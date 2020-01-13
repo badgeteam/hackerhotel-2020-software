@@ -1,0 +1,103 @@
+{
+  "help" : "Welcome to the \"Escape from Hacker Hotel!!!\" challenge.\n\nYou are locked in the hotel, just like servants of the pharaos\nwere locked in the Pyramids with their masters.\nYou will need to hack yourself a way out of the hotel before\nthe end of the weekend (when the hotel will be closed up\nforever, WHOAHAHAHAHAHAHA)!\n\nh or ?      show this help\nq           quit the game for now\nx           leave a room or enter the elevator\ne <room>    enter the given room\nl [<o>]     look around (or at object <o>)\no <o>       open object <o>\np <i>       pickup item <i> (you can only carry 2 items at a time)\nd <i>       drop item <i> (you can only carry 2 items at a time)\ni           list items you are carrying\nu [<i>] <o>   use [item <i> on] object <o>\n",
+  "game" : {
+    "name" : "The Street",
+    "desc" : "You stand in front of Hotel Pyramide, an Egyptian styled\nboutique hotel. There is a Hacker Conference going on at the hotel.",
+    "open_acl" : 127,
+    "action_mask" : 13,
+    "action_str1" : "Hahaha, you are trying to talk to a hotel!",
+    "open_acl_msg" : "No no no, you can't leave this hotel. You are locked in forever.",
+    "o" : [
+      {
+        "name" : "The Hotel Lobby",
+        "desc" : "You are in the lobby of our beautiful hotel \"The Pyramid\". Here you can find our reception, the hotel bar and a shop. On your right you can find the elevator to all the rooms and on the left is of course the entrance through which you came in.",
+        "action_mask" : 1,
+        "o" : [
+          {
+            "name" : "The Reception",
+            "desc" : "Testing look!",
+            "action_mask" : 1
+          },
+          {
+            "name" : "The Bar",
+            "desc" : "This is the hotel bar",
+            "action_mask" : 5,
+            "o" : [
+              {
+                "name" : "Keycard",
+                "desc" : "This looks like a VIP keycard",
+                "action_mask" : 20,
+                "action_item" : 1,
+                "action_msg" : "You succesfully copied the VIP keycard",
+                "action_state" : 2,
+                "state_desc" : "Access granted to the second floor"
+              }
+            ]
+          },
+          {
+            "name" : "The Shop",
+            "desc" : "This is the hotel shop",
+            "action_mask" : 5,
+            "o" : [
+              {
+                "name" : "Proxmark III",
+                "desc" : "The Proxmark is an RFID swiss-army tool, allowing for both high and low level interactions with the vast majority of RFID tags and systems world-wide.",
+                "action_mask" : 20,
+                "item_nr" : 1
+              }
+            ]
+          },
+          {
+            "name" : "The Elevator",
+            "desc" : "The elevator will take you to any floor you like",
+            "action_mask" : 5,
+            "o" : [
+              {
+                "name" : "The First Floor Hallway",
+                "desc" : "This the hallway on the First Floor",
+                "action_mask" : 1,
+                "open_acl" : 1,
+                "open_acl_msg" : "Access to this floor is for hotel guests only!",
+                "o" : [
+                  {
+                    "name" : "Room 101",
+                    "action_mask" : 1
+                  }
+                ]
+              },
+              {
+                "name" : "Second Floor",
+                "desc" : "This is the hallway on the Second Floor",
+                "action_mask" : 1,
+                "open_acl" : 2,
+                "open_acl_msg" : "This floor is for VIP guests only!",
+                "o" : [
+                  {
+                    "name" : "Room 201",
+                    "action_mask" : 1
+                  },
+                  {
+                    "name" : "Room 202",
+                    "action_mask" : 1
+                  },
+                  {
+                    "name" : "Room 203",
+                    "action_mask" : 1
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name" : "The Dungeon",
+            "desc" : "It is dark in here, get into a dark area so your eyes will adjust to the light...\n...or you will not see anything",
+            "action_mask" : 1,
+            "visible_acl" : 3,
+            "open_acl" : 3,
+            "open_acl_msg" : ""
+          }
+        ]
+      }
+    ]
+  }
+}
