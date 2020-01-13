@@ -5,6 +5,7 @@ import argparse
 
 parser = argparse.ArgumentParser(description='The Hacker Hotel 2020 badge adventure')
 parser.add_argument("-d", default=False, action="store_true", help="Enable Debugging Output")
+parser.add_argument("-t", default=False, action="store_true", help="Print game tree and logic")
 
 args = parser.parse_args()
 
@@ -14,12 +15,13 @@ DEBUG = args.d
 with open('hotel.bin', 'rb') as f:
     eeprom = f.read()
 
+if args.t:
+    print_tree(eeprom,[],[-1],0)
 
 ### Start of the game
 loc             = []
 loc_offset,loc_action_mask,loc_children = loc2offset(eeprom,loc)
 #loc_action_mask = read_byte_field(eeprom,loc_offset,'action_mask')
-inventory       = []
 
 while True:
     if DEBUG:
@@ -29,9 +31,9 @@ while True:
         print("state = {}".format(game_state))
         print("action_mask = {}".format(loc_action_mask))
         print("inventory = {}".format(inventory))
+        print()
 
     print("\nYou are in {}".format(read_string_field(eeprom,loc_offset,'name')))
-
     inp = input("? ")
     print()
     if len(inp) == 0:
@@ -44,6 +46,13 @@ while True:
     if cmd == 'h' or cmd == '?':
         show_help(eeprom)
 
+
+    elif inp[0] == "tree":
+        print_tree(eeprom,[],loc,0)
+
+    elif inp[0] == "debug":
+        DEBUG = not DEBUG
+        print("Debugging: {}".format(DEBUG))
 
     elif cmd == 'q':
         print("Thank you for staying, you can check out any time you want, but you may never leave!")
@@ -74,6 +83,8 @@ while True:
                             desc = read_string_field(eeprom,loc_children[i],'desc')
                             print(desc)
                             break
+            else:
+                print("I don't see that!")
         else:
             invalid()
 
@@ -118,6 +129,8 @@ while True:
                             loc.append(i)
                             loc_offset,loc_action_mask,loc_children = loc2offset(eeprom,loc)
                             break
+            else:
+                print("I don't see that location.")
 
 
     elif cmd == 't' or cmd == 'u':
@@ -215,11 +228,10 @@ while True:
                 if inp[1] in inventory[i][1].lower():
                     print("Dropping object {}".format(inventory[i][1]))
                     print("How nice, a hotel clerk picked it up and brought it \nback to it's original location.")
+                    del inventory[i]
                     break
-            if i == len(inventory):
-                print("You are not carrying that object.")
             else:
-                del inventory[i]
+                print("You are not carrying that object.")
 
 
     elif cmd == 'i':
@@ -244,5 +256,3 @@ while True:
         print("CONGRATULATIONS!!!")
         print("The spell has been broken and you found your way out of the hotel.")
         exit()
-
-    print()

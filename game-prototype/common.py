@@ -160,6 +160,7 @@ def show_help(data):
 # status bits that will be used for the game logic
 # bit 0 is not used for code/memory efficiency, status of bit 0 is considered True
 game_state = [0 for i in range(status_bits//8)]
+inventory  = []
 
 # get_state() returns True if the status bit <num> is set to 1.
 def get_state(num):
@@ -221,3 +222,122 @@ def object_visible(data,offset):
 ##########################################
 ###   End of State related functions   ###
 ##########################################
+
+
+##########################################
+###   Debugging functions              ###
+##########################################
+class color:
+    NORMAL     = '\033[0m'
+    BOLD       = '\033[1m'
+    UNDERLINE  = '\033[4m'
+    BLACK      = '\033[30m'
+    RED        = '\033[31m'
+    GREEN      = '\033[32m'
+    YELLOW     = '\033[33m'
+    BLUE       = '\033[34m'
+    MAGENTA    = '\033[35m'
+    CYAN       = '\033[36m'
+    WHITE      = '\033[37m'
+
+def print_summary(data,loc,current_loc,offset):
+    c = color.NORMAL
+
+    if loc == current_loc:
+        print(color.BOLD,end='')
+    print("{:20s} ".format(str(loc)),end='')
+
+    tree_str  = ""
+    tree_str += "{}+- ".format("|  "*len(loc))
+    item = read_byte_field(data,offset,'item_nr')
+    if item != 0:
+        tree_str += color.BLUE + "({})".format(item)
+    else:
+        tree_str += color.BLACK
+    print("{:50s} ".format(tree_str + read_string_field(data,offset,'name')),end='')
+
+    logic_str = ""
+    mask = read_byte_field(data,offset,'action_mask')
+    if mask & A_USE:
+        logic_str += "U"
+    else:
+        logic_str += "."
+    if mask & A_TALK:
+        logic_str += "T"
+    else:
+        logic_str += "."
+    if mask & A_LOOK:
+        logic_str += "L"
+    else:
+        logic_str += "."
+    if mask & A_OPEN:
+        logic_str += "O"
+    else:
+        logic_str += "."
+    if mask & A_ENTER:
+        logic_str += "E"
+    else:
+        logic_str += "."
+
+    acl = read_byte_field(data,offset,'visible_acl')
+    if acl != 0:
+        if get_state(acl):
+            c = color.GREEN
+        else:
+            c = color.RED
+        logic_str += " {}V:{:3d}{}".format(c,acl,color.BLACK)
+    else:
+        logic_str += " "*6
+
+    acl = read_byte_field(data,offset,'open_acl')
+    if acl != 0:
+        if get_state(acl):
+            c = color.GREEN
+        else:
+            c = color.RED
+        logic_str += " {}O:{:3d}{}".format(c,acl,color.BLACK)
+    else:
+        logic_str += " "*6
+
+    sep = ""
+    action_str = "ACT:"
+    acl = read_byte_field(data,offset,'action_acl')
+    if acl != 0:
+        if get_state(acl):
+            c = color.GREEN
+        else:
+            c = color.RED
+        action_str += "{}".format(c,acl,color.BLACK)
+        sep = ","
+    item = read_byte_field(data,offset,'action_item')
+    if item != 0:
+        for i in range(len(inventory)):
+            if item == inventory[i][0]:
+                c = color.GREEN
+                break
+        else:
+            c = color.BLUE
+        action_str += "{}{}I{}{}".format(sep,c,item,color.BLACK)
+    state = read_byte_field(data,offset,'action_state')
+    if state != 0:
+        if get_state(state):
+            c = color.GREEN
+        else:
+            c = color.RED
+        action_str += "=>{}{}{}".format(c,state,color.BLACK)
+    if len(action_str) > 4:
+        logic_str += " {}".format(action_str)
+
+    print("{}{}".format(logic_str,color.NORMAL),end='')
+    print()
+
+def print_tree(data,loc,current_loc,offset):
+    print_summary(data,loc,current_loc,offset)
+    children = read_children(data,offset)
+    for i in range(len(children)):
+        print_tree(data,loc+[i],current_loc,children[i])
+
+##########################################
+###   Debugging functions              ###
+##########################################
+
