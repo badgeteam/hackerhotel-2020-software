@@ -1,6 +1,14 @@
-#!/usr/local/bin/python3
+#!/usr/bin/env python3
 
 from common import *
+import argparse
+
+parser = argparse.ArgumentParser(description='The Hacker Hotel 2020 badge adventure')
+parser.add_argument("-d", default=False, action="store_true", help="Enable Debugging Output")
+
+args = parser.parse_args()
+
+DEBUG = args.d
 
 ### Read the EEPROM data
 with open('hotel.bin', 'rb') as f:
@@ -14,12 +22,14 @@ loc_offset,loc_action_mask,loc_children = loc2offset(eeprom,loc)
 inventory       = []
 
 while True:
-    print("\nloc = {}".format(loc))
-    print("offset = 0x{:04X}".format(loc_offset))
-    print("children = {}".format(loc_children))
-    print("state = {}".format(game_state))
-    print("action_mask = {}".format(loc_action_mask))
-    print("inventory = {}".format(inventory))
+    if DEBUG:
+        print("\nloc = {}".format(loc))
+        print("offset = 0x{:04X}".format(loc_offset))
+        print("children = {}".format(loc_children))
+        print("state = {}".format(game_state))
+        print("action_mask = {}".format(loc_action_mask))
+        print("inventory = {}".format(inventory))
+
     print("\nYou are in {}".format(read_string_field(eeprom,loc_offset,'name')))
 
     inp = input("? ")
@@ -57,7 +67,7 @@ while True:
                 if object_visible(eeprom,loc_children[i]):
                     name = read_string_field(eeprom,loc_children[i],'name')
                     if inp[1] in name.lower():
-                        if (loc_action_mask & A_LOOK == 0):
+                        if (read_byte_field(eeprom,loc_children[i],'action_mask') & A_LOOK == 0):
                             print("You can't look inside {} from here.".format(name))
                             break
                         else:
@@ -73,7 +83,7 @@ while True:
         if len(loc) == 0:
             invalid()
         elif len(loc) == 1:
-            msg = check_permission(eeprom,0,'open_acl')
+            msg = check_open_permission(eeprom,0)
             if msg != "":
                 print(msg)
             else:
@@ -100,7 +110,7 @@ while True:
                         elif cmd == 'o' and (loc_action_mask & A_OPEN == 0):
                             print("You can't open {}".format(name))
                             break
-                        msg = check_permission(eeprom,loc_children[i],'open_acl')
+                        msg = check_open_permission(eeprom,loc_children[i])
                         if msg != "":
                             print(msg)
                             break
@@ -145,6 +155,11 @@ while True:
                     print("You can't use this item on this object.")
                     continue
                 else:
+                    msg = check_action_permission(eeprom,obj_offset)
+                    if msg != "":
+                        print(msg)
+                        continue
+
                     request = read_string_field(eeprom,obj_offset,'action_str1')
                     if len(request) == 1:
                         if request == '1':
@@ -156,8 +171,8 @@ while True:
                             continue
                     elif len(request) > 1:
                         print("{}".format(request))
-                        response = input("? ")
-                        if read_string_field(eeprom,obj_offset,'action_str2') != response:
+                        response = input("(your response) ? ")
+                        if read_string_field(eeprom,obj_offset,'action_str2').lower() != response.lower():
                             print("That is incorrect!")
                             continue
                     set_state(read_byte_field(eeprom,obj_offset,'action_state'))
@@ -208,17 +223,19 @@ while True:
 
 
     elif cmd == 'i':
-        if len(inp) == 3:
-            inventory = [[int(inp[1]),inp[2]]]
+        if DEBUG:
+            if len(inp) == 3:
+                inventory = [[int(inp[1]),inp[2]]]
         print("Inventory is now {}".format(inventory))
 
 
     elif cmd == 's':
-        if len(inp) > 1:
-            toggle_state(int(inp[1]))
-        print("The game state is now:")
-        for i in range(status_bits//8):
-            print("0x{:02X}:{:08b}".format(i,game_state[i]))
+        if DEBUG:
+            if len(inp) > 1:
+                toggle_state(int(inp[1]))
+            print("The game state is now:")
+            for i in range(status_bits//8):
+                print("0x{:02X}:{:08b}".format(i,game_state[i]))
 
 
     ### end of command options

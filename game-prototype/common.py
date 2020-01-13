@@ -195,13 +195,22 @@ def toggle_state(num):
     return
 
 
-def check_permission(data,offset,acl_type):
-    state_num = read_byte_field(data,offset,acl_type)
+def check_open_permission(data,offset):
+    state_num = read_byte_field(data,offset,'open_acl')
     if get_state(state_num) == True:
         return ""
     else:
-        return read_string_field(data,offset,'open_msg')
-### end of checkpermission()
+        return read_string_field(data,offset,'open_acl_msg')
+### end of check_open_permission()
+
+
+def check_action_permission(data,offset):
+    state_num = read_byte_field(data,offset,'action_acl')
+    if get_state(state_num) == True:
+        return ""
+    else:
+        return read_string_field(data,offset,'action_acl_msg')
+### end of check_action_permission()
 
 
 def object_visible(data,offset):

@@ -1,5 +1,5 @@
 {
-  "help" : "Welcome to the \"Escape from Hacker Hotel!!!\" challenge.\n\nYou are locked in the hotel, just like servants of the pharaos\nwere locked in the Pyramids with their masters.\nYou will need to hack yourself a way out of the hotel before\nthe end of the weekend (when the hotel will be closed up\nforever, WHOAHAHAHAHAHAHA)!\n\nh or ?      show this help\nq           quit the game for now\nx           leave a room or enter the elevator\ne <room>    enter the given room\nl [<o>]     look around (or at object <o>)\no <o>       open object <o>\np <i>       pickup item <i> (you can only carry 2 items at a time)\nd <i>       drop item <i> (you can only carry 2 items at a time)\ni           list items you are carrying\nu [<i>] <o>   use [item <i> on] object <o>\n",
+  "help" : "Welcome to the \"Escape from Hacker Hotel!!!\" challenge.\n\nYou are locked in the hotel, just like servants of the pharaos\nwere locked in the Pyramids with their masters.\nYou will need to hack yourself a way out of the hotel before\nthe end of the weekend (when the hotel will be closed up\nforever, WHOAHAHAHAHAHAHA)!\n\nh or ?      show this help\nq           quit the game for now\nx           leave a room or enter the elevator\ne <room>    enter the given room\nl [<o>]     look around (or at object <o>)\no <o>       open object <o>\np <i>       pickup item <i> (you can only carry 2 items at a time)\nd <i>       drop item <i> (you can only carry 2 items at a time)\ni           list items you are carrying\nu [<i>] <o> use [item <i> on] object <o>\n",
   "game" : {
     "name" : "The Street",
     "desc" : "You stand in front of Hotel Pyramide, an Egyptian styled\nboutique hotel. There is a Hacker Conference going on at the hotel.",
@@ -16,7 +16,21 @@
           {
             "name" : "The Reception",
             "desc" : "Testing look!",
-            "action_mask" : 1
+            "action_mask" : 1,
+            "o" : [
+              {
+                "name" : "A Receptionist",
+                "desc" : "She seems friendly",
+                "action_acl" : 2,
+                "action_acl_msg" : "I'm sorry sir, I'm only allowed to check out VIP guests.",
+                "action_mask" : 12,
+                "action_str1" : "Here you go Sir, everything is settled.",
+                "action_str2" : "Thank You",
+                "action_msg" : "You succesfully checked out",
+                "action_state" : 127,
+                "state_desc" : "Allowed to leave the hotel"
+              }
+            ]
           },
           {
             "name" : "The Bar",
