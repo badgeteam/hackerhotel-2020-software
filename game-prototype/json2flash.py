@@ -16,6 +16,7 @@ def show_eeprom(data):
     offset = 0
     level = 0
     cache = []
+    objects = 0
 
     while offset<len(data):
         if level==0 and offset != 0:
@@ -23,8 +24,9 @@ def show_eeprom(data):
             l = read_ptr(data,offset)
             print("0x{0:04X} help={1:}".format(offset,read_range(data,offset+2,l).decode()))
             offset += 2 + l
-            return
+            return objects
 
+        objects += 1
         ptr = read_ptr(data,offset)
         if len(cache) == 0:
             print("0x{0:04X} ->0x{1:04X} Pointer to help".format(offset,ptr))
@@ -146,7 +148,7 @@ eeprom = open('hotel.bin', 'wb')
 eeprom.write(xor_data)
 eeprom.close
 
-show_eeprom(xor_data)
+count = show_eeprom(xor_data)
 
 print("Items")
 for i in range(max_items):
@@ -179,4 +181,5 @@ for i in range(status_bits):
 
 print()
 print("The game is currently using {} bytes of EEPROM space (including boilerplate and footer).".format(len(data)+64))
+print("There are currently {} objects in the game ({:d} bytes per object)".format(count,len(data)//count))
 print()

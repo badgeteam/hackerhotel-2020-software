@@ -29,7 +29,7 @@
                 "action_str2" : "Thank You",
                 "action_msg" : "You successfully checked out",
                 "action_state" : 127,
-                "state_desc" : "Allowed to leave the hotel"
+                "state_desc" : "You are now allowed to leave the hotel"
               }
             ]
           },
@@ -45,7 +45,7 @@
                 "action_item" : 1,
                 "action_msg" : "You succesfully copied the VIP keycard",
                 "action_state" : 2,
-                "state_desc" : "Access granted to the second floor"
+                "state_desc" : "VIP keycard obtained"
               },
               {
                 "name" : "Keycard-Copy",
@@ -77,6 +77,7 @@
             "action_acl_msg" : "You don't have a VIP keycard, access denied",
             "action_item" : 2,
             "action_state" : 3,
+            "state_desc" : "VIP access to second floor granted.",
             "action_msg" : "VIP access to second floor granted.",
             "o" : [
               {

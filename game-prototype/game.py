@@ -72,9 +72,15 @@ while True:
                 sep = ", "
             for i in range(len(loc_children)):
                 if object_visible(eeprom,loc_children[i]):
-                    name = read_string_field(eeprom,loc_children[i],'name')
-                    print("{}{}".format(sep,name),end='')
-                    sep = ", "
+                    item = read_byte_field(eeprom,loc_children[i],'item_nr')
+                    if item != 0:
+                        for inv in range(len(inventory)):
+                            if item == inventory[inv][0]:
+                                break
+                        else:
+                            name = read_string_field(eeprom,loc_children[i],'name')
+                            print("{}{}".format(sep,name),end='')
+                            sep = ", "
             print()
 
         else:
@@ -230,7 +236,7 @@ while True:
                         if unify(read_string_field(eeprom,obj_offset,'action_str2')) != unify(response):
                             print("That is incorrect!")
                             continue
-                    set_state(read_byte_field(eeprom,obj_offset,'action_state'))
+                    update_state(read_byte_field(eeprom,obj_offset,'action_state'))
                     print("{}".format(read_string_field(eeprom,obj_offset,'action_msg')))
 
         
@@ -252,7 +258,7 @@ while True:
                     if [obj_id,obj_name] in inventory:
                         print("You are already carrying that object.")
                     else:
-                        print("You are now carrying {}".format(obj_name))
+                        print("You are now carrying: {}".format(obj_name))
                         inventory.append([obj_id,obj_name])
                 else:
                     invalid()
@@ -269,7 +275,7 @@ while True:
             for i in range(len(inventory)):
                 if inp[1] in inventory[i][1].lower():
                     print("Dropping object {}".format(inventory[i][1]))
-                    print("How nice, a hotel clerk picked it up and brought it \nback to it's original location.")
+                    print("How nice, a hotel clerk picked it up and brought it \nback to its original location.")
                     del inventory[i]
                     break
             else:

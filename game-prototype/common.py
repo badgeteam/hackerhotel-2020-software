@@ -132,6 +132,12 @@ def invalid():
     print("Sorry, that is not possible")
 
 
+def unify(s):
+    exclude = '!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~ \t'
+    s = ''.join(ch for ch in s if ch not in exclude)
+    return s.lower()
+
+
 def show_help(data):
     offset = read_ptr(data,0)
     length = read_ptr(data,offset)
@@ -145,6 +151,21 @@ def show_help(data):
 # status bits that will be used for the game logic
 # bit 0 is not used for code/memory efficiency, status of bit 0 is considered True
 game_state = [0 for i in range(status_bits//8)]
+
+# Some state bits are used from outside the game, these are:
+# 116   set to 1 by FW if badge is in the dark
+# 117   set to 1 by FW after one normal-hot-normal cycle of the temp sensor
+# 118   set to 1 by FW after a second normal-hot-normal cycle of the temp sensor
+# 119   read by FW to enable the magnetic maze game (only allow the game when this bit is 1)
+# 120   set to 1 by FW after the maze game is succesfully finished
+# 121   set to 1 by FW after the lan-yard code has been entered successfully
+# 122   H turns green, set to 1 by FW after reaching level 6 of beste dictates
+# 123   A turns green, set to 1 by FW after Lanyard code has been entered correctly
+# 124   C turns green, set to 1 by FW after Connected to other 7 badge types / personas (UUID MOD 8) 
+# 125   K turns green, set to 1 by game after Reached first floor in hotel (hotel guests only)
+# 126   E turns green, set to 1 by game after Reached second floor in hotel (VIPs only)
+# 127   R turns green, set to 1 by game Was able to leave the hotel (need to solve puzzles in secret room to get antidote)
+
 inventory  = []
 
 # get_state() returns True if the status bit <num> is set to 1.
@@ -155,6 +176,23 @@ def get_state(num):
         return((game_state[byte]&bit) != 0)
     else:
         return True
+
+# update_state() updates a status bit
+# The higher order bit is used to either set (0) or reset (1) the
+# status bit. The other bits determine the state number.
+def update_state(num):
+    new_state = num & status_bits
+    num = num & (status_bits-1)
+    byte = num >> 3
+    bit = 1 << (num & 7)
+
+    # MSB set means reset the status bit
+    # Less confusing as most state changes are setting bits
+    if new_state == 0:
+        game_state[byte] |= bit
+    else:
+        game_state[byte] &= (255 - bit)
+    return
 
 # set_state() sets status bit <num> to 1
 def set_state(num):
@@ -181,14 +219,15 @@ def toggle_state(num):
     return
 
 
-def unify(s):
-    exclude = '!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~ \t'
-    s = ''.join(ch for ch in s if ch not in exclude)
-    return s.lower()
+def check_state(state_num):
+    if state_num & status_bits == 0:
+        needed = True
+    else:
+        needed = False
+    return get_state(state_num & (status_bits - 1)) == needed
 
 def check_open_permission(data,offset):
-    state_num = read_byte_field(data,offset,'open_acl')
-    if get_state(state_num) == True:
+    if check_state(read_byte_field(data,offset,'open_acl')):
         return ""
     else:
         return read_string_field(data,offset,'open_acl_msg')
@@ -196,8 +235,7 @@ def check_open_permission(data,offset):
 
 
 def check_action_permission(data,offset):
-    state_num = read_byte_field(data,offset,'action_acl')
-    if get_state(state_num) == True:
+    if check_state(read_byte_field(data,offset,'action_acl')):
         return ""
     else:
         return read_string_field(data,offset,'action_acl_msg')
