@@ -20,7 +20,7 @@ if args.t:
 
 ### Start of the game
 loc             = []
-loc_offset,loc_action_mask,loc_children = loc2offset(eeprom,loc)
+loc_offset,loc_action_mask,loc_children,loc_parent = loc2offset(eeprom,loc)
 #loc_action_mask = read_byte_field(eeprom,loc_offset,'action_mask')
 
 while True:
@@ -33,7 +33,7 @@ while True:
         print("inventory = {}".format(inventory))
         print()
 
-    print("\nYou are in {}".format(read_string_field(eeprom,loc_offset,'name')))
+    print("\nLocation: {}".format(read_string_field(eeprom,loc_offset,'name')))
     inp = input("? ")
     print()
     if len(inp) == 0:
@@ -50,9 +50,11 @@ while True:
     elif inp[0] == "tree":
         print_tree(eeprom,[],loc,0)
 
+
     elif inp[0] == "debug":
         DEBUG = not DEBUG
         print("Debugging: {}".format(DEBUG))
+
 
     elif cmd == 'q':
         print("Thank you for staying, you can check out any time you want, but you may never leave!")
@@ -62,31 +64,52 @@ while True:
     elif cmd == 'l':
         if len(inp) == 1:
             print(read_string_field(eeprom,loc_offset,'desc'))
-            if len(loc_children) > 0:
-                print("\nI see the following: ",end='')
-                sep = ""
-                for i in range(len(loc_children)):
+            print("\nI see the following: ",end='')
+            sep = ""
+            if loc_parent != 0xffff and object_visible(eeprom,loc_parent):
+                name = read_string_field(eeprom,loc_parent,'name')
+                print("{}".format(name),end='')
+                sep = ", "
+            for i in range(len(loc_children)):
+                if object_visible(eeprom,loc_children[i]):
                     name = read_string_field(eeprom,loc_children[i],'name')
-                    if object_visible(eeprom,loc_children[i]):
-                        print("{}{}".format(sep,name),end='')
-                        sep = ", "
+                    print("{}{}".format(sep,name),end='')
+                    sep = ", "
+            print()
 
-        elif len(inp) == 2:
+        else:
+            if len(inp) > 2 and inp[1] in exclude_words:
+                del(inp[1])
+            if len(inp) != 2:
+                invalid()
+                continue
+
+            look_offset = 0xffff
             for i in range(len(loc_children)):
                 if object_visible(eeprom,loc_children[i]):
                     name = read_string_field(eeprom,loc_children[i],'name')
                     if inp[1] in name.lower():
-                        if (read_byte_field(eeprom,loc_children[i],'action_mask') & A_LOOK == 0):
-                            print("You can't look inside {} from here.".format(name))
-                            break
-                        else:
-                            desc = read_string_field(eeprom,loc_children[i],'desc')
-                            print(desc)
-                            break
+                        look_offset = loc_children[i]
+                        break
             else:
-                print("I don't see that!")
-        else:
-            invalid()
+                if object_visible(eeprom,loc_parent):
+                    name = read_string_field(eeprom,loc_parent,'name')
+                    if inp[1] in name.lower():
+                        look_offset = loc_parent
+                    else:
+                        print("I don't see that!")
+                        continue
+
+            if look_offset != 0xffff:
+                if (read_byte_field(eeprom,look_offset,'action_mask') & A_LOOK == 0):
+                    print("You can't look inside {} from here.".format(name))
+                    continue
+                else:
+                    desc = read_string_field(eeprom,look_offset,'desc')
+                    print(desc)
+                    continue
+            else:
+                invalid()
 
             
     elif cmd == 'x':
@@ -104,55 +127,74 @@ while True:
 
         if exit_allowed:
             del loc[-1]
-            loc_offset,loc_action_mask,loc_children = loc2offset(eeprom,loc)
+            loc_offset,loc_action_mask,loc_children,loc_parent = loc2offset(eeprom,loc)
 
 
     elif cmd == 'e' or cmd == 'o':
-        if len(inp) < 2:
+        if len(inp) > 2 and inp[1] in exclude_words:
+            del(inp[1])
+        if len(inp) != 2:
             invalid()
         else:
+            enter_offset = 0xffff
             for i in range(len(loc_children)):
                 if object_visible(eeprom,loc_children[i]):
                     name = read_string_field(eeprom,loc_children[i],'name')
                     if inp[1] in name.lower():
-                        if cmd == 'e' and (loc_action_mask & A_ENTER == 0):
-                            print("You can't enter {}".format(name))
-                            break
-                        elif cmd == 'o' and (loc_action_mask & A_OPEN == 0):
-                            print("You can't open {}".format(name))
-                            break
-                        msg = check_open_permission(eeprom,loc_children[i])
-                        if msg != "":
-                            print(msg)
-                            break
-                        else:
-                            loc.append(i)
-                            loc_offset,loc_action_mask,loc_children = loc2offset(eeprom,loc)
-                            break
+                        enter_offset = loc_children[i]
+                        break
+            else:
+                if object_visible(eeprom,loc_parent):
+                    name = read_string_field(eeprom,loc_parent,'name')
+                    if inp[1] in name.lower():
+                        enter_offset = loc_parent
+
+            if enter_offset != 0xffff:
+                enter_action_mask = read_byte_field(eeprom,enter_offset,'action_mask')
+                if cmd == 'e' and (enter_action_mask & A_ENTER == 0):
+                    print("You can't enter {}".format(name))
+                    continue
+                elif cmd == 'o' and (enter_action_mask & A_OPEN == 0):
+                    print("You can't open {}".format(name))
+                    continue
+                msg = check_open_permission(eeprom,enter_offset)
+                if msg != "":
+                    print(msg)
+                    continue
+                else:
+                    if enter_offset != loc_parent:
+                        loc.append(i)
+                    else:
+                        del(loc[-1])
+                    loc_offset,loc_action_mask,loc_children,loc_parent = loc2offset(eeprom,loc)
+                    continue
             else:
                 print("I don't see that location.")
 
 
     elif cmd == 't' or cmd == 'u':
+        if len(inp) > 2 and inp[1] in exclude_words:
+            del(inp[1])
+        elif cmd == 'u' and len(inp) > 2 and inp[2] in exclude_words:
+            del(inp[2])
+
         if len(inp) < 2:
             invalid()
-
         else:
             item = 0
             if len(inp) == 2:
                 obj  = inp[1]
-            elif len(inp) == 3:
+            elif len(inp) >= 3:
                 obj  = inp[2]
                 for i in range(len(inventory)):
                     if inp[1] in inventory[i][1].lower():
-                        print("Found item {}".format(inventory[i][1]))
                         item = inventory[i][0]
                         break
                 if item == 0:
                     print("You are not carrying that item.")
                     continue
 
-            obj_loc,obj_offset = name2loc(eeprom,loc,loc_offset,obj)
+            obj_loc,obj_offset,obj_parent = name2loc(eeprom,loc,loc_offset,obj)
             if obj_loc is None:
                 print("No such object here.")
                 continue
@@ -185,7 +227,7 @@ while True:
                     elif len(request) > 1:
                         print("{}".format(request))
                         response = input("(your response) ? ")
-                        if read_string_field(eeprom,obj_offset,'action_str2').lower() != response.lower():
+                        if unify(read_string_field(eeprom,obj_offset,'action_str2')) != unify(response):
                             print("That is incorrect!")
                             continue
                     set_state(read_byte_field(eeprom,obj_offset,'action_state'))
@@ -200,7 +242,7 @@ while True:
             invalid()
 
         else:
-            obj_loc,obj_offset = name2loc(eeprom,loc,loc_offset,inp[1])
+            obj_loc,obj_offset,obj_parent = name2loc(eeprom,loc,loc_offset,inp[1])
             if obj_loc is None:
                 invalid()
             else:

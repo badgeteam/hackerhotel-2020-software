@@ -1,8 +1,9 @@
 {
-  "help" : "Welcome to the \"Escape from Hacker Hotel!!!\" challenge.\n\nYou are locked in the hotel, just like servants of the pharaos\nwere locked in the Pyramids with their masters.\nYou will need to hack yourself a way out of the hotel before\nthe end of the weekend (when the hotel will be closed up\nforever, WHOAHAHAHAHAHAHA)!\n\nh or ?      show this help\nq           quit the game for now\nx           leave a room or enter the elevator\ne <room>    enter the given room\nl [<o>]     look around (or at object <o>)\no <o>       open object <o>\np <i>       pickup item <i> (you can only carry 2 items at a time)\nd <i>       drop item <i> (you can only carry 2 items at a time)\ni           list items you are carrying\nu [<i>] <o> use [item <i> on] object <o>\n",
+  "help" : "Welcome to the \"Escape from Hacker Hotel!!!\" challenge.\n\nYou are locked in the hotel, just like servants of the pharaohs\nwere locked in the Pyramids with their masters.\nYou will need to hack yourself a way out of the hotel before\nthe end of the weekend (when the hotel will be closed up\nforever, WHOAHAHAHAHAHAHA)!\n\nh or ?      show this help\nq           quit the game for now\nx           leave a room or enter the elevator\ne <room>    enter the given room\nl           look around the room\nl <o>       look at object <o>\no <o>       open object <o>\np <i>       pickup item <i> (you can only carry 2 items at a time)\nd <i>       drop item <i> (you can only carry 2 items at a time)\ni           list items you are carrying\nt <p>       talk to \"person\" <p>\nu <o>       use object <o>\nu <i> <o>   use item <i> on object <o>\n\nYou can use any substring of an object, item, room etc in any case.\nSo 'e rec' will enter the reception, just as 'enter Reception'.",
   "game" : {
     "name" : "The Street",
     "desc" : "You stand in front of Hotel Pyramide, an Egyptian styled\nboutique hotel. There is a Hacker Conference going on at the hotel.",
+    "visible_acl" : 127,
     "open_acl" : 127,
     "action_mask" : 13,
     "action_str1" : "Hahaha, you are trying to talk to a hotel!",
@@ -26,7 +27,7 @@
                 "action_mask" : 12,
                 "action_str1" : "Here you go Sir, everything is settled.",
                 "action_str2" : "Thank You",
-                "action_msg" : "You succesfully checked out",
+                "action_msg" : "You successfully checked out",
                 "action_state" : 127,
                 "state_desc" : "Allowed to leave the hotel"
               }
@@ -45,6 +46,13 @@
                 "action_msg" : "You succesfully copied the VIP keycard",
                 "action_state" : 2,
                 "state_desc" : "Access granted to the second floor"
+              },
+              {
+                "name" : "Keycard-Copy",
+                "desc" : "A copy of the VIP keycard",
+                "visible_acl" : 2,
+                "action_mask" : 20,
+                "item_nr" : 2
               }
             ]
           },
@@ -64,7 +72,12 @@
           {
             "name" : "The Elevator",
             "desc" : "The elevator will take you to any floor you like",
-            "action_mask" : 5,
+            "action_mask" : 21,
+            "action_acl" : 2,
+            "action_acl_msg" : "You don't have a VIP keycard, access denied",
+            "action_item" : 2,
+            "action_state" : 3,
+            "action_msg" : "VIP access to second floor granted.",
             "o" : [
               {
                 "name" : "The First Floor Hallway",
@@ -80,10 +93,10 @@
                 ]
               },
               {
-                "name" : "Second Floor",
+                "name" : "The Second Floor",
                 "desc" : "This is the hallway on the Second Floor",
                 "action_mask" : 1,
-                "open_acl" : 2,
+                "open_acl" : 3,
                 "open_acl_msg" : "This floor is for VIP guests only!",
                 "o" : [
                   {

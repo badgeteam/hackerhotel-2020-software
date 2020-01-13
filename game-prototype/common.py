@@ -29,6 +29,7 @@ max_object_depth = 32
 max_items        = 64
 status_bits      = 128
 
+exclude_words    = ('on','to','in','with','at','from')
 
 # Keys are md5 hash of 'H@ck3r H0t3l 2020', split in two
 xor_key_game   = b'\x74\xbf\xfa\x54\x1c\x96\xb2\x26'
@@ -52,6 +53,7 @@ def read_ptr(data,offset):
 
 def read_children(data,offset):
     children = []
+    current = offset
     nxt    = read_ptr(data,offset)
     offset = read_ptr(data,offset+2)
     if offset >= nxt:
@@ -65,31 +67,34 @@ def read_children(data,offset):
 
 def loc2offset(data,loc):
     offset = 0
+    parent = 0xffff
 
     if loc != []:
         for l in range(len(loc)):
+            parent = offset
             nxt    = read_ptr(data,offset)
             offset = read_ptr(data,offset+2)
             if offset >= nxt:
-                return [0xffff,None,None]
+                return [0xffff,None,None,None]
             for i in range(loc[l]):
                 offset = read_ptr(data,offset)
                 #print("{} {} 0x{:04X} 0x{:04x}".format(l,i,offset,nxt))
                 if offset >= nxt:
-                    return [0xffff,None,None]
+                    return [0xffff,None,None,None]
 
     mask     = read_byte_field(data,offset,'action_mask')
     children = read_children(data,offset)
-    return [offset,mask,children]
+    return [offset,mask,children,parent]
 ### end of loc2offset()
 
 
 def name2loc(data,loc,loc_offset,name):
     if loc_offset == 0:
-        offset,d1,d2 = loc2offset(data,loc)
+        offset,d1,children,parent = loc2offset(data,loc)
+    # XXX change the following code to use read_children
     i = 0
     while True:
-        offset,d1,d2 = loc2offset(data,loc+[i])
+        offset,d1,d2,parent = loc2offset(data,loc+[i])
         if offset == 0xffff:
             break
         loc_name = read_string_field(data,offset,'name')
@@ -101,8 +106,8 @@ def name2loc(data,loc,loc_offset,name):
             print("ERROR: out-of-band-error")
             break
     if offset == 0xffff:
-        return [None,None]
-    return [loc+[i],offset]
+        return [None,None,None]
+    return [loc+[i],offset,parent]
 ### end of name2offset()
 
     
@@ -121,26 +126,6 @@ def read_string_field(data,offset,field):
                 offset = offset + read_byte(data,offset) + 1
             return read_range(data,offset+1,read_byte(data,offset)).decode()
     return "N/A"
-
-
-#def get_byte_field(data,loc,field):
-#    if field in byte_fields:
-#        offset,d1,d2 = loc2offset(data,loc)
-#        if offset != 0xffff:
-#            return read_byte(data,offset + 4 + byte_fields.index(field))
-#    return -1
-#
-#
-#def get_string_field(data,loc,field,offset=0):
-#    if field in string_fields:
-#        offset,d1,d2 = loc2offset(data,loc)
-#        if offset != 0xffff:
-#            offset = offset + 4 + len(byte_fields)
-#            for i in range(string_fields.index(field)):
-#                offset = offset + read_byte(data,offset) + 1
-#
-#            return read_range(data,offset+1,read_byte(data,offset)).decode()
-#    return "N/A"
 
 
 def invalid():
@@ -195,6 +180,11 @@ def toggle_state(num):
         game_state[byte] ^= bit
     return
 
+
+def unify(s):
+    exclude = '!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~ \t'
+    s = ''.join(ch for ch in s if ch not in exclude)
+    return s.lower()
 
 def check_open_permission(data,offset):
     state_num = read_byte_field(data,offset,'open_acl')
