@@ -159,7 +159,7 @@ game_state = [0 for i in range(status_bits//8)]
 # 119   read by FW to enable the magnetic maze game (only allow the game when this bit is 1)
 # 120   set to 1 by FW after the maze game is succesfully finished
 # 121   set to 1 by FW after the lan-yard code has been entered successfully
-# 122   H turns green, set to 1 by FW after reaching level 6 of beste dictates
+# 122   H turns green, set to 1 by FW after reaching level 6 of Bastet dictates
 # 123   A turns green, set to 1 by FW after Lanyard code has been entered correctly
 # 124   C turns green, set to 1 by FW after Connected to other 7 badge types / personas (UUID MOD 8) 
 # 125   K turns green, set to 1 by game after Reached first floor in hotel (hotel guests only)

@@ -73,14 +73,16 @@ while True:
             for i in range(len(loc_children)):
                 if object_visible(eeprom,loc_children[i]):
                     item = read_byte_field(eeprom,loc_children[i],'item_nr')
+                    in_inventory = False
                     if item != 0:
                         for inv in range(len(inventory)):
                             if item == inventory[inv][0]:
+                                in_inventory = True
                                 break
-                        else:
-                            name = read_string_field(eeprom,loc_children[i],'name')
-                            print("{}{}".format(sep,name),end='')
-                            sep = ", "
+                    if  not in_inventory:
+                        name = read_string_field(eeprom,loc_children[i],'name')
+                        print("{}{}".format(sep,name),end='')
+                        sep = ", "
             print()
 
         else:
