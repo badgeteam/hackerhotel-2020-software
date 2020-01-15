@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
 
+#################################################################
+### The code in this file does not need to be converted to FW ###
+### It is just for creating the flash content                 ###
+#################################################################
+
 import json
 import pprint 
 

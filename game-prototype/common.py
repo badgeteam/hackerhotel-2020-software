@@ -27,6 +27,10 @@ string_fields = ['name',            # name to show in lists
 # Any time one of the '*_msg' fields is shown, the sound/led effects in the first
 # byte of the field value should be activated.
 
+####################
+# not needed in FW #
+# vv from here  vv #
+####################
 sound_effects = ['<none>',
                  'bad (buzzer)',            # can be used when a bad answer is given
                  'good (bell)',             # can be used when a good answer is given
@@ -68,6 +72,9 @@ led_effects   = ['<none>',
                  '<free>',
                  '<free>',
                  '<free>']
+####################
+# ^^  to here   ^^ #
+####################
 
 global current_effects
 def effects(e):
@@ -269,31 +276,6 @@ def update_state(num):
         game_state[byte] &= (255 - bit)
     return
 
-# set_state() sets status bit <num> to 1
-def set_state(num):
-    if num > 0 and num < status_bits:
-        byte = num >> 3
-        bit = 1 << (num & 7)
-        game_state[byte] |= bit
-    return
-
-# clear_state() sets status bit <num> to 0
-def clear_state(num):
-    if num > 0 and num < status_bits:
-        byte = num >> 3
-        bit = 1 << (num & 7)
-        game_state[byte] &= (255 - bit)
-    return
-
-# toggle_state() toggles status bit <num>
-def toggle_state(num):
-    if num > 0 and num < status_bits:
-        byte = num >> 3
-        bit = 1 << (num & 7)
-        game_state[byte] ^= bit
-    return
-
-
 def check_state(state_num):
     if state_num & status_bits == 0:
         needed = True
@@ -327,6 +309,10 @@ def object_visible(data,offset):
 ##########################################
 
 
+####################
+# not needed in FW #
+# vv from here  vv #
+####################
 ##########################################
 ###   Debugging functions              ###
 ##########################################
@@ -443,4 +429,8 @@ def print_tree(data,loc,current_loc,offset,inventory):
 ##########################################
 ###   Debugging functions              ###
 ##########################################
+
+####################
+# ^^  to here   ^^ #
+####################
 
