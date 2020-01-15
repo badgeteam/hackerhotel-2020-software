@@ -2,3 +2,9 @@ Lib/*.o
 ISR_IO/*.o
 Lib/*.d
 ISR_IO/*.d
+ISR_IO.map
+ISR_IO.elf
+ISR_IO.hex
+ISR_IO.eep
+ISR_IO.lss
+ISR_IO.srec
