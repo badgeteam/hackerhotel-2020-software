@@ -1,5 +1,5 @@
 Lib/main_def.d Lib/main_def.o: ../../Lib/main_def.c \
- C:\Users\Wilenzo\Documents\Wilenzo_stack\Prive\HackerHotel\Badge\ISR_IO\Lib/main_def.h \
+ C:\Users\Wilenzo\Documents\Wilenzo_stack\Prive\HackerHotel\Badge\Private\hh2020\Working\ IO\ code\Lib/main_def.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\io.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\sfr_defs.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\inttypes.h \
@@ -19,7 +19,7 @@ Lib/main_def.d Lib/main_def.o: ../../Lib/main_def.c \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\stdlib.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stddef.h
 
-C:\Users\Wilenzo\Documents\Wilenzo_stack\Prive\HackerHotel\Badge\ISR_IO\Lib/main_def.h:
+C:\Users\Wilenzo\Documents\Wilenzo_stack\Prive\HackerHotel\Badge\Private\hh2020\Working\ IO\ code\Lib/main_def.h:
 
 c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\io.h:
 

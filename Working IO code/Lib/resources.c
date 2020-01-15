@@ -373,3 +373,14 @@ uint8_t CheckButtons(uint8_t previousValue){
     } else if (bNibble == 0) return 0xFF; //Buttons released, 0xFF triggers readout, previousValue holds last button value.
               else return bNibble;  //New value  
 }
+
+unsigned char nibbleSwap(unsigned char a)
+{
+    return (a<<4) | (a>>4);
+}
+
+
+uint8_t ReadByte(uint16_t offset, uint8_t * key){
+    
+    return nibbleSwap((uint8_t)(offset & 0xff));
+}
