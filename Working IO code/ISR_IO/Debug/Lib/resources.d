@@ -1,6 +1,6 @@
 Lib/resources.d Lib/resources.o: ../../Lib/resources.c \
- C:\Users\Wilenzo\Documents\Wilenzo_stack\Prive\HackerHotel\Badge\ISR_IO\Lib/resources.h \
- C:\Users\Wilenzo\Documents\Wilenzo_stack\Prive\HackerHotel\Badge\ISR_IO\Lib/main_def.h \
+ C:\Users\Wilenzo\Documents\Wilenzo_stack\Prive\HackerHotel\Badge\Private\hh2020\Working\ IO\ code\Lib/resources.h \
+ C:\Users\Wilenzo\Documents\Wilenzo_stack\Prive\HackerHotel\Badge\Private\hh2020\Working\ IO\ code\Lib/main_def.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\io.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\sfr_defs.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\inttypes.h \
@@ -19,11 +19,11 @@ Lib/resources.d Lib/resources.o: ../../Lib/resources.c \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\math.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\stdlib.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stddef.h \
- C:\Users\Wilenzo\Documents\Wilenzo_stack\Prive\HackerHotel\Badge\ISR_IO\Lib/I2C.h
+ C:\Users\Wilenzo\Documents\Wilenzo_stack\Prive\HackerHotel\Badge\Private\hh2020\Working\ IO\ code\Lib/I2C.h
 
-C:\Users\Wilenzo\Documents\Wilenzo_stack\Prive\HackerHotel\Badge\ISR_IO\Lib/resources.h:
+C:\Users\Wilenzo\Documents\Wilenzo_stack\Prive\HackerHotel\Badge\Private\hh2020\Working\ IO\ code\Lib/resources.h:
 
-C:\Users\Wilenzo\Documents\Wilenzo_stack\Prive\HackerHotel\Badge\ISR_IO\Lib/main_def.h:
+C:\Users\Wilenzo\Documents\Wilenzo_stack\Prive\HackerHotel\Badge\Private\hh2020\Working\ IO\ code\Lib/main_def.h:
 
 c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\io.h:
 
@@ -61,4 +61,4 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\
 
 c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stddef.h:
 
-C:\Users\Wilenzo\Documents\Wilenzo_stack\Prive\HackerHotel\Badge\ISR_IO\Lib/I2C.h:
+C:\Users\Wilenzo\Documents\Wilenzo_stack\Prive\HackerHotel\Badge\Private\hh2020\Working\ IO\ code\Lib/I2C.h:

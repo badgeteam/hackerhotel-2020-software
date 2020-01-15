@@ -45,6 +45,20 @@ Discarded input sections
  .text          0x00000000        0x0 Lib/resources.o
  .data          0x00000000        0x0 Lib/resources.o
  .bss           0x00000000        0x0 Lib/resources.o
+ .text.nibbleSwap
+                0x00000000        0x4 Lib/resources.o
+ .text.ReadByte
+                0x00000000        0x4 Lib/resources.o
+ .text          0x00000000        0x0 Lib/text_adv.o
+ .data          0x00000000        0x0 Lib/text_adv.o
+ .bss           0x00000000        0x0 Lib/text_adv.o
+ .debug_info    0x00000000       0x5d Lib/text_adv.o
+ .debug_abbrev  0x00000000       0x26 Lib/text_adv.o
+ .debug_aranges
+                0x00000000       0x18 Lib/text_adv.o
+ .debug_line    0x00000000       0x1a Lib/text_adv.o
+ .debug_str     0x00000000      0x1aa Lib/text_adv.o
+ .comment       0x00000000       0x31 Lib/text_adv.o
  .text          0x00000000        0x0 main.o
  .data          0x00000000        0x0 main.o
  .bss           0x00000000        0x0 main.o
@@ -131,6 +145,7 @@ LOAD C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATtiny_DFP/1.3.229/gcc/
 LOAD Lib/I2C.o
 LOAD Lib/main_def.o
 LOAD Lib/resources.o
+LOAD Lib/text_adv.o
 LOAD main.o
 START GROUP
 LOAD c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avrxmega3\libm.a
@@ -562,67 +577,67 @@ END GROUP
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x00000000      0x140
+.debug_aranges  0x00000000      0x150
  *(.debug_aranges)
  .debug_aranges
                 0x00000000       0x68 Lib/I2C.o
  .debug_aranges
                 0x00000068       0x18 Lib/main_def.o
  .debug_aranges
-                0x00000080       0xa0 Lib/resources.o
+                0x00000080       0xb0 Lib/resources.o
  .debug_aranges
-                0x00000120       0x20 main.o
+                0x00000130       0x20 main.o
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0x2e33
+.debug_info     0x00000000     0x2eb4
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000     0x19ed C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATtiny_DFP/1.3.229/gcc/dev/attiny1617/avrxmega3/crtattiny1617.o
  .debug_info    0x000019ed      0x656 Lib/I2C.o
  .debug_info    0x00002043      0x2d0 Lib/main_def.o
- .debug_info    0x00002313      0x5e8 Lib/resources.o
- .debug_info    0x000028fb      0x538 main.o
+ .debug_info    0x00002313      0x669 Lib/resources.o
+ .debug_info    0x0000297c      0x538 main.o
 
-.debug_abbrev   0x00000000     0x1ea5
+.debug_abbrev   0x00000000     0x1ef1
  *(.debug_abbrev)
  .debug_abbrev  0x00000000     0x1888 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATtiny_DFP/1.3.229/gcc/dev/attiny1617/avrxmega3/crtattiny1617.o
  .debug_abbrev  0x00001888      0x258 Lib/I2C.o
  .debug_abbrev  0x00001ae0       0x7e Lib/main_def.o
- .debug_abbrev  0x00001b5e      0x1cc Lib/resources.o
- .debug_abbrev  0x00001d2a      0x17b main.o
+ .debug_abbrev  0x00001b5e      0x218 Lib/resources.o
+ .debug_abbrev  0x00001d76      0x17b main.o
 
-.debug_line     0x00000000     0x12a5
+.debug_line     0x00000000     0x1303
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x151 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATtiny_DFP/1.3.229/gcc/dev/attiny1617/avrxmega3/crtattiny1617.o
  .debug_line    0x00000151      0x55c Lib/I2C.o
  .debug_line    0x000006ad       0x94 Lib/main_def.o
- .debug_line    0x00000741      0x809 Lib/resources.o
- .debug_line    0x00000f4a      0x35b main.o
+ .debug_line    0x00000741      0x84f Lib/resources.o
+ .debug_line    0x00000f90      0x373 main.o
 
-.debug_frame    0x00000000      0x398
+.debug_frame    0x00000000      0x3b8
  *(.debug_frame)
  .debug_frame   0x00000000      0x100 Lib/I2C.o
- .debug_frame   0x00000100      0x264 Lib/resources.o
- .debug_frame   0x00000364       0x34 main.o
+ .debug_frame   0x00000100      0x284 Lib/resources.o
+ .debug_frame   0x00000384       0x34 main.o
 
-.debug_str      0x00000000     0x12c7
+.debug_str      0x00000000     0x12fa
  *(.debug_str)
  .debug_str     0x00000000      0xacf C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATtiny_DFP/1.3.229/gcc/dev/attiny1617/avrxmega3/crtattiny1617.o
- .debug_str     0x00000acf      0x477 Lib/I2C.o
-                                0x4b1 (size before relaxing)
- .debug_str     0x00000f46       0xb1 Lib/main_def.o
-                                0x242 (size before relaxing)
- .debug_str     0x00000ff7      0x28c Lib/resources.o
-                                0x4ef (size before relaxing)
- .debug_str     0x00001283       0x44 main.o
-                                0x2d3 (size before relaxing)
+ .debug_str     0x00000acf      0x48f Lib/I2C.o
+                                0x4c9 (size before relaxing)
+ .debug_str     0x00000f5e       0xb1 Lib/main_def.o
+                                0x25a (size before relaxing)
+ .debug_str     0x0000100f      0x2a7 Lib/resources.o
+                                0x522 (size before relaxing)
+ .debug_str     0x000012b6       0x44 main.o
+                                0x2eb (size before relaxing)
 
-.debug_loc      0x00000000      0xf2d
+.debug_loc      0x00000000      0xf74
  *(.debug_loc)
  .debug_loc     0x00000000      0x594 Lib/I2C.o
- .debug_loc     0x00000594      0x692 Lib/resources.o
- .debug_loc     0x00000c26      0x307 main.o
+ .debug_loc     0x00000594      0x6d9 Lib/resources.o
+ .debug_loc     0x00000c6d      0x307 main.o
 
 .debug_macinfo
  *(.debug_macinfo)
@@ -642,11 +657,11 @@ END GROUP
 .debug_pubtypes
  *(.debug_pubtypes)
 
-.debug_ranges   0x00000000      0x150
+.debug_ranges   0x00000000      0x160
  *(.debug_ranges)
  .debug_ranges  0x00000000       0x58 Lib/I2C.o
- .debug_ranges  0x00000058       0x90 Lib/resources.o
- .debug_ranges  0x000000e8       0x68 main.o
+ .debug_ranges  0x00000058       0xa0 Lib/resources.o
+ .debug_ranges  0x000000f8       0x68 main.o
 
 .debug_macro
  *(.debug_macro)

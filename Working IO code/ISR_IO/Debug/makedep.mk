@@ -8,5 +8,7 @@
 
 ..\Lib\resources.c
 
+..\Lib\text_adv.c
+
 main.c
 

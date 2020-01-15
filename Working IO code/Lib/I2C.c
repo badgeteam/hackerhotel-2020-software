@@ -46,14 +46,6 @@
 #include "I2C.h"
 #include <util/delay.h>
 
-// timeout is handled by 1 millisecond RTC PIT interrupt as follows:
-/*
-ISR(RTC_PIT_vect) {						// PIT interrupt handling code, 1 ms interrupt
-	timeout_cnt++;;						// increment timeout counter
-	RTC.PITINTFLAGS = RTC_PI_bm;		// clear interrupt flag
-}
-*/
-
 #define NOP() asm volatile(" nop \r\n")
 
 void I2C_init(void)

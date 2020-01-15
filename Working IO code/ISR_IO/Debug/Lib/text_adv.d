@@ -1,4 +1,5 @@
-Lib/main_def.d Lib/main_def.o: ../../Lib/main_def.c \
+Lib/text_adv.d Lib/text_adv.o: ../../Lib/text_adv.c \
+ C:\Users\Wilenzo\Documents\Wilenzo_stack\Prive\HackerHotel\Badge\Private\hh2020\Working\ IO\ code\Lib/text_adv.h \
  C:\Users\Wilenzo\Documents\Wilenzo_stack\Prive\HackerHotel\Badge\Private\hh2020\Working\ IO\ code\Lib/main_def.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\io.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\sfr_defs.h \
@@ -17,7 +18,11 @@ Lib/main_def.d Lib/main_def.o: ../../Lib/main_def.c \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\delay_basic.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\math.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\stdlib.h \
- c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stddef.h
+ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stddef.h \
+ C:\Users\Wilenzo\Documents\Wilenzo_stack\Prive\HackerHotel\Badge\Private\hh2020\Working\ IO\ code\Lib/resources.h \
+ C:\Users\Wilenzo\Documents\Wilenzo_stack\Prive\HackerHotel\Badge\Private\hh2020\Working\ IO\ code\Lib/I2C.h
+
+C:\Users\Wilenzo\Documents\Wilenzo_stack\Prive\HackerHotel\Badge\Private\hh2020\Working\ IO\ code\Lib/text_adv.h:
 
 C:\Users\Wilenzo\Documents\Wilenzo_stack\Prive\HackerHotel\Badge\Private\hh2020\Working\ IO\ code\Lib/main_def.h:
 
@@ -56,3 +61,7 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\
 c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\stdlib.h:
 
 c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stddef.h:
+
+C:\Users\Wilenzo\Documents\Wilenzo_stack\Prive\HackerHotel\Badge\Private\hh2020\Working\ IO\ code\Lib/resources.h:
+
+C:\Users\Wilenzo\Documents\Wilenzo_stack\Prive\HackerHotel\Badge\Private\hh2020\Working\ IO\ code\Lib/I2C.h:
