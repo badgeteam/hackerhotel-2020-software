@@ -2,7 +2,8 @@
 # use them as constants in game.py, but in the FW source-code, they
 # can just be DEFINEs in combination with a define for the length 
 # of both of these lists
-byte_fields   = ['visible_acl',     # status bit needed to show object or look at it
+byte_fields   = ['effects',         # Sound/LED effects to play when entering/opening this room/object
+                 'visible_acl',     # status bit needed to show object or look at it
                  'open_acl',        # status bit needed to open/enter object
                  'action_acl',      # first status bit needed to perform an action on the object
                  'action_mask',     # which actions can be performed on this object
@@ -12,11 +13,68 @@ byte_fields   = ['visible_acl',     # status bit needed to show object or look a
 
 string_fields = ['name',            # name to show in lists
                  'desc',            # text to show when looking at the object
-                 'open_acl_msg',    # text to show when the open_acl prevents opening/entering the object
-                 'action_acl_msg',  # text to show when the action_acl prevents an action on the object
                  'action_str1',     # string1 used for an action, like the challenge for a challenge/response action
                  'action_str2',     # string2 used for an action, like the response for a challenge/response action
+                 'open_acl_msg',    # text to show when the open_acl prevents opening/entering the object
+                 'action_acl_msg',  # text to show when the action_acl prevents an action on the object
                  'action_msg']      # text to show when an action on the object was successful
+
+# For the string fields '*_msg', sound/led effects can be added by adding an
+# object <fieldname>_effects to the JSON file, this will prepend the string with one
+# byte containing 0bSSSLLLLL where S is the sound effect and LLL the LED show to play.
+# No sound effects for these fields show prepend a 0x00 byte to the string.
+# When entering a new room, the sound effect in 'effects' should be used.
+# Any time one of the '*_msg' fields is shown, the sound/led effects in the first
+# byte of the field value should be activated.
+
+sound_effects = ['<none>',
+                 'bad (buzzer)',            # can be used when a bad answer is given
+                 'good (bell)',             # can be used when a good answer is given
+                 'wind',                    # 
+                 'footsteps',
+                 'knocking',
+                 'screaming',
+                 '<free>']
+
+led_effects   = ['<none>',
+                 'flashing red eyes',       # can be used when a bad answer is given
+                 'flashing green eyes',     # can be used when a good answer is given
+                 '<free>',
+                 '<free>',
+                 '<free>',
+                 '<free>',
+                 '<free>',
+                 '<free>',
+                 '<free>',
+                 '<free>',
+                 '<free>',
+                 '<free>',
+                 '<free>',
+                 '<free>',
+                 '<free>',
+                 '<free>',
+                 '<free>',
+                 '<free>',
+                 '<free>',
+                 '<free>',
+                 '<free>',
+                 '<free>',
+                 '<free>',
+                 '<free>',
+                 '<free>',
+                 '<free>',
+                 '<free>',
+                 '<free>',
+                 '<free>',
+                 '<free>',
+                 '<free>']
+
+global current_effects
+def effects(e):
+    sound = e>>5
+    led   = e&31
+    return "[" + sound_effects[sound] + "," + led_effects[led] + "]"
+
 
 # Action constants, defining the bits in 'action_mask'
 A_ENTER =  1   # allowed to enter an object (room, elevator, etc)          NB: ENTER and OPEN are mutually exclusive !!!
@@ -119,12 +177,30 @@ def read_byte_field(data,offset,field):
 
 
 def read_string_field(data,offset,field):
+    global current_effects
+
     if field in string_fields:
         if offset != 0xffff:
             offset = offset + 4 + len(byte_fields)
             for i in range(string_fields.index(field)):
-                offset = offset + read_byte(data,offset) + 1
-            return read_range(data,offset+1,read_byte(data,offset)).decode()
+                while True:
+                    l = read_byte(data,offset)
+                    offset = offset + l + 1
+                    if l != 255:
+                        break
+            s = ""
+            while True:
+                l = read_byte(data,offset)
+                s += read_range(data,offset+1,read_byte(data,offset)).decode()
+                offset = offset + 1 + l
+                if l != 255:
+                    break
+
+            if string_fields.index(field) >= string_fields.index('open_acl_msg'):
+                if len(s) > 0:
+                    current_effects = ord(s[0])
+                    s = effects(current_effects) + s[1:]
+            return s
     return "N/A"
 
 
@@ -158,15 +234,14 @@ game_state = [0 for i in range(status_bits//8)]
 # 118   set to 1 by FW after a second normal-hot-normal cycle of the temp sensor
 # 119   read by FW to enable the magnetic maze game (only allow the game when this bit is 1)
 # 120   set to 1 by FW after the maze game is succesfully finished
-# 121   set to 1 by FW after the lan-yard code has been entered successfully
+# 121   <free>
 # 122   H turns green, set to 1 by FW after reaching level 6 of Bastet dictates
 # 123   A turns green, set to 1 by FW after Lanyard code has been entered correctly
-# 124   C turns green, set to 1 by FW after Connected to other 7 badge types / personas (UUID MOD 8) 
+# 124   C turns green, set to 1 by FW after Connected to other 3 badge types / personas (UUID MOD 4) 
 # 125   K turns green, set to 1 by game after Reached first floor in hotel (hotel guests only)
 # 126   E turns green, set to 1 by game after Reached second floor in hotel (VIPs only)
 # 127   R turns green, set to 1 by game Was able to leave the hotel (need to solve puzzles in secret room to get antidote)
 
-inventory  = []
 
 # get_state() returns True if the status bit <num> is set to 1.
 def get_state(num):
@@ -268,7 +343,7 @@ class color:
     CYAN       = '\033[36m'
     WHITE      = '\033[37m'
 
-def print_summary(data,loc,current_loc,offset):
+def print_summary(data,loc,current_loc,offset,inventory):
     c = color.NORMAL
 
     if loc == current_loc:
@@ -335,7 +410,7 @@ def print_summary(data,loc,current_loc,offset):
             c = color.GREEN
         else:
             c = color.RED
-        action_str += "{}".format(c,acl,color.BLACK)
+        action_str += "{}{}{}".format(c,acl,color.BLACK)
         sep = ","
     item = read_byte_field(data,offset,'action_item')
     if item != 0:
@@ -359,11 +434,11 @@ def print_summary(data,loc,current_loc,offset):
     print("{}{}".format(logic_str,color.NORMAL),end='')
     print()
 
-def print_tree(data,loc,current_loc,offset):
-    print_summary(data,loc,current_loc,offset)
+def print_tree(data,loc,current_loc,offset,inventory):
+    print_summary(data,loc,current_loc,offset,inventory)
     children = read_children(data,offset)
     for i in range(len(children)):
-        print_tree(data,loc+[i],current_loc,children[i])
+        print_tree(data,loc+[i],current_loc,children[i],inventory)
 
 ##########################################
 ###   Debugging functions              ###

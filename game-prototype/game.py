@@ -3,6 +3,9 @@
 from common import *
 import argparse
 
+global inventory
+global current_effects
+
 parser = argparse.ArgumentParser(description='The Hacker Hotel 2020 badge adventure')
 parser.add_argument("-d", default=False, action="store_true", help="Enable Debugging Output")
 parser.add_argument("-t", default=False, action="store_true", help="Print game tree and logic")
@@ -15,25 +18,32 @@ DEBUG = args.d
 with open('hotel.bin', 'rb') as f:
     eeprom = f.read()
 
-if args.t:
-    print_tree(eeprom,[],[-1],0)
-
 ### Start of the game
 loc             = []
 loc_offset,loc_action_mask,loc_children,loc_parent = loc2offset(eeprom,loc)
-#loc_action_mask = read_byte_field(eeprom,loc_offset,'action_mask')
+current_effects = read_byte_field(eeprom,loc_offset,'effects')
+inventory = []
+
+if args.t:
+    print_tree(eeprom,[],[-1],0,inventory)
 
 while True:
     if DEBUG:
         print("\nloc = {}".format(loc))
-        print("offset = 0x{:04X}".format(loc_offset))
-        print("children = {}".format(loc_children))
+        print("effects = {}".format(current_effects))
         print("state = {}".format(game_state))
         print("action_mask = {}".format(loc_action_mask))
         print("inventory = {}".format(inventory))
+        print("offset = 0x{:04X}".format(loc_offset))
+        print("children = {}".format(loc_children))
         print()
 
-    print("\nLocation: {}".format(read_string_field(eeprom,loc_offset,'name')))
+    print("\nLocation: {}".format(read_string_field(eeprom,loc_offset,'name')),end='')
+    if current_effects != 0:
+        print(" {}".format(effects(current_effects)))
+    else:
+        print()
+
     inp = input("? ")
     print()
     if len(inp) == 0:
@@ -48,7 +58,7 @@ while True:
 
 
     elif inp[0] == "tree":
-        print_tree(eeprom,[],loc,0)
+        print_tree(eeprom,[],loc,0,inventory)
 
 
     elif inp[0] == "debug":
@@ -136,6 +146,7 @@ while True:
         if exit_allowed:
             del loc[-1]
             loc_offset,loc_action_mask,loc_children,loc_parent = loc2offset(eeprom,loc)
+            current_effects = read_byte_field(eeprom,loc_offset,'effects')
 
 
     elif cmd == 'e' or cmd == 'o':
@@ -175,6 +186,7 @@ while True:
                     else:
                         del(loc[-1])
                     loc_offset,loc_action_mask,loc_children,loc_parent = loc2offset(eeprom,loc)
+                    current_effects = read_byte_field(eeprom,loc_offset,'effects')
                     continue
             else:
                 print("I don't see that location.")
@@ -260,6 +272,10 @@ while True:
                     if [obj_id,obj_name] in inventory:
                         print("You are already carrying that object.")
                     else:
+                        msg = check_action_permission(eeprom,obj_offset)
+                        if msg != "":
+                            print(msg)
+                            continue
                         print("You are now carrying: {}".format(obj_name))
                         inventory.append([obj_id,obj_name])
                 else:

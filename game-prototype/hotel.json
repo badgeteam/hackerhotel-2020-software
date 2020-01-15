@@ -3,6 +3,7 @@
   "game" : {
     "name" : "The Street",
     "desc" : "You stand in front of Hotel Pyramide, an Egyptian styled\nboutique hotel. There is a Hacker Conference going on at the hotel.",
+    "effects" : 96,
     "visible_acl" : 127,
     "open_acl" : 127,
     "action_mask" : 13,
@@ -14,6 +15,18 @@
         "desc" : "You are in the lobby of our beautiful hotel \"The Pyramid\". Here you can find our reception, the hotel bar and a shop. On your right you can find the elevator to all the rooms and on the left is of course the entrance through which you came in.",
         "action_mask" : 1,
         "o" : [
+          {
+            "name" : "ATM machine",
+            "desc" : "Hey, the ATM is hacked and gives out free $100 bills",
+            "action_mask" : 20,
+            "action_msg" : "You have withdrawn $100 and put it in your wallet",
+            "action_msgeffects" : 66,
+            "action_acl" : 132,
+            "action_acl_msg" : "Please play fair and don't use the ATM so often!",
+            "action_acl_msg_effects" : 33,
+            "action_state" : 4,
+            "state_desc" : "You have withdrawn $100"
+          },
           {
             "name" : "The Reception",
             "desc" : "Testing look!",
@@ -44,6 +57,7 @@
                 "action_mask" : 20,
                 "action_item" : 1,
                 "action_msg" : "You succesfully copied the VIP keycard",
+                "action_msg_effects" : 66,
                 "action_state" : 2,
                 "state_desc" : "VIP keycard obtained"
               },
@@ -64,6 +78,10 @@
               {
                 "name" : "Proxmark III",
                 "desc" : "The Proxmark is an RFID swiss-army tool, allowing for both high and low level interactions with the vast majority of RFID tags and systems world-wide.",
+                "action_acl" : 4,
+                "action_acl_msg" : "You need some money to buy the Proxmark III",
+                "action_acl_state" : 132,
+                "action_msg" : "You paid",
                 "action_mask" : 20,
                 "item_nr" : 1
               }

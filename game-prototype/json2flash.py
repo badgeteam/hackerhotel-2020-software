@@ -6,11 +6,11 @@ import pprint
 from common import *
 
 items        = ["" for i in range(max_items)]
-state_desc   = ["" for i in range(status_bits)]
-action_state = [[] for i in range(status_bits)]
-visible_acl  = [[] for i in range(status_bits)]
-open_acl     = [[] for i in range(status_bits)]
-action_acl   = [[] for i in range(status_bits)]
+state_desc   = ["" for i in range(status_bits*2-1)]
+action_state = [[] for i in range(status_bits*2-1)]
+visible_acl  = [[] for i in range(status_bits*2-1)]
+open_acl     = [[] for i in range(status_bits*2-1)]
+action_acl   = [[] for i in range(status_bits*2-1)]
 
 def show_eeprom(data):
     offset = 0
@@ -44,9 +44,19 @@ def show_eeprom(data):
             offset += 1
 
         for i in range(len(string_fields)):
-            l = read_byte(data,offset)
-            print("0x{0:04X} {4:} Level {1:}, {2:}={3:}".format(offset,level,string_fields[i],read_range(data,offset+1,l).decode(),"  "*level))
-            offset = offset + 1 + l
+            start_offset = offset
+            s = ""
+            while True:
+                l = read_byte(data,offset)
+                s = s + read_range(data,offset+1,l).decode()
+                offset = offset + 1 + l
+                if l != 255:
+                    break
+            if i >= string_fields.index('open_acl_msg'):
+                if len(s) > 0:
+                    s = effects(ord(s[0])) + s[1:]
+
+            print("0x{0:04X} {4:} Level {1:}, {2:}={3:}".format(start_offset,level,string_fields[i],s,"  "*level))
 
         if offset == cache[-1]:
             # next object at same level
@@ -72,11 +82,30 @@ def convert_json_to_eeprom(obj,offset=0):
             binary.append(0x00)
         l = l + 1
 
-    for f in string_fields:
+    for i in range(len(string_fields)):
+        f = string_fields[i]
         if f in obj:
-            binary.append(len(obj[f]))
-            binary.extend(obj[f].encode('ascii'))
-            l = l + 1 + len(obj[f])
+            # If needed, start with sound/LED effects in the string
+            if i >= string_fields.index('open_acl_msg'):
+                e = string_fields[i] + "_effects"
+                print(e)
+                if e in obj:
+                    s = chr(obj[e])
+                else:
+                    s = chr(0)
+            else:
+                s = ""
+            s = s + obj[f]
+            print("DEBUG: {}".format(obj[f]))
+                    
+            while len(s) >= 255:
+                binary.append(255)
+                binary.extend(s[:255].encode('utf8'))
+                l = l + 256
+                s = s[255:]
+            binary.append(len(s))
+            binary.extend(s.encode('utf8'))
+            l = l + 1 + len(s)
         else:
             binary.append(0x00)
             l = l + 1
@@ -121,7 +150,7 @@ with open('hotel.json', 'r') as f:
 data = convert_json_to_eeprom(hotel['game'])
 l = len(hotel['help'])
 data = data + bytearray([l // 256, l  % 256])
-data.extend(hotel['help'].encode('ascii'))
+data.extend(hotel['help'].encode('utf8'))
 
 
 if len(data) + 64 > flash_size:
