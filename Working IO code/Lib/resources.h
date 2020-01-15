@@ -16,6 +16,10 @@
     #include <util/delay.h>
     #include <stdlib.h>
 
+    //External EEPROM "encryption", designed to be broken
+    //volatile const uint8_t xor_key_game[8]  = {0x74, 0xbf, 0xfa, 0x54, 0x1c, 0x96, 0xb2, 0x26};
+    //volatile const uint8_t xor_key_teaser[8] = {0x1e, 0xeb, 0xd6, 0x8b, 0xc0, 0xc2, 0x0a, 0x61};
+
     void setup();
     ISR(TCA0_LUNF_vect);                                                // LED matrix interrupt routine
     ISR(TCB0_INT_vect);                                                 // Used for sending serial data and serSpeed "typing" effect
@@ -31,5 +35,6 @@
     uint8_t CheckButtons(uint8_t previousValue);                        // Readout of the button state, with duration. Run periodically, but not faster than (PIT interrupt sps / 3) times per second.
     void EERead(uint8_t eeAddr, uint8_t *eeValues, uint8_t size);       // Read from internal EEPROM, wraps around if eeAddr+size>255
     uint8_t EEWrite(uint8_t eeAddr, uint8_t *eeValues, uint8_t size);   // Write to internal EEPROM, wraps around if eeAddr+size>255
+    uint8_t ReadByte(uint16_t offset, uint8_t * key);                   // Reads and decrypts a byte from external EEPROM
 
 #endif /* RESOURCES_H_ */

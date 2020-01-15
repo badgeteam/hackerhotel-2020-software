@@ -27,6 +27,7 @@
 #include <stdlib.h>
 #include <resources.h>          //Functions for initializing and usage of hardware resources
 #include <I2C.h>                //Fixed a semi-crappy lib found on internet, replace with interrupt driven one? If so, check hardware errata pdf!
+#include <text_adv.h>           //Text adventure stuff
 #include <stdio.h>
 
 
@@ -105,7 +106,9 @@ int main(void)
             serRx[8] = retVal;
             while (serTxDone == 0);
             SerSend((uint8_t*) &serRx[0]);
+            //retVal = ReadByte(15, &xor_key_game[0]);
             retVal = 0;
+
         }
     }
 }

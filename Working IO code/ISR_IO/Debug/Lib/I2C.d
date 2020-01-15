@@ -12,7 +12,7 @@ Lib/I2C.d Lib/I2C.o: ../../Lib/I2C.c \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\fuse.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\lock.h \
  ../../Lib/I2C.h \
- C:\Users\Wilenzo\Documents\Wilenzo_stack\Prive\HackerHotel\Badge\ISR_IO\Lib/main_def.h \
+ C:\Users\Wilenzo\Documents\Wilenzo_stack\Prive\HackerHotel\Badge\Private\hh2020\Working\ IO\ code\Lib/main_def.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\interrupt.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\delay.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\delay_basic.h \
@@ -46,7 +46,7 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\
 
 ../../Lib/I2C.h:
 
-C:\Users\Wilenzo\Documents\Wilenzo_stack\Prive\HackerHotel\Badge\ISR_IO\Lib/main_def.h:
+C:\Users\Wilenzo\Documents\Wilenzo_stack\Prive\HackerHotel\Badge\Private\hh2020\Working\ IO\ code\Lib/main_def.h:
 
 c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\interrupt.h:
 
