@@ -3,33 +3,33 @@ ISR_IO.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000002  00803800  00000ef0  00000fa4  2**0
+  0 .data         0000001a  00803800  00000f60  00001014  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         00000eb0  00000000  00000000  000000b4  2**1
+  1 .text         00000f20  00000000  00000000  000000b4  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .rodata       00000040  00008eb0  00000eb0  00000f64  2**0
+  2 .rodata       00000040  00008f20  00000f20  00000fd4  2**0
                   CONTENTS, ALLOC, LOAD, READONLY, DATA
-  3 .bss          0000007c  00803802  00803802  00000fa6  2**0
+  3 .bss          0000009f  0080381a  0080381a  0000102e  2**0
                   ALLOC
-  4 .comment      00000030  00000000  00000000  00000fa6  2**0
+  4 .comment      00000030  00000000  00000000  0000102e  2**0
                   CONTENTS, READONLY
-  5 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  00000fd8  2**2
+  5 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  00001060  2**2
                   CONTENTS, READONLY
-  6 .debug_aranges 00000180  00000000  00000000  00001018  2**0
+  6 .debug_aranges 00000198  00000000  00000000  000010a0  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_info   0000313a  00000000  00000000  00001198  2**0
+  7 .debug_info   00003260  00000000  00000000  00001238  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_abbrev 00002009  00000000  00000000  000042d2  2**0
+  8 .debug_abbrev 0000207d  00000000  00000000  00004498  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_line   000014cd  00000000  00000000  000062db  2**0
+  9 .debug_line   00001589  00000000  00000000  00006515  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_frame  00000450  00000000  00000000  000077a8  2**2
+ 10 .debug_frame  00000490  00000000  00000000  00007aa0  2**2
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_str    0000134b  00000000  00000000  00007bf8  2**0
+ 11 .debug_str    000013a3  00000000  00000000  00007f30  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_loc    000011fe  00000000  00000000  00008f43  2**0
+ 12 .debug_loc    0000127c  00000000  00000000  000092d3  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_ranges 00000180  00000000  00000000  0000a141  2**0
+ 13 .debug_ranges 00000198  00000000  00000000  0000a54f  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -110,18 +110,18 @@ Disassembly of section .text:
   88:	18 e3       	ldi	r17, 0x38	; 56
   8a:	a0 e0       	ldi	r26, 0x00	; 0
   8c:	b8 e3       	ldi	r27, 0x38	; 56
-  8e:	e0 ef       	ldi	r30, 0xF0	; 240
-  90:	fe e0       	ldi	r31, 0x0E	; 14
+  8e:	e0 e6       	ldi	r30, 0x60	; 96
+  90:	ff e0       	ldi	r31, 0x0F	; 15
   92:	02 c0       	rjmp	.+4      	; 0x98 <__do_copy_data+0x10>
   94:	05 90       	lpm	r0, Z+
   96:	0d 92       	st	X+, r0
-  98:	a2 30       	cpi	r26, 0x02	; 2
+  98:	aa 31       	cpi	r26, 0x1A	; 26
   9a:	b1 07       	cpc	r27, r17
   9c:	d9 f7       	brne	.-10     	; 0x94 <__do_copy_data+0xc>
 
 0000009e <__do_clear_bss>:
   9e:	28 e3       	ldi	r18, 0x38	; 56
-  a0:	a2 e0       	ldi	r26, 0x02	; 2
+  a0:	aa e1       	ldi	r26, 0x1A	; 26
   a2:	b8 e3       	ldi	r27, 0x38	; 56
   a4:	01 c0       	rjmp	.+2      	; 0xa8 <.do_clear_bss_start>
 
@@ -129,11 +129,11 @@ Disassembly of section .text:
   a6:	1d 92       	st	X+, r1
 
 000000a8 <.do_clear_bss_start>:
-  a8:	ae 37       	cpi	r26, 0x7E	; 126
+  a8:	a9 3b       	cpi	r26, 0xB9	; 185
   aa:	b2 07       	cpc	r27, r18
   ac:	e1 f7       	brne	.-8      	; 0xa6 <.do_clear_bss_loop>
-  ae:	d6 d5       	rcall	.+2988   	; 0xc5c <main>
-  b0:	fd c6       	rjmp	.+3578   	; 0xeac <_exit>
+  ae:	11 d6       	rcall	.+3106   	; 0xcd2 <main>
+  b0:	35 c7       	rjmp	.+3690   	; 0xf1c <_exit>
 
 000000b2 <__bad_interrupt>:
   b2:	a6 cf       	rjmp	.-180    	; 0x0 <__vectors>
@@ -246,11 +246,11 @@ void I2C_rep_start(uint8_t shifted_addr)						    // send repeated start, device
 
 0000017a <I2C_wait_ACK>:
  17a:	8c e0       	ldi	r24, 0x0C	; 12
- 17c:	80 93 06 38 	sts	0x3806, r24	; 0x803806 <timeout_I2C>
+ 17c:	80 93 20 38 	sts	0x3820, r24	; 0x803820 <timeout_I2C>
  180:	e0 e1       	ldi	r30, 0x10	; 16
  182:	f8 e0       	ldi	r31, 0x08	; 8
  184:	04 c0       	rjmp	.+8      	; 0x18e <I2C_wait_ACK+0x14>
- 186:	80 91 06 38 	lds	r24, 0x3806	; 0x803806 <timeout_I2C>
+ 186:	80 91 20 38 	lds	r24, 0x3820	; 0x803820 <timeout_I2C>
  18a:	88 23       	and	r24, r24
  18c:	b9 f0       	breq	.+46     	; 0x1bc <I2C_wait_ACK+0x42>
  18e:	85 81       	ldd	r24, Z+5	; 0x05
@@ -289,7 +289,7 @@ uint8_t	I2C_read(uint8_t *data, uint8_t ack_flag)					// read data, ack_flag 0: 
  1c8:	dc 01       	movw	r26, r24
 	timeout_I2C = READ_TIMEOUT;										// reset timeout counter, will be decremented by LED matrix interrupt
  1ca:	9c e0       	ldi	r25, 0x0C	; 12
- 1cc:	90 93 06 38 	sts	0x3806, r25	; 0x803806 <timeout_I2C>
+ 1cc:	90 93 20 38 	sts	0x3820, r25	; 0x803820 <timeout_I2C>
 	if ((TWI0.MSTATUS & TWI_BUSSTATE_gm) == TWI_BUSSTATE_OWNER_gc)	// if master controls bus
  1d0:	90 91 15 08 	lds	r25, 0x0815	; 0x800815 <__TEXT_REGION_LENGTH__+0x700815>
  1d4:	89 2f       	mov	r24, r25
@@ -310,7 +310,7 @@ uint8_t	I2C_read(uint8_t *data, uint8_t ack_flag)					// read data, ack_flag 0: 
 		while (!(TWI0.MSTATUS & TWI_RIF_bm))						// wait for RIF set (data byte received)
 		{
 			if (!(timeout_I2C)) return 0xff;			            // return timeout error
- 1e0:	90 91 06 38 	lds	r25, 0x3806	; 0x803806 <timeout_I2C>
+ 1e0:	90 91 20 38 	lds	r25, 0x3820	; 0x803820 <timeout_I2C>
  1e4:	91 11       	cpse	r25, r1
  1e6:	03 c0       	rjmp	.+6      	; 0x1ee <I2C_read+0x26>
  1e8:	2a c0       	rjmp	.+84     	; 0x23e <I2C_read+0x76>
@@ -409,7 +409,7 @@ uint8_t I2C_write(uint8_t *data)									// write data, return status
  24a:	fc 01       	movw	r30, r24
 	timeout_I2C = WRITE_TIMEOUT;									// reset timeout counter, will be decremented by LED matrix interrupt
  24c:	9c e0       	ldi	r25, 0x0C	; 12
- 24e:	90 93 06 38 	sts	0x3806, r25	; 0x803806 <timeout_I2C>
+ 24e:	90 93 20 38 	sts	0x3820, r25	; 0x803820 <timeout_I2C>
 	if ((TWI0.MSTATUS & TWI_BUSSTATE_gm) == TWI_BUSSTATE_OWNER_gc)	// if master controls bus
  252:	90 91 15 08 	lds	r25, 0x0815	; 0x800815 <__TEXT_REGION_LENGTH__+0x700815>
  256:	93 70       	andi	r25, 0x03	; 3
@@ -425,7 +425,7 @@ uint8_t I2C_write(uint8_t *data)									// write data, return status
  266:	04 c0       	rjmp	.+8      	; 0x270 <I2C_write+0x26>
 		{
 			if (!(timeout_I2C)) return 0xff;			            // return timeout error
- 268:	80 91 06 38 	lds	r24, 0x3806	; 0x803806 <timeout_I2C>
+ 268:	80 91 20 38 	lds	r24, 0x3820	; 0x803820 <timeout_I2C>
  26c:	88 23       	and	r24, r24
  26e:	71 f0       	breq	.+28     	; 0x28c <I2C_write+0x42>
 {
@@ -1002,9 +1002,9 @@ void setup(){
  534:	60 81       	ld	r22, Z
  536:	71 81       	ldd	r23, Z+1	; 0x01
  538:	82 96       	adiw	r24, 0x22	; 34
- 53a:	a4 d4       	rcall	.+2376   	; 0xe84 <__udivmodhi4>
- 53c:	80 93 7c 38 	sts	0x387C, r24	; 0x80387c <tmp16bit>
- 540:	90 93 7d 38 	sts	0x387D, r25	; 0x80387d <tmp16bit+0x1>
+ 53a:	dc d4       	rcall	.+2488   	; 0xef4 <__udivmodhi4>
+ 53c:	80 93 96 38 	sts	0x3896, r24	; 0x803896 <tmp16bit>
+ 540:	90 93 97 38 	sts	0x3897, r25	; 0x803897 <tmp16bit+0x1>
     while(RTC_STATUS & RTC_CMPBUSY_bm);
  544:	e1 e4       	ldi	r30, 0x41	; 65
  546:	f1 e0       	ldi	r31, 0x01	; 1
@@ -1012,8 +1012,8 @@ void setup(){
  54a:	83 fd       	sbrc	r24, 3
  54c:	fd cf       	rjmp	.-6      	; 0x548 <__LOCK_REGION_LENGTH__+0x148>
     RTC_CMP            = tmp16bit;                         //Button timing
- 54e:	80 91 7c 38 	lds	r24, 0x387C	; 0x80387c <tmp16bit>
- 552:	90 91 7d 38 	lds	r25, 0x387D	; 0x80387d <tmp16bit+0x1>
+ 54e:	80 91 96 38 	lds	r24, 0x3896	; 0x803896 <tmp16bit>
+ 552:	90 91 97 38 	lds	r25, 0x3897	; 0x803897 <tmp16bit+0x1>
  556:	80 93 4c 01 	sts	0x014C, r24	; 0x80014c <__TEXT_REGION_LENGTH__+0x70014c>
  55a:	90 93 4d 01 	sts	0x014D, r25	; 0x80014d <__TEXT_REGION_LENGTH__+0x70014d>
     RTC_INTCTRL        = 0x03;                             //RTC overflow interrupt enabled
@@ -1046,12 +1046,12 @@ void setup(){
      
     //Other inits
     serRx[0] = 0;           // Empty Rx buffer (first char is enough)
- 58e:	e7 e0       	ldi	r30, 0x07	; 7
+ 58e:	e1 e2       	ldi	r30, 0x21	; 33
  590:	f8 e3       	ldi	r31, 0x38	; 56
  592:	10 82       	st	Z, r1
     serTxAddr = &serRx[0];  // Point to first address of the Rx buffer
- 594:	e0 93 2b 38 	sts	0x382B, r30	; 0x80382b <serTxAddr>
- 598:	f0 93 2c 38 	sts	0x382C, r31	; 0x80382c <serTxAddr+0x1>
+ 594:	e0 93 45 38 	sts	0x3845, r30	; 0x803845 <serTxAddr>
+ 598:	f0 93 46 38 	sts	0x3846, r31	; 0x803846 <serTxAddr+0x1>
 
     sei();
  59c:	78 94       	sei
@@ -1096,7 +1096,7 @@ ISR(TCA0_LUNF_vect){
  5d0:	ff 1f       	adc	r31, r31
  5d2:	ee 0f       	add	r30, r30
  5d4:	ff 1f       	adc	r31, r31
- 5d6:	ee 5a       	subi	r30, 0xAE	; 174
+ 5d6:	e4 59       	subi	r30, 0x94	; 148
  5d8:	f7 4c       	sbci	r31, 0xC7	; 199
     //Turn off all columns
     PORTC_OUTCLR = 0x07;
@@ -1159,12 +1159,12 @@ ISR(TCA0_LUNF_vect){
     }
     
     if(timeout_I2C) timeout_I2C--;
- 61e:	80 91 06 38 	lds	r24, 0x3806	; 0x803806 <timeout_I2C>
+ 61e:	80 91 20 38 	lds	r24, 0x3820	; 0x803820 <timeout_I2C>
  622:	88 23       	and	r24, r24
  624:	29 f0       	breq	.+10     	; 0x630 <__vector_8+0x8c>
- 626:	80 91 06 38 	lds	r24, 0x3806	; 0x803806 <timeout_I2C>
+ 626:	80 91 20 38 	lds	r24, 0x3820	; 0x803820 <timeout_I2C>
  62a:	81 50       	subi	r24, 0x01	; 1
- 62c:	80 93 06 38 	sts	0x3806, r24	; 0x803806 <timeout_I2C>
+ 62c:	80 93 20 38 	sts	0x3820, r24	; 0x803820 <timeout_I2C>
     TCA0_SPLIT_INTFLAGS = 0xFF;
  630:	8f ef       	ldi	r24, 0xFF	; 255
  632:	80 93 0b 0a 	sts	0x0A0B, r24	; 0x800a0b <__TEXT_REGION_LENGTH__+0x700a0b>
@@ -1195,8 +1195,8 @@ ISR(TCB0_INT_vect){
  65a:	ef 93       	push	r30
  65c:	ff 93       	push	r31
     if (*serTxAddr) {
- 65e:	e0 91 2b 38 	lds	r30, 0x382B	; 0x80382b <serTxAddr>
- 662:	f0 91 2c 38 	lds	r31, 0x382C	; 0x80382c <serTxAddr+0x1>
+ 65e:	e0 91 45 38 	lds	r30, 0x3845	; 0x803845 <serTxAddr>
+ 662:	f0 91 46 38 	lds	r31, 0x3846	; 0x803846 <serTxAddr+0x1>
  666:	80 81       	ld	r24, Z
  668:	88 23       	and	r24, r24
  66a:	91 f0       	breq	.+36     	; 0x690 <__vector_13+0x44>
@@ -1204,11 +1204,11 @@ ISR(TCB0_INT_vect){
  66c:	80 81       	ld	r24, Z
  66e:	80 93 02 08 	sts	0x0802, r24	; 0x800802 <__TEXT_REGION_LENGTH__+0x700802>
         serTxAddr++;
- 672:	80 91 2b 38 	lds	r24, 0x382B	; 0x80382b <serTxAddr>
- 676:	90 91 2c 38 	lds	r25, 0x382C	; 0x80382c <serTxAddr+0x1>
+ 672:	80 91 45 38 	lds	r24, 0x3845	; 0x803845 <serTxAddr>
+ 676:	90 91 46 38 	lds	r25, 0x3846	; 0x803846 <serTxAddr+0x1>
  67a:	01 96       	adiw	r24, 0x01	; 1
- 67c:	80 93 2b 38 	sts	0x382B, r24	; 0x80382b <serTxAddr>
- 680:	90 93 2c 38 	sts	0x382C, r25	; 0x80382c <serTxAddr+0x1>
+ 67c:	80 93 45 38 	sts	0x3845, r24	; 0x803845 <serTxAddr>
+ 680:	90 93 46 38 	sts	0x3846, r25	; 0x803846 <serTxAddr+0x1>
         USART0_CTRLA |= USART_DREIE_bm;
  684:	e5 e0       	ldi	r30, 0x05	; 5
  686:	f8 e0       	ldi	r31, 0x08	; 8
@@ -1251,8 +1251,8 @@ ISR(TCB1_INT_vect){
  6c0:	ef 93       	push	r30
  6c2:	ff 93       	push	r31
     if (*auSmpAddr) {
- 6c4:	e0 91 27 38 	lds	r30, 0x3827	; 0x803827 <auSmpAddr>
- 6c8:	f0 91 28 38 	lds	r31, 0x3828	; 0x803828 <auSmpAddr+0x1>
+ 6c4:	e0 91 41 38 	lds	r30, 0x3841	; 0x803841 <auSmpAddr>
+ 6c8:	f0 91 42 38 	lds	r31, 0x3842	; 0x803842 <auSmpAddr+0x1>
  6cc:	80 81       	ld	r24, Z
  6ce:	88 23       	and	r24, r24
  6d0:	69 f0       	breq	.+26     	; 0x6ec <__vector_14+0x3a>
@@ -1260,11 +1260,11 @@ ISR(TCB1_INT_vect){
  6d2:	80 81       	ld	r24, Z
  6d4:	80 93 a1 06 	sts	0x06A1, r24	; 0x8006a1 <__TEXT_REGION_LENGTH__+0x7006a1>
         auSmpAddr++;
- 6d8:	80 91 27 38 	lds	r24, 0x3827	; 0x803827 <auSmpAddr>
- 6dc:	90 91 28 38 	lds	r25, 0x3828	; 0x803828 <auSmpAddr+0x1>
+ 6d8:	80 91 41 38 	lds	r24, 0x3841	; 0x803841 <auSmpAddr>
+ 6dc:	90 91 42 38 	lds	r25, 0x3842	; 0x803842 <auSmpAddr+0x1>
  6e0:	01 96       	adiw	r24, 0x01	; 1
- 6e2:	80 93 27 38 	sts	0x3827, r24	; 0x803827 <auSmpAddr>
- 6e6:	90 93 28 38 	sts	0x3828, r25	; 0x803828 <auSmpAddr+0x1>
+ 6e2:	80 93 41 38 	sts	0x3841, r24	; 0x803841 <auSmpAddr>
+ 6e6:	90 93 42 38 	sts	0x3842, r25	; 0x803842 <auSmpAddr+0x1>
  6ea:	06 c0       	rjmp	.+12     	; 0x6f8 <__vector_14+0x46>
         } else {
         DAC0_DATA = 0x80;
@@ -1272,7 +1272,7 @@ ISR(TCB1_INT_vect){
  6ee:	80 93 a1 06 	sts	0x06A1, r24	; 0x8006a1 <__TEXT_REGION_LENGTH__+0x7006a1>
         auPlayDone = 1;
  6f2:	81 e0       	ldi	r24, 0x01	; 1
- 6f4:	80 93 7a 38 	sts	0x387A, r24	; 0x80387a <auPlayDone>
+ 6f4:	80 93 94 38 	sts	0x3894, r24	; 0x803894 <auPlayDone>
     }
     TCB1_INTFLAGS = TCB_CAPT_bm;
  6f8:	81 e0       	ldi	r24, 0x01	; 1
@@ -1304,13 +1304,13 @@ ISR(USART0_RXC_vect){
  720:	ed b3       	in	r30, 0x1d	; 29
  722:	f0 e0       	ldi	r31, 0x00	; 0
  724:	80 91 00 08 	lds	r24, 0x0800	; 0x800800 <__TEXT_REGION_LENGTH__+0x700800>
- 728:	e9 5f       	subi	r30, 0xF9	; 249
+ 728:	ef 5d       	subi	r30, 0xDF	; 223
  72a:	f7 4c       	sbci	r31, 0xC7	; 199
  72c:	80 83       	st	Z, r24
     if (serRx[RXCNT] == 0x0A){
  72e:	ed b3       	in	r30, 0x1d	; 29
  730:	f0 e0       	ldi	r31, 0x00	; 0
- 732:	e9 5f       	subi	r30, 0xF9	; 249
+ 732:	ef 5d       	subi	r30, 0xDF	; 223
  734:	f7 4c       	sbci	r31, 0xC7	; 199
  736:	80 81       	ld	r24, Z
  738:	8a 30       	cpi	r24, 0x0A	; 10
@@ -1318,12 +1318,12 @@ ISR(USART0_RXC_vect){
         serRx[RXCNT] = 0;
  73c:	ed b3       	in	r30, 0x1d	; 29
  73e:	f0 e0       	ldi	r31, 0x00	; 0
- 740:	e9 5f       	subi	r30, 0xF9	; 249
+ 740:	ef 5d       	subi	r30, 0xDF	; 223
  742:	f7 4c       	sbci	r31, 0xC7	; 199
  744:	10 82       	st	Z, r1
         serRxDone = 1;
  746:	81 e0       	ldi	r24, 0x01	; 1
- 748:	80 93 05 38 	sts	0x3805, r24	; 0x803805 <serRxDone>
+ 748:	80 93 1d 38 	sts	0x381D, r24	; 0x80381d <serRxDone>
  74c:	06 c0       	rjmp	.+12     	; 0x75a <__vector_27+0x4a>
     } else if (RXCNT < (RXLEN-1)) RXCNT++;
  74e:	8d b3       	in	r24, 0x1d	; 29
@@ -1397,7 +1397,7 @@ ISR(ADC0_RESRDY_vect){
  7bc:	8f 71       	andi	r24, 0x1F	; 31
  7be:	8e bb       	out	0x1e, r24	; 30
     if (adc0Chg == 0){
- 7c0:	80 91 02 38 	lds	r24, 0x3802	; 0x803802 <__data_end>
+ 7c0:	80 91 1a 38 	lds	r24, 0x381A	; 0x80381a <__data_end>
  7c4:	81 11       	cpse	r24, r1
  7c6:	11 c0       	rjmp	.+34     	; 0x7ea <__vector_20+0x42>
         if (ADC0_MUXPOS == 0x1E) adcTemp = ADC0_RESL; else auIn[AUPOS]=ADC0_RESL;
@@ -1405,17 +1405,17 @@ ISR(ADC0_RESRDY_vect){
  7cc:	8e 31       	cpi	r24, 0x1E	; 30
  7ce:	29 f4       	brne	.+10     	; 0x7da <__vector_20+0x32>
  7d0:	80 91 10 06 	lds	r24, 0x0610	; 0x800610 <__TEXT_REGION_LENGTH__+0x700610>
- 7d4:	80 93 7b 38 	sts	0x387B, r24	; 0x80387b <adcTemp>
+ 7d4:	80 93 95 38 	sts	0x3895, r24	; 0x803895 <adcTemp>
  7d8:	0a c0       	rjmp	.+20     	; 0x7ee <__vector_20+0x46>
  7da:	ee b3       	in	r30, 0x1e	; 30
  7dc:	f0 e0       	ldi	r31, 0x00	; 0
  7de:	80 91 10 06 	lds	r24, 0x0610	; 0x800610 <__TEXT_REGION_LENGTH__+0x700610>
- 7e2:	ee 5c       	subi	r30, 0xCE	; 206
+ 7e2:	e4 5b       	subi	r30, 0xB4	; 180
  7e4:	f7 4c       	sbci	r31, 0xC7	; 199
  7e6:	80 83       	st	Z, r24
  7e8:	02 c0       	rjmp	.+4      	; 0x7ee <__vector_20+0x46>
     } else adc0Chg = 0;
- 7ea:	10 92 02 38 	sts	0x3802, r1	; 0x803802 <__data_end>
+ 7ea:	10 92 1a 38 	sts	0x381A, r1	; 0x80381a <__data_end>
     ADC0_INTFLAGS = ADC_RESRDY_bm;
  7ee:	81 e0       	ldi	r24, 0x01	; 1
  7f0:	80 93 0b 06 	sts	0x060B, r24	; 0x80060b <__TEXT_REGION_LENGTH__+0x70060b>
@@ -1447,8 +1447,8 @@ ISR(ADC1_RESRDY_vect){
         adcPhot = ADC1_RES;
  81a:	80 91 50 06 	lds	r24, 0x0650	; 0x800650 <__TEXT_REGION_LENGTH__+0x700650>
  81e:	90 91 51 06 	lds	r25, 0x0651	; 0x800651 <__TEXT_REGION_LENGTH__+0x700651>
- 822:	80 93 2f 38 	sts	0x382F, r24	; 0x80382f <adcPhot>
- 826:	90 93 30 38 	sts	0x3830, r25	; 0x803830 <adcPhot+0x1>
+ 822:	80 93 49 38 	sts	0x3849, r24	; 0x803849 <adcPhot>
+ 826:	90 93 4a 38 	sts	0x384A, r25	; 0x80384a <adcPhot+0x1>
         ADC1_MUXPOS = 0x01;             //Select Hall sensor
  82a:	81 e0       	ldi	r24, 0x01	; 1
  82c:	80 93 46 06 	sts	0x0646, r24	; 0x800646 <__TEXT_REGION_LENGTH__+0x700646>
@@ -1463,8 +1463,8 @@ ISR(ADC1_RESRDY_vect){
         adcHall = ADC1_RES;
  840:	80 91 50 06 	lds	r24, 0x0650	; 0x800650 <__TEXT_REGION_LENGTH__+0x700650>
  844:	90 91 51 06 	lds	r25, 0x0651	; 0x800651 <__TEXT_REGION_LENGTH__+0x700651>
- 848:	80 93 2d 38 	sts	0x382D, r24	; 0x80382d <adcHall>
- 84c:	90 93 2e 38 	sts	0x382E, r25	; 0x80382e <adcHall+0x1>
+ 848:	80 93 47 38 	sts	0x3847, r24	; 0x803847 <adcHall>
+ 84c:	90 93 48 38 	sts	0x3848, r25	; 0x803848 <adcHall+0x1>
         ADC1_MUXPOS = 0x04;             //select buttons
  850:	84 e0       	ldi	r24, 0x04	; 4
  852:	80 93 46 06 	sts	0x0646, r24	; 0x800646 <__TEXT_REGION_LENGTH__+0x700646>
@@ -1473,8 +1473,8 @@ ISR(ADC1_RESRDY_vect){
         adcBtns = ADC1_RES;
  858:	80 91 50 06 	lds	r24, 0x0650	; 0x800650 <__TEXT_REGION_LENGTH__+0x700650>
  85c:	90 91 51 06 	lds	r25, 0x0651	; 0x800651 <__TEXT_REGION_LENGTH__+0x700651>
- 860:	80 93 29 38 	sts	0x3829, r24	; 0x803829 <adcBtns>
- 864:	90 93 2a 38 	sts	0x382A, r25	; 0x80382a <adcBtns+0x1>
+ 860:	80 93 43 38 	sts	0x3843, r24	; 0x803843 <adcBtns>
+ 864:	90 93 44 38 	sts	0x3844, r25	; 0x803844 <adcBtns+0x1>
         if (A1CNT == 15){
  868:	8f b3       	in	r24, 0x1f	; 31
  86a:	8f 30       	cpi	r24, 0x0F	; 15
@@ -1535,21 +1535,21 @@ ISR(RTC_CNT_vect) {
  8c4:	81 ff       	sbrs	r24, 1
  8c6:	28 c0       	rjmp	.+80     	; 0x918 <__vector_6+0x74>
         if (buttonMark<255) buttonMark++;   // For button timing purposes
- 8c8:	80 91 03 38 	lds	r24, 0x3803	; 0x803803 <buttonMark>
+ 8c8:	80 91 1b 38 	lds	r24, 0x381B	; 0x80381b <buttonMark>
  8cc:	8f 3f       	cpi	r24, 0xFF	; 255
  8ce:	29 f0       	breq	.+10     	; 0x8da <__vector_6+0x36>
- 8d0:	80 91 03 38 	lds	r24, 0x3803	; 0x803803 <buttonMark>
+ 8d0:	80 91 1b 38 	lds	r24, 0x381B	; 0x80381b <buttonMark>
  8d4:	8f 5f       	subi	r24, 0xFF	; 255
- 8d6:	80 93 03 38 	sts	0x3803, r24	; 0x803803 <buttonMark>
+ 8d6:	80 93 1b 38 	sts	0x381B, r24	; 0x80381b <buttonMark>
         tmp16bit = (RTC_CNT + BTN_TMR)%RTC_PER;
  8da:	80 91 48 01 	lds	r24, 0x0148	; 0x800148 <__TEXT_REGION_LENGTH__+0x700148>
  8de:	90 91 49 01 	lds	r25, 0x0149	; 0x800149 <__TEXT_REGION_LENGTH__+0x700149>
  8e2:	60 91 4a 01 	lds	r22, 0x014A	; 0x80014a <__TEXT_REGION_LENGTH__+0x70014a>
  8e6:	70 91 4b 01 	lds	r23, 0x014B	; 0x80014b <__TEXT_REGION_LENGTH__+0x70014b>
  8ea:	82 96       	adiw	r24, 0x22	; 34
- 8ec:	cb d2       	rcall	.+1430   	; 0xe84 <__udivmodhi4>
- 8ee:	80 93 7c 38 	sts	0x387C, r24	; 0x80387c <tmp16bit>
- 8f2:	90 93 7d 38 	sts	0x387D, r25	; 0x80387d <tmp16bit+0x1>
+ 8ec:	03 d3       	rcall	.+1542   	; 0xef4 <__udivmodhi4>
+ 8ee:	80 93 96 38 	sts	0x3896, r24	; 0x803896 <tmp16bit>
+ 8f2:	90 93 97 38 	sts	0x3897, r25	; 0x803897 <tmp16bit+0x1>
         while(RTC_STATUS & RTC_CMPBUSY_bm);
  8f6:	e1 e4       	ldi	r30, 0x41	; 65
  8f8:	f1 e0       	ldi	r31, 0x01	; 1
@@ -1557,8 +1557,8 @@ ISR(RTC_CNT_vect) {
  8fc:	83 fd       	sbrc	r24, 3
  8fe:	fd cf       	rjmp	.-6      	; 0x8fa <__vector_6+0x56>
         RTC_CMP = tmp16bit;                 // Button timing: next interrupt set
- 900:	80 91 7c 38 	lds	r24, 0x387C	; 0x80387c <tmp16bit>
- 904:	90 91 7d 38 	lds	r25, 0x387D	; 0x80387d <tmp16bit+0x1>
+ 900:	80 91 96 38 	lds	r24, 0x3896	; 0x803896 <tmp16bit>
+ 904:	90 91 97 38 	lds	r25, 0x3897	; 0x803897 <tmp16bit+0x1>
  908:	80 93 4c 01 	sts	0x014C, r24	; 0x80014c <__TEXT_REGION_LENGTH__+0x70014c>
  90c:	90 93 4d 01 	sts	0x014D, r25	; 0x80014d <__TEXT_REGION_LENGTH__+0x70014d>
         RTC_INTFLAGS = RTC_CMP_bm;		    // clear interrupt flag
@@ -1567,12 +1567,12 @@ ISR(RTC_CNT_vect) {
  916:	0c c0       	rjmp	.+24     	; 0x930 <__vector_6+0x8c>
     } else {
         if (minuteMark<255) minuteMark++;   // For very slow timing purposes
- 918:	80 91 04 38 	lds	r24, 0x3804	; 0x803804 <minuteMark>
+ 918:	80 91 1c 38 	lds	r24, 0x381C	; 0x80381c <minuteMark>
  91c:	8f 3f       	cpi	r24, 0xFF	; 255
  91e:	29 f0       	breq	.+10     	; 0x92a <__vector_6+0x86>
- 920:	80 91 04 38 	lds	r24, 0x3804	; 0x803804 <minuteMark>
+ 920:	80 91 1c 38 	lds	r24, 0x381C	; 0x80381c <minuteMark>
  924:	8f 5f       	subi	r24, 0xFF	; 255
- 926:	80 93 04 38 	sts	0x3804, r24	; 0x803804 <minuteMark>
+ 926:	80 93 1c 38 	sts	0x381C, r24	; 0x80381c <minuteMark>
         RTC_INTFLAGS = RTC_OVF_bm;		    // clear interrupt flag
  92a:	81 e0       	ldi	r24, 0x01	; 1
  92c:	80 93 43 01 	sts	0x0143, r24	; 0x800143 <__TEXT_REGION_LENGTH__+0x700143>
@@ -1813,8 +1813,8 @@ uint8_t SerSend(unsigned char *addr){
  a2c:	99 23       	and	r25, r25
  a2e:	59 f0       	breq	.+22     	; 0xa46 <SerSend+0x20>
         serTxAddr = addr;
- a30:	20 93 2b 38 	sts	0x382B, r18	; 0x80382b <serTxAddr>
- a34:	30 93 2c 38 	sts	0x382C, r19	; 0x80382c <serTxAddr+0x1>
+ a30:	20 93 45 38 	sts	0x3845, r18	; 0x803845 <serTxAddr>
+ a34:	30 93 46 38 	sts	0x3846, r19	; 0x803846 <serTxAddr+0x1>
         serTxDone = 0;
  a38:	10 92 00 38 	sts	0x3800, r1	; 0x803800 <__data_start>
         TCB0_INTCTRL = 0x01;
@@ -1869,7 +1869,7 @@ void SelectTSens(){
  a7e:	80 93 06 06 	sts	0x0606, r24	; 0x800606 <__TEXT_REGION_LENGTH__+0x700606>
      adc0Chg = 1;
  a82:	81 e0       	ldi	r24, 0x01	; 1
- a84:	80 93 02 38 	sts	0x3802, r24	; 0x803802 <__data_end>
+ a84:	80 93 1a 38 	sts	0x381A, r24	; 0x80381a <__data_end>
  a88:	08 95       	ret
 
 00000a8a <SelectAuIn>:
@@ -1891,7 +1891,7 @@ void SelectAuIn(){
  a9c:	80 93 06 06 	sts	0x0606, r24	; 0x800606 <__TEXT_REGION_LENGTH__+0x700606>
      adc0Chg = 1;
  aa0:	81 e0       	ldi	r24, 0x01	; 1
- aa2:	80 93 02 38 	sts	0x3802, r24	; 0x803802 <__data_end>
+ aa2:	80 93 1a 38 	sts	0x381A, r24	; 0x80381a <__data_end>
  aa6:	08 95       	ret
 
 00000aa8 <CheckButtons>:
@@ -1900,8 +1900,8 @@ void SelectAuIn(){
 //Returns button combination (4LSB) and number of consecutive times this combination is detected. First read should always be ignored! 
 uint8_t CheckButtons(uint8_t previousValue){
     uint8_t bADC = (uint8_t)(adcBtns>>4);
- aa8:	20 91 29 38 	lds	r18, 0x3829	; 0x803829 <adcBtns>
- aac:	30 91 2a 38 	lds	r19, 0x382A	; 0x80382a <adcBtns+0x1>
+ aa8:	20 91 43 38 	lds	r18, 0x3843	; 0x803843 <adcBtns>
+ aac:	30 91 44 38 	lds	r19, 0x3844	; 0x803844 <adcBtns+0x1>
     uint8_t bNibble = 0x0F;     //MSB to LSB: Bottom left, top left, top right, bottom right, 0F is error
     
     switch(bADC){
@@ -2081,30 +2081,20 @@ uint8_t CheckButtons(uint8_t previousValue){
  b76:	08 95       	ret
 
 00000b78 <DecryptData>:
-//Keys are md5 hash of 'H@ck3r H0t3l 2020', split in two
-const uint8_t xor_key[2][KEY_LENGTH]  = {{0x74, 0xbf, 0xfa, 0x54, 0x1c, 0x96, 0xb2, 0x26},{0x1e, 0xeb, 0xd6, 0x8b, 0xc0, 0xc2, 0x0a, 0x61}};
-//const unsigned char boiler_plate[]   = "Hacker Hotel 2020 by badge.team "; // boiler_plate must by 32 bytes long, excluding string_end(0)
+uint8_t CheckInput(){
+    return 0;
+}
 
-//Decrypts data read from I2C EEPROM, max 255 bytes at a time
-void DecryptData(uint16_t offset, uint8_t length, uint8_t type, uint8_t *data){
+//The game logic!
+void ProcessInput(){
  b78:	cf 93       	push	r28
  b7a:	df 93       	push	r29
  b7c:	dc 01       	movw	r26, r24
  b7e:	e9 01       	movw	r28, r18
-    while(length){
  b80:	66 23       	and	r22, r22
  b82:	a9 f0       	breq	.+42     	; 0xbae <DecryptData+0x36>
-        offset-=32;
-        *data ^= xor_key[(uint8_t)(offset%KEY_LENGTH)][type];
  b84:	50 e0       	ldi	r21, 0x00	; 0
-//const unsigned char boiler_plate[]   = "Hacker Hotel 2020 by badge.team "; // boiler_plate must by 32 bytes long, excluding string_end(0)
-
-//Decrypts data read from I2C EEPROM, max 255 bytes at a time
-void DecryptData(uint16_t offset, uint8_t length, uint8_t type, uint8_t *data){
-    while(length){
-        offset-=32;
  b86:	90 97       	sbiw	r26, 0x20	; 32
-        *data ^= xor_key[(uint8_t)(offset%KEY_LENGTH)][type];
  b88:	fd 01       	movw	r30, r26
  b8a:	e7 70       	andi	r30, 0x07	; 7
  b8c:	ff 27       	eor	r31, r31
@@ -2114,38 +2104,21 @@ void DecryptData(uint16_t offset, uint8_t length, uint8_t type, uint8_t *data){
  b94:	ff 1f       	adc	r31, r31
  b96:	ee 0f       	add	r30, r30
  b98:	ff 1f       	adc	r31, r31
- b9a:	e4 54       	subi	r30, 0x44	; 68
- b9c:	f1 47       	sbci	r31, 0x71	; 113
+ b9a:	e4 5d       	subi	r30, 0xD4	; 212
+ b9c:	f0 47       	sbci	r31, 0x70	; 112
  b9e:	e4 0f       	add	r30, r20
  ba0:	f5 1f       	adc	r31, r21
  ba2:	88 81       	ld	r24, Y
  ba4:	90 81       	ld	r25, Z
  ba6:	98 27       	eor	r25, r24
  ba8:	99 93       	st	Y+, r25
-        ++data;
-        --length;
  baa:	61 50       	subi	r22, 0x01	; 1
-const uint8_t xor_key[2][KEY_LENGTH]  = {{0x74, 0xbf, 0xfa, 0x54, 0x1c, 0x96, 0xb2, 0x26},{0x1e, 0xeb, 0xd6, 0x8b, 0xc0, 0xc2, 0x0a, 0x61}};
-//const unsigned char boiler_plate[]   = "Hacker Hotel 2020 by badge.team "; // boiler_plate must by 32 bytes long, excluding string_end(0)
-
-//Decrypts data read from I2C EEPROM, max 255 bytes at a time
-void DecryptData(uint16_t offset, uint8_t length, uint8_t type, uint8_t *data){
-    while(length){
  bac:	61 f7       	brne	.-40     	; 0xb86 <DecryptData+0xe>
-        offset-=32;
-        *data ^= xor_key[(uint8_t)(offset%KEY_LENGTH)][type];
-        ++data;
-        --length;
-    }
-}
  bae:	df 91       	pop	r29
  bb0:	cf 91       	pop	r28
  bb2:	08 95       	ret
 
 00000bb4 <ExtEERead>:
-
-//Game data: Read a number of bytes and decrypt
-uint8_t ExtEERead(uint16_t offset, uint8_t length, uint8_t type, uint8_t *data){
  bb4:	af 92       	push	r10
  bb6:	bf 92       	push	r11
  bb8:	cf 92       	push	r12
@@ -2162,15 +2135,12 @@ uint8_t ExtEERead(uint16_t offset, uint8_t length, uint8_t type, uint8_t *data){
  bce:	d6 2e       	mov	r13, r22
  bd0:	c4 2e       	mov	r12, r20
  bd2:	59 01       	movw	r10, r18
-    offset = (offset+32)&0x7fff;
  bd4:	80 96       	adiw	r24, 0x20	; 32
  bd6:	7c 01       	movw	r14, r24
  bd8:	e8 94       	clt
  bda:	f7 f8       	bld	r15, 7
-    uint8_t reg[2] = {(uint8_t)(offset>>8), (uint8_t)(offset&0xff)};
  bdc:	f9 82       	std	Y+1, r15	; 0x01
  bde:	ea 82       	std	Y+2, r14	; 0x02
-    uint8_t error = (I2C_read_bytes(EE_I2C_ADDR, &reg[0], 2, data, length));
  be0:	06 2f       	mov	r16, r22
  be2:	42 e0       	ldi	r20, 0x02	; 2
  be4:	be 01       	movw	r22, r28
@@ -2179,17 +2149,13 @@ uint8_t ExtEERead(uint16_t offset, uint8_t length, uint8_t type, uint8_t *data){
  bea:	80 e5       	ldi	r24, 0x50	; 80
  bec:	59 db       	rcall	.-2382   	; 0x2a0 <I2C_read_bytes>
  bee:	18 2f       	mov	r17, r24
-    if (error) return error;
  bf0:	81 11       	cpse	r24, r1
  bf2:	05 c0       	rjmp	.+10     	; 0xbfe <ExtEERead+0x4a>
-    DecryptData(offset, length, type, data);
  bf4:	95 01       	movw	r18, r10
  bf6:	4c 2d       	mov	r20, r12
  bf8:	6d 2d       	mov	r22, r13
  bfa:	c7 01       	movw	r24, r14
  bfc:	bd df       	rcall	.-134    	; 0xb78 <DecryptData>
-    return 0;
-}
  bfe:	81 2f       	mov	r24, r17
  c00:	0f 90       	pop	r0
  c02:	0f 90       	pop	r0
@@ -2205,501 +2171,554 @@ uint8_t ExtEERead(uint16_t offset, uint8_t length, uint8_t type, uint8_t *data){
  c16:	af 90       	pop	r10
  c18:	08 95       	ret
 
-00000c1a <ReadPtr>:
+00000c1a <CheckSend>:
+ c1a:	0f 93       	push	r16
+ c1c:	1f 93       	push	r17
+ c1e:	cf 93       	push	r28
+ c20:	80 91 1f 38 	lds	r24, 0x381F	; 0x80381f <txAddrNow>
+ c24:	88 30       	cpi	r24, 0x08	; 8
+ c26:	08 f0       	brcs	.+2      	; 0xc2a <CheckSend+0x10>
+ c28:	44 c0       	rjmp	.+136    	; 0xcb2 <CheckSend+0x98>
+ c2a:	90 91 00 38 	lds	r25, 0x3800	; 0x803800 <__data_start>
+ c2e:	99 23       	and	r25, r25
+ c30:	09 f4       	brne	.+2      	; 0xc34 <CheckSend+0x1a>
+ c32:	3f c0       	rjmp	.+126    	; 0xcb2 <CheckSend+0x98>
+ c34:	28 2f       	mov	r18, r24
+ c36:	30 e0       	ldi	r19, 0x00	; 0
+ c38:	f9 01       	movw	r30, r18
+ c3a:	ef 5f       	subi	r30, 0xFF	; 255
+ c3c:	f7 4c       	sbci	r31, 0xC7	; 199
+ c3e:	00 81       	ld	r16, Z
+ c40:	90 91 1e 38 	lds	r25, 0x381E	; 0x80381e <txPart.3927>
+ c44:	90 17       	cp	r25, r16
+ c46:	28 f5       	brcc	.+74     	; 0xc92 <CheckSend+0x78>
+ c48:	10 e0       	ldi	r17, 0x00	; 0
+ c4a:	09 1b       	sub	r16, r25
+ c4c:	11 09       	sbc	r17, r1
+ c4e:	0f 71       	andi	r16, 0x1F	; 31
+ c50:	10 78       	andi	r17, 0x80	; 128
+ c52:	11 23       	and	r17, r17
+ c54:	34 f4       	brge	.+12     	; 0xc62 <CheckSend+0x48>
+ c56:	01 50       	subi	r16, 0x01	; 1
+ c58:	11 09       	sbc	r17, r1
+ c5a:	00 6e       	ori	r16, 0xE0	; 224
+ c5c:	1f 6f       	ori	r17, 0xFF	; 255
+ c5e:	0f 5f       	subi	r16, 0xFF	; 255
+ c60:	1f 4f       	sbci	r17, 0xFF	; 255
+ c62:	c0 2f       	mov	r28, r16
+ c64:	22 0f       	add	r18, r18
+ c66:	33 1f       	adc	r19, r19
+ c68:	f9 01       	movw	r30, r18
+ c6a:	e7 5f       	subi	r30, 0xF7	; 247
+ c6c:	f7 4c       	sbci	r31, 0xC7	; 199
+ c6e:	01 90       	ld	r0, Z+
+ c70:	f0 81       	ld	r31, Z
+ c72:	e0 2d       	mov	r30, r0
+ c74:	28 e9       	ldi	r18, 0x98	; 152
+ c76:	38 e3       	ldi	r19, 0x38	; 56
+ c78:	40 e0       	ldi	r20, 0x00	; 0
+ c7a:	60 2f       	mov	r22, r16
+ c7c:	df 01       	movw	r26, r30
+ c7e:	a9 0f       	add	r26, r25
+ c80:	b1 1d       	adc	r27, r1
+ c82:	cd 01       	movw	r24, r26
+ c84:	97 df       	rcall	.-210    	; 0xbb4 <ExtEERead>
+ c86:	80 91 1e 38 	lds	r24, 0x381E	; 0x80381e <txPart.3927>
+ c8a:	08 0f       	add	r16, r24
+ c8c:	00 93 1e 38 	sts	0x381E, r16	; 0x80381e <txPart.3927>
+ c90:	06 c0       	rjmp	.+12     	; 0xc9e <CheckSend+0x84>
+ c92:	10 92 1e 38 	sts	0x381E, r1	; 0x80381e <txPart.3927>
+ c96:	8f 5f       	subi	r24, 0xFF	; 255
+ c98:	80 93 1f 38 	sts	0x381F, r24	; 0x80381f <txAddrNow>
+ c9c:	c0 e0       	ldi	r28, 0x00	; 0
+ c9e:	ec 2f       	mov	r30, r28
+ ca0:	f0 e0       	ldi	r31, 0x00	; 0
+ ca2:	e8 56       	subi	r30, 0x68	; 104
+ ca4:	f7 4c       	sbci	r31, 0xC7	; 199
+ ca6:	10 82       	st	Z, r1
+ ca8:	88 e9       	ldi	r24, 0x98	; 152
+ caa:	98 e3       	ldi	r25, 0x38	; 56
+ cac:	bc de       	rcall	.-648    	; 0xa26 <SerSend>
+ cae:	81 e0       	ldi	r24, 0x01	; 1
+ cb0:	05 c0       	rjmp	.+10     	; 0xcbc <CheckSend+0xa2>
+ cb2:	90 91 00 38 	lds	r25, 0x3800	; 0x803800 <__data_start>
+ cb6:	81 e0       	ldi	r24, 0x01	; 1
+ cb8:	91 11       	cpse	r25, r1
+ cba:	80 e0       	ldi	r24, 0x00	; 0
+ cbc:	cf 91       	pop	r28
+ cbe:	1f 91       	pop	r17
+ cc0:	0f 91       	pop	r16
+ cc2:	08 95       	ret
 
-//Reads a pointer from I2C EEPROM
-uint16_t ReadPtr (uint16_t offset){
- c1a:	cf 93       	push	r28
- c1c:	df 93       	push	r29
- c1e:	00 d0       	rcall	.+0      	; 0xc20 <ReadPtr+0x6>
- c20:	cd b7       	in	r28, 0x3d	; 61
- c22:	de b7       	in	r29, 0x3e	; 62
-    uint8_t data[2] = {0,0};
- c24:	19 82       	std	Y+1, r1	; 0x01
- c26:	1a 82       	std	Y+2, r1	; 0x02
-    if (ExtEERead(offset, 2, GAME, &data[0])) return 0xffff; else return (data[0]<<8|data[1]);
- c28:	9e 01       	movw	r18, r28
- c2a:	2f 5f       	subi	r18, 0xFF	; 255
- c2c:	3f 4f       	sbci	r19, 0xFF	; 255
- c2e:	40 e0       	ldi	r20, 0x00	; 0
- c30:	62 e0       	ldi	r22, 0x02	; 2
- c32:	c0 df       	rcall	.-128    	; 0xbb4 <ExtEERead>
- c34:	81 11       	cpse	r24, r1
- c36:	07 c0       	rjmp	.+14     	; 0xc46 <ReadPtr+0x2c>
- c38:	89 81       	ldd	r24, Y+1	; 0x01
- c3a:	90 e0       	ldi	r25, 0x00	; 0
- c3c:	98 2f       	mov	r25, r24
- c3e:	88 27       	eor	r24, r24
- c40:	2a 81       	ldd	r18, Y+2	; 0x02
- c42:	82 2b       	or	r24, r18
- c44:	02 c0       	rjmp	.+4      	; 0xc4a <ReadPtr+0x30>
- c46:	8f ef       	ldi	r24, 0xFF	; 255
- c48:	9f ef       	ldi	r25, 0xFF	; 255
+00000cc4 <TextAdventure>:
 }
- c4a:	0f 90       	pop	r0
- c4c:	0f 90       	pop	r0
- c4e:	df 91       	pop	r29
- c50:	cf 91       	pop	r28
- c52:	08 95       	ret
 
-00000c54 <TextAdventure>:
 
 // Main game loop
 uint8_t TextAdventure(){
-     uint8_t test = (uint8_t)(ReadPtr(1000)&0xff);
- c54:	88 ee       	ldi	r24, 0xE8	; 232
- c56:	93 e0       	ldi	r25, 0x03	; 3
- c58:	e0 cf       	rjmp	.-64     	; 0xc1a <ReadPtr>
-     return test;
- c5a:	08 95       	ret
+    if (CheckSend()) return 1;          //Still sending data to serial, return 1
+ cc4:	aa df       	rcall	.-172    	; 0xc1a <CheckSend>
+ cc6:	81 11       	cpse	r24, r1
+ cc8:	02 c0       	rjmp	.+4      	; 0xcce <TextAdventure+0xa>
+    if (CheckInput() == 0) return 2;    //No input to process, return 2
+ cca:	82 e0       	ldi	r24, 0x02	; 2
+ ccc:	08 95       	ret
+}
 
-00000c5c <main>:
+
+// Main game loop
+uint8_t TextAdventure(){
+    if (CheckSend()) return 1;          //Still sending data to serial, return 1
+ cce:	81 e0       	ldi	r24, 0x01	; 1
+    if (CheckInput() == 0) return 2;    //No input to process, return 2
+    ProcessInput();
+    return 0;
+ cd0:	08 95       	ret
+
+00000cd2 <main>:
 
 
 
 //This is where it begins, inits first and main program in while(1) loop.
 int main(void)
 {
- c5c:	cf 93       	push	r28
- c5e:	df 93       	push	r29
- c60:	cd b7       	in	r28, 0x3d	; 61
- c62:	de b7       	in	r29, 0x3e	; 62
- c64:	a7 97       	sbiw	r28, 0x27	; 39
- c66:	cd bf       	out	0x3d, r28	; 61
- c68:	de bf       	out	0x3e, r29	; 62
+ cd2:	cf 93       	push	r28
+ cd4:	df 93       	push	r29
+ cd6:	cd b7       	in	r28, 0x3d	; 61
+ cd8:	de b7       	in	r29, 0x3e	; 62
+ cda:	a7 97       	sbiw	r28, 0x27	; 39
+ cdc:	cd bf       	out	0x3d, r28	; 61
+ cde:	de bf       	out	0x3e, r29	; 62
     setup();
- c6a:	be db       	rcall	.-2180   	; 0x3e8 <setup>
+ ce0:	83 db       	rcall	.-2298   	; 0x3e8 <setup>
 
     unsigned char strTest[]="\aHäckerHotel2020 badge pest!\b\b\b\b\bt\n";
- c6c:	84 e2       	ldi	r24, 0x24	; 36
- c6e:	ec ec       	ldi	r30, 0xCC	; 204
- c70:	fe e8       	ldi	r31, 0x8E	; 142
- c72:	de 01       	movw	r26, r28
- c74:	11 96       	adiw	r26, 0x01	; 1
- c76:	01 90       	ld	r0, Z+
- c78:	0d 92       	st	X+, r0
- c7a:	8a 95       	dec	r24
- c7c:	e1 f7       	brne	.-8      	; 0xc76 <main+0x1a>
+ ce2:	84 e2       	ldi	r24, 0x24	; 36
+ ce4:	ec e3       	ldi	r30, 0x3C	; 60
+ ce6:	ff e8       	ldi	r31, 0x8F	; 143
+ ce8:	de 01       	movw	r26, r28
+ cea:	11 96       	adiw	r26, 0x01	; 1
+ cec:	01 90       	ld	r0, Z+
+ cee:	0d 92       	st	X+, r0
+ cf0:	8a 95       	dec	r24
+ cf2:	e1 f7       	brne	.-8      	; 0xcec <main+0x1a>
     SerSend(&strTest[0]);
- c7e:	ce 01       	movw	r24, r28
- c80:	01 96       	adiw	r24, 0x01	; 1
- c82:	d1 de       	rcall	.-606    	; 0xa26 <SerSend>
+ cf4:	ce 01       	movw	r24, r28
+ cf6:	01 96       	adiw	r24, 0x01	; 1
+ cf8:	96 de       	rcall	.-724    	; 0xa26 <SerSend>
 
     //I2C 
     uint8_t devAddr = 0x50;
     uint8_t memAddr[2] = {0,0};
- c84:	1d a2       	std	Y+37, r1	; 0x25
- c86:	1e a2       	std	Y+38, r1	; 0x26
+ cfa:	1d a2       	std	Y+37, r1	; 0x25
+ cfc:	1e a2       	std	Y+38, r1	; 0x26
     volatile uint8_t retVal = 0;
- c88:	1f a2       	std	Y+39, r1	; 0x27
+ cfe:	1f a2       	std	Y+39, r1	; 0x27
     uint8_t btns = 0;
     uint8_t bla = 0;
 
     if (I2C_write_bytes(devAddr, &memAddr[0], 2, &strTest[0], sizeof(strTest))) retVal = 0xFA;
- c8a:	04 e2       	ldi	r16, 0x24	; 36
- c8c:	9e 01       	movw	r18, r28
- c8e:	2f 5f       	subi	r18, 0xFF	; 255
- c90:	3f 4f       	sbci	r19, 0xFF	; 255
- c92:	42 e0       	ldi	r20, 0x02	; 2
- c94:	be 01       	movw	r22, r28
- c96:	6b 5d       	subi	r22, 0xDB	; 219
- c98:	7f 4f       	sbci	r23, 0xFF	; 255
- c9a:	80 e5       	ldi	r24, 0x50	; 80
- c9c:	59 db       	rcall	.-2382   	; 0x350 <I2C_write_bytes>
- c9e:	88 23       	and	r24, r24
- ca0:	11 f0       	breq	.+4      	; 0xca6 <main+0x4a>
- ca2:	8a ef       	ldi	r24, 0xFA	; 250
+ d00:	04 e2       	ldi	r16, 0x24	; 36
+ d02:	9e 01       	movw	r18, r28
+ d04:	2f 5f       	subi	r18, 0xFF	; 255
+ d06:	3f 4f       	sbci	r19, 0xFF	; 255
+ d08:	42 e0       	ldi	r20, 0x02	; 2
+ d0a:	be 01       	movw	r22, r28
+ d0c:	6b 5d       	subi	r22, 0xDB	; 219
+ d0e:	7f 4f       	sbci	r23, 0xFF	; 255
+ d10:	80 e5       	ldi	r24, 0x50	; 80
+ d12:	1e db       	rcall	.-2500   	; 0x350 <I2C_write_bytes>
+ d14:	88 23       	and	r24, r24
+ d16:	11 f0       	breq	.+4      	; 0xd1c <main+0x4a>
+ d18:	8a ef       	ldi	r24, 0xFA	; 250
     SerSpeed(255);
- ca4:	8f a3       	std	Y+39, r24	; 0x27
- ca6:	8f ef       	ldi	r24, 0xFF	; 255
- ca8:	d0 de       	rcall	.-608    	; 0xa4a <SerSpeed>
+ d1a:	8f a3       	std	Y+39, r24	; 0x27
+ d1c:	8f ef       	ldi	r24, 0xFF	; 255
+ d1e:	95 de       	rcall	.-726    	; 0xa4a <SerSpeed>
 
     //Do some LED tests
     for (uint8_t n=0; n<40; n++){
- caa:	80 e0       	ldi	r24, 0x00	; 0
+ d20:	80 e0       	ldi	r24, 0x00	; 0
         if ((n%8)>5) n+=2;
         if (n<40) iLED[n] = 255;
- cac:	2f ef       	ldi	r18, 0xFF	; 255
- cae:	07 c0       	rjmp	.+14     	; 0xcbe <main+0x62>
+ d22:	2f ef       	ldi	r18, 0xFF	; 255
+ d24:	07 c0       	rjmp	.+14     	; 0xd34 <main+0x62>
     if (I2C_write_bytes(devAddr, &memAddr[0], 2, &strTest[0], sizeof(strTest))) retVal = 0xFA;
     SerSpeed(255);
 
     //Do some LED tests
     for (uint8_t n=0; n<40; n++){
         if ((n%8)>5) n+=2;
- cb0:	39 2f       	mov	r19, r25
- cb2:	37 70       	andi	r19, 0x07	; 7
- cb4:	36 30       	cpi	r19, 0x06	; 6
- cb6:	10 f0       	brcs	.+4      	; 0xcbc <main+0x60>
- cb8:	93 e0       	ldi	r25, 0x03	; 3
- cba:	98 0f       	add	r25, r24
+ d26:	39 2f       	mov	r19, r25
+ d28:	37 70       	andi	r19, 0x07	; 7
+ d2a:	36 30       	cpi	r19, 0x06	; 6
+ d2c:	10 f0       	brcs	.+4      	; 0xd32 <main+0x60>
+ d2e:	93 e0       	ldi	r25, 0x03	; 3
+ d30:	98 0f       	add	r25, r24
 
 
 
 //This is where it begins, inits first and main program in while(1) loop.
 int main(void)
 {
- cbc:	89 2f       	mov	r24, r25
+ d32:	89 2f       	mov	r24, r25
     SerSpeed(255);
 
     //Do some LED tests
     for (uint8_t n=0; n<40; n++){
         if ((n%8)>5) n+=2;
         if (n<40) iLED[n] = 255;
- cbe:	88 32       	cpi	r24, 0x28	; 40
- cc0:	08 f0       	brcs	.+2      	; 0xcc4 <main+0x68>
- cc2:	dc c0       	rjmp	.+440    	; 0xe7c <main+0x220>
- cc4:	e8 2f       	mov	r30, r24
- cc6:	f0 e0       	ldi	r31, 0x00	; 0
- cc8:	ee 5a       	subi	r30, 0xAE	; 174
- cca:	f7 4c       	sbci	r31, 0xC7	; 199
- ccc:	20 83       	st	Z, r18
- cce:	d6 c0       	rjmp	.+428    	; 0xe7c <main+0x220>
+ d34:	88 32       	cpi	r24, 0x28	; 40
+ d36:	08 f0       	brcs	.+2      	; 0xd3a <main+0x68>
+ d38:	d9 c0       	rjmp	.+434    	; 0xeec <main+0x21a>
+ d3a:	e8 2f       	mov	r30, r24
+ d3c:	f0 e0       	ldi	r31, 0x00	; 0
+ d3e:	e4 59       	subi	r30, 0x94	; 148
+ d40:	f7 4c       	sbci	r31, 0xC7	; 199
+ d42:	20 83       	st	Z, r18
+ d44:	d3 c0       	rjmp	.+422    	; 0xeec <main+0x21a>
 	#else
 		//round up by default
 		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
 	#endif
 
 	__builtin_avr_delay_cycles(__ticks_dc);
- cd0:	a7 ea       	ldi	r26, 0xA7	; 167
- cd2:	b1 e6       	ldi	r27, 0x61	; 97
- cd4:	11 97       	sbiw	r26, 0x01	; 1
- cd6:	f1 f7       	brne	.-4      	; 0xcd4 <main+0x78>
- cd8:	00 c0       	rjmp	.+0      	; 0xcda <main+0x7e>
- cda:	00 00       	nop
- cdc:	91 50       	subi	r25, 0x01	; 1
+ d46:	a7 ea       	ldi	r26, 0xA7	; 167
+ d48:	b1 e6       	ldi	r27, 0x61	; 97
+ d4a:	11 97       	sbiw	r26, 0x01	; 1
+ d4c:	f1 f7       	brne	.-4      	; 0xd4a <main+0x78>
+ d4e:	00 c0       	rjmp	.+0      	; 0xd50 <main+0x7e>
+ d50:	00 00       	nop
+ d52:	91 50       	subi	r25, 0x01	; 1
         for(uint8_t b=0; b<10; b++)_delay_ms(10);
- cde:	c1 f7       	brne	.-16     	; 0xcd0 <main+0x74>
+ d54:	c1 f7       	brne	.-16     	; 0xd46 <main+0x74>
 
     if (I2C_write_bytes(devAddr, &memAddr[0], 2, &strTest[0], sizeof(strTest))) retVal = 0xFA;
     SerSpeed(255);
 
     //Do some LED tests
     for (uint8_t n=0; n<40; n++){
- ce0:	91 e0       	ldi	r25, 0x01	; 1
- ce2:	98 0f       	add	r25, r24
- ce4:	98 32       	cpi	r25, 0x28	; 40
- ce6:	20 f3       	brcs	.-56     	; 0xcb0 <main+0x54>
- ce8:	80 e0       	ldi	r24, 0x00	; 0
- cea:	07 c0       	rjmp	.+14     	; 0xcfa <main+0x9e>
+ d56:	91 e0       	ldi	r25, 0x01	; 1
+ d58:	98 0f       	add	r25, r24
+ d5a:	98 32       	cpi	r25, 0x28	; 40
+ d5c:	20 f3       	brcs	.-56     	; 0xd26 <main+0x54>
+ d5e:	80 e0       	ldi	r24, 0x00	; 0
+ d60:	07 c0       	rjmp	.+14     	; 0xd70 <main+0x9e>
         if ((n%8)>5) n+=2;
         if (n<40) iLED[n] = 255;
         for(uint8_t b=0; b<10; b++)_delay_ms(10);
     }
     for (uint8_t n=0; n<40; n++){
         if ((n%8)>5) n+=2;
- cec:	29 2f       	mov	r18, r25
- cee:	27 70       	andi	r18, 0x07	; 7
- cf0:	26 30       	cpi	r18, 0x06	; 6
- cf2:	10 f0       	brcs	.+4      	; 0xcf8 <main+0x9c>
- cf4:	93 e0       	ldi	r25, 0x03	; 3
- cf6:	98 0f       	add	r25, r24
- cf8:	89 2f       	mov	r24, r25
+ d62:	29 2f       	mov	r18, r25
+ d64:	27 70       	andi	r18, 0x07	; 7
+ d66:	26 30       	cpi	r18, 0x06	; 6
+ d68:	10 f0       	brcs	.+4      	; 0xd6e <main+0x9c>
+ d6a:	93 e0       	ldi	r25, 0x03	; 3
+ d6c:	98 0f       	add	r25, r24
+ d6e:	89 2f       	mov	r24, r25
         if (n<40) iLED[n] = 0;
- cfa:	88 32       	cpi	r24, 0x28	; 40
- cfc:	08 f0       	brcs	.+2      	; 0xd00 <main+0xa4>
- cfe:	c0 c0       	rjmp	.+384    	; 0xe80 <main+0x224>
- d00:	e8 2f       	mov	r30, r24
- d02:	f0 e0       	ldi	r31, 0x00	; 0
- d04:	ee 5a       	subi	r30, 0xAE	; 174
- d06:	f7 4c       	sbci	r31, 0xC7	; 199
- d08:	10 82       	st	Z, r1
- d0a:	ba c0       	rjmp	.+372    	; 0xe80 <main+0x224>
- d0c:	e7 ea       	ldi	r30, 0xA7	; 167
- d0e:	f1 e6       	ldi	r31, 0x61	; 97
- d10:	31 97       	sbiw	r30, 0x01	; 1
- d12:	f1 f7       	brne	.-4      	; 0xd10 <main+0xb4>
- d14:	00 c0       	rjmp	.+0      	; 0xd16 <main+0xba>
- d16:	00 00       	nop
- d18:	91 50       	subi	r25, 0x01	; 1
+ d70:	88 32       	cpi	r24, 0x28	; 40
+ d72:	08 f0       	brcs	.+2      	; 0xd76 <main+0xa4>
+ d74:	bd c0       	rjmp	.+378    	; 0xef0 <main+0x21e>
+ d76:	e8 2f       	mov	r30, r24
+ d78:	f0 e0       	ldi	r31, 0x00	; 0
+ d7a:	e4 59       	subi	r30, 0x94	; 148
+ d7c:	f7 4c       	sbci	r31, 0xC7	; 199
+ d7e:	10 82       	st	Z, r1
+ d80:	b7 c0       	rjmp	.+366    	; 0xef0 <main+0x21e>
+ d82:	e7 ea       	ldi	r30, 0xA7	; 167
+ d84:	f1 e6       	ldi	r31, 0x61	; 97
+ d86:	31 97       	sbiw	r30, 0x01	; 1
+ d88:	f1 f7       	brne	.-4      	; 0xd86 <main+0xb4>
+ d8a:	00 c0       	rjmp	.+0      	; 0xd8c <main+0xba>
+ d8c:	00 00       	nop
+ d8e:	91 50       	subi	r25, 0x01	; 1
         for(uint8_t b=0; b<10; b++)_delay_ms(10);
- d1a:	c1 f7       	brne	.-16     	; 0xd0c <main+0xb0>
+ d90:	c1 f7       	brne	.-16     	; 0xd82 <main+0xb0>
     for (uint8_t n=0; n<40; n++){
         if ((n%8)>5) n+=2;
         if (n<40) iLED[n] = 255;
         for(uint8_t b=0; b<10; b++)_delay_ms(10);
     }
     for (uint8_t n=0; n<40; n++){
- d1c:	91 e0       	ldi	r25, 0x01	; 1
- d1e:	98 0f       	add	r25, r24
- d20:	98 32       	cpi	r25, 0x28	; 40
- d22:	20 f3       	brcs	.-56     	; 0xcec <main+0x90>
- d24:	22 eb       	ldi	r18, 0xB2	; 178
- d26:	3e e8       	ldi	r19, 0x8E	; 142
- d28:	ac eb       	ldi	r26, 0xBC	; 188
- d2a:	be e8       	ldi	r27, 0x8E	; 142
- d2c:	80 e0       	ldi	r24, 0x00	; 0
- d2e:	90 e0       	ldi	r25, 0x00	; 0
+ d92:	91 e0       	ldi	r25, 0x01	; 1
+ d94:	98 0f       	add	r25, r24
+ d96:	98 32       	cpi	r25, 0x28	; 40
+ d98:	20 f3       	brcs	.-56     	; 0xd62 <main+0x90>
+ d9a:	22 e2       	ldi	r18, 0x22	; 34
+ d9c:	3f e8       	ldi	r19, 0x8F	; 143
+ d9e:	ac e2       	ldi	r26, 0x2C	; 44
+ da0:	bf e8       	ldi	r27, 0x8F	; 143
+ da2:	80 e0       	ldi	r24, 0x00	; 0
+ da4:	90 e0       	ldi	r25, 0x00	; 0
         if ((n%8)>5) n+=2;
         if (n<40) iLED[n] = 0;
         for(uint8_t b=0; b<10; b++)_delay_ms(10);
     }
     for (uint8_t n=0; n<5; n++){
         iLED[WING[R][n]] = 1<<n;
- d30:	41 e0       	ldi	r20, 0x01	; 1
- d32:	50 e0       	ldi	r21, 0x00	; 0
- d34:	f9 01       	movw	r30, r18
- d36:	61 91       	ld	r22, Z+
- d38:	9f 01       	movw	r18, r30
- d3a:	e6 2f       	mov	r30, r22
- d3c:	f0 e0       	ldi	r31, 0x00	; 0
- d3e:	ee 5a       	subi	r30, 0xAE	; 174
- d40:	f7 4c       	sbci	r31, 0xC7	; 199
- d42:	ba 01       	movw	r22, r20
- d44:	08 2e       	mov	r0, r24
- d46:	02 c0       	rjmp	.+4      	; 0xd4c <main+0xf0>
- d48:	66 0f       	add	r22, r22
- d4a:	77 1f       	adc	r23, r23
- d4c:	0a 94       	dec	r0
- d4e:	e2 f7       	brpl	.-8      	; 0xd48 <main+0xec>
- d50:	60 83       	st	Z, r22
+ da6:	41 e0       	ldi	r20, 0x01	; 1
+ da8:	50 e0       	ldi	r21, 0x00	; 0
+ daa:	f9 01       	movw	r30, r18
+ dac:	61 91       	ld	r22, Z+
+ dae:	9f 01       	movw	r18, r30
+ db0:	e6 2f       	mov	r30, r22
+ db2:	f0 e0       	ldi	r31, 0x00	; 0
+ db4:	e4 59       	subi	r30, 0x94	; 148
+ db6:	f7 4c       	sbci	r31, 0xC7	; 199
+ db8:	ba 01       	movw	r22, r20
+ dba:	08 2e       	mov	r0, r24
+ dbc:	02 c0       	rjmp	.+4      	; 0xdc2 <main+0xf0>
+ dbe:	66 0f       	add	r22, r22
+ dc0:	77 1f       	adc	r23, r23
+ dc2:	0a 94       	dec	r0
+ dc4:	e2 f7       	brpl	.-8      	; 0xdbe <main+0xec>
+ dc6:	60 83       	st	Z, r22
         iLED[WING[L][4-n]] = 1<<n;
- d52:	ee 91       	ld	r30, -X
- d54:	f0 e0       	ldi	r31, 0x00	; 0
- d56:	ee 5a       	subi	r30, 0xAE	; 174
- d58:	f7 4c       	sbci	r31, 0xC7	; 199
- d5a:	60 83       	st	Z, r22
- d5c:	6a e0       	ldi	r22, 0x0A	; 10
- d5e:	e7 ea       	ldi	r30, 0xA7	; 167
- d60:	f1 e6       	ldi	r31, 0x61	; 97
- d62:	31 97       	sbiw	r30, 0x01	; 1
- d64:	f1 f7       	brne	.-4      	; 0xd62 <main+0x106>
- d66:	00 c0       	rjmp	.+0      	; 0xd68 <main+0x10c>
- d68:	00 00       	nop
- d6a:	61 50       	subi	r22, 0x01	; 1
+ dc8:	ee 91       	ld	r30, -X
+ dca:	f0 e0       	ldi	r31, 0x00	; 0
+ dcc:	e4 59       	subi	r30, 0x94	; 148
+ dce:	f7 4c       	sbci	r31, 0xC7	; 199
+ dd0:	60 83       	st	Z, r22
+ dd2:	6a e0       	ldi	r22, 0x0A	; 10
+ dd4:	e7 ea       	ldi	r30, 0xA7	; 167
+ dd6:	f1 e6       	ldi	r31, 0x61	; 97
+ dd8:	31 97       	sbiw	r30, 0x01	; 1
+ dda:	f1 f7       	brne	.-4      	; 0xdd8 <main+0x106>
+ ddc:	00 c0       	rjmp	.+0      	; 0xdde <main+0x10c>
+ dde:	00 00       	nop
+ de0:	61 50       	subi	r22, 0x01	; 1
         for(uint8_t b=0; b<10; b++)_delay_ms(10);
- d6c:	c1 f7       	brne	.-16     	; 0xd5e <main+0x102>
- d6e:	01 96       	adiw	r24, 0x01	; 1
+ de2:	c1 f7       	brne	.-16     	; 0xdd4 <main+0x102>
+ de4:	01 96       	adiw	r24, 0x01	; 1
     for (uint8_t n=0; n<40; n++){
         if ((n%8)>5) n+=2;
         if (n<40) iLED[n] = 0;
         for(uint8_t b=0; b<10; b++)_delay_ms(10);
     }
     for (uint8_t n=0; n<5; n++){
- d70:	85 30       	cpi	r24, 0x05	; 5
- d72:	91 05       	cpc	r25, r1
- d74:	f9 f6       	brne	.-66     	; 0xd34 <main+0xd8>
+ de6:	85 30       	cpi	r24, 0x05	; 5
+ de8:	91 05       	cpc	r25, r1
+ dea:	f9 f6       	brne	.-66     	; 0xdaa <main+0xd8>
         iLED[WING[R][n]] = 1<<n;
         iLED[WING[L][4-n]] = 1<<n;
         for(uint8_t b=0; b<10; b++)_delay_ms(10);
     }
 
     iLED[GEM[R]] = 255;
- d76:	a0 eb       	ldi	r26, 0xB0	; 176
- d78:	be e8       	ldi	r27, 0x8E	; 142
- d7a:	ec 91       	ld	r30, X
- d7c:	f0 e0       	ldi	r31, 0x00	; 0
- d7e:	ee 5a       	subi	r30, 0xAE	; 174
- d80:	f7 4c       	sbci	r31, 0xC7	; 199
- d82:	8f ef       	ldi	r24, 0xFF	; 255
- d84:	80 83       	st	Z, r24
+ dec:	a0 e2       	ldi	r26, 0x20	; 32
+ dee:	bf e8       	ldi	r27, 0x8F	; 143
+ df0:	ec 91       	ld	r30, X
+ df2:	f0 e0       	ldi	r31, 0x00	; 0
+ df4:	e4 59       	subi	r30, 0x94	; 148
+ df6:	f7 4c       	sbci	r31, 0xC7	; 199
+ df8:	8f ef       	ldi	r24, 0xFF	; 255
+ dfa:	80 83       	st	Z, r24
     iLED[GEM[L]] = 63;
- d86:	11 96       	adiw	r26, 0x01	; 1
- d88:	ec 91       	ld	r30, X
- d8a:	f0 e0       	ldi	r31, 0x00	; 0
- d8c:	ee 5a       	subi	r30, 0xAE	; 174
- d8e:	f7 4c       	sbci	r31, 0xC7	; 199
- d90:	8f e3       	ldi	r24, 0x3F	; 63
- d92:	80 83       	st	Z, r24
+ dfc:	11 96       	adiw	r26, 0x01	; 1
+ dfe:	ec 91       	ld	r30, X
+ e00:	f0 e0       	ldi	r31, 0x00	; 0
+ e02:	e4 59       	subi	r30, 0x94	; 148
+ e04:	f7 4c       	sbci	r31, 0xC7	; 199
+ e06:	8f e3       	ldi	r24, 0x3F	; 63
+ e08:	80 83       	st	Z, r24
 
     if (EEWrite(16, &strTest[0], sizeof(strTest))) retVal = 0xFA;     //Internal EEPROM write test
- d94:	44 e2       	ldi	r20, 0x24	; 36
- d96:	be 01       	movw	r22, r28
- d98:	6f 5f       	subi	r22, 0xFF	; 255
- d9a:	7f 4f       	sbci	r23, 0xFF	; 255
- d9c:	80 e1       	ldi	r24, 0x10	; 16
- d9e:	fa dd       	rcall	.-1036   	; 0x994 <EEWrite>
- da0:	88 23       	and	r24, r24
- da2:	11 f0       	breq	.+4      	; 0xda8 <main+0x14c>
- da4:	8a ef       	ldi	r24, 0xFA	; 250
- da6:	8f a3       	std	Y+39, r24	; 0x27
+ e0a:	44 e2       	ldi	r20, 0x24	; 36
+ e0c:	be 01       	movw	r22, r28
+ e0e:	6f 5f       	subi	r22, 0xFF	; 255
+ e10:	7f 4f       	sbci	r23, 0xFF	; 255
+ e12:	80 e1       	ldi	r24, 0x10	; 16
+ e14:	bf dd       	rcall	.-1154   	; 0x994 <EEWrite>
+ e16:	88 23       	and	r24, r24
+ e18:	11 f0       	breq	.+4      	; 0xe1e <main+0x14c>
+ e1a:	8a ef       	ldi	r24, 0xFA	; 250
+ e1c:	8f a3       	std	Y+39, r24	; 0x27
         if (n<40) iLED[n] = 0;
         for(uint8_t b=0; b<10; b++)_delay_ms(10);
     }
     for (uint8_t n=0; n<5; n++){
         iLED[WING[R][n]] = 1<<n;
         iLED[WING[L][4-n]] = 1<<n;
- da8:	d1 2c       	mov	r13, r1
- daa:	c1 2c       	mov	r12, r1
+ e1e:	d1 2c       	mov	r13, r1
+ e20:	c1 2c       	mov	r12, r1
     while (1)
     {
         //serRxDone is 1 when a LF character is detected
         if (serRxDone) {
             while (serTxDone == 0);
             if (SerSend((uint8_t*) &serRx[0])) retVal = 0xFA; //Echo back using the serRx buffer (which is abused here and further on in code too for sending stuff, I'm lazy...)
- dac:	1a ef       	ldi	r17, 0xFA	; 250
+ e22:	1a ef       	ldi	r17, 0xFA	; 250
             
             //Send test sensor values
             serRx[1] = (unsigned char)(adcHall>>4);
             serRx[2] = (unsigned char)(adcPhot>>4);
             serRx[3] = (unsigned char)(adcTemp);
             serRx[4] = (unsigned char)(auIn[0]);            
- dae:	0f 2e       	mov	r0, r31
- db0:	f2 e3       	ldi	r31, 0x32	; 50
- db2:	ef 2e       	mov	r14, r31
- db4:	f8 e3       	ldi	r31, 0x38	; 56
- db6:	ff 2e       	mov	r15, r31
- db8:	f0 2d       	mov	r31, r0
+ e24:	0f 2e       	mov	r0, r31
+ e26:	fc e4       	ldi	r31, 0x4C	; 76
+ e28:	ef 2e       	mov	r14, r31
+ e2a:	f8 e3       	ldi	r31, 0x38	; 56
+ e2c:	ff 2e       	mov	r15, r31
+ e2e:	f0 2d       	mov	r31, r0
     if (EEWrite(16, &strTest[0], sizeof(strTest))) retVal = 0xFA;     //Internal EEPROM write test
 
     while (1)
     {
         //serRxDone is 1 when a LF character is detected
         if (serRxDone) {
- dba:	80 91 05 38 	lds	r24, 0x3805	; 0x803805 <serRxDone>
- dbe:	88 23       	and	r24, r24
- dc0:	61 f0       	breq	.+24     	; 0xdda <main+0x17e>
+ e30:	80 91 1d 38 	lds	r24, 0x381D	; 0x80381d <serRxDone>
+ e34:	88 23       	and	r24, r24
+ e36:	61 f0       	breq	.+24     	; 0xe50 <main+0x17e>
             while (serTxDone == 0);
- dc2:	80 91 00 38 	lds	r24, 0x3800	; 0x803800 <__data_start>
- dc6:	88 23       	and	r24, r24
+ e38:	80 91 00 38 	lds	r24, 0x3800	; 0x803800 <__data_start>
+ e3c:	88 23       	and	r24, r24
             if (SerSend((uint8_t*) &serRx[0])) retVal = 0xFA; //Echo back using the serRx buffer (which is abused here and further on in code too for sending stuff, I'm lazy...)
- dc8:	e1 f3       	breq	.-8      	; 0xdc2 <main+0x166>
- dca:	87 e0       	ldi	r24, 0x07	; 7
- dcc:	98 e3       	ldi	r25, 0x38	; 56
- dce:	2b de       	rcall	.-938    	; 0xa26 <SerSend>
- dd0:	81 11       	cpse	r24, r1
- dd2:	1f a3       	std	Y+39, r17	; 0x27
+ e3e:	e1 f3       	breq	.-8      	; 0xe38 <main+0x166>
+ e40:	81 e2       	ldi	r24, 0x21	; 33
+ e42:	98 e3       	ldi	r25, 0x38	; 56
+ e44:	f0 dd       	rcall	.-1056   	; 0xa26 <SerSend>
+ e46:	81 11       	cpse	r24, r1
+ e48:	1f a3       	std	Y+39, r17	; 0x27
             RXCNT = 0;
- dd4:	1d ba       	out	0x1d, r1	; 29
+ e4a:	1d ba       	out	0x1d, r1	; 29
             serRxDone = 0;         
- dd6:	10 92 05 38 	sts	0x3805, r1	; 0x803805 <serRxDone>
+ e4c:	10 92 1d 38 	sts	0x381D, r1	; 0x80381d <serRxDone>
         }
 
         //buttonMark is updated by hardware timer, every increment there is a new button value available  
         if (buttonMark){
- dda:	80 91 03 38 	lds	r24, 0x3803	; 0x803803 <buttonMark>
- dde:	88 23       	and	r24, r24
+ e50:	80 91 1b 38 	lds	r24, 0x381B	; 0x80381b <buttonMark>
+ e54:	88 23       	and	r24, r24
             serRx[0] = CheckButtons(btns); //Reading buttons and duration is done by passing old value to the function, return value is the new readout.
- de0:	61 f3       	breq	.-40     	; 0xdba <main+0x15e>
- de2:	8c 2d       	mov	r24, r12
- de4:	61 de       	rcall	.-830    	; 0xaa8 <CheckButtons>
- de6:	e7 e0       	ldi	r30, 0x07	; 7
- de8:	f8 e3       	ldi	r31, 0x38	; 56
+ e56:	61 f3       	breq	.-40     	; 0xe30 <main+0x15e>
+ e58:	8c 2d       	mov	r24, r12
+ e5a:	26 de       	rcall	.-948    	; 0xaa8 <CheckButtons>
+ e5c:	e1 e2       	ldi	r30, 0x21	; 33
+ e5e:	f8 e3       	ldi	r31, 0x38	; 56
             /*
                 Check if button value has changed here
             */
             btns = serRx[0]; 
- dea:	80 83       	st	Z, r24
+ e60:	80 83       	st	Z, r24
             buttonMark = 0;
- dec:	c0 80       	ld	r12, Z
+ e62:	c0 80       	ld	r12, Z
 
             bla++;
- dee:	10 92 03 38 	sts	0x3803, r1	; 0x803803 <buttonMark>
+ e64:	10 92 1b 38 	sts	0x381B, r1	; 0x80381b <buttonMark>
             if (bla%2) SelectAuIn(); else SelectTSens();    //Switch between audio in and temperature for testing
- df2:	d3 94       	inc	r13
- df4:	d0 fe       	sbrs	r13, 0
- df6:	02 c0       	rjmp	.+4      	; 0xdfc <main+0x1a0>
- df8:	48 de       	rcall	.-880    	; 0xa8a <SelectAuIn>
- dfa:	01 c0       	rjmp	.+2      	; 0xdfe <main+0x1a2>
- dfc:	37 de       	rcall	.-914    	; 0xa6c <SelectTSens>
+ e68:	d3 94       	inc	r13
+ e6a:	d0 fe       	sbrs	r13, 0
+ e6c:	02 c0       	rjmp	.+4      	; 0xe72 <main+0x1a0>
+ e6e:	0d de       	rcall	.-998    	; 0xa8a <SelectAuIn>
+ e70:	01 c0       	rjmp	.+2      	; 0xe74 <main+0x1a2>
+ e72:	fc dd       	rcall	.-1032   	; 0xa6c <SelectTSens>
             
             //Send test sensor values
             serRx[1] = (unsigned char)(adcHall>>4);
- dfe:	80 91 2d 38 	lds	r24, 0x382D	; 0x80382d <adcHall>
- e02:	90 91 2e 38 	lds	r25, 0x382E	; 0x80382e <adcHall+0x1>
- e06:	92 95       	swap	r25
- e08:	82 95       	swap	r24
- e0a:	8f 70       	andi	r24, 0x0F	; 15
- e0c:	89 27       	eor	r24, r25
- e0e:	9f 70       	andi	r25, 0x0F	; 15
- e10:	89 27       	eor	r24, r25
- e12:	e7 e0       	ldi	r30, 0x07	; 7
- e14:	f8 e3       	ldi	r31, 0x38	; 56
- e16:	81 83       	std	Z+1, r24	; 0x01
+ e74:	80 91 47 38 	lds	r24, 0x3847	; 0x803847 <adcHall>
+ e78:	90 91 48 38 	lds	r25, 0x3848	; 0x803848 <adcHall+0x1>
+ e7c:	92 95       	swap	r25
+ e7e:	82 95       	swap	r24
+ e80:	8f 70       	andi	r24, 0x0F	; 15
+ e82:	89 27       	eor	r24, r25
+ e84:	9f 70       	andi	r25, 0x0F	; 15
+ e86:	89 27       	eor	r24, r25
+ e88:	e1 e2       	ldi	r30, 0x21	; 33
+ e8a:	f8 e3       	ldi	r31, 0x38	; 56
+ e8c:	81 83       	std	Z+1, r24	; 0x01
             serRx[2] = (unsigned char)(adcPhot>>4);
- e18:	80 91 2f 38 	lds	r24, 0x382F	; 0x80382f <adcPhot>
- e1c:	90 91 30 38 	lds	r25, 0x3830	; 0x803830 <adcPhot+0x1>
- e20:	92 95       	swap	r25
- e22:	82 95       	swap	r24
- e24:	8f 70       	andi	r24, 0x0F	; 15
- e26:	89 27       	eor	r24, r25
- e28:	9f 70       	andi	r25, 0x0F	; 15
- e2a:	89 27       	eor	r24, r25
- e2c:	82 83       	std	Z+2, r24	; 0x02
+ e8e:	80 91 49 38 	lds	r24, 0x3849	; 0x803849 <adcPhot>
+ e92:	90 91 4a 38 	lds	r25, 0x384A	; 0x80384a <adcPhot+0x1>
+ e96:	92 95       	swap	r25
+ e98:	82 95       	swap	r24
+ e9a:	8f 70       	andi	r24, 0x0F	; 15
+ e9c:	89 27       	eor	r24, r25
+ e9e:	9f 70       	andi	r25, 0x0F	; 15
+ ea0:	89 27       	eor	r24, r25
+ ea2:	82 83       	std	Z+2, r24	; 0x02
             serRx[3] = (unsigned char)(adcTemp);
- e2e:	80 91 7b 38 	lds	r24, 0x387B	; 0x80387b <adcTemp>
- e32:	83 83       	std	Z+3, r24	; 0x03
+ ea4:	80 91 95 38 	lds	r24, 0x3895	; 0x803895 <adcTemp>
+ ea8:	83 83       	std	Z+3, r24	; 0x03
             serRx[4] = (unsigned char)(auIn[0]);            
- e34:	d7 01       	movw	r26, r14
- e36:	8c 91       	ld	r24, X
+ eaa:	d7 01       	movw	r26, r14
+ eac:	8c 91       	ld	r24, X
             serRx[5] = (unsigned char) minuteMark;
- e38:	84 83       	std	Z+4, r24	; 0x04
- e3a:	80 91 04 38 	lds	r24, 0x3804	; 0x803804 <minuteMark>
+ eae:	84 83       	std	Z+4, r24	; 0x04
+ eb0:	80 91 1c 38 	lds	r24, 0x381C	; 0x80381c <minuteMark>
             EERead(17, (uint8_t*)&serRx[6], 1);                                                   //"H" character (second char of strTest)
- e3e:	85 83       	std	Z+5, r24	; 0x05
- e40:	41 e0       	ldi	r20, 0x01	; 1
- e42:	6d e0       	ldi	r22, 0x0D	; 13
- e44:	78 e3       	ldi	r23, 0x38	; 56
- e46:	81 e1       	ldi	r24, 0x11	; 17
+ eb4:	85 83       	std	Z+5, r24	; 0x05
+ eb6:	41 e0       	ldi	r20, 0x01	; 1
+ eb8:	67 e2       	ldi	r22, 0x27	; 39
+ eba:	78 e3       	ldi	r23, 0x38	; 56
+ ebc:	81 e1       	ldi	r24, 0x11	; 17
             if (I2C_read_bytes(devAddr, &memAddr[0], 2, (uint8_t*)&serRx[7], 1)) retVal = 0xFA;   //Bell character (first char of strTest)
- e48:	92 dd       	rcall	.-1244   	; 0x96e <EERead>
- e4a:	01 e0       	ldi	r16, 0x01	; 1
- e4c:	2e e0       	ldi	r18, 0x0E	; 14
- e4e:	38 e3       	ldi	r19, 0x38	; 56
- e50:	42 e0       	ldi	r20, 0x02	; 2
- e52:	be 01       	movw	r22, r28
- e54:	6b 5d       	subi	r22, 0xDB	; 219
- e56:	7f 4f       	sbci	r23, 0xFF	; 255
- e58:	80 e5       	ldi	r24, 0x50	; 80
- e5a:	22 da       	rcall	.-3004   	; 0x2a0 <I2C_read_bytes>
+ ebe:	57 dd       	rcall	.-1362   	; 0x96e <EERead>
+ ec0:	01 e0       	ldi	r16, 0x01	; 1
+ ec2:	28 e2       	ldi	r18, 0x28	; 40
+ ec4:	38 e3       	ldi	r19, 0x38	; 56
+ ec6:	42 e0       	ldi	r20, 0x02	; 2
+ ec8:	be 01       	movw	r22, r28
+ eca:	6b 5d       	subi	r22, 0xDB	; 219
+ ecc:	7f 4f       	sbci	r23, 0xFF	; 255
+ ece:	80 e5       	ldi	r24, 0x50	; 80
+ ed0:	e7 d9       	rcall	.-3122   	; 0x2a0 <I2C_read_bytes>
+ ed2:	81 11       	cpse	r24, r1
             serRx[8] = retVal;
- e5c:	81 11       	cpse	r24, r1
- e5e:	1f a3       	std	Y+39, r17	; 0x27
- e60:	8f a1       	ldd	r24, Y+39	; 0x27
+ ed4:	1f a3       	std	Y+39, r17	; 0x27
+ ed6:	8f a1       	ldd	r24, Y+39	; 0x27
+ ed8:	80 93 29 38 	sts	0x3829, r24	; 0x803829 <serRx+0x8>
             while (serTxDone == 0);
- e62:	80 93 0f 38 	sts	0x380F, r24	; 0x80380f <serRx+0x8>
- e66:	80 91 00 38 	lds	r24, 0x3800	; 0x803800 <__data_start>
-            SerSend((uint8_t*) &serRx[0]);
- e6a:	88 23       	and	r24, r24
- e6c:	e1 f3       	breq	.-8      	; 0xe66 <main+0x20a>
- e6e:	87 e0       	ldi	r24, 0x07	; 7
- e70:	98 e3       	ldi	r25, 0x38	; 56
+ edc:	80 91 00 38 	lds	r24, 0x3800	; 0x803800 <__data_start>
+ ee0:	88 23       	and	r24, r24
+            //SerSend((uint8_t*) &serRx[0]);
             retVal = TextAdventure();
- e72:	d9 dd       	rcall	.-1102   	; 0xa26 <SerSend>
- e74:	ef de       	rcall	.-546    	; 0xc54 <TextAdventure>
- e76:	8f a3       	std	Y+39, r24	; 0x27
+ ee2:	e1 f3       	breq	.-8      	; 0xedc <main+0x20a>
+ ee4:	ef de       	rcall	.-546    	; 0xcc4 <TextAdventure>
+ ee6:	8f a3       	std	Y+39, r24	; 0x27
             retVal = 0;
- e78:	1f a2       	std	Y+39, r1	; 0x27
- e7a:	9f cf       	rjmp	.-194    	; 0xdba <main+0x15e>
+ ee8:	1f a2       	std	Y+39, r1	; 0x27
+ eea:	a2 cf       	rjmp	.-188    	; 0xe30 <main+0x15e>
 
     if (I2C_write_bytes(devAddr, &memAddr[0], 2, &strTest[0], sizeof(strTest))) retVal = 0xFA;
     SerSpeed(255);
 
     //Do some LED tests
     for (uint8_t n=0; n<40; n++){
- e7c:	9a e0       	ldi	r25, 0x0A	; 10
- e7e:	28 cf       	rjmp	.-432    	; 0xcd0 <main+0x74>
- e80:	9a e0       	ldi	r25, 0x0A	; 10
- e82:	44 cf       	rjmp	.-376    	; 0xd0c <main+0xb0>
+ eec:	9a e0       	ldi	r25, 0x0A	; 10
+ eee:	2b cf       	rjmp	.-426    	; 0xd46 <main+0x74>
+ ef0:	9a e0       	ldi	r25, 0x0A	; 10
+ ef2:	47 cf       	rjmp	.-370    	; 0xd82 <main+0xb0>
 
-00000e84 <__udivmodhi4>:
- e84:	aa 1b       	sub	r26, r26
- e86:	bb 1b       	sub	r27, r27
- e88:	51 e1       	ldi	r21, 0x11	; 17
- e8a:	07 c0       	rjmp	.+14     	; 0xe9a <__udivmodhi4_ep>
+00000ef4 <__udivmodhi4>:
+ ef4:	aa 1b       	sub	r26, r26
+ ef6:	bb 1b       	sub	r27, r27
+ ef8:	51 e1       	ldi	r21, 0x11	; 17
+ efa:	07 c0       	rjmp	.+14     	; 0xf0a <__udivmodhi4_ep>
 
-00000e8c <__udivmodhi4_loop>:
- e8c:	aa 1f       	adc	r26, r26
- e8e:	bb 1f       	adc	r27, r27
- e90:	a6 17       	cp	r26, r22
- e92:	b7 07       	cpc	r27, r23
- e94:	10 f0       	brcs	.+4      	; 0xe9a <__udivmodhi4_ep>
- e96:	a6 1b       	sub	r26, r22
- e98:	b7 0b       	sbc	r27, r23
+00000efc <__udivmodhi4_loop>:
+ efc:	aa 1f       	adc	r26, r26
+ efe:	bb 1f       	adc	r27, r27
+ f00:	a6 17       	cp	r26, r22
+ f02:	b7 07       	cpc	r27, r23
+ f04:	10 f0       	brcs	.+4      	; 0xf0a <__udivmodhi4_ep>
+ f06:	a6 1b       	sub	r26, r22
+ f08:	b7 0b       	sbc	r27, r23
 
-00000e9a <__udivmodhi4_ep>:
- e9a:	88 1f       	adc	r24, r24
- e9c:	99 1f       	adc	r25, r25
- e9e:	5a 95       	dec	r21
- ea0:	a9 f7       	brne	.-22     	; 0xe8c <__udivmodhi4_loop>
- ea2:	80 95       	com	r24
- ea4:	90 95       	com	r25
- ea6:	bc 01       	movw	r22, r24
- ea8:	cd 01       	movw	r24, r26
- eaa:	08 95       	ret
+00000f0a <__udivmodhi4_ep>:
+ f0a:	88 1f       	adc	r24, r24
+ f0c:	99 1f       	adc	r25, r25
+ f0e:	5a 95       	dec	r21
+ f10:	a9 f7       	brne	.-22     	; 0xefc <__udivmodhi4_loop>
+ f12:	80 95       	com	r24
+ f14:	90 95       	com	r25
+ f16:	bc 01       	movw	r22, r24
+ f18:	cd 01       	movw	r24, r26
+ f1a:	08 95       	ret
 
-00000eac <_exit>:
- eac:	f8 94       	cli
+00000f1c <_exit>:
+ f1c:	f8 94       	cli
 
-00000eae <__stop_program>:
- eae:	ff cf       	rjmp	.-2      	; 0xeae <__stop_program>
+00000f1e <__stop_program>:
+ f1e:	ff cf       	rjmp	.-2      	; 0xf1e <__stop_program>

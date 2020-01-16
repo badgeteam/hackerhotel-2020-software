@@ -14,6 +14,7 @@
     #define A1CNT   GPIOR3  //Counter for ADC1
     
     #define RXLEN   32      //Length of serial Rx buffer
+    #define TXLEN   33      //Length of serial Tx buffer (yes, it one longer than a power of two)
     #define AULEN   32      //Audio input buffer length: MUST be a power of 2
 
     #define USART0_BAUD_RATE(BAUD_RATE) ((float)(F_CPU * 64 / (16 * (float)BAUD_RATE)) + 0.5)

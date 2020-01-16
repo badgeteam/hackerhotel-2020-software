@@ -105,7 +105,7 @@ int main(void)
             if (I2C_read_bytes(devAddr, &memAddr[0], 2, (uint8_t*)&serRx[7], 1)) retVal = 0xFA;   //Bell character (first char of strTest)
             serRx[8] = retVal;
             while (serTxDone == 0);
-            SerSend((uint8_t*) &serRx[0]);
+            //SerSend((uint8_t*) &serRx[0]);
             retVal = TextAdventure();
             retVal = 0;
 

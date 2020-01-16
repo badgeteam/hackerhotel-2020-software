@@ -9,9 +9,8 @@
 
  // Game loop:
  // Check if still sending data, true -> end loop
- // Check if (more) data needs to be sent, true -> send to serial, end loop
  // Check if input present, false -> end loop
- // Process input
+ // Process input, put response in tx variables for sending to user
  // :End of loop
 
  // Playing of game audio and LED effects are done outside this library
