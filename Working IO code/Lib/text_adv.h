@@ -7,13 +7,20 @@
  *  Author: Badge.team
  */ 
 
+ // Game loop:
+ // Check if still sending data, true -> end loop
+ // Check if (more) data needs to be sent, true -> send to serial, end loop
+ // Check if input present, false -> end loop
+ // Process input
+ // :End of loop
+
+ // Playing of game audio and LED effects are done outside this library
 
 #ifndef TEXT_ADV_H_
 #define TEXT_ADV_H_
-    #include <main_def.h>
+    //#include <main_def.h>
     #include <avr/io.h>
     #include <avr/interrupt.h>
-    #include <util/delay.h>
     #include <stdlib.h>
 
     //Byte fields
@@ -24,9 +31,24 @@
     enum {NAME, DESC, ACTION_STR1, ACTION_STR2, OPEN_ACL_MSG, ACTION_ACL_MSG, ACTION_MSG};
     #define STRING_FIELDS_LEN   ACTION_MSG+1
 
+    //action constants
+    enum {A_ENTER = 1, A_OPEN = 2, A_LOOK = 4, A_TALK = 8, A_USE = 16};
+
+    #define MAX_OBJ_DEPTH   32
+    #define MAX_ITEMS       64
+    #define STATUS_BITS     128
+    extern uint8_t statusBytes[STATUS_BITS/sizeof(uint8_t)];
+
     //Keys are md5 hash of 'H@ck3r H0t3l 2020', split in two
-    //const uint8_t xor_key_game[8]  = {0x74, 0xbf, 0xfa, 0x54, 0x1c, 0x96, 0xb2, 0x26};
-    //const uint8_t xor_key_teaser[8] = {0x1e, 0xeb, 0xd6, 0x8b, 0xc0, 0xc2, 0x0a, 0x61};
-    //const unsigned char boiler_plate[]   = "Hacker Hotel 2020 by badge.team "; // boiler_plate must by 32 bytes long, excluding string_end(0)
+    #define KEY_LENGTH      8
+    enum {GAME = 0, TEASER = 1};
+    extern const uint8_t xor_key[2][KEY_LENGTH];
+    //extern const unsigned char boiler_plate[];        // = "Hacker Hotel 2020 by badge.team "; // boiler_plate must by 32 bytes long, excluding string_end(0)
+    
+    uint8_t TextAdventure();
+    //uint8_t ExtEERead(uint16_t offset, uint8_t length, uint8_t type, uint8_t *data);
+    //void DecryptGame(uint16_t offset, uint8_t length, uint8_t type, uint8_t *data);
+    //uint16_t ReadPtr (uint16_t offset)
+
 
 #endif /* RESOURCES_H_ */

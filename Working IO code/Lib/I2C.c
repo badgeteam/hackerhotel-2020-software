@@ -215,15 +215,15 @@ uint8_t	I2C_read_bytes(uint8_t slave_addr, uint8_t *reg_ptr, uint8_t reg_len, ui
     while(reg_len > 0){
 	    status = I2C_write(reg_ptr);    							// send slave start register
 	    if (status != 0) goto error;
-        reg_ptr++;
-        reg_len--;
+        ++reg_ptr;
+        --reg_len;
     }
 	I2C_rep_start((slave_addr << 1) + 1);							// slave read address, LSB 1
 	while (dat_len > 1) {
 		status = I2C_read(dat_ptr, 0);								// first bytes, send ACK
 		if (status != 0) goto error;
-		dat_ptr++;
-		dat_len--;
+		++dat_ptr;
+		--dat_len;
 	}
 	status = I2C_read(dat_ptr, 1);									// single or last byte, send NACK
 	if (status != 0) goto error;
@@ -250,15 +250,15 @@ uint8_t	I2C_write_bytes(uint8_t slave_addr, uint8_t *reg_ptr, uint8_t reg_len, u
 	while(reg_len > 0){
     	status = I2C_write(reg_ptr);    							// send slave start register
     	if (status != 0) goto error;
-    	reg_ptr++;
-    	reg_len--;
+    	++reg_ptr;
+    	--reg_len;
 	}
 	if (status != 0) goto error;
 	while (dat_len > 0) {											// write bytes
 		status = I2C_write(dat_ptr);
 		if (status != 0) goto error;
-		dat_ptr++;
-		dat_len--;		
+		++dat_ptr;
+		--dat_len;		
 	}
 	I2C_stop();
 	return 0;

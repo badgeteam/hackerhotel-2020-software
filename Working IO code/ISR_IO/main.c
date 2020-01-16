@@ -106,7 +106,7 @@ int main(void)
             serRx[8] = retVal;
             while (serTxDone == 0);
             SerSend((uint8_t*) &serRx[0]);
-            //retVal = ReadByte(15, &xor_key_game[0]);
+            retVal = TextAdventure();
             retVal = 0;
 
         }
