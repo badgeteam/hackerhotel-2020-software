@@ -5,10 +5,20 @@
 ### It is just for creating the flash content                 ###
 #################################################################
 
+### Flash memory layout
+###
+### ADDR   CONTENT                          XOR_KEY
+### 0x0000 boilerplate (32 bytes)           xor_key_teaser
+### 0x0020 Game data                        xor_key_game
+### 0xXXXX Empty space with random data     xor_key_teaser
+### 0xXXXX Literals                         xor_key_teaser
+
 import json
 import pprint 
+from random import *
 
 from common import *
+import literals
 
 items        = ["" for i in range(max_items)]
 state_desc   = ["" for i in range(status_bits*2-1)]
@@ -24,19 +34,11 @@ def show_eeprom(data):
     objects = 0
 
     while offset<len(data):
-        if level==0 and offset != 0:
-            # We're at the help file
-            l = read_ptr(data,offset)
-            print("0x{0:04X} help={1:}".format(offset,read_range(data,offset+2,l).decode()))
-            offset += 2 + l
-            return objects
-
         objects += 1
         ptr = read_ptr(data,offset)
-        if len(cache) == 0:
-            print("0x{0:04X} ->0x{1:04X} Pointer to help".format(offset,ptr))
-        else:
-            print("\n0x{0:04X} {2:} ->0x{1:04X} Pointer to next object at this level".format(offset,ptr,"  "*level))
+        if ptr == 0x0000:
+            break
+        print("\n0x{0:04X} {2:} ->0x{1:04X} Pointer to next object at this level".format(offset,ptr,"  "*level))
         cache.append(ptr)
         offset += 2
 
@@ -73,93 +75,134 @@ def show_eeprom(data):
             continue
 
         level += 1
+    return objects
 ### end of show_eeprom()
 
 
-def convert_json_to_eeprom(obj,offset=0):
-    nextlevel = 0
-    binary    = bytearray(0)
-    l = 0
-    for f in byte_fields:
-        if f in obj:
-            binary.append(obj[f])
-        else:
-            binary.append(0x00)
-        l = l + 1
+def convert_json_to_eeprom(objects,offset=0):
+    result = bytearray(0)
 
-    for i in range(len(string_fields)):
-        f = string_fields[i]
-        if f in obj:
-            # If needed, start with sound/LED effects in the string
-            if i >= string_fields.index('open_acl_msg'):
-                e = string_fields[i] + "_effects"
-                print(e)
-                if e in obj:
-                    s = chr(obj[e])
-                else:
-                    s = chr(0)
+    for name in objects:
+        l = 0
+        nextlevel = 0
+        binary = bytearray(0)
+
+        obj = objects[name]
+        for f in byte_fields:
+            if f in obj:
+                binary.append(obj[f])
             else:
-                s = ""
-            s = s + obj[f]
-            print("DEBUG: {}".format(obj[f]))
-                    
-            while len(s) >= 255:
-                binary.append(255)
-                binary.extend(s[:255].encode('utf8'))
-                l = l + 256
-                s = s[255:]
-            binary.append(len(s))
-            binary.extend(s.encode('utf8'))
-            l = l + 1 + len(s)
-        else:
-            binary.append(0x00)
+                binary.append(0x00)
             l = l + 1
 
-    if 'item_nr' in obj:
-        items[obj['item_nr']] = obj['name']
+        # Add name of the object
+        binary.append(len(name))
+        binary.extend(name.encode('utf8'))
+        l = l + 1 + len(name)
 
-    if 'action_state' in obj:
-        if 'state_desc' in obj:
-            state_desc[obj['action_state']] = obj['state_desc']
-        action_state[obj['action_state']].append(obj['name'])
+        for i in range(1,len(string_fields)):   # skip first string field (name), as it has been processed already
+            f = string_fields[i]
+            if f in obj:
+                # If needed, start with sound/LED effects in the string
+                if i >= string_fields.index('open_acl_msg'):
+                    e = string_fields[i] + "_effects"
+                    if e in obj:
+                        s = chr(obj[e])
+                    else:
+                        s = chr(0)
+                else:
+                    s = ""
+                s = s + obj[f]
+                        
+                while len(s) >= 255:
+                    binary.append(255)
+                    binary.extend(s[:255].encode('utf8'))
+                    l = l + 256
+                    s = s[255:]
+                binary.append(len(s))
+                binary.extend(s.encode('utf8'))
+                l = l + 1 + len(s)
+            else:
+                binary.append(0x00)
+                l = l + 1
 
-    if 'visible_acl' in obj:
-        visible_acl[obj['visible_acl']].append(obj['name'])
+        if 'item_nr' in obj:
+            if obj['item_nr'] != 0:
+                items[obj['item_nr']] = name
 
-    if 'open_acl' in obj:
-        open_acl[obj['open_acl']].append(obj['name'])
+        if 'action_state' in obj:
+            if obj['action_state'] != 0:
+                if 'state_desc' in obj:
+                    if obj['state_desc'] != "":
+                        state_desc[obj['action_state']] = obj['state_desc']
+                action_state[obj['action_state']].append(name)
 
-    if 'action_acl' in obj:
-        action_acl[obj['action_acl']].append(obj['name'])
+        if 'visible_acl' in obj:
+            if obj['visible_acl'] != 0:
+                visible_acl[obj['visible_acl']].append(name)
+
+        if 'open_acl' in obj:
+            if obj['open_acl'] != 0:
+                open_acl[obj['open_acl']].append(name)
+
+        if 'action_acl' in obj:
+            if obj['action_acl'] != 0:
+                action_acl[obj['action_acl']].append(name)
 
 
-    nextlevel = l
+        nextlevel = offset+l+4
 
-    if 'o' in obj:
-        for o in obj['o']:
-            c = convert_json_to_eeprom(o,offset+l+4)
+        if 'o' in obj:
+            c = convert_json_to_eeprom(obj['o'],nextlevel)
             l = l + len(c)
             binary = binary + c
 
-    binary = bytearray([(offset+l+4) // 256, (offset+l+4)  % 256]) + \
-             bytearray([(offset+nextlevel+4) // 256, (offset+nextlevel+4)  % 256])+ \
-             binary
+        offset = offset+l+4
 
-    return binary
+        print(offset,nextlevel)
+        result = result + \
+                 bytearray([(offset) // 256, (offset)  % 256]) + \
+                 bytearray([(nextlevel) // 256, (nextlevel)  % 256])+ \
+                 binary
+
+    return result
 ### end of convert_json_to_eeprom()
 
 
 ### Read and convert the JSON file
 with open('hotel.json', 'r') as f:
     hotel = json.load(f)
-data = convert_json_to_eeprom(hotel['game'])
-l = len(hotel['help'])
-data = data + bytearray([l // 256, l  % 256])
-data.extend(hotel['help'].encode('utf8'))
+game_data = convert_json_to_eeprom(hotel)
+game_data.append(0x00)
+game_data.append(0x00)
+
+f1 = open('literals.h', 'w')
+f2 = open('lit_offsets.py', 'w')
+f2.write("lit_offsets = {\n")
+
+literal_data   = bytearray(0)
+literal_offset = flash_size
+i              = 0
+for l in literals.literals:
+    literal_data.extend(l.encode('utf8'))
+    literal_offset = literal_offset - len(l)
+    if i == 0:
+        f1.write("#define A_HELP   {:5d}\n".format(literal_offset))
+        f1.write("#define L_HELP   {:5d}\n".format(len(l)))
+        f2.write("    'help': [{},{}],\n".format(literal_offset,len(l)))
+    else:
+        f1.write("#define A_STR{:03d} {:5d} /* '{}' */\n".format(i,literal_offset,l))
+        f1.write("#define L_STR{:03d} {:5d}\n".format(i,len(l),l))
+        f2.write("    '{}': [{},{}],  # A_STR{:03d}\n".format(l,literal_offset,len(l),i))
+    i = i + 1
+f2.write("}\n")
+f2.close()
+f1.close()
 
 
-if len(data) + 64 > flash_size:
-    print("The game is currently using {} bytes of EEPROM space (including boilerplate and footer).".format(len(data)+64))
+total_length = 32 + len(game_data) + len(literal_data)
+if total_length > flash_size:
+    print("The game is currently using {} bytes of EEPROM space...".format(total_length))
     print("... but only {} bytes of flash available".format(flash_size))
     exit()
 
@@ -170,12 +213,16 @@ for i in range(len(boiler_plate)):
     xor_data.append(boiler_plate[i] ^ xor_key_teaser[offset % len(xor_key_teaser)])
     offset += 1
 
-for i in range(len(data)):
-    xor_data.append(data[i] ^ xor_key_game[offset % len(xor_key_game)])
+for i in range(len(game_data)):
+    xor_data.append(game_data[i] ^ xor_key_game[offset % len(xor_key_game)])
     offset += 1
 
-for i in range(flash_size - len(xor_data)):
-    xor_data.append(xor_key_teaser[offset % len(xor_key_teaser)])
+for i in range(flash_size - len(xor_data) - len(literal_data)):
+    xor_data.append(randrange(0,256) ^ xor_key_teaser[offset % len(xor_key_teaser)])
+    offset += 1
+
+for i in range(len(literal_data)):
+    xor_data.append(literal_data[i] ^ xor_key_teaser[offset % len(xor_key_teaser)])
     offset += 1
 
 eeprom = open('hotel.bin', 'wb')
@@ -214,6 +261,7 @@ for i in range(status_bits):
 
 
 print()
-print("The game is currently using {} bytes of EEPROM space (including boilerplate and footer).".format(len(data)+64))
-print("There are currently {} objects in the game ({:d} bytes per object)".format(count,len(data)//count))
+print("The game is currently using {} bytes of EEPROM space".format(total_length))
+print("There are currently {} objects in the game,using {} bytes ({:d} bytes per object)".format(count,len(game_data),len(game_data)//count))
+print("The literal strings are using {} bytes.".format(len(literal_data)))
 print()

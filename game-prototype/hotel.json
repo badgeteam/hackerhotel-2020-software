@@ -1,7 +1,5 @@
 {
-  "help" : "Welcome to the \"Escape from Hacker Hotel!!!\" challenge.\n\nYou are locked in the hotel, just like servants of the pharaohs\nwere locked in the Pyramids with their masters.\nYou will need to hack yourself a way out of the hotel before\nthe end of the weekend (when the hotel will be closed up\nforever, WHOAHAHAHAHAHAHA)!\n\nh or ?      show this help\nq           quit the game for now\nx           leave a room or enter the elevator\ne <room>    enter the given room\nl           look around the room\nl <o>       look at object <o>\no <o>       open object <o>\np <i>       pickup item <i> (you can only carry 2 items at a time)\nd <i>       drop item <i> (you can only carry 2 items at a time)\ni           list items you are carrying\nt <p>       talk to \"person\" <p>\nu <o>       use object <o>\nu <i> <o>   use item <i> on object <o>\n\nYou can use any substring of an object, item, room etc in any case.\nSo 'e rec' will enter the reception, just as 'enter Reception'.",
-  "game" : {
-    "name" : "The Street",
+  "The Street" : {
     "desc" : "You stand in front of Hotel Pyramide, an Egyptian styled\nboutique hotel. There is a Hacker Conference going on at the hotel.",
     "effects" : 96,
     "visible_acl" : 127,
@@ -9,31 +7,94 @@
     "action_mask" : 13,
     "action_str1" : "Hahaha, you are trying to talk to a hotel!",
     "open_acl_msg" : "No no no, you can't leave this hotel. You are locked in forever.",
-    "o" : [
-      {
-        "name" : "The Hotel Lobby",
+    "o" : {
+      "The Hotel Lobby" : {
         "desc" : "You are in the lobby of our beautiful hotel \"The Pyramid\". Here you can find our reception, the hotel bar and a shop. On your right you can find the elevator to all the rooms and on the left is of course the entrance through which you came in.",
         "action_mask" : 1,
-        "o" : [
-          {
-            "name" : "ATM machine",
-            "desc" : "Hey, the ATM is hacked and gives out free $100 bills",
-            "action_mask" : 20,
-            "action_msg" : "You have withdrawn $100 and put it in your wallet",
-            "action_msgeffects" : 66,
-            "action_acl" : 132,
-            "action_acl_msg" : "Please play fair and don't use the ATM so often!",
-            "action_acl_msg_effects" : 33,
-            "action_state" : 4,
-            "state_desc" : "You have withdrawn $100"
+        "action_msg" : "Testing",
+        "o" : {
+          "The Elevator" : {
+            "desc" : "The elevator will take you to any floor you like",
+            "action_mask" : 21,
+            "action_acl" : 2,
+            "action_acl_msg" : "You don't have a VIP keycard, access denied",
+            "action_item" : 2,
+            "action_state" : 3,
+            "state_desc" : "VIP access to second floor granted.",
+            "action_msg" : "VIP access to second floor granted.",
+            "o" : {
+              "The First Floor" : {
+                "desc" : "This the hallway on the First Floor",
+                "action_mask" : 1,
+                "open_acl" : 1,
+                "open_acl_msg" : "Access to this floor is for hotel guests only!",
+                "o" : {
+                  "Room 101" : {
+                    "action_mask" : 1
+                  }
+                }
+              },
+              "The Second Floor" : {
+                "desc" : "This is the hallway on the Second Floor",
+                "action_mask" : 1,
+                "open_acl" : 3,
+                "open_acl_msg" : "This floor is for VIP guests only!",
+                "o" : {
+                  "Room 203" : {
+                    "action_mask" : 1
+                  },
+                  "Room 202" : {
+                    "action_mask" : 1
+                  },
+                  "Room 201" : {
+                    "action_mask" : 1
+                  }
+                }
+              }
+            }
           },
-          {
-            "name" : "The Reception",
+          "The Bar" : {
+            "desc" : "This is the hotel bar",
+            "action_mask" : 5,
+            "o" : {
+              "Keycard" : {
+                "desc" : "This looks like a VIP keycard",
+                "action_mask" : 20,
+                "action_item" : 1,
+                "action_msg" : "You succesfully copied the VIP keycard",
+                "action_msg_effects" : 66,
+                "action_state" : 2,
+                "state_desc" : "VIP keycard obtained"
+              },
+              "Keycard-Copy" : {
+                "desc" : "A copy of the VIP keycard",
+                "visible_acl" : 2,
+                "action_mask" : 20,
+                "item_nr" : 2
+              }
+            }
+          },
+          "The Shop" : {
+            "desc" : "This is the hotel shop",
+            "action_mask" : 5,
+            "o" : {
+              "Proxmark III" : {
+                "name" : "",
+                "desc" : "The Proxmark is an RFID swiss-army tool, allowing for both high and low level interactions with the vast majority of RFID tags and systems world-wide.",
+                "action_acl" : 4,
+                "action_acl_msg" : "You need some money to buy the Proxmark III",
+                "action_acl_state" : 132,
+                "action_msg" : "You paid",
+                "action_mask" : 20,
+                "item_nr" : 1
+              }
+            }
+          },
+          "The Reception" : {
             "desc" : "Testing look!",
             "action_mask" : 1,
-            "o" : [
-              {
-                "name" : "A Receptionist",
+            "o" : {
+              "The Receptionist" : {
                 "desc" : "She seems friendly",
                 "action_acl" : 2,
                 "action_acl_msg" : "I'm sorry sir, I'm only allowed to check out VIP guests.",
@@ -44,106 +105,46 @@
                 "action_state" : 127,
                 "state_desc" : "You are now allowed to leave the hotel"
               }
-            ]
+            }
           },
-          {
-            "name" : "The Bar",
-            "desc" : "This is the hotel bar",
-            "action_mask" : 5,
-            "o" : [
-              {
-                "name" : "Keycard",
-                "desc" : "This looks like a VIP keycard",
-                "action_mask" : 20,
-                "action_item" : 1,
-                "action_msg" : "You succesfully copied the VIP keycard",
-                "action_msg_effects" : 66,
-                "action_state" : 2,
-                "state_desc" : "VIP keycard obtained"
-              },
-              {
-                "name" : "Keycard-Copy",
-                "desc" : "A copy of the VIP keycard",
-                "visible_acl" : 2,
-                "action_mask" : 20,
-                "item_nr" : 2
-              }
-            ]
+          "ATM machine" : {
+            "desc" : "Hey, the ATM is hacked and gives out free $100 bills",
+            "action_mask" : 20,
+            "action_msg" : "You have withdrawn $100 and put it in your wallet",
+            "action_msgeffects" : 66,
+            "action_acl" : 132,
+            "action_acl_msg" : "Please play fair and don't use the ATM so often!",
+            "action_acl_msg_effects" : 33,
+            "action_state" : 4,
+            "state_desc" : "You have withdrawn $100"
           },
-          {
-            "name" : "The Shop",
-            "desc" : "This is the hotel shop",
-            "action_mask" : 5,
-            "o" : [
-              {
-                "name" : "Proxmark III",
-                "desc" : "The Proxmark is an RFID swiss-army tool, allowing for both high and low level interactions with the vast majority of RFID tags and systems world-wide.",
-                "action_acl" : 4,
-                "action_acl_msg" : "You need some money to buy the Proxmark III",
-                "action_acl_state" : 132,
-                "action_msg" : "You paid",
-                "action_mask" : 20,
-                "item_nr" : 1
-              }
-            ]
-          },
-          {
-            "name" : "The Elevator",
-            "desc" : "The elevator will take you to any floor you like",
-            "action_mask" : 21,
-            "action_acl" : 2,
-            "action_acl_msg" : "You don't have a VIP keycard, access denied",
-            "action_item" : 2,
-            "action_state" : 3,
-            "state_desc" : "VIP access to second floor granted.",
-            "action_msg" : "VIP access to second floor granted.",
-            "o" : [
-              {
-                "name" : "The First Floor Hallway",
-                "desc" : "This the hallway on the First Floor",
-                "action_mask" : 1,
-                "open_acl" : 1,
-                "open_acl_msg" : "Access to this floor is for hotel guests only!",
-                "o" : [
-                  {
-                    "name" : "Room 101",
-                    "action_mask" : 1
-                  }
-                ]
-              },
-              {
-                "name" : "The Second Floor",
-                "desc" : "This is the hallway on the Second Floor",
-                "action_mask" : 1,
-                "open_acl" : 3,
-                "open_acl_msg" : "This floor is for VIP guests only!",
-                "o" : [
-                  {
-                    "name" : "Room 201",
-                    "action_mask" : 1
-                  },
-                  {
-                    "name" : "Room 202",
-                    "action_mask" : 1
-                  },
-                  {
-                    "name" : "Room 203",
-                    "action_mask" : 1
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "name" : "The Dungeon",
+          "The Dungeon" : {
             "desc" : "It is dark in here, get into a dark area so your eyes will adjust to the light...\n...or you will not see anything",
             "action_mask" : 1,
             "visible_acl" : 3,
             "open_acl" : 3,
             "open_acl_msg" : ""
           }
-        ]
+        }
       }
-    ]
+    }
+  },
+  "dummy" : {
+    "desc" : "Dummy",
+    "effects" : 0,
+    "visible_acl" : 0,
+    "action_mask" : 0,
+    "open_acl" : 0,
+    "open_acl_msg" : "",
+    "action_acl" : 0,
+    "action_acl_msg" : "",
+    "action_item" : 0,
+    "action_str1" : "",
+    "action_str2" : "",
+    "action_msg" : "",
+    "action_state" : 0,
+    "state_desc" : "",
+    "item_nr" : 0,
+    "o" : {}
   }
 }

@@ -1,3 +1,5 @@
+import literals
+
 # these definitions are used for importing the JSON data. I also
 # use them as constants in game.py, but in the FW source-code, they
 # can just be DEFINEs in combination with a define for the length 
@@ -103,66 +105,69 @@ flash_size     = 32768
 boiler_plate   = b'Hacker Hotel 2020 by badge.team ' # boiler_plate must by 32 bytes long
 
 
-def read_byte(data,offset):
-    return (data[offset+32] ^ xor_key_game[offset % len(xor_key_game)])
+def read_byte(eeprom,offset,key=1):
+    if key == 1:
+        return (eeprom[offset+32] ^ xor_key_game[offset % len(xor_key_game)])
+    else:
+        return (eeprom[offset] ^ xor_key_teaser[offset % len(xor_key_teaser)])
 
-def read_range(data,offset,length):
+def read_range(eeprom,offset,length,key=1):
     result = bytearray(0)
     for i in range(length):
-        result.append(read_byte(data,offset+i))
+        result.append(read_byte(eeprom,offset+i,key))
     return result
 
-def read_ptr(data,offset):
-    return 256 * int(read_byte(data,offset)) + int(read_byte(data,offset+1))
+def read_ptr(eeprom,offset):
+    return 256 * int(read_byte(eeprom,offset)) + int(read_byte(eeprom,offset+1))
 
 
-def read_children(data,offset):
+def read_children(eeprom,offset):
     children = []
     current = offset
-    nxt    = read_ptr(data,offset)
-    offset = read_ptr(data,offset+2)
+    nxt    = read_ptr(eeprom,offset)
+    offset = read_ptr(eeprom,offset+2)
     if offset >= nxt:
         return []
     while True:
         children.append(offset)
-        offset = read_ptr(data,offset)
+        offset = read_ptr(eeprom,offset)
         if offset >= nxt:
             return children
     
 
-def loc2offset(data,loc):
+def loc2offset(eeprom,loc):
     offset = 0
     parent = 0xffff
 
     if loc != []:
         for l in range(len(loc)):
             parent = offset
-            nxt    = read_ptr(data,offset)
-            offset = read_ptr(data,offset+2)
+            nxt    = read_ptr(eeprom,offset)
+            offset = read_ptr(eeprom,offset+2)
             if offset >= nxt:
                 return [0xffff,None,None,None]
             for i in range(loc[l]):
-                offset = read_ptr(data,offset)
+                offset = read_ptr(eeprom,offset)
                 #print("{} {} 0x{:04X} 0x{:04x}".format(l,i,offset,nxt))
                 if offset >= nxt:
                     return [0xffff,None,None,None]
 
-    mask     = read_byte_field(data,offset,'action_mask')
-    children = read_children(data,offset)
+    mask     = read_byte_field(eeprom,offset,'action_mask')
+    children = read_children(eeprom,offset)
     return [offset,mask,children,parent]
 ### end of loc2offset()
 
 
-def name2loc(data,loc,loc_offset,name):
+def name2loc(eeprom,loc,loc_offset,name):
     if loc_offset == 0:
-        offset,d1,children,parent = loc2offset(data,loc)
+        offset,d1,children,parent = loc2offset(eeprom,loc)
     # XXX change the following code to use read_children
     i = 0
     while True:
-        offset,d1,d2,parent = loc2offset(data,loc+[i])
+        offset,d1,d2,parent = loc2offset(eeprom,loc+[i])
         if offset == 0xffff:
             break
-        loc_name = read_string_field(data,offset,'name')
+        loc_name = read_string_field(eeprom,offset,'name')
         if name in loc_name.lower():
                 break
         i += 1
@@ -176,14 +181,14 @@ def name2loc(data,loc,loc_offset,name):
 ### end of name2offset()
 
     
-def read_byte_field(data,offset,field):
+def read_byte_field(eeprom,offset,field):
     if field in byte_fields:
         if offset != 0xffff:
-            return read_byte(data,offset + 4 + byte_fields.index(field))
+            return read_byte(eeprom,offset + 4 + byte_fields.index(field))
     return -1
 
 
-def read_string_field(data,offset,field):
+def read_string_field(eeprom,offset,field):
     global current_effects
 
     if field in string_fields:
@@ -191,14 +196,14 @@ def read_string_field(data,offset,field):
             offset = offset + 4 + len(byte_fields)
             for i in range(string_fields.index(field)):
                 while True:
-                    l = read_byte(data,offset)
+                    l = read_byte(eeprom,offset)
                     offset = offset + l + 1
                     if l != 255:
                         break
             s = ""
             while True:
-                l = read_byte(data,offset)
-                s += read_range(data,offset+1,read_byte(data,offset)).decode()
+                l = read_byte(eeprom,offset)
+                s += read_range(eeprom,offset+1,read_byte(eeprom,offset)).decode()
                 offset = offset + 1 + l
                 if l != 255:
                     break
@@ -221,10 +226,9 @@ def unify(s):
     return s.lower()
 
 
-def show_help(data):
-    offset = read_ptr(data,0)
-    length = read_ptr(data,offset)
-    print(read_range(data,offset+2,length).decode())
+def show_help(eeprom):
+    offset,length = literals.lit_offsets['help']
+    print(read_range(eeprom,offset,length,0).decode())
 
 
 ###################################
@@ -283,24 +287,24 @@ def check_state(state_num):
         needed = False
     return get_state(state_num & (status_bits - 1)) == needed
 
-def check_open_permission(data,offset):
-    if check_state(read_byte_field(data,offset,'open_acl')):
+def check_open_permission(eeprom,offset):
+    if check_state(read_byte_field(eeprom,offset,'open_acl')):
         return ""
     else:
-        return read_string_field(data,offset,'open_acl_msg')
+        return read_string_field(eeprom,offset,'open_acl_msg')
 ### end of check_open_permission()
 
 
-def check_action_permission(data,offset):
-    if check_state(read_byte_field(data,offset,'action_acl')):
+def check_action_permission(eeprom,offset):
+    if check_state(read_byte_field(eeprom,offset,'action_acl')):
         return ""
     else:
-        return read_string_field(data,offset,'action_acl_msg')
+        return read_string_field(eeprom,offset,'action_acl_msg')
 ### end of check_action_permission()
 
 
-def object_visible(data,offset):
-    state_num = read_byte_field(data,offset,'visible_acl')
+def object_visible(eeprom,offset):
+    state_num = read_byte_field(eeprom,offset,'visible_acl')
     return get_state(state_num)
 ### end of checkpermission()
 
@@ -329,7 +333,7 @@ class color:
     CYAN       = '\033[36m'
     WHITE      = '\033[37m'
 
-def print_summary(data,loc,current_loc,offset,inventory):
+def print_summary(eeprom,loc,current_loc,offset,inventory):
     c = color.NORMAL
 
     if loc == current_loc:
@@ -338,15 +342,15 @@ def print_summary(data,loc,current_loc,offset,inventory):
 
     tree_str  = ""
     tree_str += "{}+- ".format("|  "*len(loc))
-    item = read_byte_field(data,offset,'item_nr')
+    item = read_byte_field(eeprom,offset,'item_nr')
     if item != 0:
         tree_str += color.BLUE + "({})".format(item)
     else:
         tree_str += color.BLACK
-    print("{:50s} ".format(tree_str + read_string_field(data,offset,'name')),end='')
+    print("{:50s} ".format(tree_str + read_string_field(eeprom,offset,'name')),end='')
 
     logic_str = ""
-    mask = read_byte_field(data,offset,'action_mask')
+    mask = read_byte_field(eeprom,offset,'action_mask')
     if mask & A_USE:
         logic_str += "U"
     else:
@@ -368,7 +372,7 @@ def print_summary(data,loc,current_loc,offset,inventory):
     else:
         logic_str += "."
 
-    acl = read_byte_field(data,offset,'visible_acl')
+    acl = read_byte_field(eeprom,offset,'visible_acl')
     if acl != 0:
         if get_state(acl):
             c = color.GREEN
@@ -378,7 +382,7 @@ def print_summary(data,loc,current_loc,offset,inventory):
     else:
         logic_str += " "*6
 
-    acl = read_byte_field(data,offset,'open_acl')
+    acl = read_byte_field(eeprom,offset,'open_acl')
     if acl != 0:
         if get_state(acl):
             c = color.GREEN
@@ -390,7 +394,7 @@ def print_summary(data,loc,current_loc,offset,inventory):
 
     sep = ""
     action_str = "ACT:"
-    acl = read_byte_field(data,offset,'action_acl')
+    acl = read_byte_field(eeprom,offset,'action_acl')
     if acl != 0:
         if get_state(acl):
             c = color.GREEN
@@ -398,7 +402,7 @@ def print_summary(data,loc,current_loc,offset,inventory):
             c = color.RED
         action_str += "{}{}{}".format(c,acl,color.BLACK)
         sep = ","
-    item = read_byte_field(data,offset,'action_item')
+    item = read_byte_field(eeprom,offset,'action_item')
     if item != 0:
         for i in range(len(inventory)):
             if item == inventory[i][0]:
@@ -407,7 +411,7 @@ def print_summary(data,loc,current_loc,offset,inventory):
         else:
             c = color.BLUE
         action_str += "{}{}I{}{}".format(sep,c,item,color.BLACK)
-    state = read_byte_field(data,offset,'action_state')
+    state = read_byte_field(eeprom,offset,'action_state')
     if state != 0:
         if get_state(state):
             c = color.GREEN
@@ -420,11 +424,11 @@ def print_summary(data,loc,current_loc,offset,inventory):
     print("{}{}".format(logic_str,color.NORMAL),end='')
     print()
 
-def print_tree(data,loc,current_loc,offset,inventory):
-    print_summary(data,loc,current_loc,offset,inventory)
-    children = read_children(data,offset)
+def print_tree(eeprom,loc,current_loc,offset,inventory):
+    print_summary(eeprom,loc,current_loc,offset,inventory)
+    children = read_children(eeprom,offset)
     for i in range(len(children)):
-        print_tree(data,loc+[i],current_loc,children[i],inventory)
+        print_tree(eeprom,loc+[i],current_loc,children[i],inventory)
 
 ##########################################
 ###   Debugging functions              ###
