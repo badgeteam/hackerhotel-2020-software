@@ -181,7 +181,7 @@ ISR(TCB0_INT_vect){
 ISR(TCB1_INT_vect){
     if (*auSmpAddr) {
         DAC0_DATA = *auSmpAddr;
-        auSmpAddr++;
+        ++auSmpAddr;
         } else {
         DAC0_DATA = 0x80;
         auPlayDone = 1;
@@ -191,11 +191,13 @@ ISR(TCB1_INT_vect){
 
 // Reads up to RXLEN characters until LF is found, LF sets the serRxDone flag and writes 0 instead of LF.
 ISR(USART0_RXC_vect){
-    serRx[RXCNT] = USART0.RXDATAL;
-    if (serRx[RXCNT] == 0x0A){
-        serRx[RXCNT] = 0;
-        serRxDone = 1;
-    } else if (RXCNT < (RXLEN-1)) RXCNT++;
+    if (serRxDone == 0){
+        serRx[RXCNT] = USART0.RXDATAL;
+        if (serRx[RXCNT] == 0x0A){
+            serRx[RXCNT] = 0;
+            serRxDone = 1;
+        } else if (RXCNT < (RXLEN-1)) RXCNT++;
+    }
     USART0_STATUS = USART_RXCIF_bm;
 };
 
@@ -250,7 +252,7 @@ ISR(RTC_CNT_vect) {
     }
 }
 
-//PIT interrupt (timing of ADC0: audio/temperature value)
+//PIT interrupt (timing of ADC1: sensor values)
 ISR(RTC_PIT_vect) {						// PIT interrupt handling code
     ADC1_COMMAND = 0x01;
     RTC_PITINTFLAGS = RTC_PI_bm;		// clear interrupt flag

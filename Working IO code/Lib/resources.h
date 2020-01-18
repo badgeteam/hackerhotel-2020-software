@@ -33,5 +33,10 @@
     uint8_t EEWrite(uint8_t eeAddr, uint8_t *eeValues, uint8_t size);   // Write to internal EEPROM, wraps around if eeAddr+size>255
     
     
+    typedef union
+    {
+        uint16_t u16;
+        uint8_t  u8[2];
+    } u16_2u8_t;
 
 #endif /* RESOURCES_H_ */
