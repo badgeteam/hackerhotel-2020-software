@@ -380,7 +380,3 @@ unsigned char nibbleSwap(unsigned char a)
 }
 
 
-uint8_t ReadByte(uint16_t offset, uint8_t * key){
-    
-    return nibbleSwap((uint8_t)(offset & 0xff));
-}

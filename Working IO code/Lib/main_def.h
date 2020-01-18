@@ -5,7 +5,6 @@
     
     #include <avr/io.h>
     #include <avr/interrupt.h>
-    #include <util/delay.h>
     #include <stdlib.h>
 
     //Used in ISRs for efficiency
@@ -14,7 +13,8 @@
     #define AUPOS   GPIOR2  //Audio in position counter
     #define A1CNT   GPIOR3  //Counter for ADC1
     
-    #define RXLEN   16      //Length of serial Rx buffer
+    #define RXLEN   32      //Length of serial Rx buffer
+    #define TXLEN   33      //Length of serial Tx buffer (yes, it one longer than a power of two)
     #define AULEN   32      //Audio input buffer length: MUST be a power of 2
 
     #define USART0_BAUD_RATE(BAUD_RATE) ((float)(F_CPU * 64 / (16 * (float)BAUD_RATE)) + 0.5)
@@ -25,7 +25,7 @@
 
     #define BTN_TMR 34      //RTC Compare incremental value for button readout timing (512 = 1 second)
 
-//    #define EEPROM_START    0x1400
+    #define EE_I2C_ADDR 0x50 //External EEPROM address
 
     // Global vars
     extern volatile uint8_t iLED[40];           // 0,1,2,3,4,5(,6,7),8,9,10,11,12,13(,14,15) etc. ()=unused
@@ -58,5 +58,7 @@
     extern const uint8_t GEM[2];        //Gem on top of cat head (red, green)
     extern const uint8_t RAT;           //Rat gem LED location inside iLED
     extern const uint8_t CAT;           //Cat lower gem LED location inside iLED
+
+    // Global challenge data
 
 #endif  //MAIN_DEF_H_
