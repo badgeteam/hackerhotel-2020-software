@@ -1,5 +1,5 @@
 {
-  "The Street" : {
+  "The [S]treet" : {
     "desc" : "You stand in front of Hotel Pyramide, an Egyptian styled\nboutique hotel. There is a Hacker Conference going on at the hotel.",
     "effects" : 96,
     "visible_acl" : 127,
@@ -8,12 +8,12 @@
     "action_str1" : "Hahaha, you are trying to talk to a hotel!",
     "open_acl_msg" : "No no no, you can't leave this hotel. You are locked in forever.",
     "o" : {
-      "The Hotel Lobby" : {
+      "The [H]otel Lobby" : {
         "desc" : "You are in the lobby of our beautiful hotel \"The Pyramid\". Here you can find our reception, the hotel bar and a shop. On your right you can find the elevator to all the rooms and on the left is of course the entrance through which you came in.",
         "action_mask" : 1,
         "action_msg" : "Testing",
         "o" : {
-          "The Elevator" : {
+          "The [E]levator" : {
             "desc" : "The elevator will take you to any floor you like",
             "action_mask" : 21,
             "action_acl" : 2,
@@ -23,41 +23,41 @@
             "state_desc" : "VIP access to second floor granted.",
             "action_msg" : "VIP access to second floor granted.",
             "o" : {
-              "The First Floor" : {
+              "The [F]irst Floor" : {
                 "desc" : "This the hallway on the First Floor",
                 "action_mask" : 1,
                 "open_acl" : 1,
                 "open_acl_msg" : "Access to this floor is for hotel guests only!",
                 "o" : {
-                  "Room 101" : {
+                  "Room 10[1]" : {
                     "action_mask" : 1
                   }
                 }
               },
-              "The Second Floor" : {
+              "The [S]econd Floor" : {
                 "desc" : "This is the hallway on the Second Floor",
                 "action_mask" : 1,
                 "open_acl" : 3,
                 "open_acl_msg" : "This floor is for VIP guests only!",
                 "o" : {
-                  "Room 203" : {
+                  "Room 20[1]" : {
                     "action_mask" : 1
                   },
-                  "Room 202" : {
+                  "Room 20[2]" : {
                     "action_mask" : 1
                   },
-                  "Room 201" : {
+                  "Room 20[3]" : {
                     "action_mask" : 1
                   }
                 }
               }
             }
           },
-          "The Bar" : {
+          "The [B]ar" : {
             "desc" : "This is the hotel bar",
             "action_mask" : 5,
             "o" : {
-              "Keycard" : {
+              "[K]eycard" : {
                 "desc" : "This looks like a VIP keycard",
                 "action_mask" : 20,
                 "action_item" : 1,
@@ -66,7 +66,7 @@
                 "action_state" : 2,
                 "state_desc" : "VIP keycard obtained"
               },
-              "Keycard-Copy" : {
+              "Keycard-[C]opy" : {
                 "desc" : "A copy of the VIP keycard",
                 "visible_acl" : 2,
                 "action_mask" : 20,
@@ -74,11 +74,11 @@
               }
             }
           },
-          "The Shop" : {
+          "The [S]hop" : {
             "desc" : "This is the hotel shop",
             "action_mask" : 5,
             "o" : {
-              "Proxmark III" : {
+              "[P]roxmark III" : {
                 "name" : "",
                 "desc" : "The Proxmark is an RFID swiss-army tool, allowing for both high and low level interactions with the vast majority of RFID tags and systems world-wide.",
                 "action_acl" : 4,
@@ -90,11 +90,11 @@
               }
             }
           },
-          "The Reception" : {
+          "The [R]eception" : {
             "desc" : "Testing look!",
             "action_mask" : 1,
             "o" : {
-              "The Receptionist" : {
+              "The [R]eceptionist" : {
                 "desc" : "She seems friendly",
                 "action_acl" : 2,
                 "action_acl_msg" : "I'm sorry sir, I'm only allowed to check out VIP guests.",
@@ -107,7 +107,7 @@
               }
             }
           },
-          "ATM machine" : {
+          "[A]TM machine" : {
             "desc" : "Hey, the ATM is hacked and gives out free $100 bills",
             "action_mask" : 20,
             "action_msg" : "You have withdrawn $100 and put it in your wallet",
@@ -118,7 +118,7 @@
             "action_state" : 4,
             "state_desc" : "You have withdrawn $100"
           },
-          "The Dungeon" : {
+          "The [D]ungeon" : {
             "desc" : "It is dark in here, get into a dark area so your eyes will adjust to the light...\n...or you will not see anything",
             "action_mask" : 1,
             "visible_acl" : 3,
@@ -129,7 +129,7 @@
       }
     }
   },
-  "dummy" : {
+  "[d]ummy" : {
     "desc" : "Dummy",
     "effects" : 0,
     "visible_acl" : 0,

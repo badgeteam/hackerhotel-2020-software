@@ -1,2 +1,5 @@
 __pycache__
 **/\.*\.swp
+hotel.bin
+literals.h
+lit_offsets.py

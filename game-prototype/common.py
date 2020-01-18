@@ -102,8 +102,8 @@ exclude_words    = ('on','to','in','with','at','from')
 # Keys are md5 hash of 'H@ck3r H0t3l 2020', split in two
 xor_key_game   = b'\x74\xbf\xfa\x54\x1c\x96\xb2\x26'
 xor_key_teaser = b'\x1e\xeb\xd6\x8b\xc0\xc2\x0a\x61'
-xor_key_game   = b'\x00' * 8
-xor_key_teaser = b'\x00' * 8
+#xor_key_game   = b'\x00' * 8
+#xor_key_teaser = b'\x00' * 8
 flash_size     = 32768
 boiler_plate   = b'Hacker Hotel 2020 by badge.team ' # boiler_plate must by 32 bytes long
 
@@ -114,14 +114,29 @@ def read_byte(eeprom,offset,key=1):
     else:
         return (eeprom[offset] ^ xor_key_teaser[offset % len(xor_key_teaser)])
 
+
 def read_range(eeprom,offset,length,key=1):
     result = bytearray(0)
     for i in range(length):
         result.append(read_byte(eeprom,offset+i,key))
     return result
 
+
 def read_ptr(eeprom,offset):
     return 256 * int(read_byte(eeprom,offset)) + int(read_byte(eeprom,offset+1))
+
+
+def read_handle(eeprom,offset):
+    offset = offset + 4 + len(byte_fields)
+    l = read_byte(eeprom,offset)
+    while l>0:
+        offset += 1
+        c = chr(read_byte(eeprom,offset)).lower()
+        if c == '[':
+            c = chr(read_byte(eeprom,offset+1)).lower()
+            return c
+        l -= 1
+    return ' '
 
 
 def read_children(eeprom,offset):
@@ -132,7 +147,8 @@ def read_children(eeprom,offset):
     if offset >= nxt:
         return []
     while True:
-        children.append(offset)
+        handle = read_handle(eeprom,offset)
+        children.append([handle,offset])
         offset = read_ptr(eeprom,offset)
         if offset >= nxt:
             return children
@@ -141,10 +157,12 @@ def read_children(eeprom,offset):
 def loc2offset(eeprom,loc):
     offset = 0
     parent = 0xffff
+    handle = ' '
 
     if loc != []:
         for l in range(len(loc)):
             parent = offset
+            handle = read_handle(eeprom,offset)
             nxt    = read_ptr(eeprom,offset)
             offset = read_ptr(eeprom,offset+2)
             if offset >= nxt:
@@ -157,11 +175,11 @@ def loc2offset(eeprom,loc):
 
     mask     = read_byte_field(eeprom,offset,'action_mask')
     children = read_children(eeprom,offset)
-    return [offset,mask,children,parent]
+    return [offset,mask,children,[handle,parent]]
 ### end of loc2offset()
 
 
-def name2loc(eeprom,loc,loc_offset,name):
+def name2loc(eeprom,loc,loc_offset,handle):
     if loc_offset == 0:
         offset,d1,children,parent = loc2offset(eeprom,loc)
     # XXX change the following code to use read_children
@@ -170,8 +188,7 @@ def name2loc(eeprom,loc,loc_offset,name):
         offset,d1,d2,parent = loc2offset(eeprom,loc+[i])
         if offset == 0xffff:
             break
-        loc_name = read_string_field(eeprom,offset,'name')
-        if name in loc_name.lower():
+        if handle == parent[0]:
                 break
         i += 1
         # failsafe
@@ -440,7 +457,7 @@ def print_tree(eeprom,loc,current_loc,offset,inventory):
     print_summary(eeprom,loc,current_loc,offset,inventory)
     children = read_children(eeprom,offset)
     for i in range(len(children)):
-        print_tree(eeprom,loc+[i],current_loc,children[i],inventory)
+        print_tree(eeprom,loc+[i],current_loc,children[i][1],inventory)
 
 ##########################################
 ###   Debugging functions              ###
