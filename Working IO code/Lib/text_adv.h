@@ -22,6 +22,9 @@
     #include <avr/interrupt.h>
     #include <stdlib.h>
 
+    //Object model offsets
+    enum{OFF_NEXTOBJ = 0, OFF_NEXTLVL = 2, OFF_BYTEFLDS = 4};
+
     //Byte fields
     enum {EFFECTS, VISIBLE_ACL, OPEN_ACL, ACTION_ACL, ACTION_MASK, ACTION_ITEM, ACTION_STATE, ITEM_NR};
     #define BYTE_FIELDS_LEN     ITEM_NR+1
@@ -29,6 +32,15 @@
     //string fields
     enum {NAME, DESC, ACTION_STR1, ACTION_STR2, OPEN_ACL_MSG, ACTION_ACL_MSG, ACTION_MSG};
     #define STRING_FIELDS_LEN   ACTION_MSG+1
+    #define OFF_STRINGFLDS      OFF_BYTEFLDS+BYTE_FIELDS_LEN
+
+    //Object model
+    typedef struct {
+        uint16_t addrNextObj;
+        uint16_t addrNextLvl;
+        uint8_t  byteField[BYTE_FIELDS_LEN];
+        uint16_t addrStrField[STRING_FIELDS_LEN];
+    } object_model_t;
 
     //action constants
     enum {A_ENTER = 1, A_OPEN = 2, A_LOOK = 4, A_TALK = 8, A_USE = 16};
@@ -37,13 +49,15 @@
     #define MAX_ITEMS       64
     #define STATUS_BITS     128
     extern uint8_t statusBytes[STATUS_BITS/sizeof(uint8_t)];
+    
+    #define EXT_EE_MAX      32767
 
     //Keys are md5 hash of 'H@ck3r H0t3l 2020', split in two
     #define KEY_LENGTH      8
     enum {GAME = 0, TEASER = 1};
     extern const uint8_t xor_key[2][KEY_LENGTH];
     //extern const unsigned char boiler_plate[];        // = "Hacker Hotel 2020 by badge.team "; // boiler_plate must by 32 bytes long, excluding string_end(0)
-    
+    uint8_t LoadGameState();
     uint8_t TextAdventure();
     //uint8_t ExtEERead(uint16_t offset, uint8_t length, uint8_t type, uint8_t *data);
     //void DecryptGame(uint16_t offset, uint8_t length, uint8_t type, uint8_t *data);

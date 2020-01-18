@@ -37,6 +37,7 @@
 int main(void)
 {
     setup();
+    LoadGameState();
 
     unsigned char strTest[]="\aHäckerHotel2020 badge pest!\b\b\b\b\bt\n";
     SerSend(&strTest[0]);
@@ -76,27 +77,27 @@ int main(void)
     while (1)
     {
         //serRxDone is 1 when a LF character is detected
-        if (serRxDone) {
+        /*if (serRxDone) {
             while (serTxDone == 0);
             if (SerSend((uint8_t*) &serRx[0])) retVal = 0xFA; //Echo back using the serRx buffer (which is abused here and further on in code too for sending stuff, I'm lazy...)
             RXCNT = 0;
             serRxDone = 0;         
-        }
+        }*/
 
         //buttonMark is updated by hardware timer, every increment there is a new button value available  
         if (buttonMark){
-            serRx[0] = CheckButtons(btns); //Reading buttons and duration is done by passing old value to the function, return value is the new readout.
+            //serRx[0] = CheckButtons(btns); //Reading buttons and duration is done by passing old value to the function, return value is the new readout.
             /*
                 Check if button value has changed here
             */
-            btns = serRx[0]; 
+            //btns = serRx[0]; 
             buttonMark = 0;
 
             bla++;
             if (bla%2) SelectAuIn(); else SelectTSens();    //Switch between audio in and temperature for testing
             
             //Send test sensor values
-            serRx[1] = (unsigned char)(adcHall>>4);
+            /*serRx[1] = (unsigned char)(adcHall>>4);
             serRx[2] = (unsigned char)(adcPhot>>4);
             serRx[3] = (unsigned char)(adcTemp);
             serRx[4] = (unsigned char)(auIn[0]);            
@@ -105,7 +106,7 @@ int main(void)
             if (I2C_read_bytes(devAddr, &memAddr[0], 2, (uint8_t*)&serRx[7], 1)) retVal = 0xFA;   //Bell character (first char of strTest)
             serRx[8] = retVal;
             while (serTxDone == 0);
-            //SerSend((uint8_t*) &serRx[0]);
+            //SerSend((uint8_t*) &serRx[0]);*/
             retVal = TextAdventure();
             retVal = 0;
 
