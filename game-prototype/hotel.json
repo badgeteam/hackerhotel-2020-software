@@ -119,7 +119,7 @@
             "state_desc" : "You have withdrawn $100"
           },
           "The [D]ungeon" : {
-            "desc" : "It is dark in here, get into a dark area so your eyes will adjust to the light...\n...or you will not see anything",
+            "desc" : "Your light is blinding me so I can't see much, please get into a dark area so my eyes can adjust to the light...\n...or you will not see anything",
             "action_mask" : 1,
             "visible_acl" : 3,
             "open_acl" : 3,
@@ -159,6 +159,11 @@
                 "state_desc" : "",
                 "item_nr" : 0,
                 "o" : {}
+              },
+              "[P]apyrus Roll" : {
+                "desc" : "Please follow these instructions carefully if you want\nto enter the tunnel. The guard is very picky on who he lets\nthrough. \n\nYou can only enter the tunnel with people at\nthe same time. Each person must choose the correct\noffering ([w]ine, [f]ruit, [r]obe or [i]ncense) and kneel the \nright amount of times ([4], [5], [6] or [7] times).\n\nLast, but certainly not least, you must all bring one of the\nfour elements of nature ([e]arth, [a]ir, [f]ire or [w]ater).\n\nGood luck!\n",
+                "visible_acl" : 116,
+                "action_mask" : 4
               }
             }
           }

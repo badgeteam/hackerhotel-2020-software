@@ -105,12 +105,11 @@ while True:
         print("Debugging: {}".format(DEBUG))
 
     elif cmd == 's':
-        if DEBUG:
-            if len(inp) > 1:
-                update_state(int(inp[1]))
-            print("The game state is now:")
-            for i in range(status_bits//8):
-                print("0x{:02X}:{:08b}".format(i,game_state[i]))
+        if len(inp) > 1:
+            update_state(int(inp[1]))
+        print("The game state is now:")
+        for i in range(status_bits//8):
+            print("0x{:02X}:{:08b}".format(i,game_state[i]))
 
 
     elif cmd == 'i':
