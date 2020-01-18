@@ -121,12 +121,9 @@ ISR(TCA0_LUNF_vect){
     asm(
     "ldi r25, 6        \n"
     "ld r24, %a[arr]+  \n"
-    /*"cpi r24, 252      \n"      //Quick fix: Somehow values above 251 can cause data to shift to other LEDs, weird...
-    "brlo .+2          \n"      //Quick fix
-    "ldi r24, 251      \n"      //Quick fix
-    */"st %a[wo]+, r24   \n"
+    "st %a[wo]+, r24   \n"
     "dec r25           \n"
-    "brne .-8         \n"
+    "brne .-8          \n"
     :: [wo] "e" (&TCA0_SPLIT_LCMP0), [arr] "e" (&iLED[(L_COL<<3)]) : "r25", "r24", "cc", "memory");
 
     TCA0_SPLIT_CTRLESET = ((0x2)<<2)|0x3; //Sync timers: Moved this below the PWM value loading to fix the data shifting in asm above.

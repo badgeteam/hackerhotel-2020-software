@@ -21,6 +21,7 @@
     #include <avr/io.h>
     #include <avr/interrupt.h>
     #include <stdlib.h>
+    #include <literals.h>
 
     //Object model offsets
     enum{OFF_NEXTOBJ = 0, OFF_NEXTLVL = 2, OFF_BYTEFLDS = 4};
@@ -43,7 +44,7 @@
     } object_model_t;
 
     //action constants
-    enum {A_ENTER = 1, A_OPEN = 2, A_LOOK = 4, A_TALK = 8, A_USE = 16};
+    enum {ENTER = 1, OPEN = 2, LOOK = 4, TALK = 8, USE = 16};
 
     #define MAX_OBJ_DEPTH   32
     #define MAX_ITEMS       64

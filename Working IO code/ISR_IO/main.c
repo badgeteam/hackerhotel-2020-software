@@ -39,20 +39,21 @@ int main(void)
     setup();
     LoadGameState();
 
+    SerSpeed(1);
     unsigned char strTest[]="\aHäckerHotel2020 badge pest!\b\b\b\b\bt\n";
     SerSend(&strTest[0]);
 
     //I2C 
-    uint8_t devAddr = 0x50;
-    uint8_t memAddr[2] = {0,0};
-    volatile uint8_t retVal = 0;
-    uint8_t btns = 0;
+    //uint8_t devAddr = 0x50;
+    //uint8_t memAddr[2] = {0,0};
+    //volatile uint8_t retVal = 0;
+    //uint8_t btns = 0;
     uint8_t bla = 0;
 
-    if (I2C_write_bytes(devAddr, &memAddr[0], 2, &strTest[0], sizeof(strTest))) retVal = 0xFA;
+    //if (I2C_write_bytes(devAddr, &memAddr[0], 2, &strTest[0], sizeof(strTest))) retVal = 0xFA;
     SerSpeed(255);
 
-    //Do some LED tests
+    /*//Do some LED tests
     for (uint8_t n=0; n<40; n++){
         if ((n%8)>5) n+=2;
         if (n<40) iLED[n] = 255;
@@ -71,8 +72,8 @@ int main(void)
 
     iLED[GEM[R]] = 255;
     iLED[GEM[L]] = 63;
-
-    if (EEWrite(16, &strTest[0], sizeof(strTest))) retVal = 0xFA;     //Internal EEPROM write test
+    */
+    //if (EEWrite(16, &strTest[0], sizeof(strTest))) retVal = 0xFA;     //Internal EEPROM write test
 
     while (1)
     {
@@ -107,8 +108,9 @@ int main(void)
             serRx[8] = retVal;
             while (serTxDone == 0);
             //SerSend((uint8_t*) &serRx[0]);*/
-            retVal = TextAdventure();
-            retVal = 0;
+            TextAdventure();
+            
+            //retVal = 0;
 
         }
     }

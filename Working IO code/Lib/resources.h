@@ -35,8 +35,8 @@
     
     typedef union
     {
-        uint16_t u16;
-        uint8_t  u8[2];
+        uint16_t u16;       //0x1234
+        uint8_t  u8[2];     //0:0x12 1:0x34
     } u16_2u8_t;
 
 #endif /* RESOURCES_H_ */
