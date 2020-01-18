@@ -1,4 +1,5 @@
 import literals
+from lit_offsets import *
 
 # these definitions are used for importing the JSON data. I also
 # use them as constants in game.py, but in the FW source-code, they
@@ -101,6 +102,8 @@ exclude_words    = ('on','to','in','with','at','from')
 # Keys are md5 hash of 'H@ck3r H0t3l 2020', split in two
 xor_key_game   = b'\x74\xbf\xfa\x54\x1c\x96\xb2\x26'
 xor_key_teaser = b'\x1e\xeb\xd6\x8b\xc0\xc2\x0a\x61'
+xor_key_game   = b'\x00' * 8
+xor_key_teaser = b'\x00' * 8
 flash_size     = 32768
 boiler_plate   = b'Hacker Hotel 2020 by badge.team ' # boiler_plate must by 32 bytes long
 
@@ -216,19 +219,28 @@ def read_string_field(eeprom,offset,field):
     return "N/A"
 
 
-def invalid():
-    print("Sorry, that is not possible")
-
-
 def unify(s):
     exclude = '!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~ \t'
     s = ''.join(ch for ch in s if ch not in exclude)
     return s.lower()
 
 
+def s(eeprom,lit):
+    if lit in lit_offsets:
+        offset,length = lit_offsets[lit]
+        return read_range(eeprom,offset,length,0).decode()
+    else:
+        print("ERROR: {} not listed in literals.py".format(lit))
+        exit()
+
+
 def show_help(eeprom):
-    offset,length = literals.lit_offsets['help']
+    offset,length = lit_offsets['help']
     print(read_range(eeprom,offset,length,0).decode())
+
+
+def invalid():
+    print("Sorry, that is not possible")
 
 
 ###################################

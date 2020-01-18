@@ -1,6 +1,3 @@
-from lit_offsets import *
-import common
-
 literals = ['Welcome to the "Escape from Hacker Hotel!!!" challenge.\n\
 \n\
 You are locked in the hotel, just like servants of the pharaohs\n\
@@ -26,13 +23,29 @@ u <i> <o>   use item <i> on object <o>\n\
 Every object has a single letter identifier enclosed in brackets. So \n\
 when you see "The [R]eception" in the game, you can use "e r" to enter\n\
 the Reception.',
-'string2',
-'string3'
+'\nLocation: ',
+' ',
+'? ',
+'Thank you for staying, you can check out any time you want, but you may never leave!',
+'\nI see the following: ',
+', ',
+'I don\'t see that!',
+'You can\'t look inside ',
+'You can\'t enter ',
+'You can\'t open ',
+'I don\'t see that location.',
+'You are not carrying that item.',
+'Why are you trying to talk to ',
+'You can\'t use this object.',
+'You can\'t use this item on this object.',
+'(your response) ? ',
+'You can only carry 2 objects, please drop another object\nif you really need this object.',
+'You are already carrying that object.',
+'You are now carrying: ',
+'Uhmmm... you\'re not carrying anything!',
+'Dropping object ',
+'A hotel clerk brought the item back to its original location.',
+'You are not carrying that object.',
+'IDDQD (for testing purposes only, remove from final code!!!)',
+'CONGRATULATIONS!!!\nThe spell has been broken and you found your way out of the hotel.'
 ]
-
-def s(eeprom,lit):
-    if lit in lit_offsets:
-        offset,length = lit_offsets[lit]
-        return common.read_range(eeprom,offset,length,0)
-    else:
-        print("ERROR: {} not listed in literals.py".format(lit))

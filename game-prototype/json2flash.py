@@ -184,7 +184,7 @@ literal_data   = bytearray(0)
 literal_offset = flash_size
 i              = 0
 for l in literals.literals:
-    literal_data.extend(l.encode('utf8'))
+    literal_data = l.encode('utf8') + literal_data
     literal_offset = literal_offset - len(l)
     if i == 0:
         f1.write("#define A_HELP   {:5d}\n".format(literal_offset))
@@ -193,7 +193,7 @@ for l in literals.literals:
     else:
         f1.write("#define A_STR{:03d} {:5d} /* '{}' */\n".format(i,literal_offset,l))
         f1.write("#define L_STR{:03d} {:5d}\n".format(i,len(l),l))
-        f2.write("    '{}': [{},{}],  # A_STR{:03d}\n".format(l,literal_offset,len(l),i))
+        f2.write("    {}: [{},{}],  # A_STR{:03d}\n".format(repr(l),literal_offset,len(l),i))
     i = i + 1
 f2.write("}\n")
 f2.close()
