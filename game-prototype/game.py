@@ -64,23 +64,23 @@ while True:
 ####################
 
 
-    print(s(eeprom,'\nLocation: ') + "{}".format(read_string_field(eeprom,loc_offset,'name')),end='')
+    print(s(eeprom,'LOCATION') + "{}".format(read_string_field(eeprom,loc_offset,'name')),end='')
 
     # The effects should be triggered, so no need to print them I think, unless we want to
     # maybe print the sound effect for those that do not use earplugs ;-)
     if current_effects != 0:
-        print(s(eeprom,' ') + "{}".format(effects(current_effects)))
+        print(s(eeprom,'SPACE') + "{}".format(effects(current_effects)))
     else:
         print()
 
     # Start with getting user input
-    inp = input(s(eeprom,'? '))
+    inp = input(s(eeprom,'PROMPT'))
     print()
     if len(inp) == 0:
         continue
 
-    inp = inp.lower().split()
-    cmd = inp[0][0]
+    inp = [i[0] for i in inp.lower().split()]
+    cmd = inp[0]
 
 
     if cmd == 'h' or cmd == '?':
@@ -132,19 +132,19 @@ while True:
 
 
     elif cmd == 'q':
-        print(s(eeprom,'Thank you for staying, you can check out any time you want, but you may never leave!'))
+        print(s(eeprom,'QUIT'))
         exit()
 
 
     elif cmd == 'l':
         if len(inp) == 1:
             print(read_string_field(eeprom,loc_offset,'desc'))
-            print(s(eeprom,'\nI see the following: '),end='')
+            print(s(eeprom,'LOOK'),end='')
             sep = ""
             if loc_parent[1] != 0xffff and object_visible(eeprom,loc_parent[1]):
                 name = read_string_field(eeprom,loc_parent[1],'name')
                 print("{}".format(name),end='')
-                sep = s(eeprom,', ')
+                sep = s(eeprom,'COMMA')
             for i in range(len(loc_children)):
                 if object_visible(eeprom,loc_children[i][1]):
                     item = read_byte_field(eeprom,loc_children[i][1],'item_nr')
@@ -157,14 +157,14 @@ while True:
                     if  not in_inventory:
                         name = read_string_field(eeprom,loc_children[i][1],'name')
                         print("{}{}".format(sep,name),end='')
-                        sep = s(eeprom,', ')
+                        sep = s(eeprom,'COMMA')
             print()
 
         else:
             if len(inp) > 2 and inp[1] in exclude_words:
                 del(inp[1])
             if len(inp) != 2:
-                invalid()
+                invalid(eeprom)
                 continue
 
             look_offset = 0xffff
@@ -178,24 +178,25 @@ while True:
                     if inp[1] == loc_parent[0]:
                         look_offset = loc_parent[1]
                     else:
-                        print(s(eeprom,'I don\'t see that!'))
+                        print(s(eeprom,'DONTSEE'))
                         continue
             if look_offset != 0xffff:
                 if (read_byte_field(eeprom,look_offset,'action_mask') & A_LOOK == 0):
-                    print(s(eeprom,'You can\'t look inside ') + "{}".format(name))
+                    name = read_string_field(eeprom,look_offset,'name')
+                    print(s(eeprom,'CANTLOOK') + "{}".format(name))
                     continue
                 else:
                     desc = read_string_field(eeprom,look_offset,'desc')
                     print(desc)
                     continue
             else:
-                invalid()
+                invalid(eeprom)
 
             
     elif cmd == 'x':
         exit_allowed = False
         if len(loc) == 0:
-            invalid()
+            invalid(eeprom)
         elif len(loc) == 1:
             msg = check_open_permission(eeprom,0)
             if msg != "":
@@ -215,7 +216,7 @@ while True:
         if len(inp) > 2 and inp[1] in exclude_words:
             del(inp[1])
         if len(inp) != 2:
-            invalid()
+            invalid(eeprom)
         else:
             enter_offset = 0xffff
             for i in range(len(loc_children)):
@@ -231,10 +232,10 @@ while True:
             if enter_offset != 0xffff:
                 enter_action_mask = read_byte_field(eeprom,enter_offset,'action_mask')
                 if cmd == 'e' and (enter_action_mask & A_ENTER == 0):
-                    print(s(eeprom,'You can\'t enter that location.'))
+                    print(s(eeprom,'CANTENTER'))
                     continue
                 elif cmd == 'o' and (enter_action_mask & A_OPEN == 0):
-                    print(s(eeprom,'You can\'t open that object.'))
+                    print(s(eeprom,'CANTOPEN'))
                     continue
                 msg = check_open_permission(eeprom,enter_offset)
                 if msg != "":
@@ -249,7 +250,7 @@ while True:
                     current_effects = read_byte_field(eeprom,loc_offset,'effects')
                     continue
             else:
-                print(s(eeprom,'I don\'t see that location.'))
+                print(s(eeprom,'DONTSEE'))
 
 
     elif cmd == 't' or cmd == 'u' or cmd == 'g':
@@ -259,7 +260,7 @@ while True:
             del(inp[2])
 
         if len(inp) < 2:
-            invalid()
+            invalid(eeprom)
         else:
             item = 0
             if len(inp) == 2:
@@ -271,26 +272,26 @@ while True:
                         item = inventory[i][0]
                         break
                 if item == 0:
-                    print(s(eeprom,'You are not carrying that item.'))
+                    print(s(eeprom,'NOTCARRYING'))
                     continue
 
             obj_loc,obj_offset,obj_parent = name2loc(eeprom,loc,loc_offset,obj)
             if obj_loc is None:
-                print(s(eeprom,'No such object here.'))
+                print(s(eeprom,'NOSUCHOBJECT'))
                 continue
             else:
                 obj_action_mask = read_byte_field(eeprom,obj_offset,'action_mask')
                 if cmd == 't' and (obj_action_mask & A_TALK == 0):
-                    print(s(eeprom,'Why are you trying to talk to ') + "{}".format(read_string_field(eeprom,obj_offset,'name')))
+                    print(s(eeprom,'WHYTALK') + "{}".format(read_string_field(eeprom,obj_offset,'name')))
                     continue
                 elif cmd == 'u' and (obj_action_mask & A_USE == 0):
-                    print(s(eeprom,'You can\'t use this object.'))
+                    print(s(eeprom,'CANTUSE'))
                     continue
                 elif cmd == 'u' and item != 0 and read_byte_field(eeprom,obj_offset,'action_item') != item:
-                    print(s(eeprom,'You can\'t use this item on this object.'))
+                    print(s(eeprom,'CANTUSEITEM'))
                     continue
                 elif cmd == 'g' and item != 0 and read_byte_field(eeprom,obj_offset,'action_item') != item:
-                    print(s(eeprom,'You can\'t give this item to this person.'))
+                    print(s(eeprom,'CANTGIVE'))
                     continue
                 else:
                     msg = check_action_permission(eeprom,obj_offset)
@@ -309,9 +310,9 @@ while True:
                             continue
                     elif len(request) > 1:
                         print("{}".format(request))
-                        response = input(s(eeprom,'(your response) ? '))
+                        response = input(s(eeprom,'RESPONSE'))
                         if unify(read_string_field(eeprom,obj_offset,'action_str2')) != unify(response):
-                            print(s(eeprom,'That is incorrect!'))
+                            print(s(eeprom,'INCORRECT'))
                             continue
                     update_state(read_byte_field(eeprom,obj_offset,'action_state'))
                     print("{}".format(read_string_field(eeprom,obj_offset,'action_msg')))
@@ -319,52 +320,52 @@ while True:
         
     elif cmd == 'p':
         if len(inventory) >= 2:
-            print(s(eeprom,'You can only carry 2 objects, please drop another object\nif you really need this object.'))
+            print(s(eeprom,'CARRYTWO'))
             
         elif len(inp) < 2:
-            invalid()
+            invalid(eeprom)
 
         else:
             obj_loc,obj_offset,obj_parent = name2loc(eeprom,loc,loc_offset,inp[1])
             if obj_loc is None:
-                invalid()
+                invalid(eeprom)
             else:
                 obj_id   = read_byte_field(eeprom,obj_offset,'item_nr')
                 if obj_id != 0:
                     obj_name = read_string_field(eeprom,obj_offset,'name')
                     if [obj_id,obj_name] in inventory:
-                        print(s(eeprom,'You are already carrying that object.'))
+                        print(s(eeprom,'ALREADYCARRYING'))
                     else:
                         msg = check_action_permission(eeprom,obj_offset)
                         if msg != "":
                             print(msg)
                             continue
-                        print(s(eeprom,'You are now carrying: ') + "{}".format(obj_name))
+                        print(s(eeprom,'NOWCARRING') + "{}".format(obj_name))
                         inventory.append([obj_id,obj_name])
                 else:
-                    invalid()
+                    invalid(eeprom)
                     
 
     elif cmd == 'd':
         if len(inventory) == 0:
-            print(s(eeprom,'Uhmmm... you\'re not carrying anything!'))
+            print(s(eeprom,'EMPTYHANDS'))
             
         elif len(inp) < 2:
-            invalid()
+            invalid(eeprom)
 
         else:
             for i in range(len(inventory)):
                 if inp[1] in inventory[i][1].lower():
-                    print(s(eeprom,'Dropping object ') + "{}".format(inventory[i][1]))
-                    print(s(eeprom,'A hotel clerk brought the item back to its original location.'))
+                    print(s(eeprom,'DROPPING') + "{}".format(inventory[i][1]))
+                    print(s(eeprom,'RETURNING'))
                     del inventory[i]
                     break
             else:
-                print(s(eeprom,'You are not carrying that object.'))
+                print(s(eeprom,'NOTCARRYING'))
 
 
     ### end of command options
 
     if loc == [] and get_state(status_bits-1):
-        print(s(eeprom,'CONGRATULATIONS!!!\nThe spell has been broken and you found your way out of the hotel.'))
+        print(s(eeprom,'CONGRATS'))
         exit()

@@ -258,20 +258,24 @@ def show_help(eeprom):
 
 def who_am_i(eeprom):
     if check_state(110):
-        offset,length = lit_offsets['Hi, my name is Anubis!']
+        name_offset,name_length = lit_offsets['Anubis']
     elif check_state(111):
-        offset,length = lit_offsets['Hi, my name is Bes!']
+        name_offset,name_length = lit_offsets['Bes']
     elif check_state(112):
-        offset,length = lit_offsets['Hi, my name is Khonsu!']
+        name_offset,name_length = lit_offsets['Khonsu']
     elif check_state(113):
-        offset,length = lit_offsets['Hi, my name is Thoth!']
+        name_offset,name_length = lit_offsets['Thoth']
     else:
-        offset,length = lit_offsets['I\'m nobody, please contact someone from badge.team!']
-    print(read_range(eeprom,offset,length,0).decode())
+        printf(s(eeprom,'ERROR'))
+        return
+
+    print(s(eeprom,'HELLO'),end='')
+    print(read_range(eeprom,name_offset,name_length,0).decode(),end='')
+    print(s(eeprom,'PLEASED'))
 
 
-def invalid():
-    print("Sorry, that is not possible")
+def invalid(eeprom):
+    print(s(eeprom,'NOTPOSSIBLE'))
 
 
 ###################################
