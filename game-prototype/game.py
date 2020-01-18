@@ -14,11 +14,20 @@ global current_effects
 parser = argparse.ArgumentParser(description='The Hacker Hotel 2020 badge adventure')
 parser.add_argument("-d", default=False, action="store_true", help="Enable Debugging Output")
 parser.add_argument("-t", default=False, action="store_true", help="Print game tree and logic")
+parser.add_argument("-b", default=0, help="Set the badge type")
 
 args = parser.parse_args()
 
 DEBUG = args.d
 
+if args.b % 4 == 0:
+    update_state(110)
+elif args.b % 4 == 1:
+    update_state(111)
+elif args.b % 4 == 2:
+    update_state(112)
+elif args.b % 4 == 3:
+    update_state(113)
 
 ### Read the EEPROM data
 with open('hotel.bin', 'rb') as f:
@@ -76,6 +85,10 @@ while True:
 
     if cmd == 'h' or cmd == '?':
         show_help(eeprom)
+
+
+    if cmd == 'w':
+        who_am_i(eeprom)
 
 
 ####################
@@ -240,7 +253,7 @@ while True:
                 print(s(eeprom,'I don\'t see that location.'))
 
 
-    elif cmd == 't' or cmd == 'u':
+    elif cmd == 't' or cmd == 'u' or cmd == 'g':
         if len(inp) > 2 and inp[1] in exclude_words:
             del(inp[1])
         elif cmd == 'u' and len(inp) > 2 and inp[2] in exclude_words:
@@ -276,6 +289,9 @@ while True:
                     continue
                 elif cmd == 'u' and item != 0 and read_byte_field(eeprom,obj_offset,'action_item') != item:
                     print(s(eeprom,'You can\'t use this item on this object.'))
+                    continue
+                elif cmd == 'g' and item != 0 and read_byte_field(eeprom,obj_offset,'action_item') != item:
+                    print(s(eeprom,'You can\'t give this item to this person.'))
                     continue
                 else:
                     msg = check_action_permission(eeprom,obj_offset)

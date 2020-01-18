@@ -123,7 +123,44 @@
             "action_mask" : 1,
             "visible_acl" : 3,
             "open_acl" : 3,
-            "open_acl_msg" : ""
+            "open_acl_msg" : "",
+            "o" : {
+              "[G]uard" : {
+                "desc" : "Dummy",
+                "effects" : 0,
+                "visible_acl" : 110,
+                "action_mask" : 12,
+                "open_acl" : 0,
+                "open_acl_msg" : "",
+                "action_acl" : 124,
+                "action_acl_msg" : "!",
+                "action_item" : 0,
+                "action_str1" : "1",
+                "action_str2" : "21770",
+                "action_msg" : "Thank you for your gift!",
+                "action_state" : 31,
+                "state_desc" : "LogiQuiz answer given",
+                "item_nr" : 0
+              },
+              "[T]unnel" : {
+                "desc" : "A dark and long tunnel",
+                "effects" : 0,
+                "visible_acl" : 0,
+                "action_mask" : 5,
+                "open_acl" : 0,
+                "open_acl_msg" : "",
+                "action_acl" : 31,
+                "action_acl_msg" : "You can only enter after proving yourself worthy. And gifts will go a long way!",
+                "action_item" : 0,
+                "action_str1" : "",
+                "action_str2" : "",
+                "action_msg" : "",
+                "action_state" : 0,
+                "state_desc" : "",
+                "item_nr" : 0,
+                "o" : {}
+              }
+            }
           }
         }
       }
@@ -132,7 +169,7 @@
   "[d]ummy" : {
     "desc" : "Dummy",
     "effects" : 0,
-    "visible_acl" : 0,
+    "visible_acl" : 127,
     "action_mask" : 0,
     "open_acl" : 0,
     "open_acl_msg" : "",

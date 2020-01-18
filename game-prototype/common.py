@@ -256,6 +256,20 @@ def show_help(eeprom):
     print(read_range(eeprom,offset,length,0).decode())
 
 
+def who_am_i(eeprom):
+    if check_state(110):
+        offset,length = lit_offsets['Hi, my name is Anubis!']
+    elif check_state(111):
+        offset,length = lit_offsets['Hi, my name is Bes!']
+    elif check_state(112):
+        offset,length = lit_offsets['Hi, my name is Khonsu!']
+    elif check_state(113):
+        offset,length = lit_offsets['Hi, my name is Thoth!']
+    else:
+        offset,length = lit_offsets['I\'m nobody, please contact someone from badge.team!']
+    print(read_range(eeprom,offset,length,0).decode())
+
+
 def invalid():
     print("Sorry, that is not possible")
 
@@ -269,6 +283,12 @@ def invalid():
 game_state = [0 for i in range(status_bits//8)]
 
 # Some state bits are used from outside the game, these are:
+# 110   set to 1 by FW if badge UUID mod 4 == 0
+# 111   set to 1 by FW if badge UUID mod 4 == 1
+# 112   set to 1 by FW if badge UUID mod 4 == 2
+# 113   set to 1 by FW if badge UUID mod 4 == 3
+# 114   <free>
+# 115   <free>
 # 116   set to 1 by FW if badge is in the dark
 # 117   set to 1 by FW after one normal-hot-normal cycle of the temp sensor
 # 118   set to 1 by FW after a second normal-hot-normal cycle of the temp sensor
