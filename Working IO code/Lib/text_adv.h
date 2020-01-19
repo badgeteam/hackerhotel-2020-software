@@ -41,6 +41,7 @@
         uint16_t addrNextLvl;
         uint8_t  byteField[BYTE_FIELDS_LEN];
         uint16_t addrStrField[STRING_FIELDS_LEN];
+        uint16_t lenStrField[STRING_FIELDS_LEN];
     } object_model_t;
 
     //action constants

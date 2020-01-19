@@ -13,7 +13,7 @@
     #define AUPOS   GPIOR2  //Audio in position counter
     #define A1CNT   GPIOR3  //Counter for ADC1
     
-    #define RXLEN   32      //Length of serial Rx buffer
+    #define RXLEN   72//32      //Length of serial Rx buffer
     #define TXLEN   33      //Length of serial Tx buffer (yes, it one longer than a power of two)
     #define AULEN   32      //Audio input buffer length: MUST be a power of 2
 

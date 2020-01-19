@@ -33,17 +33,18 @@ uint8_t LoadGameState(){
 
 //Decrypts data read from I2C EEPROM, max 255 bytes at a time
 void DecryptData(uint16_t offset, uint8_t length, uint8_t type, uint8_t *data){
-    offset += L_BOILER;
+    //offset += L_BOILER;
     while(length){
-        *data ^= xor_key[(uint8_t)(offset%KEY_LENGTH)][type];
+        *data ^= xor_key[type][(uint8_t)(offset%KEY_LENGTH)];
         ++data;
+        ++offset;
         --length;
     }
 }
 
 //Game data: Read a number of bytes and decrypt
 uint8_t ExtEERead(uint16_t offset, uint8_t length, uint8_t type, uint8_t *data){
-    offset &=0x7fff;
+    offset &=EXT_EE_MAX;
     uint8_t reg[2] = {(uint8_t)(offset>>8), (uint8_t)(offset&0xff)};
     uint8_t error = (I2C_read_bytes(EE_I2C_ADDR, &reg[0], 2, data, length));
     if (error) return error;
@@ -52,7 +53,7 @@ uint8_t ExtEERead(uint16_t offset, uint8_t length, uint8_t type, uint8_t *data){
 }
 
 //Reads an address from I2C EEPROM
-uint16_t ReadAddr (uint16_t *offset, uint8_t type){
+uint16_t ReadAddr (uint16_t offset, uint8_t type){
     uint8_t data[2] = {0,0};
     if (ExtEERead(offset, 2, type, &data[0])) return 0xffff; else return (data[0]<<8|data[1]);
 }
@@ -86,15 +87,19 @@ uint8_t PrepareSending(uint16_t address, uint16_t length, uint8_t type, uint8_t 
     }
     txAddrList[x]=address;
     txStrLen[x]=length%255;
-    if (length>255) return 1; else return 0;
+    if (length>255) return 1; 
     txTypeNow = type;
     ClearTxAfter(x);
     SerSpeed(speed);
+    txAddrNow = 0;  //Start at first pointer, initiates sending in CheckSend
+    return 0;
 }
 
 //Get all the relevant data and string addresses of an object
-void populateObject(uint16_t offset, object_model_t *object){
-    
+void PopulateObject(uint16_t offset, object_model_t *object){
+    uint16_t addrStart;
+    offset += L_BOILER;
+
     //Fill things with fixed distance to offset
     uint8_t data[OFF_STRINGFLDS];
     ExtEERead(offset, OFF_STRINGFLDS, GAME, &data[0]);
@@ -104,17 +109,20 @@ void populateObject(uint16_t offset, object_model_t *object){
         object->byteField[x]=data[x+OFF_BYTEFLDS];
     }
 
-    //Find out where all of the strings begin
+    //Find out where all of the strings begin and how long they are
     offset += OFF_STRINGFLDS;
-    object->addrStrField[0]=offset;
+    object->addrStrField[0]=offset+1;
     for(uint8_t x=1; x<STRING_FIELDS_LEN; ++x){
+        addrStart = offset;
         do {
             ExtEERead(offset, 1, GAME, &data[0]);
             offset += (uint16_t)(data[0])+1;
             if (offset>EXT_EE_MAX) break;
         } while (data[0]==255);
+        object->lenStrField[x-1]=(offset-addrStart-1)&EXT_EE_MAX;
         object->addrStrField[x]=offset&EXT_EE_MAX;
     }
+    object->lenStrField[STRING_FIELDS_LEN-1]=(offset-addrStart)&EXT_EE_MAX;
 }
 
 //Send routine, optimized for low memory usage
@@ -142,37 +150,32 @@ uint8_t CheckSend(){
 //User input check (and validation)
 uint8_t CheckInput(uint8_t *data){
     if (serRxDone){
-        uint16_t address, length;
-        
         //Read up to the \0 character and convert to lower case.
         for (uint8_t x=0; serRx[x]!=0; ++x){
             if ((serRx[x]<'A')||(serRx[x]>'Z')) data[x]=serRx[x]; else data[x]=serRx[x]|0x20;
-            serRxDone = 0;  //Free serial input 
         }
 
+        //Reset serial input pointer and accept new input
+        RXCNT = 0;
+        serRxDone = 0;        
+        
         //Help text
         if ((data[0] == '?')||(data[0] == 'h')){
             //Put help pointers/lengths in tx list
-            address = A_HELP;
-            length = L_HELP;
-            PrepareSending(address, length, TEASER, 255);
-            txAddrNow = 0;  //Start at first pointer, initiates sending in CheckSend
+            PrepareSending(A_HELP, L_HELP, TEASER, 255);
             return 1;
         }
 
         //Quit text
         if (data[0] == 'q'){
             //Put quit pointers/lengths in tx list
-            txAddrList[0] = 0;
-            txStrLen[0] = 0;
-            ClearTxAfter(0);
-            txAddrNow = 0;  //Start at first pointer, initiates sending in CheckSend
+            PrepareSending(A_QUIT, L_QUIT, TEASER, 255);
             return 1;
         }
 
         //Cheat = reset badge!
         if (StartsWith(&data[0], "iddqd")){
-            //Reset game(s) data
+            //Reset game(s) data (TODO)
 
             uint8_t cheat[] = "Cheater! ";
             SerSpeed(255);
@@ -180,33 +183,48 @@ uint8_t CheckInput(uint8_t *data){
                 if (serTxDone) SerSend(&cheat[0]);
             }
         }
+
+        //Data received, but not any of the commands above
         return 0;
     }
+
+    //Serial input not available yet
     return 1;
 }
 
 //The game logic!
 void ProcessInput(uint8_t *data){
+//    enum {NAME, DESC, ACTION_STR1, ACTION_STR2, OPEN_ACL_MSG, ACTION_ACL_MSG, ACTION_MSG};
+
+    PopulateObject(0, &currentObject);
 
     if (data[0] == 'x'){
+        PrepareSending(currentObject.addrStrField[NAME],currentObject.lenStrField[NAME], GAME, 255);
         
     } else
     if ((data[0] == 'e')||(data[0] == 'o')){
+        PrepareSending(currentObject.addrStrField[DESC],currentObject.lenStrField[DESC], GAME, 255);
         
     } else
     if (data[0] == 'l'){
-        
+        PrepareSending(currentObject.addrStrField[ACTION_STR1],currentObject.lenStrField[ACTION_STR1], GAME, 255);
     } else
     if (data[0] == 'p'){
+        PrepareSending(currentObject.addrStrField[ACTION_STR2],currentObject.lenStrField[ACTION_STR2], GAME, 255);
         
     } else
     if (data[0] == 'd'){
+        PrepareSending(currentObject.addrStrField[OPEN_ACL_MSG],currentObject.lenStrField[OPEN_ACL_MSG], GAME, 255);
         
     } else
     if (data[0] == 'i'){
+        PrepareSending(currentObject.addrStrField[ACTION_ACL_MSG],currentObject.lenStrField[ACTION_ACL_MSG], GAME, 255);
+        
+        
         
     } else
     if ((data[0] == 't')||(data[0] == 'u')){
+        PrepareSending(currentObject.addrStrField[ACTION_MSG],currentObject.lenStrField[ACTION_MSG], GAME, 255);
         
     } 
 
