@@ -13,7 +13,7 @@
     #include <main_def.h>
     #include <avr/io.h>
     #include <avr/interrupt.h>
-    #include <util/delay.h>
+    //#include <util/delay.h>
     #include <stdlib.h>
 
     void setup();
@@ -32,11 +32,4 @@
     void EERead(uint8_t eeAddr, uint8_t *eeValues, uint8_t size);       // Read from internal EEPROM, wraps around if eeAddr+size>255
     uint8_t EEWrite(uint8_t eeAddr, uint8_t *eeValues, uint8_t size);   // Write to internal EEPROM, wraps around if eeAddr+size>255
     
-    
-    typedef union
-    {
-        uint16_t u16;       //0x1234
-        uint8_t  u8[2];     //0:0x12 1:0x34
-    } u16_2u8_t;
-
 #endif /* RESOURCES_H_ */

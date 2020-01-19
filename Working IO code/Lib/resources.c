@@ -176,10 +176,14 @@ ISR(TCB0_INT_vect){
 
 // TCB1 is used for audio generation. Keeps playing "data" until 0 is reached. Audio sample data can contain 0x01 to 0xFF, centered around 0x80
 ISR(TCB1_INT_vect){
+    int16_t volCtrl;
     if (*auSmpAddr) {
-        DAC0_DATA = *auSmpAddr;
+        volCtrl = ((((int16_t)(*auSmpAddr) - 0x7f)*auVolume)>>8)+0x80;
+        DAC0_DATA = (uint8_t)(volCtrl);
         ++auSmpAddr;
-        } else {
+    } else if (*auRepAddr) {
+        auSmpAddr = auRepAddr;
+    } else {
         DAC0_DATA = 0x80;
         auPlayDone = 1;
     }
@@ -207,8 +211,9 @@ ISR(USART0_DRE_vect){
 
 // ADC used for audio input and temperature sensor.
 ISR(ADC0_RESRDY_vect){
-    AUPOS = (AUPOS+1)&(AULEN-1);
+    //If just switched reference, discard first sample
     if (adc0Chg == 0){
+        AUPOS = (AUPOS+1)&(AULEN-1);
         if (ADC0_MUXPOS == 0x1E) adcTemp = ADC0_RESL; else auIn[AUPOS]=ADC0_RESL;
     } else adc0Chg = 0;
     ADC0_INTFLAGS = ADC_RESRDY_bm;

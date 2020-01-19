@@ -42,7 +42,9 @@
 
     extern volatile uint8_t auIn[AULEN];
     extern volatile uint8_t adc0Chg;
-    extern volatile unsigned char *auSmpAddr;   // Tx data address pointer
+    extern volatile uint8_t *auSmpAddr;         // Audio sample address pointer
+    extern volatile uint8_t *auRepAddr;         // Audio loop start address pointer
+    extern volatile uint8_t auVolume;           // Used for Volume control
     extern volatile uint8_t auPlayDone;         // User writes 0 just after initiation of playing a sample, after playing sample, interrupt routine writes it to 1.
 
     extern volatile uint16_t adcPhot;
