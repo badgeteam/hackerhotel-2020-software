@@ -20,11 +20,16 @@ const uint8_t xor_key[2][KEY_LENGTH] = {{0x74, 0xbf, 0xfa, 0x54, 0x1c, 0x96, 0xb
 uint16_t txAddrList[TXLISTLEN]  = {0};      //List of external EEPROM addresses of first element of strings to be glued together
 uint8_t txStrLen[TXLISTLEN]     = {0};      //List of lengths of strings to be glued together
 uint8_t txAddrNow = 0;                      //Number of the string that currently is being sent
+uint8_t sendPrompt = 0;
 uint8_t txTypeNow = GAME;                   //Type of data that is being sent.
 uint8_t txBuffer[TXLEN];                    //Buffer for string data
 
-object_model_t currentObject;
-object_model_t actionObject;
+object_model_t currObj;
+object_model_t actObj;
+
+uint16_t reactStr[3][8] = {{0},{0},{0}};
+uint8_t actionList = 0;
+
 
 //Load saved data from internal EEPROM
 uint8_t LoadGameState(){
@@ -75,7 +80,7 @@ uint8_t StartsWith(uint8_t *data, char *compare){
 }
 
 //Put the addresses
-uint8_t PrepareSending(uint16_t address, uint16_t length, uint8_t type, uint8_t speed){
+uint8_t PrepareSending(uint16_t address, uint16_t length, uint8_t type, uint8_t prompt){
     uint8_t x=0;
     while (length>255) {
         txAddrList[x] = address;
@@ -90,7 +95,7 @@ uint8_t PrepareSending(uint16_t address, uint16_t length, uint8_t type, uint8_t 
     if (length>255) return 1; 
     txTypeNow = type;
     ClearTxAfter(x);
-    SerSpeed(speed);
+    sendPrompt = prompt;
     txAddrNow = 0;  //Start at first pointer, initiates sending in CheckSend
     return 0;
 }
@@ -111,7 +116,7 @@ void PopulateObject(uint16_t offset, object_model_t *object){
 
     //Find out where all of the strings begin and how long they are
     offset += OFF_STRINGFLDS;
-    object->addrStrField[0]=offset+1;
+    object->addrStr[0]=offset+1;
     for(uint8_t x=1; x<STRING_FIELDS_LEN; ++x){
         addrStart = offset;
         do {
@@ -119,10 +124,20 @@ void PopulateObject(uint16_t offset, object_model_t *object){
             offset += (uint16_t)(data[0])+1;
             if (offset>EXT_EE_MAX) break;
         } while (data[0]==255);
-        object->lenStrField[x-1]=(offset-addrStart-1)&EXT_EE_MAX;
-        object->addrStrField[x]=offset&EXT_EE_MAX;
+        object->lenStr[x-1]=(offset-addrStart-1)&EXT_EE_MAX;
+        object->addrStr[x]=offset&EXT_EE_MAX;
     }
-    object->lenStrField[STRING_FIELDS_LEN-1]=(offset-addrStart)&EXT_EE_MAX;
+    object->lenStr[STRING_FIELDS_LEN-1]=(offset-addrStart)&EXT_EE_MAX;
+}
+
+//Sends numCR LFs and a literal, total
+void SendLiteral(uint16_t address, uint16_t length, uint8_t numCR){
+    numCR %= (TXLEN-1);
+    length %= (TXLEN-numCR-1);
+    for (uint8_t x=0; x<numCR; ++x) txBuffer[x]='\n';
+    if (length) ExtEERead(address, length, TEASER, &txBuffer[numCR]);
+    txBuffer[numCR+length]='\0';
+    SerSend(&txBuffer[0]);
 }
 
 //Send routine, optimized for low memory usage
@@ -143,6 +158,17 @@ uint8_t CheckSend(){
             txPart = 0;
             ++txAddrNow;
         }
+    
+    //Check if prompt needs to be sent afterward or something else
+    } else if (serTxDone&&sendPrompt) {
+        if (sendPrompt == PROMPT){
+            SendLiteral(A_PROMPT, L_PROMPT, 2);
+        } else if (sendPrompt == SPACE){
+            SendLiteral(A_SPACE, L_SPACE, 0);
+        } else if (sendPrompt == CR_2){
+            SendLiteral(0, 0, 2);
+        }
+        sendPrompt=0;
     } else if (serTxDone) return 0; //All is sent!
     return 1; //Still sending, do not change the data in the tx variables
 }
@@ -162,14 +188,14 @@ uint8_t CheckInput(uint8_t *data){
         //Help text
         if ((data[0] == '?')||(data[0] == 'h')){
             //Put help pointers/lengths in tx list
-            PrepareSending(A_HELP, L_HELP, TEASER, 255);
+            PrepareSending(A_HELP, L_HELP, TEASER, PROMPT);
             return 1;
         }
 
         //Quit text
         if (data[0] == 'q'){
             //Put quit pointers/lengths in tx list
-            PrepareSending(A_QUIT, L_QUIT, TEASER, 255);
+            PrepareSending(A_QUIT, L_QUIT, TEASER, PROMPT);
             return 1;
         }
 
@@ -195,46 +221,54 @@ uint8_t CheckInput(uint8_t *data){
 //The game logic!
 void ProcessInput(uint8_t *data){
 //    enum {NAME, DESC, ACTION_STR1, ACTION_STR2, OPEN_ACL_MSG, ACTION_ACL_MSG, ACTION_MSG};
+    static uint8_t toSend = 0;
 
-    PopulateObject(0, &currentObject);
+    PopulateObject(0, &currObj);
+    
+    if (actionList){
+        PrepareSending(reactStr[0][toSend], reactStr[1][toSend], GAME, reactStr[2][toSend]);
+        ++toSend;
+        --actionList;
+    } else {
+        toSend = 0;
 
-    if (data[0] == 'x'){
-        PrepareSending(currentObject.addrStrField[NAME],currentObject.lenStrField[NAME], GAME, 255);
+        if (data[0] == 'x'){
+            reactStr[0][0]=currObj.addrStr[NAME];
+            reactStr[1][0]=currObj.lenStr[NAME];
+            reactStr[2][0]=PROMPT;
+            actionList = 1;
         
-    } else
-    if ((data[0] == 'e')||(data[0] == 'o')){
-        PrepareSending(currentObject.addrStrField[DESC],currentObject.lenStrField[DESC], GAME, 255);
+        } else
+        if ((data[0] == 'e')||(data[0] == 'o')){
+            PrepareSending(currObj.addrStr[DESC],currObj.lenStr[DESC], GAME, PROMPT);
         
-    } else
-    if (data[0] == 'l'){
-        PrepareSending(currentObject.addrStrField[ACTION_STR1],currentObject.lenStrField[ACTION_STR1], GAME, 255);
-    } else
-    if (data[0] == 'p'){
-        PrepareSending(currentObject.addrStrField[ACTION_STR2],currentObject.lenStrField[ACTION_STR2], GAME, 255);
+        } else
+        if (data[0] == 'l'){
+            PrepareSending(currObj.addrStr[ACTION_STR1],currObj.lenStr[ACTION_STR1], GAME, PROMPT);
+        } else
+        if (data[0] == 'p'){
+            PrepareSending(currObj.addrStr[ACTION_STR2],currObj.lenStr[ACTION_STR2], GAME, PROMPT);
         
-    } else
-    if (data[0] == 'd'){
-        PrepareSending(currentObject.addrStrField[OPEN_ACL_MSG],currentObject.lenStrField[OPEN_ACL_MSG], GAME, 255);
+        } else
+        if (data[0] == 'd'){
+            PrepareSending(currObj.addrStr[OPEN_ACL_MSG],currObj.lenStr[OPEN_ACL_MSG], GAME, PROMPT);
         
-    } else
-    if (data[0] == 'i'){
-        PrepareSending(currentObject.addrStrField[ACTION_ACL_MSG],currentObject.lenStrField[ACTION_ACL_MSG], GAME, 255);
+        } else
+        if (data[0] == 'i'){
+            PrepareSending(currObj.addrStr[ACTION_ACL_MSG],currObj.lenStr[ACTION_ACL_MSG], GAME, PROMPT);
         
+        } else
+        if ((data[0] == 't')||(data[0] == 'u')){
+            PrepareSending(currObj.addrStr[ACTION_MSG],currObj.lenStr[ACTION_MSG], GAME, PROMPT);
         
-        
-    } else
-    if ((data[0] == 't')||(data[0] == 'u')){
-        PrepareSending(currentObject.addrStrField[ACTION_MSG],currentObject.lenStrField[ACTION_MSG], GAME, 255);
-        
-    } 
-
-    txAddrNow = 0;  //Start at first pointer, initiates sending in CheckSend
+        } 
+    }
 }
 
 
 // Main game loop
 uint8_t TextAdventure(){
-    uint8_t serInput[RXLEN];
+    static uint8_t serInput[RXLEN];
     if (CheckSend()) return 1;                      //Still sending data to serial, return 1
     if (CheckInput(&serInput[0])) return 2;         //No valid input to process, return 2
     ProcessInput(&serInput[0]);                     //Check which response to generate and fill tx arrays

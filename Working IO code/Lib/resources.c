@@ -177,12 +177,11 @@ ISR(TCB0_INT_vect){
 // TCB1 is used for audio generation. Keeps playing "data" until 0 is reached. Audio sample data can contain 0x01 to 0xFF, centered around 0x80
 ISR(TCB1_INT_vect){
     int16_t volCtrl;
+    if (*auSmpAddr == 0) auSmpAddr = auRepAddr;
     if (*auSmpAddr) {
-        volCtrl = ((((int16_t)(*auSmpAddr) - 0x7f)*auVolume)>>8)+0x80;
+        volCtrl = ((((int16_t)(*auSmpAddr) - 0x7f) * auVolume) >> 8) + 0x80;
         DAC0_DATA = (uint8_t)(volCtrl);
         ++auSmpAddr;
-    } else if (*auRepAddr) {
-        auSmpAddr = auRepAddr;
     } else {
         DAC0_DATA = 0x80;
         auPlayDone = 1;
@@ -240,7 +239,7 @@ ISR(ADC1_RESRDY_vect){
     ADC1_INTFLAGS = ADC_RESRDY_bm;
 }
 
-//RTC compare interrupt, triggers at 512/BTN_TMR rate, also RTC overflow interrupt, triggers once a minute
+// RTC compare interrupt, triggers at 512/BTN_TMR rate, also RTC overflow interrupt, triggers once a minute
 ISR(RTC_CNT_vect) {
     if (RTC_INTFLAGS & RTC_CMP_bm){
         if (buttonMark<255) buttonMark++;   // For button timing purposes
@@ -254,13 +253,13 @@ ISR(RTC_CNT_vect) {
     }
 }
 
-//PIT interrupt (timing of ADC1: sensor values)
+// PIT interrupt (timing of ADC1: sensor values)
 ISR(RTC_PIT_vect) {						// PIT interrupt handling code
     ADC1_COMMAND = 0x01;
     RTC_PITINTFLAGS = RTC_PI_bm;		// clear interrupt flag
 }
 
-//Read bytes from EEPROM
+// Read bytes from EEPROM
 void EERead(uint8_t eeAddr, uint8_t *eeValues, uint8_t size)
 {
     while(NVMCTRL_STATUS & NVMCTRL_EEBUSY_bm);              // Wait until any write operation has finished
@@ -271,7 +270,7 @@ void EERead(uint8_t eeAddr, uint8_t *eeValues, uint8_t size)
     }
 }
 
-//Write bytes to the EEPROM, if address exceeds EEPROM space data wraps around
+// Write bytes to the EEPROM, if address exceeds EEPROM space data wraps around
 uint8_t EEWrite(uint8_t eeAddr, uint8_t *eeValues, uint8_t size)
 {
     uint8_t lastByteOfPage;
@@ -292,7 +291,7 @@ uint8_t EEWrite(uint8_t eeAddr, uint8_t *eeValues, uint8_t size)
     return 0;
 }
 
-//Sends a set of characters to the serial port, stops only when character value 0 is reached.
+// Sends a set of characters to the serial port, stops only when character value 0 is reached.
 uint8_t SerSend(unsigned char *addr){
     if (serTxDone){
         serTxAddr = addr;
@@ -324,7 +323,7 @@ void SelectAuIn(){
      adc0Chg = 1;
 };
 
-//Returns button combination (4LSB) and number of consecutive times this combination is detected. First read should always be ignored! 
+// Returns button combination (4LSB) and number of consecutive times this combination is detected. First read should always be ignored! 
 uint8_t CheckButtons(uint8_t previousValue){
     uint8_t bADC = (uint8_t)(adcBtns>>4);
     uint8_t bNibble = 0x0F;     //MSB to LSB: Bottom left, top left, top right, bottom right, 0F is error
@@ -378,9 +377,10 @@ uint8_t CheckButtons(uint8_t previousValue){
               else return bNibble;  //New value  
 }
 
+/*
 unsigned char nibbleSwap(unsigned char a)
 {
     return (a<<4) | (a>>4);
-}
+}*/
 
 

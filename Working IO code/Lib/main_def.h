@@ -42,6 +42,7 @@
 
     extern volatile uint8_t auIn[AULEN];
     extern volatile uint8_t adc0Chg;
+    extern volatile uint8_t zero;
     extern volatile uint8_t *auSmpAddr;         // Audio sample address pointer
     extern volatile uint8_t *auRepAddr;         // Audio loop start address pointer
     extern volatile uint8_t auVolume;           // Used for Volume control

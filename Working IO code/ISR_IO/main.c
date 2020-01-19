@@ -51,6 +51,11 @@ int main(void)
         if (n<40) iLED[n] = 2;
     }
 
+    //Test audio play stuff, play a tone.
+    uint8_t beep[5]={1, 16, 32, 255, 0};
+    auRepAddr = &zero;
+    auVolume = 127;
+
     while (1)
     {
         if (buttonMark){
@@ -61,13 +66,15 @@ int main(void)
             
             TextAdventure();
             
-            //Other games user interaction checks
+            //Other games & user interaction checks
             //MagnetMaze();
             //BastetDictates();
-            //Mastermind();
+            //MasterMind-ishThing(); //Not sure if to be implemented
+            //LanyardCode();
+            //MakeFriends();
              
             //Check light sensor status 
-            //Check temperature
+            //Check temperature 
         }
 
         /* 
@@ -85,9 +92,7 @@ int main(void)
 
             LEDs:
                 -Usage: iLED[n] = value; NOTE: n must be < 40 and (n%8)>5 is not used.
-                -The HCKR[2][6] EYE[2][2] WING[2][5] GEM[2] RAT CAT values can be used to substitute n for easy LED addressing, for 2 dimensional arrays, the 
-
- 
+                -The HCKR[2][6] EYE[2][2] WING[2][5] GEM[2] RAT CAT values can be used to substitute n for easy LED addressing, for 2 dimensional arrays, the first dimension is the LED color.
         */
     }
 }

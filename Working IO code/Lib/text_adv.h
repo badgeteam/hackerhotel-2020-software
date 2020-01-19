@@ -40,13 +40,19 @@
         uint16_t addrNextObj;
         uint16_t addrNextLvl;
         uint8_t  byteField[BYTE_FIELDS_LEN];
-        uint16_t addrStrField[STRING_FIELDS_LEN];
-        uint16_t lenStrField[STRING_FIELDS_LEN];
+        uint16_t addrStr[STRING_FIELDS_LEN];
+        uint16_t lenStr[STRING_FIELDS_LEN];
     } object_model_t;
 
-    //action constants
+    //Action constants
     enum {ENTER = 1, OPEN = 2, LOOK = 4, TALK = 8, USE = 16};
 
+    //
+    #define PROMPT          1
+    #define SPACE           2
+    #define CR_2            3
+
+    //
     #define MAX_OBJ_DEPTH   32
     #define MAX_ITEMS       64
     #define STATUS_BITS     128
