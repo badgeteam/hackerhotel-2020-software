@@ -20,13 +20,15 @@ args = parser.parse_args()
 
 DEBUG = args.d
 
-if args.b % 4 == 0:
+badge = int(args.b)
+
+if badge % 4 == 0:
     update_state(110)
-elif args.b % 4 == 1:
+elif badge % 4 == 1:
     update_state(111)
-elif args.b % 4 == 2:
+elif badge % 4 == 2:
     update_state(112)
-elif args.b % 4 == 3:
+elif badge % 4 == 3:
     update_state(113)
 
 ### Read the EEPROM data
@@ -79,8 +81,12 @@ while True:
     if len(inp) == 0:
         continue
 
-    inp = [i[0] for i in inp.lower().split()]
-    cmd = inp[0]
+    if inp == 'IDDQD':
+        exit()
+
+
+    inp = inp.lower().split()
+    cmd = inp[0][0]
 
 
     if cmd == 'h' or cmd == '?':
@@ -119,16 +125,10 @@ while True:
         print("Inventory is now {}".format(inventory))
 
 
-    elif inp[0] == 'quit':
-        exit()
-
 ####################
 # ^^  to here   ^^ #
 ####################
 
-
-    elif inp[0] == 'IDDQD':
-        exit()
 
 
     elif cmd == 'q':
@@ -161,12 +161,6 @@ while True:
             print()
 
         else:
-            if len(inp) > 2 and inp[1] in exclude_words:
-                del(inp[1])
-            if len(inp) != 2:
-                invalid(eeprom)
-                continue
-
             look_offset = 0xffff
             for i in range(len(loc_children)):
                 if object_visible(eeprom,loc_children[i][1]):
@@ -213,20 +207,18 @@ while True:
 
 
     elif cmd == 'e' or cmd == 'o':
-        if len(inp) > 2 and inp[1] in exclude_words:
-            del(inp[1])
         if len(inp) != 2:
             invalid(eeprom)
         else:
             enter_offset = 0xffff
             for i in range(len(loc_children)):
                 if object_visible(eeprom,loc_children[i][1]):
-                    if inp[1] == loc_children[i][0]:
+                    if inp[1][0] == loc_children[i][0]:
                         enter_offset = loc_children[i][1]
                         break
             else:
                 if object_visible(eeprom,loc_parent[1]):
-                    if inp[1] == loc_parent[0]:
+                    if inp[1][0] == loc_parent[0]:
                         enter_offset = loc_parent[1]
 
             if enter_offset != 0xffff:
@@ -254,39 +246,102 @@ while True:
 
 
     elif cmd == 't' or cmd == 'u' or cmd == 'g':
-        if len(inp) > 2 and inp[1] in exclude_words:
-            del(inp[1])
-        elif cmd == 'u' and len(inp) > 2 and inp[2] in exclude_words:
-            del(inp[2])
-
-        if len(inp) < 2:
+        if len(inp) < 2 or len(inp)>3:
             invalid(eeprom)
         else:
             item = 0
             if len(inp) == 2:
-                obj  = inp[1]
-            elif len(inp) >= 3:
-                obj  = inp[2]
+                obj  = inp[1][0]
+            elif len(inp) == 3:
+                obj  = inp[2][0]
                 for i in range(len(inventory)):
-                    if inp[1] in inventory[i][1].lower():
+                    if "["+inp[1][0]+"]" in inventory[i][1].lower():
                         item = inventory[i][0]
                         break
                 if item == 0:
                     print(s(eeprom,'NOTCARRYING'))
                     continue
 
-            obj_loc,obj_offset,obj_parent = name2loc(eeprom,loc,loc_offset,obj)
-            if obj_loc is None:
-                print(s(eeprom,'NOSUCHOBJECT'))
+            obj_offset = 0xffff
+            for i in range(len(loc_children)):
+                if object_visible(eeprom,loc_children[i][1]):
+                    if obj == loc_children[i][0]:
+                        obj_offset = loc_children[i][1]
+                        break
+            else:
+                if object_visible(eeprom,loc_parent[1]):
+                    if obj == loc_parent[0]:
+                        obj_offset = loc_parent[1]
+
+            if obj_offset == 0xffff:
+                if cmd == 'u':
+                    print(s(eeprom,'NOSUCHOBJECT'))
+                else:
+                    print(s(eeprom,'NOSUCHPERSON'))
                 continue
             else:
                 obj_action_mask = read_byte_field(eeprom,obj_offset,'action_mask')
+                msg = check_action_permission(eeprom,obj_offset)
+                request = read_string_field(eeprom,obj_offset,'action_str1')
                 if cmd == 't' and (obj_action_mask & A_TALK == 0):
                     print(s(eeprom,'WHYTALK') + "{}".format(read_string_field(eeprom,obj_offset,'name')))
                     continue
                 elif cmd == 'u' and (obj_action_mask & A_USE == 0):
                     print(s(eeprom,'CANTUSE'))
                     continue
+                elif msg != "":
+                    print(msg)
+                    continue
+                if len(request) == 1:
+                    if request == '1':
+                        # Offer an item by placing it on the altar
+                        print("Special game/challenge 1")
+                        if item == 31 or item == 32 or item == 33 or item == 34:
+                            offering = item - 31
+                            print(s(eeprom,'PRIEST'))
+                            response = input(s(eeprom,'RESPONSE'))
+                            inp = response.lower().split()
+                            if len(inp) != 2:
+                                offering = -1
+                                print(s(eeprom,'BADOFFERING'))
+                                continue
+                            kneelings = ord(inp[0][0]) - 49
+                            if kneelings < 0 or kneelings > 3:
+                                offering = -1
+                                print(s(eeprom,'BADOFFERING'))
+                                continue
+                            if inp[1][0] not in elements:
+                                offering = -1
+                                print(s(eeprom,'BADOFFERING'))
+                                continue
+                            element = elements.index(inp[1][0])
+                            if get_state(110):
+                                person = 0
+                            elif get_state(111):
+                                person = 1
+                            elif get_state(112):
+                                person = 2
+                            elif get_state(113):
+                                person = 3
+                            else:
+                                print(s(eeprom,'ERROR'))
+                                continue
+
+                            answer = ((offering  & 2) << 19) + ((offering  & 1) << 8) + \
+                                     ((element   & 2) << 15) + ((element   & 1) << 4) + \
+                                     ((kneelings & 2) << 11) + ((kneelings & 1)) 
+                            answer = answer << (3-person)
+                            print(s(eeprom,'YOURPART') + "{}".format(answer))
+                            update_state(read_byte_field(eeprom,obj_offset,'action_state'))
+                            continue
+                        else:
+                            print(s(eeprom,'CANTUSEITEM'))
+                            continue
+                    elif request == '2':
+                        print("Special game/challenge 2")
+                    else:
+                        print("Undefined challenge!")
+                        continue
                 elif cmd == 'u' and item != 0 and read_byte_field(eeprom,obj_offset,'action_item') != item:
                     print(s(eeprom,'CANTUSEITEM'))
                     continue
@@ -294,21 +349,7 @@ while True:
                     print(s(eeprom,'CANTGIVE'))
                     continue
                 else:
-                    msg = check_action_permission(eeprom,obj_offset)
-                    if msg != "":
-                        print(msg)
-                        continue
-
-                    request = read_string_field(eeprom,obj_offset,'action_str1')
-                    if len(request) == 1:
-                        if request == '1':
-                            print("Special game/challenge 1")
-                        elif request == '2':
-                            print("Special game/challenge 2")
-                        else:
-                            print("Undefined challenge!")
-                            continue
-                    elif len(request) > 1:
+                    if len(request) > 1:
                         print("{}".format(request))
                         response = input(s(eeprom,'RESPONSE'))
                         if unify(read_string_field(eeprom,obj_offset,'action_str2')) != unify(response):
@@ -322,28 +363,35 @@ while True:
         if len(inventory) >= 2:
             print(s(eeprom,'CARRYTWO'))
             
-        elif len(inp) < 2:
+        elif len(inp) != 2:
             invalid(eeprom)
 
         else:
-            obj_loc,obj_offset,obj_parent = name2loc(eeprom,loc,loc_offset,inp[1])
-            if obj_loc is None:
-                invalid(eeprom)
-            else:
-                obj_id   = read_byte_field(eeprom,obj_offset,'item_nr')
-                if obj_id != 0:
-                    obj_name = read_string_field(eeprom,obj_offset,'name')
-                    if [obj_id,obj_name] in inventory:
-                        print(s(eeprom,'ALREADYCARRYING'))
-                    else:
-                        msg = check_action_permission(eeprom,obj_offset)
-                        if msg != "":
-                            print(msg)
-                            continue
-                        print(s(eeprom,'NOWCARRING') + "{}".format(obj_name))
-                        inventory.append([obj_id,obj_name])
+            obj_offset = 0xffff
+            for i in range(len(loc_children)):
+                if object_visible(eeprom,loc_children[i][1]):
+                    if inp[1] == loc_children[i][0]:
+                        obj_offset = loc_children[i][1]
+                        break
+
+            if obj_offset == 0xffff:
+                print(s(eeprom,'NOSUCHOBJECT'))
+                continue
+
+            obj_id   = read_byte_field(eeprom,obj_offset,'item_nr')
+            if obj_id != 0:
+                obj_name = read_string_field(eeprom,obj_offset,'name')
+                if [obj_id,obj_name] in inventory:
+                    print(s(eeprom,'ALREADYCARRYING'))
                 else:
-                    invalid(eeprom)
+                    msg = check_action_permission(eeprom,obj_offset)
+                    if msg != "":
+                        print(msg)
+                        continue
+                    print(s(eeprom,'NOWCARRING') + "{}".format(obj_name))
+                    inventory.append([obj_id,obj_name])
+            else:
+                invalid(eeprom)
                     
 
     elif cmd == 'd':

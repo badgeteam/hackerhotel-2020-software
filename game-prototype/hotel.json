@@ -87,6 +87,26 @@
                 "action_msg" : "You paid",
                 "action_mask" : 20,
                 "item_nr" : 1
+              },
+              "[W]ine" : {
+                "desc" : "A bottle of wine",
+                "item_nr" : 31,
+                "action_mask" : 20
+              },
+              "[R]obe" : {
+                "desc" : "A nice soft bathrobe of ancient egyptian cotton.",
+                "item_nr" : 32,
+                "action_mask" : 20
+              },
+              "[I]ncense" : {
+                "desc" : "The kind of incense used for rituals.",
+                "item_nr" : 33,
+                "action_mask" : 20
+              },
+              "[F]ruit" : {
+                "desc" : "A bowl of fresh fruit.",
+                "item_nr" : 34,
+                "action_mask" : 20
               }
             }
           },
@@ -119,51 +139,78 @@
             "state_desc" : "You have withdrawn $100"
           },
           "The [D]ungeon" : {
-            "desc" : "Your light is blinding me so I can't see much, please get into a dark area so my eyes can adjust to the light...\n...or you will not see anything",
+            "desc" : "Your light is blinding me so I can't see much, please get into a dark area so my eyes can adjust.",
             "action_mask" : 1,
             "visible_acl" : 3,
             "open_acl" : 3,
             "open_acl_msg" : "",
             "o" : {
               "[G]uard" : {
-                "desc" : "Dummy",
-                "effects" : 0,
+                "desc" : "There is a guard near the tunnel",
                 "visible_acl" : 110,
                 "action_mask" : 12,
-                "open_acl" : 0,
-                "open_acl_msg" : "",
                 "action_acl" : 124,
-                "action_acl_msg" : "!",
-                "action_item" : 0,
-                "action_str1" : "1",
-                "action_str2" : "21770",
-                "action_msg" : "Thank you for your gift!",
-                "action_state" : 31,
-                "state_desc" : "LogiQuiz answer given",
-                "item_nr" : 0
+                "action_acl_msg" : "Access to the tunnel can only be granted to a group\nof 4 people, each bringing one of the 4 elements.",
+                "action_msg" : "Make sure your offering is perfect, otherwise the High Priest will\nnot trust you and rejects access to the secret Pyramid.\n\nHere are your personal hints:\n\n* Khonsu will offer Incense\n* The one who kneels 3 times will bring element Water.\n"
+              },
+              "[G]uard " : {
+                "desc" : "There is a guard near the tunnel",
+                "visible_acl" : 111,
+                "action_mask" : 12,
+                "action_acl" : 124,
+                "action_acl_msg" : "Access to the tunnel can only be granted to a group\nof 4 people, each bringing one of the 4 elements.",
+                "action_msg" : "Make sure your offering is perfect, otherwise the High Priest will\nnot trust you and rejects access to the secret Pyramid.\n\nHere are your personal hints:\n\n* Khonsu will kneel more than once.\n* The one who offers Incense will bring element Fire.\n"
+              },
+              "[G]uard   " : {
+                "desc" : "There is a guard near the tunnel",
+                "visible_acl" : 112,
+                "action_mask" : 12,
+                "action_acl" : 124,
+                "action_acl_msg" : "Access to the tunnel can only be granted to a group\nof 4 people, each bringing one of the 4 elements.",
+                "action_msg" : "Make sure your offering is perfect, otherwise the High Priest will\nnot trust you and rejects access to the secret Pyramid.\n\nHere are your personal hints:\n\n* Bes will bring element Air\n* Anubis will be kneeling once more than the one bringing element Earth\n"
+              },
+              "[G]uard  " : {
+                "desc" : "There is a guard near the tunnel",
+                "visible_acl" : 113,
+                "action_mask" : 12,
+                "action_acl" : 124,
+                "action_acl_msg" : "Access to the tunnel can only be granted to a group\nof 4 people, each bringing one of the 4 elements.",
+                "action_msg" : "Make sure your offering is perfect, otherwise the High Priest will\nnot trust you and rejects access to the secret Pyramid.\n\nHere are your personal hints:\n\n* Anubis will bring a Robe as offering, he will not kneel 2 times.\n* The one bringing the element Air will offer something other than Fruit\n"
               },
               "[T]unnel" : {
-                "desc" : "A dark and long tunnel",
+                "desc" : "A dark and long tunnel that leads to the Pyramid",
                 "effects" : 0,
-                "visible_acl" : 0,
+                "visible_acl" : 116,
                 "action_mask" : 5,
-                "open_acl" : 0,
-                "open_acl_msg" : "",
-                "action_acl" : 31,
-                "action_acl_msg" : "You can only enter after proving yourself worthy. And gifts will go a long way!",
-                "action_item" : 0,
-                "action_str1" : "",
-                "action_str2" : "",
-                "action_msg" : "",
-                "action_state" : 0,
-                "state_desc" : "",
-                "item_nr" : 0,
+                "open_acl" : 32,
+                "open_acl_msg" : "The tunnel is closed, only the priest can tell the guard to let you in.",
                 "o" : {}
               },
-              "[P]apyrus Roll" : {
-                "desc" : "Please follow these instructions carefully if you want\nto enter the tunnel. The guard is very picky on who he lets\nthrough. \n\nYou can only enter the tunnel with people at\nthe same time. Each person must choose the correct\noffering ([w]ine, [f]ruit, [r]obe or [i]ncense) and kneel the \nright amount of times ([4], [5], [6] or [7] times).\n\nLast, but certainly not least, you must all bring one of the\nfour elements of nature ([e]arth, [a]ir, [f]ire or [w]ater).\n\nGood luck!\n",
+              "Papyrus [R]oll" : {
+                "desc" : "Please follow these instructions carefully if you want\nto enter the tunnel. The guard is very picky on who he lets\nthrough. \n\nYou can only enter the tunnel with 4 people at\nthe same time. Each person must choose the correct\noffering (wine, fruit, robe or incense) and kneel the \nright amount of times (1, 2, 3 or 4 times).\n\nLast, but certainly not least, you must all bring one of the\nfour elements of nature (earth, air, fire or water).\n\nGood luck!\n",
                 "visible_acl" : 116,
                 "action_mask" : 4
+              },
+              "High [P]riest" : {
+                "desc" : "The high priest is standing at the altar where you have placed your offering.",
+                "visible_acl" : 31,
+                "action_mask" : 12,
+                "action_str1" : "In order to allow you access to the secret Pyramid, you need\nto work together. Please give me the sum of all of your\npersonal access-codes.",
+                "action_str2" : "3844451",
+                "action_msg" : "It is good to see a group work so well together, I have ordered\nthe guard to open the tunnel for you!",
+                "action_state" : 32,
+                "state_desc" : "The priest allows access to the tunnel"
+              },
+              "[A]ltar" : {
+                "desc" : "The offering altar is where you can place your offerings to the high priest.",
+                "effects" : 0,
+                "visible_acl" : 116,
+                "action_mask" : 20,
+                "action_str1" : "1",
+                "action_str2" : "",
+                "action_msg" : "",
+                "action_state" : 31,
+                "state_desc" : "The offer made the High Priest visible"
               }
             }
           }

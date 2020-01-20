@@ -96,8 +96,9 @@ A_USE   = 16   # allowed to use an object (like computer, knife, etc)      NB: T
 max_object_depth = 32
 max_items        = 64
 status_bits      = 128
+elements         = ['e','a','w','f']    # Earth, Air, Water, Fire
 
-exclude_words    = ('on','to','in','with','at','from')
+#exclude_words    = ('on','to','in','with','at','from')
 
 # Keys are md5 hash of 'H@ck3r H0t3l 2020', split in two
 xor_key_game   = b'\x74\xbf\xfa\x54\x1c\x96\xb2\x26'
@@ -252,7 +253,7 @@ def s(eeprom,lit):
 
 
 def show_help(eeprom):
-    offset,length = lit_offsets['help']
+    offset,length = lit_offsets['HELP']
     print(read_range(eeprom,offset,length,0).decode())
 
 
@@ -285,6 +286,7 @@ def invalid(eeprom):
 # status bits that will be used for the game logic
 # bit 0 is not used for code/memory efficiency, status of bit 0 is considered True
 game_state = [0 for i in range(status_bits//8)]
+offering   = -1
 
 # Some state bits are used from outside the game, these are:
 # 110   set to 1 by FW if badge UUID mod 4 == 0
