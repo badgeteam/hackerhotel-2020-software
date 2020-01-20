@@ -17,7 +17,6 @@
 
 #ifndef TEXT_ADV_H_
 #define TEXT_ADV_H_
-    //#include <main_def.h>
     #include <avr/io.h>
     #include <avr/interrupt.h>
     #include <stdlib.h>
@@ -55,8 +54,7 @@
     //
     #define MAX_OBJ_DEPTH   32
     #define MAX_ITEMS       64
-    #define STATUS_BITS     128
-    extern uint8_t statusBytes[STATUS_BITS/sizeof(uint8_t)];
+    #define STATUS_BITS     sizeof(gameState)*8
     
     #define EXT_EE_MAX      32767
 
@@ -64,12 +62,7 @@
     #define KEY_LENGTH      8
     enum {GAME = 0, TEASER = 1};
     extern const uint8_t xor_key[2][KEY_LENGTH];
-    //extern const unsigned char boiler_plate[];        // = "Hacker Hotel 2020 by badge.team "; // boiler_plate must by 32 bytes long, excluding string_end(0)
-    uint8_t LoadGameState();
-    uint8_t TextAdventure();
-    //uint8_t ExtEERead(uint16_t offset, uint8_t length, uint8_t type, uint8_t *data);
-    //void DecryptGame(uint16_t offset, uint8_t length, uint8_t type, uint8_t *data);
-    //uint16_t ReadPtr (uint16_t offset)
 
+    uint8_t TextAdventure();
 
 #endif /* RESOURCES_H_ */

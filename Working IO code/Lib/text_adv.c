@@ -24,18 +24,6 @@ uint8_t sendPrompt = 0;
 uint8_t txTypeNow = GAME;                   //Type of data that is being sent.
 uint8_t txBuffer[TXLEN];                    //Buffer for string data
 
-object_model_t currObj;
-object_model_t actObj;
-
-uint16_t reactStr[3][8] = {{0},{0},{0}};
-uint8_t actionList = 0;
-
-
-//Load saved data from internal EEPROM
-uint8_t LoadGameState(){
-    return 0;
-}
-
 //Decrypts data read from I2C EEPROM, max 255 bytes at a time
 void DecryptData(uint16_t offset, uint8_t length, uint8_t type, uint8_t *data){
     //offset += L_BOILER;
@@ -125,7 +113,7 @@ void PopulateObject(uint16_t offset, object_model_t *object){
             if (offset>EXT_EE_MAX) break;
         } while (data[0]==255);
         object->lenStr[x-1]=(offset-addrStart-1)&EXT_EE_MAX;
-        object->addrStr[x]=offset&EXT_EE_MAX;
+        object->addrStr[x]=(offset-1)&EXT_EE_MAX;
     }
     object->lenStr[STRING_FIELDS_LEN-1]=(offset-addrStart)&EXT_EE_MAX;
 }
@@ -181,14 +169,12 @@ uint8_t CheckInput(uint8_t *data){
             if ((serRx[x]<'A')||(serRx[x]>'Z')) data[x]=serRx[x]; else data[x]=serRx[x]|0x20;
         }
 
-        //Reset serial input pointer and accept new input
-        RXCNT = 0;
-        serRxDone = 0;        
-        
         //Help text
         if ((data[0] == '?')||(data[0] == 'h')){
             //Put help pointers/lengths in tx list
             PrepareSending(A_HELP, L_HELP, TEASER, PROMPT);
+            RXCNT = 0;
+            serRxDone = 0;
             return 1;
         }
 
@@ -196,15 +182,22 @@ uint8_t CheckInput(uint8_t *data){
         if (data[0] == 'q'){
             //Put quit pointers/lengths in tx list
             PrepareSending(A_QUIT, L_QUIT, TEASER, PROMPT);
+            RXCNT = 0;
+            serRxDone = 0;
             return 1;
         }
 
         //Cheat = reset badge!
         if (StartsWith(&data[0], "iddqd")){
-            //Reset game(s) data (TODO)
+            
+            //Reset game data by wiping the UUID bits
+            for (uint8_t x=0; x<4; ++x){
+                WriteStatusBit(110+x, 0);
+            }
+            SaveGameState();
 
             uint8_t cheat[] = "Cheater! ";
-            SerSpeed(255);
+            SerSpeed(60);
             while(1){
                 if (serTxDone) SerSend(&cheat[0]);
             }
@@ -221,15 +214,26 @@ uint8_t CheckInput(uint8_t *data){
 //The game logic!
 void ProcessInput(uint8_t *data){
 //    enum {NAME, DESC, ACTION_STR1, ACTION_STR2, OPEN_ACL_MSG, ACTION_ACL_MSG, ACTION_MSG};
+    static object_model_t currObj, actObj1, actObj2;
+    
+    static uint16_t reactStr[3][8] = {{0},{0},{0}};
+    static uint8_t actionList = 0;
     static uint8_t toSend = 0;
 
     PopulateObject(0, &currObj);
     
+    //Responses to send after something has tried by the user
     if (actionList){
         PrepareSending(reactStr[0][toSend], reactStr[1][toSend], GAME, reactStr[2][toSend]);
         ++toSend;
         --actionList;
-    } else {
+        if (actionList == 0) {
+            RXCNT = 0;
+            serRxDone = 0;
+        }
+
+    //No responses yet? 
+    } else if (data[0]){
         toSend = 0;
 
         if (data[0] == 'x'){
@@ -261,7 +265,10 @@ void ProcessInput(uint8_t *data){
         if ((data[0] == 't')||(data[0] == 'u')){
             PrepareSending(currObj.addrStr[ACTION_MSG],currObj.lenStr[ACTION_MSG], GAME, PROMPT);
         
-        } 
+        } else {
+            //No clue...
+            data[0] = 0;
+        }
     }
 }
 
@@ -272,6 +279,6 @@ uint8_t TextAdventure(){
     if (CheckSend()) return 1;                      //Still sending data to serial, return 1
     if (CheckInput(&serInput[0])) return 2;         //No valid input to process, return 2
     ProcessInput(&serInput[0]);                     //Check which response to generate and fill tx arrays
-    //CheckChanges();                               //Check if things are changed, write to EEPROM
+    SaveGameState();                                //Check if things are changed, write to EEPROM
     return 0;
 }

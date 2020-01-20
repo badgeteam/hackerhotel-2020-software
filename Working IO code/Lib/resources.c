@@ -10,7 +10,7 @@
 
 volatile uint16_t tmp16bit;     
 
-void setup(){
+void Setup(){
     cli();
 
     //Set up clock at 10MHz
@@ -383,4 +383,66 @@ unsigned char nibbleSwap(unsigned char a)
     return (a<<4) | (a>>4);
 }*/
 
+//Very cheap pseudo random, feed with previous value (XOR-ed with some ADC measurement).
+uint8_t lcg(uint8_t state){
+    state = (5 * state) + 129;
+    return state;
+}
 
+uint8_t lfsr(){
+    static uint16_t state;
+    state ^= (state << 13);
+    state ^= (state >> 9);
+    state ^= (state << 7);
+    return (state & 0xff);
+}
+
+//Save changed data to EEPROM
+uint8_t SaveGameState(){
+    uint8_t gameCheck[16];
+    EERead(0, &gameCheck[0], 16);
+    for (uint8_t x=0; x<16; ++x){
+        if (gameState[x] != gameCheck[x]){
+            if (EEWrite(x, &gameState[x], 1)) return 1;
+        }
+    }
+    return 0;
+}
+
+uint8_t ReadStatusBit(uint8_t number){
+    number &= 0x3f;
+    if (gameState[number>>3] & (1<<(number%8))) return 1; else return 0;
+}
+
+void WriteStatusBit(uint8_t number, uint8_t state){
+    number &= 0x3f;
+    if (state) gameState[number>>3] |= 1<<(number%8);
+    else gameState[number>>3] &= ~(1<<(number%8));
+}
+
+void Reset(){
+    //Reset game progress (all zeroes) and load some bits:
+    //# 110   set to 1 by FW if badge UUID mod 4 == 0
+    //# 111   set to 1 by FW if badge UUID mod 4 == 1
+    //# 112   set to 1 by FW if badge UUID mod 4 == 2
+    //# 113   set to 1 by FW if badge UUID mod 4 == 3
+    for (uint8_t x=0; x<sizeof(gameState); ++x){
+        gameState[x] = 0;
+    }
+    uint8_t id = 0;
+    uint8_t *serNum;
+    serNum = &SIGROW_SERNUM0;
+    
+    //Give out a number 0..3, calculated using serial number fields
+    for (uint8_t x=0; x<10; ++x){
+        id += *serNum;
+        ++serNum;
+    }
+    id %= 4;
+
+    //Write bit in gameState location 110..113
+    if (id == 0) WriteStatusBit(110, 1);
+    else if (id == 1) WriteStatusBit(111, 1);
+    else if (id == 2) WriteStatusBit(112, 1);
+    else if (id == 3) WriteStatusBit(113, 1);
+}

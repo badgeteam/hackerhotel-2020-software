@@ -22,11 +22,13 @@ volatile uint8_t auVolume;              // Used for Volume control
 volatile uint8_t auPlayDone;            // User writes 0 just after initiation of playing a sample, after playing sample, interrupt routine writes it to 1.
 
 
-volatile uint16_t adcPhot;           // Photo transistor ADC value
+volatile uint16_t adcPhot;           // Photo transistor ADC value (0...4096)
 volatile uint16_t adcHall;           // Hall sensor value
 volatile uint16_t adcBtns;           // Raw button value
 volatile uint8_t  adcTemp;           // Raw temperature related value
 volatile uint8_t  detHdPh;           // Headphone detected (TODO)
+
+uint8_t gameState[16];
 
 //LED translation matrices (usage iLED[name_of_const_array[][]] = value;)
 /*

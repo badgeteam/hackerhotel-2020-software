@@ -63,5 +63,6 @@
     extern const uint8_t CAT;           //Cat lower gem LED location inside iLED
 
     // Global challenge data
+    extern uint8_t gameState[16]; 
 
 #endif  //MAIN_DEF_H_

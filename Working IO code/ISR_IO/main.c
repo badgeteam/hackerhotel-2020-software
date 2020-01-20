@@ -10,7 +10,7 @@
             - Check if external Flash is empty. true? -> make I2C bus tristate until next power on (for external programming during sweatshop)
             - Enable audio output if headphone is detected, else enable badge handshake mode.
             - Use internal serial number for some things
-            - Simple handshake between badges for detecting badge group (8 types?)
+            - Simple handshake between badges for detecting badge group (4 types) already modeled
             - Games / challenges
             - Audio generation during games (nice to have)
             - Encryption for external EEPROM (with fake empty data trolling thing)
@@ -35,8 +35,18 @@
 //This is where it begins, inits first and main program in while(1) loop.
 int main(void)
 {
-    setup();
-    LoadGameState();
+    Setup();
+    EERead(0, &gameState[0], 16);   //Load game status bits from EEPROM
+
+    uint8_t idSet = 0;
+    for (uint8_t x=0; x<4; ++x){
+        idSet += ReadStatusBit(110+x);
+    }
+
+    //idSet can be used to detect cheating. After cheating idSet will be 0, with a virgin badge idSet will be 3.
+    if (idSet != 1) {
+        Reset();
+    }
 
     SerSpeed(1);
     unsigned char strTest[]="\aHäckerHotel2020 badge pest!\b\b\b\b\bt\n";
@@ -51,13 +61,16 @@ int main(void)
         if (n<40) iLED[n] = 2;
     }
 
-    //Test audio play stuff, play a tone.
-    uint8_t beep[5]={1, 16, 32, 255, 0};
-    auRepAddr = &zero;
+    //Test audio play, play a waveform.
+    uint8_t beep[5]={0x60, 0x80, 0xA0, 0xFF, 0};
+    auRepAddr = &beep[0];
     auVolume = 127;
 
     while (1)
     {
+        beep[3] = lfsr();
+        beep[1] = lcg(beep[1])&0x01;
+
         if (buttonMark){
             /*
                 Check if button value has changed here
@@ -65,7 +78,7 @@ int main(void)
             buttonMark = 0;
             
             TextAdventure();
-            
+          
             //Other games & user interaction checks
             //MagnetMaze();
             //BastetDictates();
@@ -73,7 +86,10 @@ int main(void)
             //LanyardCode();
             //MakeFriends();
              
-            //Check light sensor status 
+            //Check light sensor status (added hysteresis to preserve writing cycles to internal EEPROM)
+            if (adcPhot < 10) WriteStatusBit(116, 1);
+            if (adcPhot > 100) WriteStatusBit(116, 0);
+
             //Check temperature 
         }
 
