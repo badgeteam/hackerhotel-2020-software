@@ -10,7 +10,7 @@
 
 volatile uint16_t tmp16bit;     
 
-void setup(){
+void Setup(){
     cli();
 
     //Set up clock at 10MHz
@@ -176,10 +176,13 @@ ISR(TCB0_INT_vect){
 
 // TCB1 is used for audio generation. Keeps playing "data" until 0 is reached. Audio sample data can contain 0x01 to 0xFF, centered around 0x80
 ISR(TCB1_INT_vect){
+    int16_t volCtrl;
+    if (*auSmpAddr == 0) auSmpAddr = auRepAddr;
     if (*auSmpAddr) {
-        DAC0_DATA = *auSmpAddr;
+        volCtrl = ((((int16_t)(*auSmpAddr) - 0x7f) * auVolume) >> 8) + 0x80;
+        DAC0_DATA = (uint8_t)(volCtrl);
         ++auSmpAddr;
-        } else {
+    } else {
         DAC0_DATA = 0x80;
         auPlayDone = 1;
     }
@@ -207,8 +210,9 @@ ISR(USART0_DRE_vect){
 
 // ADC used for audio input and temperature sensor.
 ISR(ADC0_RESRDY_vect){
-    AUPOS = (AUPOS+1)&(AULEN-1);
+    //If just switched reference, discard first sample
     if (adc0Chg == 0){
+        AUPOS = (AUPOS+1)&(AULEN-1);
         if (ADC0_MUXPOS == 0x1E) adcTemp = ADC0_RESL; else auIn[AUPOS]=ADC0_RESL;
     } else adc0Chg = 0;
     ADC0_INTFLAGS = ADC_RESRDY_bm;
@@ -235,7 +239,7 @@ ISR(ADC1_RESRDY_vect){
     ADC1_INTFLAGS = ADC_RESRDY_bm;
 }
 
-//RTC compare interrupt, triggers at 512/BTN_TMR rate, also RTC overflow interrupt, triggers once a minute
+// RTC compare interrupt, triggers at 512/BTN_TMR rate, also RTC overflow interrupt, triggers once a minute
 ISR(RTC_CNT_vect) {
     if (RTC_INTFLAGS & RTC_CMP_bm){
         if (buttonMark<255) buttonMark++;   // For button timing purposes
@@ -249,13 +253,13 @@ ISR(RTC_CNT_vect) {
     }
 }
 
-//PIT interrupt (timing of ADC1: sensor values)
+// PIT interrupt (timing of ADC1: sensor values)
 ISR(RTC_PIT_vect) {						// PIT interrupt handling code
     ADC1_COMMAND = 0x01;
     RTC_PITINTFLAGS = RTC_PI_bm;		// clear interrupt flag
 }
 
-//Read bytes from EEPROM
+// Read bytes from EEPROM
 void EERead(uint8_t eeAddr, uint8_t *eeValues, uint8_t size)
 {
     while(NVMCTRL_STATUS & NVMCTRL_EEBUSY_bm);              // Wait until any write operation has finished
@@ -266,7 +270,7 @@ void EERead(uint8_t eeAddr, uint8_t *eeValues, uint8_t size)
     }
 }
 
-//Write bytes to the EEPROM, if address exceeds EEPROM space data wraps around
+// Write bytes to the EEPROM, if address exceeds EEPROM space data wraps around
 uint8_t EEWrite(uint8_t eeAddr, uint8_t *eeValues, uint8_t size)
 {
     uint8_t lastByteOfPage;
@@ -287,7 +291,7 @@ uint8_t EEWrite(uint8_t eeAddr, uint8_t *eeValues, uint8_t size)
     return 0;
 }
 
-//Sends a set of characters to the serial port, stops only when character value 0 is reached.
+// Sends a set of characters to the serial port, stops only when character value 0 is reached.
 uint8_t SerSend(unsigned char *addr){
     if (serTxDone){
         serTxAddr = addr;
@@ -319,7 +323,7 @@ void SelectAuIn(){
      adc0Chg = 1;
 };
 
-//Returns button combination (4LSB) and number of consecutive times this combination is detected. First read should always be ignored! 
+// Returns button combination (4LSB) and number of consecutive times this combination is detected. First read should always be ignored! 
 uint8_t CheckButtons(uint8_t previousValue){
     uint8_t bADC = (uint8_t)(adcBtns>>4);
     uint8_t bNibble = 0x0F;     //MSB to LSB: Bottom left, top left, top right, bottom right, 0F is error
@@ -373,9 +377,72 @@ uint8_t CheckButtons(uint8_t previousValue){
               else return bNibble;  //New value  
 }
 
+/*
 unsigned char nibbleSwap(unsigned char a)
 {
     return (a<<4) | (a>>4);
+}*/
+
+//Very cheap pseudo random, feed with previous value (XOR-ed with some ADC measurement).
+uint8_t lcg(uint8_t state){
+    state = (5 * state) + 129;
+    return state;
 }
 
+uint8_t lfsr(){
+    static uint16_t state;
+    state ^= (state << 13);
+    state ^= (state >> 9);
+    state ^= (state << 7);
+    return (state & 0xff);
+}
 
+//Save changed data to EEPROM
+uint8_t SaveGameState(){
+    uint8_t gameCheck[16];
+    EERead(0, &gameCheck[0], 16);
+    for (uint8_t x=0; x<16; ++x){
+        if (gameState[x] != gameCheck[x]){
+            if (EEWrite(x, &gameState[x], 1)) return 1;
+        }
+    }
+    return 0;
+}
+
+uint8_t ReadStatusBit(uint8_t number){
+    number &= 0x3f;
+    if (gameState[number>>3] & (1<<(number%8))) return 1; else return 0;
+}
+
+void WriteStatusBit(uint8_t number, uint8_t state){
+    number &= 0x3f;
+    if (state) gameState[number>>3] |= 1<<(number%8);
+    else gameState[number>>3] &= ~(1<<(number%8));
+}
+
+void Reset(){
+    //Reset game progress (all zeroes) and load some bits:
+    //# 110   set to 1 by FW if badge UUID mod 4 == 0
+    //# 111   set to 1 by FW if badge UUID mod 4 == 1
+    //# 112   set to 1 by FW if badge UUID mod 4 == 2
+    //# 113   set to 1 by FW if badge UUID mod 4 == 3
+    for (uint8_t x=0; x<sizeof(gameState); ++x){
+        gameState[x] = 0;
+    }
+    uint8_t id = 0;
+    uint8_t *serNum;
+    serNum = &SIGROW_SERNUM0;
+    
+    //Give out a number 0..3, calculated using serial number fields
+    for (uint8_t x=0; x<10; ++x){
+        id += *serNum;
+        ++serNum;
+    }
+    id %= 4;
+
+    //Write bit in gameState location 110..113
+    if (id == 0) WriteStatusBit(110, 1);
+    else if (id == 1) WriteStatusBit(111, 1);
+    else if (id == 2) WriteStatusBit(112, 1);
+    else if (id == 3) WriteStatusBit(113, 1);
+}

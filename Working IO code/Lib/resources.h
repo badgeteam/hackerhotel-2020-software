@@ -13,10 +13,10 @@
     #include <main_def.h>
     #include <avr/io.h>
     #include <avr/interrupt.h>
-    #include <util/delay.h>
+    //#include <util/delay.h>
     #include <stdlib.h>
 
-    void setup();
+    void Setup();
     ISR(TCA0_LUNF_vect);                                                // LED matrix interrupt routine
     ISR(TCB0_INT_vect);                                                 // Used for sending serial data and serSpeed "typing" effect
     ISR(USART0_RXC_vect);                                               // RX handling of serial data
@@ -31,12 +31,10 @@
     uint8_t CheckButtons(uint8_t previousValue);                        // Readout of the button state, with duration. Run periodically, but not faster than (PIT interrupt sps / 3) times per second.
     void EERead(uint8_t eeAddr, uint8_t *eeValues, uint8_t size);       // Read from internal EEPROM, wraps around if eeAddr+size>255
     uint8_t EEWrite(uint8_t eeAddr, uint8_t *eeValues, uint8_t size);   // Write to internal EEPROM, wraps around if eeAddr+size>255
-    
-    
-    typedef union
-    {
-        uint16_t u16;       //0x1234
-        uint8_t  u8[2];     //0:0x12 1:0x34
-    } u16_2u8_t;
-
+    uint8_t lcg(uint8_t state);
+    uint8_t lfsr();
+    uint8_t SaveGameState();
+    uint8_t ReadStatusBit(uint8_t number);
+    void WriteStatusBit(uint8_t number, uint8_t state);
+    void Reset();
 #endif /* RESOURCES_H_ */

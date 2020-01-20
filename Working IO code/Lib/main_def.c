@@ -13,16 +13,22 @@ volatile uint8_t serRxDone = 0;      // Done receiving (CR or LF detected)
 volatile uint8_t minuteMark = 0;     // RTC overflows every minute, this counts up to max 255.
 volatile uint8_t buttonMark = 0;     // Increments when a guaranteed new button value is available.
 
-volatile uint8_t auIn[AULEN];        // Audio input buffer
-volatile uint8_t adc0Chg = 0;        // Changed adc0 channel and reference
-volatile unsigned char *auSmpAddr;   // Tx data address pointer
-volatile uint8_t auPlayDone;         // User writes 0 just after initiation of playing a sample, after playing sample, interrupt routine writes it to 1.
+volatile uint8_t auIn[AULEN];           // Audio input buffer
+volatile uint8_t adc0Chg = 0;           // Changed adc0 channel and reference
+volatile uint8_t zero = 0;              // Point to this to stop playing audio
+volatile uint8_t *auSmpAddr = &zero;    // Audio sample address pointer
+volatile uint8_t *auRepAddr = &zero;    // Audio loop start address pointer
+volatile uint8_t auVolume;              // Used for Volume control
+volatile uint8_t auPlayDone;            // User writes 0 just after initiation of playing a sample, after playing sample, interrupt routine writes it to 1.
 
-volatile uint16_t adcPhot;           // Photo transistor ADC value
+
+volatile uint16_t adcPhot;           // Photo transistor ADC value (0...4096)
 volatile uint16_t adcHall;           // Hall sensor value
 volatile uint16_t adcBtns;           // Raw button value
 volatile uint8_t  adcTemp;           // Raw temperature related value
 volatile uint8_t  detHdPh;           // Headphone detected (TODO)
+
+uint8_t gameState[16];
 
 //LED translation matrices (usage iLED[name_of_const_array[][]] = value;)
 /*

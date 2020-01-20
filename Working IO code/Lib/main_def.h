@@ -13,7 +13,7 @@
     #define AUPOS   GPIOR2  //Audio in position counter
     #define A1CNT   GPIOR3  //Counter for ADC1
     
-    #define RXLEN   32      //Length of serial Rx buffer
+    #define RXLEN   72//32      //Length of serial Rx buffer
     #define TXLEN   33      //Length of serial Tx buffer (yes, it one longer than a power of two)
     #define AULEN   32      //Audio input buffer length: MUST be a power of 2
 
@@ -42,7 +42,10 @@
 
     extern volatile uint8_t auIn[AULEN];
     extern volatile uint8_t adc0Chg;
-    extern volatile unsigned char *auSmpAddr;   // Tx data address pointer
+    extern volatile uint8_t zero;
+    extern volatile uint8_t *auSmpAddr;         // Audio sample address pointer
+    extern volatile uint8_t *auRepAddr;         // Audio loop start address pointer
+    extern volatile uint8_t auVolume;           // Used for Volume control
     extern volatile uint8_t auPlayDone;         // User writes 0 just after initiation of playing a sample, after playing sample, interrupt routine writes it to 1.
 
     extern volatile uint16_t adcPhot;
@@ -60,5 +63,6 @@
     extern const uint8_t CAT;           //Cat lower gem LED location inside iLED
 
     // Global challenge data
+    extern uint8_t gameState[16]; 
 
 #endif  //MAIN_DEF_H_
