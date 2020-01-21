@@ -27,6 +27,7 @@
 #include <resources.h>          //Functions for initializing and usage of hardware resources
 #include <I2C.h>                //Fixed a semi-crappy lib found on internet, replace with interrupt driven one? If so, check hardware errata pdf!
 #include <text_adv.h>           //Text adventure stuff
+#include <simon.h>              //Bastet Dictates (Simon clone)
 #include <stdio.h>
 
 
@@ -77,7 +78,7 @@ int main(void)
           
             //Other games & user interaction checks
             //MagnetMaze();
-            //BastetDictates();
+            BastetDictates();
             //MasterMind-ishThing(); //Not sure if to be implemented
             //LanyardCode();
             //MakeFriends();

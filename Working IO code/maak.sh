@@ -1,6 +1,6 @@
 #!/usr/bin/env bash 
 
-TARGETS="Lib/I2C Lib/main_def Lib/resources Lib/text_adv ISR_IO/main"
+TARGETS="Lib/I2C Lib/main_def Lib/resources Lib/text_adv Lib/simon ISR_IO/main"
 OBJECTS=""
 
 if [ "$1" == "clean" ]; then
