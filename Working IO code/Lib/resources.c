@@ -421,13 +421,13 @@ uint8_t SaveGameState(){
 
 uint8_t ReadStatusBit(uint8_t number){
     number &= 0x3f;
-    if (gameState[number>>3] & (1<<(number%8))) return 1; else return 0;
+    if (gameState[number>>3] & (1<<(number&7))) return 1; else return 0;
 }
 
 void WriteStatusBit(uint8_t number, uint8_t state){
     number &= 0x3f;
-    if (state) gameState[number>>3] |= 1<<(number%8);
-    else gameState[number>>3] &= ~(1<<(number%8));
+    if (state) gameState[number>>3] |= 1<<(number&7);
+    else gameState[number>>3] &= ~(1<<(number&7));
 }
 
 void Reset(){
@@ -455,4 +455,27 @@ void Reset(){
     else if (id == 1) WriteStatusBit(111, 1);
     else if (id == 2) WriteStatusBit(112, 1);
     else if (id == 3) WriteStatusBit(113, 1);
+}
+
+void GenerateAudio(){
+    //Test audio play, play a rainstorm with howling wind.
+    static uint8_t storm[7]={0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0};
+
+    auRepAddr = &storm[0];
+    auVolume = 127;
+
+    //Noise is to be generated fast, outside of buttonMark loop
+    for (uint8_t x=1; x<6; ++x){
+        if (x%3) storm[x] = floatAround(0x80, 5, 0x01, 0x00);
+    }
+
+    if (buttonMark){
+        //"Floating" speed for howl (and noise, but that's hardly audible)
+        floatSpeed(6, 0x0300, 0x0700);
+            
+        //"Floating" volume and wind howl during 8 bit rainstorm needs some randomness
+        auVolume = floatAround(auVolume, 2, 0x10, 0xA0);
+        storm[0] = floatAround(storm[0], 2, 0x70, 0x90);
+        storm[3] = 0xFF-storm[0];  //Inverse value of wind[0] produces a whistle
+    }
 }

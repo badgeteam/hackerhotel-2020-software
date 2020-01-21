@@ -46,4 +46,6 @@
     void WriteStatusBit(uint8_t number, uint8_t state);
 
     void Reset();
+
+    void GenerateAudio();
 #endif /* RESOURCES_H_ */

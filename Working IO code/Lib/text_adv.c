@@ -128,6 +128,31 @@ void SendLiteral(uint16_t address, uint16_t length, uint8_t numCR){
     SerSend(&txBuffer[0]);
 }
 
+//Update game state: num -> vBBBBbbb v=value(0 is set!), BBBB=Byte number, bbb=bit number
+void UpdateState(uint8_t num){
+    uint8_t clearBit = num & STATUS_BITS;
+    num &= (STATUS_BITS-1);
+    if (clearBit) {
+        WriteStatusBit(num, 0);
+    } else {
+        WriteStatusBit(num, 1);
+    }
+}
+
+//Returns the state of the bit on position "num"
+uint8_t GetState(uint8_t num){
+    if ((num)&&(num<STATUS_BITS)){
+        return ReadStatusBit(num);
+    }
+    return 1;
+}
+
+//Checks if state of bit BBBBbbb matches with v (inverted) bit
+uint8_t CheckState(uint8_t num){
+    return (GetState(num&(STATUS_BITS-1)) == (1-(num&STATUS_BITS))); 
+}
+
+
 //Send routine, optimized for low memory usage
 uint8_t CheckSend(){
     static uint8_t txPart;
@@ -215,12 +240,14 @@ uint8_t CheckInput(uint8_t *data){
 void ProcessInput(uint8_t *data){
 //    enum {NAME, DESC, ACTION_STR1, ACTION_STR2, OPEN_ACL_MSG, ACTION_ACL_MSG, ACTION_MSG};
     static object_model_t currObj, actObj1, actObj2;
+    static uint16_t route[MAX_OBJ_DEPTH] = {0};
+    static uint8_t currDepth = 0;
     
     static uint16_t reactStr[3][8] = {{0},{0},{0}};
     static uint8_t actionList = 0;
     static uint8_t toSend = 0;
 
-    PopulateObject(0, &currObj);
+    PopulateObject(route[currDepth], &currObj);
     
     //Responses to send after something has tried by the user
     if (actionList){
@@ -238,12 +265,19 @@ void ProcessInput(uint8_t *data){
 
         if (data[0] == 'x'){
 
+            //Trash later
             reactStr[0][0]=currObj.addrStr[NAME];
             reactStr[1][0]=currObj.lenStr[NAME];
             reactStr[2][0]=PROMPT;
             actionList = 1;
+
+            //Standing outside?
+            if (route[currDepth] == 0){
+                PrepareSending(A_NOTPOSSIBLE, L_NOTPOSSIBLE, TEASER, PROMPT);
+            } else {
+                //if 
+            }
         /*
-            exit_allowed = False
             if len(loc) == 0:
             invalid(eeprom)
             elif len(loc) == 1:
