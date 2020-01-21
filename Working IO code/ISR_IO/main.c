@@ -61,22 +61,32 @@ int main(void)
         if (n<40) iLED[n] = 2;
     }
 
-    //Test audio play, play a waveform.
-    uint8_t beep[5]={0x60, 0x80, 0xA0, 0xFF, 0};
-    auRepAddr = &beep[0];
+    //Test audio play, play a rainstorm with howling wind.
+    uint8_t wind[7]={0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0};
+
+    auRepAddr = &wind[0];
     auVolume = 127;
 
     while (1)
     {
-        beep[3] = lfsr();
-        beep[1] = lcg(beep[1])&0x01;
-
+        for (uint8_t x=1; x<6; ++x){
+            if (x%3) wind[x] = floatAround(0x80, 6, 0x01, 0x00);
+        }
+        
         if (buttonMark){
             /*
                 Check if button value has changed here
             */
             buttonMark = 0;
+
+            //Floating speed
+            floatSpeed(6, 0x0300, 0x0700);
             
+            //Floating volume and wind howl during 8 bit rainstorm needs some more randomness
+            auVolume = floatAround(auVolume, 2, 0x10, 0xA0);
+            wind[0] = floatAround(wind[0], 2, 0x70, 0x90);
+            wind[3] = 0xFF-wind[0];  //Inverse value of wind[0] produces a whistle   
+                    
             TextAdventure();
           
             //Other games & user interaction checks

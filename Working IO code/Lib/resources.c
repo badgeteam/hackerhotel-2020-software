@@ -8,7 +8,8 @@
 #include <resources.h>
 #include <I2C.h>                //Fixed a semi-crappy lib found on internet, replace with interrupt driven one? If so, check hardware errata pdf!
 
-volatile uint16_t tmp16bit;     
+volatile uint16_t tmp16bit;    
+volatile uint8_t mask[8] = {0x01, 0x03, 0x07, 0x0f, 0x1f, 0x3f, 0x7f, 0xff};
 
 void Setup(){
     cli();
@@ -377,24 +378,33 @@ uint8_t CheckButtons(uint8_t previousValue){
               else return bNibble;  //New value  
 }
 
-/*
-unsigned char nibbleSwap(unsigned char a)
-{
-    return (a<<4) | (a>>4);
-}*/
-
-//Very cheap pseudo random, feed with previous value (XOR-ed with some ADC measurement).
-uint8_t lcg(uint8_t state){
-    state = (5 * state) + 129;
-    return state;
-}
-
 uint8_t lfsr(){
-    static uint16_t state;
+    static uint16_t state = 0xd401;
     state ^= (state << 13);
     state ^= (state >> 9);
     state ^= (state << 7);
     return (state & 0xff);
+}
+
+void floatSpeed(uint8_t bits, uint16_t min, uint16_t max){
+    uint16_t val = TCB1_CCMP;
+    bits = mask[(bits-1)&0x07];
+    val += (lfsr()&bits);
+    val -= (lfsr()&bits);
+    if (val > max) val = max;    //0x038B is normal rate, for wind we need to be a bit slower
+    if (val < min) val = min;  
+    TCB1_CCMP = val;
+}
+
+uint8_t floatAround(uint8_t sample, uint8_t bits, uint8_t min, uint8_t max){
+    bits = mask[(bits-1)&0x07];
+    sample += lfsr()&bits;
+    sample -= lfsr()&bits;
+    if (max){
+        if (sample > max) sample = max;
+        if (sample < min) sample = min;
+    }
+    return sample;
 }
 
 //Save changed data to EEPROM
@@ -431,7 +441,7 @@ void Reset(){
     }
     uint8_t id = 0;
     uint8_t *serNum;
-    serNum = &SIGROW_SERNUM0;
+    serNum = (uint8_t*)&SIGROW_SERNUM0;
     
     //Give out a number 0..3, calculated using serial number fields
     for (uint8_t x=0; x<10; ++x){
