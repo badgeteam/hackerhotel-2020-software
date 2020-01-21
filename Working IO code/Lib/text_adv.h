@@ -63,4 +63,4 @@
 
     uint8_t TextAdventure();
 
-#endif /* RESOURCES_H_ */
+#endif /* TEXT_ADV_H_ */
