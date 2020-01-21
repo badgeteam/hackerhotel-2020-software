@@ -68,11 +68,11 @@ int main(void)
         GenerateAudio();
 
         if (buttonMark){
-            /*
-                Check if button value has changed here
-            */
+            buttonState = CheckButtons(buttonState);
             buttonMark = 0;
-                    
+            
+            //GenerateLEDshow();        
+
             TextAdventure();
           
             //Other games & user interaction checks
