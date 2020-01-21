@@ -64,5 +64,6 @@
 
     // Global challenge data
     extern uint8_t gameState[16]; 
+    extern uint16_t effect;
 
 #endif  //MAIN_DEF_H_

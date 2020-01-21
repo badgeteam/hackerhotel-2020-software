@@ -29,6 +29,7 @@ volatile uint8_t  adcTemp;           // Raw temperature related value
 volatile uint8_t  detHdPh;           // Headphone detected (TODO)
 
 uint8_t gameState[16];
+uint16_t effect = 0;
 
 //LED translation matrices (usage iLED[name_of_const_array[][]] = value;)
 /*

@@ -17,19 +17,19 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
   6 .debug_aranges 00000210  00000000  00000000  00001560  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_info   00003d0c  00000000  00000000  00001770  2**0
+  7 .debug_info   00003d1e  00000000  00000000  00001770  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_abbrev 0000221e  00000000  00000000  0000547c  2**0
+  8 .debug_abbrev 0000221e  00000000  00000000  0000548e  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_line   000019c2  00000000  00000000  0000769a  2**0
+  9 .debug_line   000019c2  00000000  00000000  000076ac  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_frame  000006b8  00000000  00000000  0000905c  2**2
+ 10 .debug_frame  000006b8  00000000  00000000  00009070  2**2
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_str    00001631  00000000  00000000  00009714  2**0
+ 11 .debug_str    00001638  00000000  00000000  00009728  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_loc    00001ed8  00000000  00000000  0000ad45  2**0
+ 12 .debug_loc    00001ed8  00000000  00000000  0000ad60  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_ranges 00000200  00000000  00000000  0000cc1d  2**0
+ 13 .debug_ranges 00000200  00000000  00000000  0000cc38  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -1409,8 +1409,8 @@ error:
 uint8_t lfsr(){
     static uint16_t state = 0xd401;
     state ^= (state << 13);
-     a28:	80 91 0c 38 	lds	r24, 0x380C	; 0x80380c <state.3856>
-     a2c:	90 91 0d 38 	lds	r25, 0x380D	; 0x80380d <state.3856+0x1>
+     a28:	80 91 0c 38 	lds	r24, 0x380C	; 0x80380c <state.3857>
+     a2c:	90 91 0d 38 	lds	r25, 0x380D	; 0x80380d <state.3857+0x1>
      a30:	9c 01       	movw	r18, r24
      a32:	32 2f       	mov	r19, r18
      a34:	22 27       	eor	r18, r18
@@ -1435,8 +1435,8 @@ uint8_t lfsr(){
      a56:	27 95       	ror	r18
      a58:	82 27       	eor	r24, r18
      a5a:	93 27       	eor	r25, r19
-     a5c:	80 93 0c 38 	sts	0x380C, r24	; 0x80380c <state.3856>
-     a60:	90 93 0d 38 	sts	0x380D, r25	; 0x80380d <state.3856+0x1>
+     a5c:	80 93 0c 38 	sts	0x380C, r24	; 0x80380c <state.3857>
+     a60:	90 93 0d 38 	sts	0x380D, r25	; 0x80380d <state.3857+0x1>
     return (state & 0xff);
 }
      a64:	08 95       	ret
@@ -2371,7 +2371,7 @@ uint8_t CheckSend(){
     1016:	ef 53       	subi	r30, 0x3F	; 63
     1018:	f7 4c       	sbci	r31, 0xC7	; 199
     101a:	e0 81       	ld	r30, Z
-    101c:	90 91 bd 38 	lds	r25, 0x38BD	; 0x8038bd <txPart.3867>
+    101c:	90 91 bd 38 	lds	r25, 0x38BD	; 0x8038bd <txPart.3868>
     1020:	9e 17       	cp	r25, r30
     1022:	30 f5       	brcc	.+76     	; 0x1070 <CheckSend+0x72>
             EEreadLength = txStrLen[txAddrNow]-txPart;
@@ -2400,9 +2400,9 @@ uint8_t CheckSend(){
     104e:	cd 01       	movw	r24, r26
     1050:	73 de       	rcall	.-794    	; 0xd38 <ExtEERead>
             txPart += EEreadLength;
-    1052:	80 91 bd 38 	lds	r24, 0x38BD	; 0x8038bd <txPart.3867>
+    1052:	80 91 bd 38 	lds	r24, 0x38BD	; 0x8038bd <txPart.3868>
     1056:	8c 0f       	add	r24, r28
-    1058:	80 93 bd 38 	sts	0x38BD, r24	; 0x8038bd <txPart.3867>
+    1058:	80 93 bd 38 	sts	0x38BD, r24	; 0x8038bd <txPart.3868>
             txBuffer[EEreadLength] = 0; //Add string terminator after piece to send to plug memory leak
     105c:	ec 2f       	mov	r30, r28
     105e:	f0 e0       	ldi	r31, 0x00	; 0
@@ -2427,7 +2427,7 @@ uint8_t CheckSend(){
             SerSend(&txBuffer[0]);
         } else {
             txPart = 0;
-    1070:	10 92 bd 38 	sts	0x38BD, r1	; 0x8038bd <txPart.3867>
+    1070:	10 92 bd 38 	sts	0x38BD, r1	; 0x8038bd <txPart.3868>
             ++txAddrNow;
     1074:	8f 5f       	subi	r24, 0xFF	; 255
     1076:	80 93 c0 38 	sts	0x38C0, r24	; 0x8038c0 <txAddrNow>
@@ -2717,11 +2717,11 @@ void ProcessInput(uint8_t *data){
     
     //Responses to send after something has tried by the user
     if (actionList){
-    11f0:	c0 91 94 38 	lds	r28, 0x3894	; 0x803894 <actionList.3891>
+    11f0:	c0 91 94 38 	lds	r28, 0x3894	; 0x803894 <actionList.3892>
     11f4:	cc 23       	and	r28, r28
     11f6:	31 f1       	breq	.+76     	; 0x1244 <ProcessInput+0x66>
         PrepareSending(reactStr[0][toSend], reactStr[1][toSend], GAME, reactStr[2][toSend]);
-    11f8:	10 91 93 38 	lds	r17, 0x3893	; 0x803893 <toSend.3892>
+    11f8:	10 91 93 38 	lds	r17, 0x3893	; 0x803893 <toSend.3893>
     11fc:	81 2f       	mov	r24, r17
     11fe:	90 e0       	ldi	r25, 0x00	; 0
     1200:	dc 01       	movw	r26, r24
@@ -2748,10 +2748,10 @@ void ProcessInput(uint8_t *data){
     122a:	d5 dd       	rcall	.-1110   	; 0xdd6 <PrepareSending>
         ++toSend;
     122c:	1f 5f       	subi	r17, 0xFF	; 255
-    122e:	10 93 93 38 	sts	0x3893, r17	; 0x803893 <toSend.3892>
+    122e:	10 93 93 38 	sts	0x3893, r17	; 0x803893 <toSend.3893>
         --actionList;
     1232:	c1 50       	subi	r28, 0x01	; 1
-    1234:	c0 93 94 38 	sts	0x3894, r28	; 0x803894 <actionList.3891>
+    1234:	c0 93 94 38 	sts	0x3894, r28	; 0x803894 <actionList.3892>
         if (actionList == 0) {
     1238:	c1 11       	cpse	r28, r1
     123a:	3b c0       	rjmp	.+118    	; 0x12b2 <ProcessInput+0xd4>
@@ -2769,7 +2769,7 @@ void ProcessInput(uint8_t *data){
     1248:	88 23       	and	r24, r24
     124a:	99 f1       	breq	.+102    	; 0x12b2 <ProcessInput+0xd4>
         toSend = 0;
-    124c:	10 92 93 38 	sts	0x3893, r1	; 0x803893 <toSend.3892>
+    124c:	10 92 93 38 	sts	0x3893, r1	; 0x803893 <toSend.3893>
 
         if (data[0] == 'x'){
     1250:	88 37       	cpi	r24, 0x78	; 120
@@ -2800,7 +2800,7 @@ void ProcessInput(uint8_t *data){
     1278:	80 a3       	std	Z+32, r24	; 0x20
     127a:	91 a3       	std	Z+33, r25	; 0x21
             actionList = 1;
-    127c:	80 93 94 38 	sts	0x3894, r24	; 0x803894 <actionList.3891>
+    127c:	80 93 94 38 	sts	0x3894, r24	; 0x803894 <actionList.3892>
 
             //Standing outside?
             if (route[currDepth] == 0){
