@@ -70,18 +70,22 @@ uint8_t StartsWith(uint8_t *data, char *compare){
 //Put the addresses
 uint8_t PrepareSending(uint16_t address, uint16_t length, uint8_t type, uint8_t prompt){
     uint8_t x=0;
-    while (length>255) {
-        txAddrList[x] = address;
-        txStrLen[x] = 255;
-        address += 255;
-        length -= 255;
-        ++x;
-        if (x==(TXLISTLEN-1));
+    if (length){
+        while (length>255) {
+            txAddrList[x] = address;
+            txStrLen[x] = 255;
+            address += 255;
+            length -= 255;
+            ++x;
+            if (x==(TXLISTLEN-1));
+        }
+        txAddrList[x]=address;
+        txStrLen[x]=length%255;
+        if (length>255) return 1; 
+        txTypeNow = type;
+    } else {
+        txAddrList[0] = 0;
     }
-    txAddrList[x]=address;
-    txStrLen[x]=length%255;
-    if (length>255) return 1; 
-    txTypeNow = type;
     ClearTxAfter(x);
     sendPrompt = prompt;
     txAddrNow = 0;  //Start at first pointer, initiates sending in CheckSend
@@ -152,6 +156,74 @@ uint8_t CheckState(uint8_t num){
     return (GetState(num&(STATUS_BITS-1)) == (1-(num&STATUS_BITS))); 
 }
 
+//
+uint8_t CheckLetter(uint16_t child, uint8_t letter){
+    
+    uint8_t found = 0;
+    uint8_t data[32];
+
+    child += L_BOILER;
+    ExtEERead(child+OFF_STRINGFLDS, 1, GAME, &data[0]);
+    uint8_t x = data[0];
+
+    while (x){
+        uint8_t max = (x>32)?32:x;
+        ExtEERead(child+OFF_STRINGFLDS+1, max, GAME, &data[0]);
+        for (uint8_t y=0; y<max; ++y){
+            if (found){
+                if (data[y] == letter) return 1; else return 0;
+            }
+            if (data[y] == '[') found = 1;
+        }
+        child += max;
+        x -= max;
+    }
+    return 0;
+}
+
+//Returns the child's address if the child is visible and the search letter matches
+uint16_t FindChild(uint16_t parent, uint8_t letter){
+    
+    uint16_t child = parent;
+    uint8_t data[4];
+
+    ExtEERead(child+L_BOILER, 4, GAME, &data[0]);
+    parent = (data[0]<<8||data[1]);    //Next object on parent level
+    child =  (data[2]<<8||data[3]);    //First object on child level
+
+    //As long as the child is within the parent's range
+    while (parent>child){
+
+        //Find out if the found child is visible and check letter
+        ExtEERead(child+OFF_BYTEFLDS+VISIBLE_ACL+L_BOILER, 1, GAME, &data[0]);
+        if (CheckState(data[0])) {
+            if (CheckLetter(child, letter)) return child;
+        }
+
+        //Not visible or name not right
+        ExtEERead(child+L_BOILER, 2, GAME, &data[0]);
+        child = (data[0]<<8||data[1]);    //Next object on child level
+        
+    } return 0;
+}
+
+uint8_t InpOkChk(uint8_t test){
+    if ((test>='a')&&(test<='z')) return 1;
+    if ((test>='0')&&(test<='9')) return 1;
+    return 0;
+}
+
+//Cleans input of garbage and returns length of cleaned input "o->d2  !\0" becomes "od2\0"
+uint8_t CleanInput(uint8_t *data){
+    uint8_t cnt = 0;
+    for (uint8_t x=0; data[x]!=0; ++x){
+        data[cnt] = data[x];
+        if (InpOkChk(data[x])) ++cnt;
+    }
+    data[cnt] = 0;
+    return cnt;
+}
+
 
 //Send routine, optimized for low memory usage
 uint8_t CheckSend(){
@@ -175,9 +247,11 @@ uint8_t CheckSend(){
     //Check if prompt needs to be sent afterward or something else
     } else if (serTxDone&&sendPrompt) {
         if (sendPrompt == PROMPT){
-            SendLiteral(A_PROMPT, L_PROMPT, 2);
+            SendLiteral(A_PROMPT, L_PROMPT, 1);
         } else if (sendPrompt == SPACE){
             SendLiteral(A_SPACE, L_SPACE, 0);
+        } else if (sendPrompt == CR_1){
+            SendLiteral(0, 0, 1);
         } else if (sendPrompt == CR_2){
             SendLiteral(0, 0, 2);
         }
@@ -247,7 +321,9 @@ void ProcessInput(uint8_t *data){
     static uint8_t actionList = 0;
     static uint8_t toSend = 0;
 
-    PopulateObject(route[currDepth], &currObj);
+    if (currDepth == 0) PopulateObject(route[currDepth], &currObj);
+    effect = currObj.byteField[EFFECTS];
+    CleanInput(&data[0]);
     
     //Responses to send after something has tried by the user
     if (actionList){
@@ -260,265 +336,279 @@ void ProcessInput(uint8_t *data){
         }
 
     //No responses yet and data available? Figure out what to say!
-    } else if (data[0]){
-        toSend = 0;
+    } else {
 
-        if (data[0] == 'x'){
+        uint8_t inputLen = CleanInput(&data[0]);
+        if (inputLen) {
 
-            //Trash later
-            reactStr[0][0]=currObj.addrStr[NAME];
-            reactStr[1][0]=currObj.lenStr[NAME];
-            reactStr[2][0]=PROMPT;
+            toSend = 0;
+            reactStr[1][0]=0;
+            reactStr[2][0]=CR_1;
             actionList = 1;
 
-            //Standing outside?
-            if (route[currDepth] == 0){
-                PrepareSending(A_NOTPOSSIBLE, L_NOTPOSSIBLE, TEASER, PROMPT);
-            } else {
-                //if 
-            }
-        /*
-            if len(loc) == 0:
-            invalid(eeprom)
-            elif len(loc) == 1:
-            msg = check_open_permission(eeprom,0)
-            if msg != "":
-            print(msg)
-            else:
-            exit_allowed = True
-            else:
-            exit_allowed = True
+            if (data[0] == 'x'){
 
-            if exit_allowed:
-            del loc[-1]
-            loc_offset,loc_action_mask,loc_children,loc_parent = loc2offset(eeprom,loc)
-            current_effects = read_byte_field(eeprom,loc_offset,'effects')
-        */
-
-
-        } else
-        if ((data[0] == 'e')||(data[0] == 'o')){
-        /*
-            if len(inp) > 2 and inp[1] in exclude_words:
-            del(inp[1])
-            if len(inp) != 2:
-            invalid(eeprom)
-            else:
-            enter_offset = 0xffff
-            for i in range(len(loc_children)):
-            if object_visible(eeprom,loc_children[i][1]):
-            if inp[1] == loc_children[i][0]:
-            enter_offset = loc_children[i][1]
-            break
-            else:
-            if object_visible(eeprom,loc_parent[1]):
-            if inp[1] == loc_parent[0]:
-            enter_offset = loc_parent[1]
-
-            if enter_offset != 0xffff:
-            enter_action_mask = read_byte_field(eeprom,enter_offset,'action_mask')
-            if cmd == 'e' and (enter_action_mask & A_ENTER == 0):
-            print(s(eeprom,'CANTENTER'))
-            continue
-            elif cmd == 'o' and (enter_action_mask & A_OPEN == 0):
-            print(s(eeprom,'CANTOPEN'))
-            continue
-            msg = check_open_permission(eeprom,enter_offset)
-            if msg != "":
-            print(msg)
-            continue
-            else:
-            if enter_offset != loc_parent[1]:
-            loc.append(i)
-            else:
-            del(loc[-1])
-            loc_offset,loc_action_mask,loc_children,loc_parent = loc2offset(eeprom,loc)
-            current_effects = read_byte_field(eeprom,loc_offset,'effects')
-            continue
-            else:
-            print(s(eeprom,'DONTSEE'))
-        */
+                //Standing outside?
+                if ((route[currDepth] == 0)||(currDepth == 0)){
+                    PrepareSending(A_NOTPOSSIBLE, L_NOTPOSSIBLE, TEASER, PROMPT);
+            
+                //Is there a way to go back?
+                } else if (CheckState(currObj.byteField[OPEN_ACL])){
+                    --currDepth;
+                    PopulateObject(route[currDepth], &currObj);
+                    reactStr[0][1]=currObj.addrStr[NAME];
+                    reactStr[1][1]=currObj.lenStr[NAME];
+                    reactStr[2][1]=PROMPT;             
+                    actionList = 2;
+            
+                //No way out, print denied message of location
+                } else {
+                    reactStr[0][1]=currObj.addrStr[OPEN_ACL_MSG];
+                    reactStr[1][1]=currObj.lenStr[OPEN_ACL_MSG];
+                    reactStr[2][1]=PROMPT;                
+                    actionList = 2;
+                }
+            } 
         
-        } else
-        if (data[0] == 'l'){
-        /*
-            if len(inp) == 1:
-            print(read_string_field(eeprom,loc_offset,'desc'))
-            print(s(eeprom,'LOOK'),end='')
-            sep = ""
-            if loc_parent[1] != 0xffff and object_visible(eeprom,loc_parent[1]):
-            name = read_string_field(eeprom,loc_parent[1],'name')
-            print("{}".format(name),end='')
-            sep = s(eeprom,'COMMA')
-            for i in range(len(loc_children)):
-            if object_visible(eeprom,loc_children[i][1]):
-            item = read_byte_field(eeprom,loc_children[i][1],'item_nr')
-            in_inventory = False
-            if item != 0:
-            for inv in range(len(inventory)):
-            if item == inventory[inv][0]:
-            in_inventory = True
-            break
-            if  not in_inventory:
-            name = read_string_field(eeprom,loc_children[i][1],'name')
-            print("{}{}".format(sep,name),end='')
-            sep = s(eeprom,'COMMA')
-            print()
+            else if ((data[0] == 'e')||(data[0] == 'o')){
+                
+                //Not possible, too many/little characters
+                if (inputLen != 2){
+                    PrepareSending(A_NOTPOSSIBLE, L_NOTPOSSIBLE, TEASER, PROMPT);
+                } else {
+                    uint8_t canDo = 0;
+                    route[currDepth+1] = FindChild(route[currDepth], data[1]);
+                    
+                    //Child found?
+                    if (route[currDepth+1]) {
+                        PopulateObject(route[currDepth+1], &actObj1);
 
-            else:
-            if len(inp) > 2 and inp[1] in exclude_words:
-            del(inp[1])
-            if len(inp) != 2:
-            invalid(eeprom)
-            continue
+                    //Maybe a step back, letter ok?
+                    } else if (currDepth) {
+                        PopulateObject(route[currDepth+1], &actObj1);
+                        if (CheckLetter(actObj1.addrStr[NAME], data[1])) {
+                                   
+                        }
+                    }
+                }
+            /*
+                    enter_offset = 0xffff
+                    for i in range(len(loc_children)):
+                    if object_visible(eeprom,loc_children[i][1]):
+                    if inp[1] == loc_children[i][0]:
+                    enter_offset = loc_children[i][1]
+                    break
+                    else:
+                    if object_visible(eeprom,loc_parent[1]):
+                    if inp[1] == loc_parent[0]:
+                    enter_offset = loc_parent[1]
 
-            look_offset = 0xffff
-            for i in range(len(loc_children)):
-            if object_visible(eeprom,loc_children[i][1]):
-            if inp[1] == loc_children[i][0]:
-            look_offset = loc_children[i][1]
-            break
-            else:
-            if object_visible(eeprom,loc_parent[1]):
-            if inp[1] == loc_parent[0]:
-            look_offset = loc_parent[1]
-            else:
-            print(s(eeprom,'DONTSEE'))
-            continue
-            if look_offset != 0xffff:
-            if (read_byte_field(eeprom,look_offset,'action_mask') & A_LOOK == 0):
-            name = read_string_field(eeprom,look_offset,'name')
-            print(s(eeprom,'CANTLOOK') + "{}".format(name))
-            continue
-            else:
-            desc = read_string_field(eeprom,look_offset,'desc')
-            print(desc)
-            continue
-            else:
-            invalid(eeprom)        
-        */
-        } else
-        if (data[0] == 'p'){
-        /*
-             if len(inventory) >= 2:
-             print(s(eeprom,'CARRYTWO'))
+                    if enter_offset != 0xffff:
+                    enter_action_mask = read_byte_field(eeprom,enter_offset,'action_mask')
+                    if cmd == 'e' and (enter_action_mask & A_ENTER == 0):
+                    print(s(eeprom,'CANTENTER'))
+                    continue
+                    elif cmd == 'o' and (enter_action_mask & A_OPEN == 0):
+                    print(s(eeprom,'CANTOPEN'))
+                    continue
+                    msg = check_open_permission(eeprom,enter_offset)
+                    if msg != "":
+                    print(msg)
+                    continue
+                    else:
+                    if enter_offset != loc_parent[1]:
+                    loc.append(i)
+                    else:
+                    del(loc[-1])
+                    loc_offset,loc_action_mask,loc_children,loc_parent = loc2offset(eeprom,loc)
+                    current_effects = read_byte_field(eeprom,loc_offset,'effects')
+                    continue
+                else:
+                print(s(eeprom,'DONTSEE'))
+            */
+        
+            } else
+            if (data[0] == 'l'){
+            /*
+                if len(inp) == 1:
+                print(read_string_field(eeprom,loc_offset,'desc'))
+                print(s(eeprom,'LOOK'),end='')
+                sep = ""
+                if loc_parent[1] != 0xffff and object_visible(eeprom,loc_parent[1]):
+                name = read_string_field(eeprom,loc_parent[1],'name')
+                print("{}".format(name),end='')
+                sep = s(eeprom,'COMMA')
+                for i in range(len(loc_children)):
+                if object_visible(eeprom,loc_children[i][1]):
+                item = read_byte_field(eeprom,loc_children[i][1],'item_nr')
+                in_inventory = False
+                if item != 0:
+                for inv in range(len(inventory)):
+                if item == inventory[inv][0]:
+                in_inventory = True
+                break
+                if  not in_inventory:
+                name = read_string_field(eeprom,loc_children[i][1],'name')
+                print("{}{}".format(sep,name),end='')
+                sep = s(eeprom,'COMMA')
+                print()
+
+                else:
+                if len(inp) > 2 and inp[1] in exclude_words:
+                del(inp[1])
+                if len(inp) != 2:
+                invalid(eeprom)
+                continue
+
+                look_offset = 0xffff
+                for i in range(len(loc_children)):
+                if object_visible(eeprom,loc_children[i][1]):
+                if inp[1] == loc_children[i][0]:
+                look_offset = loc_children[i][1]
+                break
+                else:
+                if object_visible(eeprom,loc_parent[1]):
+                if inp[1] == loc_parent[0]:
+                look_offset = loc_parent[1]
+                else:
+                print(s(eeprom,'DONTSEE'))
+                continue
+                if look_offset != 0xffff:
+                if (read_byte_field(eeprom,look_offset,'action_mask') & A_LOOK == 0):
+                name = read_string_field(eeprom,look_offset,'name')
+                print(s(eeprom,'CANTLOOK') + "{}".format(name))
+                continue
+                else:
+                desc = read_string_field(eeprom,look_offset,'desc')
+                print(desc)
+                continue
+                else:
+                invalid(eeprom)        
+            */
+            } else
+            if (data[0] == 'p'){
+            /*
+                 if len(inventory) >= 2:
+                 print(s(eeprom,'CARRYTWO'))
          
-             elif len(inp) < 2:
-             invalid(eeprom)
+                 elif len(inp) < 2:
+                 invalid(eeprom)
 
-             else:
-             obj_loc,obj_offset,obj_parent = name2loc(eeprom,loc,loc_offset,inp[1])
-             if obj_loc is None:
-             invalid(eeprom)
-             else:
-             obj_id   = read_byte_field(eeprom,obj_offset,'item_nr')
-             if obj_id != 0:
-             obj_name = read_string_field(eeprom,obj_offset,'name')
-             if [obj_id,obj_name] in inventory:
-             print(s(eeprom,'ALREADYCARRYING'))
-             else:
-             msg = check_action_permission(eeprom,obj_offset)
-             if msg != "":
-             print(msg)
-             continue
-             print(s(eeprom,'NOWCARRING') + "{}".format(obj_name))
-             inventory.append([obj_id,obj_name])
-             else:
-             invalid(eeprom)
-        */
-        } else
-        if (data[0] == 'd'){
-        /*
-            if len(inventory) == 0:
-            print(s(eeprom,'EMPTYHANDS'))
+                 else:
+                 obj_loc,obj_offset,obj_parent = name2loc(eeprom,loc,loc_offset,inp[1])
+                 if obj_loc is None:
+                 invalid(eeprom)
+                 else:
+                 obj_id   = read_byte_field(eeprom,obj_offset,'item_nr')
+                 if obj_id != 0:
+                 obj_name = read_string_field(eeprom,obj_offset,'name')
+                 if [obj_id,obj_name] in inventory:
+                 print(s(eeprom,'ALREADYCARRYING'))
+                 else:
+                 msg = check_action_permission(eeprom,obj_offset)
+                 if msg != "":
+                 print(msg)
+                 continue
+                 print(s(eeprom,'NOWCARRING') + "{}".format(obj_name))
+                 inventory.append([obj_id,obj_name])
+                 else:
+                 invalid(eeprom)
+            */
+            } else
+            if (data[0] == 'd'){
+            /*
+                if len(inventory) == 0:
+                print(s(eeprom,'EMPTYHANDS'))
         
-            elif len(inp) < 2:
-            invalid(eeprom)
+                elif len(inp) < 2:
+                invalid(eeprom)
 
-            else:
-            for i in range(len(inventory)):
-            if inp[1] in inventory[i][1].lower():
-            print(s(eeprom,'DROPPING') + "{}".format(inventory[i][1]))
-            print(s(eeprom,'RETURNING'))
-            del inventory[i]
-            break
-            else:
-            print(s(eeprom,'NOTCARRYING'))
-        */
-        } else
-        if (data[0] == 'i'){
-        /*
+                else:
+                for i in range(len(inventory)):
+                if inp[1] in inventory[i][1].lower():
+                print(s(eeprom,'DROPPING') + "{}".format(inventory[i][1]))
+                print(s(eeprom,'RETURNING'))
+                del inventory[i]
+                break
+                else:
+                print(s(eeprom,'NOTCARRYING'))
+            */
+            } else
+            if (data[0] == 'i'){
+            /*
         
-        */
-        } else
-        if ((data[0] == 't')||(data[0] == 'u')||(data[0] == 'g')){
-        /*
-            if len(inp) > 2 and inp[1] in exclude_words:
-            del(inp[1])
-            elif cmd == 'u' and len(inp) > 2 and inp[2] in exclude_words:
-            del(inp[2])
+            */
+            } else
+            if ((data[0] == 't')||(data[0] == 'u')||(data[0] == 'g')){
+            /*
+                if len(inp) > 2 and inp[1] in exclude_words:
+                del(inp[1])
+                elif cmd == 'u' and len(inp) > 2 and inp[2] in exclude_words:
+                del(inp[2])
 
-            if len(inp) < 2:
-            invalid(eeprom)
-            else:
-            item = 0
-            if len(inp) == 2:
-            obj  = inp[1]
-            elif len(inp) >= 3:
-            obj  = inp[2]
-            for i in range(len(inventory)):
-            if inp[1] in inventory[i][1].lower():
-            item = inventory[i][0]
-            break
-            if item == 0:
-            print(s(eeprom,'NOTCARRYING'))
-            continue
+                if len(inp) < 2:
+                invalid(eeprom)
+                else:
+                item = 0
+                if len(inp) == 2:
+                obj  = inp[1]
+                elif len(inp) >= 3:
+                obj  = inp[2]
+                for i in range(len(inventory)):
+                if inp[1] in inventory[i][1].lower():
+                item = inventory[i][0]
+                break
+                if item == 0:
+                print(s(eeprom,'NOTCARRYING'))
+                continue
 
-            obj_loc,obj_offset,obj_parent = name2loc(eeprom,loc,loc_offset,obj)
-            if obj_loc is None:
-            print(s(eeprom,'NOSUCHOBJECT'))
-            continue
-            else:
-            obj_action_mask = read_byte_field(eeprom,obj_offset,'action_mask')
-            if cmd == 't' and (obj_action_mask & A_TALK == 0):
-            print(s(eeprom,'WHYTALK') + "{}".format(read_string_field(eeprom,obj_offset,'name')))
-            continue
-            elif cmd == 'u' and (obj_action_mask & A_USE == 0):
-            print(s(eeprom,'CANTUSE'))
-            continue
-            elif cmd == 'u' and item != 0 and read_byte_field(eeprom,obj_offset,'action_item') != item:
-            print(s(eeprom,'CANTUSEITEM'))
-            continue
-            elif cmd == 'g' and item != 0 and read_byte_field(eeprom,obj_offset,'action_item') != item:
-            print(s(eeprom,'CANTGIVE'))
-            continue
-            else:
-            msg = check_action_permission(eeprom,obj_offset)
-            if msg != "":
-            print(msg)
-            continue
+                obj_loc,obj_offset,obj_parent = name2loc(eeprom,loc,loc_offset,obj)
+                if obj_loc is None:
+                print(s(eeprom,'NOSUCHOBJECT'))
+                continue
+                else:
+                obj_action_mask = read_byte_field(eeprom,obj_offset,'action_mask')
+                if cmd == 't' and (obj_action_mask & A_TALK == 0):
+                print(s(eeprom,'WHYTALK') + "{}".format(read_string_field(eeprom,obj_offset,'name')))
+                continue
+                elif cmd == 'u' and (obj_action_mask & A_USE == 0):
+                print(s(eeprom,'CANTUSE'))
+                continue
+                elif cmd == 'u' and item != 0 and read_byte_field(eeprom,obj_offset,'action_item') != item:
+                print(s(eeprom,'CANTUSEITEM'))
+                continue
+                elif cmd == 'g' and item != 0 and read_byte_field(eeprom,obj_offset,'action_item') != item:
+                print(s(eeprom,'CANTGIVE'))
+                continue
+                else:
+                msg = check_action_permission(eeprom,obj_offset)
+                if msg != "":
+                print(msg)
+                continue
 
-            request = read_string_field(eeprom,obj_offset,'action_str1')
-            if len(request) == 1:
-            if request == '1':
-            print("Special game/challenge 1")
-            elif request == '2':
-            print("Special game/challenge 2")
-            else:
-            print("Undefined challenge!")
-            continue
-            elif len(request) > 1:
-            print("{}".format(request))
-            response = input(s(eeprom,'RESPONSE'))
-            if unify(read_string_field(eeprom,obj_offset,'action_str2')) != unify(response):
-            print(s(eeprom,'INCORRECT'))
-            continue
-            update_state(read_byte_field(eeprom,obj_offset,'action_state'))
-            print("{}".format(read_string_field(eeprom,obj_offset,'action_msg')))          
-        */
-        } else {
-            //No clue...
-            data[0] = 0;
+                request = read_string_field(eeprom,obj_offset,'action_str1')
+                if len(request) == 1:
+                if request == '1':
+                print("Special game/challenge 1")
+                elif request == '2':
+                print("Special game/challenge 2")
+                else:
+                print("Undefined challenge!")
+                continue
+                elif len(request) > 1:
+                print("{}".format(request))
+                response = input(s(eeprom,'RESPONSE'))
+                if unify(read_string_field(eeprom,obj_offset,'action_str2')) != unify(response):
+                print(s(eeprom,'INCORRECT'))
+                continue
+                update_state(read_byte_field(eeprom,obj_offset,'action_state'))
+                print("{}".format(read_string_field(eeprom,obj_offset,'action_msg')))          
+            */
+            } else {
+        
+                //No clue, no valid input...
+                
+            }
         }
     }
 }

@@ -46,10 +46,8 @@
     //Action constants
     enum {ENTER = 1, OPEN = 2, LOOK = 4, TALK = 8, USE = 16};
 
-    //
-    #define PROMPT          1
-    #define SPACE           2
-    #define CR_2            3
+    //Extra text additions constants
+    enum {PROMPT = 1, SPACE, CR_1, CR_2};
 
     //
     #define MAX_OBJ_DEPTH   32

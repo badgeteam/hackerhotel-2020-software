@@ -460,9 +460,7 @@ void Reset(){
 void GenerateAudio(){
     //Test audio play, play a rainstorm with howling wind.
     static uint8_t storm[7]={0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0};
-
     auRepAddr = &storm[0];
-    auVolume = 127;
 
     //Noise is to be generated fast, outside of buttonMark loop
     for (uint8_t x=1; x<6; ++x){
@@ -471,7 +469,7 @@ void GenerateAudio(){
 
     if (buttonMark){
         //"Floating" speed for howl (and noise, but that's hardly audible)
-        floatSpeed(6, 0x0300, 0x0700);
+        floatSpeed(5, 0x0300, 0x0500);
             
         //"Floating" volume and wind howl during 8 bit rainstorm needs some randomness
         auVolume = floatAround(auVolume, 2, 0x10, 0xA0);
