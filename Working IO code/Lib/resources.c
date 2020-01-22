@@ -455,6 +455,9 @@ void Reset(){
     else if (id == 1) WriteStatusBit(111, 1);
     else if (id == 2) WriteStatusBit(112, 1);
     else if (id == 3) WriteStatusBit(113, 1);
+
+    //Write bit 0, must always be 1!
+    WriteStatusBit(0, 1);
 }
 
 void GenerateAudio(){

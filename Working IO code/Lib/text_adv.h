@@ -47,7 +47,7 @@
     enum {ENTER = 1, OPEN = 2, LOOK = 4, TALK = 8, USE = 16};
 
     //Extra text additions constants
-    enum {PROMPT = 1, SPACE, CR_1, CR_2};
+    enum {PROMPT = 1, SPACE, CR_1, CR_2, LOCATION};
 
     //
     #define MAX_OBJ_DEPTH   32

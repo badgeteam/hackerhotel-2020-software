@@ -247,13 +247,15 @@ uint8_t CheckSend(){
     //Check if prompt needs to be sent afterward or something else
     } else if (serTxDone&&sendPrompt) {
         if (sendPrompt == PROMPT){
-            SendLiteral(A_PROMPT, L_PROMPT, 1);
+            SendLiteral(A_PROMPT, L_PROMPT, 2);
         } else if (sendPrompt == SPACE){
             SendLiteral(A_SPACE, L_SPACE, 0);
         } else if (sendPrompt == CR_1){
             SendLiteral(0, 0, 1);
         } else if (sendPrompt == CR_2){
             SendLiteral(0, 0, 2);
+        } else if (sendPrompt == LOCATION){
+            SendLiteral(A_LOCATION, L_LOCATION, 0);
         }
         sendPrompt=0;
     } else if (serTxDone) return 0; //All is sent!
@@ -311,7 +313,7 @@ uint8_t CheckInput(uint8_t *data){
 }
 
 //The game logic!
-void ProcessInput(uint8_t *data){
+uint8_t ProcessInput(uint8_t *data){
 //    enum {NAME, DESC, ACTION_STR1, ACTION_STR2, OPEN_ACL_MSG, ACTION_ACL_MSG, ACTION_MSG};
     static object_model_t currObj, actObj1, actObj2;
     static uint16_t route[MAX_OBJ_DEPTH] = {0};
@@ -343,8 +345,7 @@ void ProcessInput(uint8_t *data){
 
             toSend = 0;
             reactStr[1][0]=0;
-            reactStr[2][0]=CR_1;
-            actionList = 1;
+            reactStr[2][0]=CR_2;
 
             if (data[0] == 'x'){
 
@@ -370,11 +371,11 @@ void ProcessInput(uint8_t *data){
                 }
             } 
         
-            else if ((data[0] == 'e')||(data[0] == 'o')){
+            else if ((data[0] == 'e')||(data[0] == 'o')) {
                 
                 //Not possible, too many/little characters
                 if (inputLen != 2){
-                    PrepareSending(A_NOTPOSSIBLE, L_NOTPOSSIBLE, TEASER, PROMPT);
+                    PrepareSending(A_NOTPOSSIBLE, L_NOTPOSSIBLE, TEASER, CR_2);
                 } else {
                     uint8_t canDo = 0;
                     route[currDepth+1] = FindChild(route[currDepth], data[1]);
@@ -382,53 +383,52 @@ void ProcessInput(uint8_t *data){
                     //Child found?
                     if (route[currDepth+1]) {
                         PopulateObject(route[currDepth+1], &actObj1);
-
-                    //Maybe a step back, letter ok?
+                        canDo = 1;
+                    //No child, maybe a step back, letter ok?
                     } else if (currDepth) {
-                        PopulateObject(route[currDepth+1], &actObj1);
+                        PopulateObject(route[currDepth-1], &actObj1);
                         if (CheckLetter(actObj1.addrStr[NAME], data[1])) {
-                                   
+                            canDo = 1; 
                         }
                     }
-                }
-            /*
-                    enter_offset = 0xffff
-                    for i in range(len(loc_children)):
-                    if object_visible(eeprom,loc_children[i][1]):
-                    if inp[1] == loc_children[i][0]:
-                    enter_offset = loc_children[i][1]
-                    break
-                    else:
-                    if object_visible(eeprom,loc_parent[1]):
-                    if inp[1] == loc_parent[0]:
-                    enter_offset = loc_parent[1]
 
-                    if enter_offset != 0xffff:
-                    enter_action_mask = read_byte_field(eeprom,enter_offset,'action_mask')
-                    if cmd == 'e' and (enter_action_mask & A_ENTER == 0):
-                    print(s(eeprom,'CANTENTER'))
-                    continue
-                    elif cmd == 'o' and (enter_action_mask & A_OPEN == 0):
-                    print(s(eeprom,'CANTOPEN'))
-                    continue
-                    msg = check_open_permission(eeprom,enter_offset)
-                    if msg != "":
-                    print(msg)
-                    continue
-                    else:
-                    if enter_offset != loc_parent[1]:
-                    loc.append(i)
-                    else:
-                    del(loc[-1])
-                    loc_offset,loc_action_mask,loc_children,loc_parent = loc2offset(eeprom,loc)
-                    current_effects = read_byte_field(eeprom,loc_offset,'effects')
-                    continue
-                else:
-                print(s(eeprom,'DONTSEE'))
-            */
-        
+                    //The candidate is found! Let's check if the action is legit
+                    if (canDo) {
+                        uint8_t bEnter = (data[0] == 'e');
+                        if ((actObj1.byteField[ACTION_ACL]&(bEnter?ENTER:OPEN))==0) {
+                            PrepareSending(bEnter?A_CANTENTER:A_CANTOPEN, bEnter?L_CANTENTER:L_CANTOPEN, TEASER, CR_2);
+                        
+                        //Action legit, permission granted?
+                        } else if (CheckState(actObj1.byteField[OPEN_ACL])) {
+                            
+                            //Yes! Check if we must move forward or backwards.
+                            if (route[currDepth+1]) ++currDepth; else --currDepth;
+                            PopulateObject(route[currDepth], &currObj);
+                            effect = currObj.byteField[EFFECTS];
+
+                        //Not granted!
+                        } else {
+                            route[currDepth+1] = 0;
+                        }
+
+                    //No candidate
+                    } else {
+                        PrepareSending(A_DONTSEE, L_DONTSEE, TEASER, CR_2);
+                    }
+                }
+
+                //Show current location
+                reactStr[1][1]=0;
+                reactStr[2][1]=LOCATION;
+                reactStr[1][2]=0;
+                reactStr[2][2]=SPACE;
+                reactStr[0][3]=currObj.addrStr[NAME];
+                reactStr[1][3]=currObj.lenStr[NAME];
+                reactStr[2][3]=PROMPT;
+                actionList = 3;
+
             } else
-            if (data[0] == 'l'){
+            if (data[0] == 'l') {
             /*
                 if len(inp) == 1:
                 print(read_string_field(eeprom,loc_offset,'desc'))
@@ -486,7 +486,7 @@ void ProcessInput(uint8_t *data){
                 invalid(eeprom)        
             */
             } else
-            if (data[0] == 'p'){
+            if (data[0] == 'p') {
             /*
                  if len(inventory) >= 2:
                  print(s(eeprom,'CARRYTWO'))
@@ -515,7 +515,7 @@ void ProcessInput(uint8_t *data){
                  invalid(eeprom)
             */
             } else
-            if (data[0] == 'd'){
+            if (data[0] == 'd') {
             /*
                 if len(inventory) == 0:
                 print(s(eeprom,'EMPTYHANDS'))
@@ -534,12 +534,12 @@ void ProcessInput(uint8_t *data){
                 print(s(eeprom,'NOTCARRYING'))
             */
             } else
-            if (data[0] == 'i'){
+            if (data[0] == 'i') {
             /*
         
             */
             } else
-            if ((data[0] == 't')||(data[0] == 'u')||(data[0] == 'g')){
+            if ((data[0] == 't')||(data[0] == 'u')||(data[0] == 'g')) {
             /*
                 if len(inp) > 2 and inp[1] in exclude_words:
                 del(inp[1])
@@ -606,11 +606,17 @@ void ProcessInput(uint8_t *data){
             */
             } else {
         
-                //No clue, no valid input...
+                ;//No clue, no valid input...
                 
             }
+            
+            //Input handled
+            //data[0] = 0;
+            serRxDone = 0;
+            RXCNT = 0;
         }
     }
+    return 0;
 }
 
 
