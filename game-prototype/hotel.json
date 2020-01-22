@@ -16,10 +16,10 @@
           "The [E]levator" : {
             "desc" : "The elevator will take you to any floor you like",
             "action_mask" : 21,
-            "action_acl" : 2,
+            "action_acl" : 10,
             "action_acl_msg" : "You don't have a VIP keycard, access denied",
             "action_item" : 2,
-            "action_state" : 3,
+            "action_state" : 11,
             "state_desc" : "VIP access to second floor granted.",
             "action_msg" : "VIP access to second floor granted.",
             "o" : {
@@ -30,7 +30,43 @@
                 "open_acl_msg" : "Access to this floor is for hotel guests only!",
                 "o" : {
                   "Room 10[1]" : {
-                    "action_mask" : 1
+                    "open_acl" : 2,
+                    "open_acl_msg" : "The door is locked, please use your keycard to unlock the door",
+                    "action_mask" : 17,
+                    "desc" : "This is room 101, your hotel room during Hacker Hotel 2020. You travelled a whole day \nto get to the event. You decide to chill out for a while.",
+                    "action_item" : 1,
+                    "action_state" : 2,
+                    "action_msg" : "You unlocked room 101",
+                    "state_desc" : "You unlocked room 101",
+                    "o" : {
+                      "[M]inibar" : {
+                        "desc" : "How nice, the room has a minibar. You can use a drink.",
+                        "action_mask" : 20,
+                        "action_acl" : 131,
+                        "action_acl_msg" : "The minibar is empty !?!",
+                        "action_msg" : "You drank two beers from the minibar. You feel like getting another beer.",
+                        "action_state" : 3,
+                        "state_desc" : "drank from the minibar, still thirsty"
+                      }
+                    }
+                  },
+                  "Room 10[2]" : {
+                    "action_mask" : 1,
+                    "desc" : "This is room 102",
+                    "open_acl" : 30,
+                    "open_acl_msg" : "The door is locked, please use your keycard to unlock the door"
+                  },
+                  "Room 10[3]" : {
+                    "action_mask" : 0,
+                    "desc" : "This is room 103",
+                    "open_acl" : 30,
+                    "open_acl_msg" : "The door is locked, please use your keycard to unlock the door"
+                  },
+                  "Room 10[4]" : {
+                    "action_mask" : 0,
+                    "desc" : "This is room 104",
+                    "open_acl" : 30,
+                    "open_acl_msg" : "The door is locked, please use your keycard to unlock the door"
                   }
                 }
               },
@@ -54,21 +90,22 @@
             }
           },
           "The [B]ar" : {
-            "desc" : "This is the hotel bar",
+            "desc" : "This looks like a standard laptop. Nothing special except the two barcode \nstickers on the back of the laptop:\n\nSticker 1     █▐ ▌ ▐ █  ▌▌ ▐▐▌▐ ▌█  ▌▐ ██▐ ██▐ ▌█ ▌ ▐ ▌▐█▌█  ▌▌▐▌ █▌▌█     \n\nSticker 2     █▐ ▌ ▐▌██▐▌█ █▌▐▐▐▌ █????? ▐ ▌██ █▌█ ▐▐▐▌ ▌ █ ▐█▐▐▌     \n\nAs you can see, sticker 2 is a little damaged.",
             "action_mask" : 5,
             "o" : {
-              "[K]eycard" : {
-                "desc" : "This looks like a VIP keycard",
+              "[V]IP guest" : {
+                "desc" : "This guest looks posh, I bet she is a VIP. Now wait, is that her keycard\nlying on the bar?",
+                "visible_acl" : 3,
                 "action_mask" : 20,
                 "action_item" : 1,
-                "action_msg" : "You succesfully copied the VIP keycard",
+                "action_msg" : "You succesfully copied the VIPs keycard",
                 "action_msg_effects" : 66,
-                "action_state" : 2,
-                "state_desc" : "VIP keycard obtained"
+                "action_state" : 10,
+                "state_desc" : "Copied the VIPs keycard"
               },
               "Keycard-[C]opy" : {
-                "desc" : "A copy of the VIP keycard",
-                "visible_acl" : 2,
+                "desc" : "A brand new copy of the VIP keycard",
+                "visible_acl" : 10,
                 "action_mask" : 20,
                 "item_nr" : 2
               }
@@ -81,11 +118,11 @@
               "[P]roxmark III" : {
                 "name" : "",
                 "desc" : "The Proxmark is an RFID swiss-army tool, allowing for both high and low level interactions with the vast majority of RFID tags and systems world-wide.",
+                "action_mask" : 20,
                 "action_acl" : 4,
                 "action_acl_msg" : "You need some money to buy the Proxmark III",
                 "action_acl_state" : 132,
-                "action_msg" : "You paid",
-                "action_mask" : 20,
+                "action_msg" : "You bought the Proxmark III",
                 "item_nr" : 1
               },
               "[W]ine" : {
@@ -111,19 +148,107 @@
             }
           },
           "The [R]eception" : {
-            "desc" : "Testing look!",
+            "desc" : "The reception does resemble the Hacket Hotel reception quite remarkably.\nEven the picture frame of 'The Bangles' looks the same.",
             "action_mask" : 1,
             "o" : {
               "The [R]eceptionist" : {
-                "desc" : "She seems friendly",
-                "action_acl" : 2,
-                "action_acl_msg" : "I'm sorry sir, I'm only allowed to check out VIP guests.",
+                "desc" : "The receptionist looks friendly!",
                 "action_mask" : 12,
-                "action_str1" : "Here you go Sir, everything is settled.",
-                "action_str2" : "Thank You",
-                "action_msg" : "You successfully checked out",
-                "action_state" : 127,
-                "state_desc" : "You are now allowed to leave the hotel"
+                "action_msg" : "\"Hello, Can I check in please?\"\n\n\"Welcome to Hotel Pyramid and thank you for choosing us during your stay at \nHacker Hotel 2020. I have checked you in, here is your keycard. Your room \nnumber is 101, located on the 1st floor.\"",
+                "action_state" : 1,
+                "state_desc" : "checked in"
+              },
+              "[P]icture frame" : {
+                "desc" : "That's strange, I did not see this picture frame before. And why would anyone draw hieroglyphs on a \nscreenshot of an eighties music video and hang it on the wall???",
+                "visible_acl" : 0,
+                "action_mask" : 20,
+                "action_msg" : "You're all set, please \"walk like an Egyptian\" in the Reception.",
+                "action_state" : 119,
+                "state_desc" : "Ready to play magnetic maze!"
+              },
+              "The [D]ungeon" : {
+                "desc" : "Your light is blinding me so I can't see much as it is very dark in the Dungeon.\nPlease get into a dark area so my eyes can adjust to these poor light conditions.",
+                "action_mask" : 1,
+                "visible_acl" : 3,
+                "open_acl" : 120,
+                "open_acl_msg" : "Only people who can walk like an Egyptian are allowed to enter the dungeon. Please\n\"Walk like an Egyptian\" first to gain access to the dungeon!",
+                "o" : {
+                  "[G]uard" : {
+                    "desc" : "There is a guard near the tunnel",
+                    "visible_acl" : 110,
+                    "action_mask" : 12,
+                    "action_acl" : 124,
+                    "action_acl_msg" : "Access to the tunnel can only be granted to a group\nof 4 people, each bringing one of the 4 elements.",
+                    "action_msg" : "Make sure your offering is perfect, otherwise the High Priest will\nnot trust you and rejects access to the secret Pyramid.\n\nHere are your personal hints:\n\n* Khonsu will offer Incense\n* The one who kneels 3 times will bring element Water.\n"
+                  },
+                  "[G]uard " : {
+                    "desc" : "There is a guard near the tunnel",
+                    "visible_acl" : 111,
+                    "action_mask" : 12,
+                    "action_acl" : 124,
+                    "action_acl_msg" : "Access to the tunnel can only be granted to a group\nof 4 people, each bringing one of the 4 elements.",
+                    "action_msg" : "Make sure your offering is perfect, otherwise the High Priest will\nnot trust you and rejects access to the secret Pyramid.\n\nHere are your personal hints:\n\n* Khonsu will kneel more than once.\n* The one who offers Incense will bring element Fire.\n"
+                  },
+                  "[G]uard   " : {
+                    "desc" : "There is a guard near the tunnel",
+                    "visible_acl" : 112,
+                    "action_mask" : 12,
+                    "action_acl" : 124,
+                    "action_acl_msg" : "Access to the tunnel can only be granted to a group\nof 4 people, each bringing one of the 4 elements.",
+                    "action_msg" : "Make sure your offering is perfect, otherwise the High Priest will\nnot trust you and rejects access to the secret Pyramid.\n\nHere are your personal hints:\n\n* Bes will bring element Air\n* Anubis will be kneeling once more than the one bringing element Earth\n"
+                  },
+                  "[G]uard  " : {
+                    "desc" : "There is a guard near the tunnel",
+                    "visible_acl" : 113,
+                    "action_mask" : 12,
+                    "action_acl" : 124,
+                    "action_acl_msg" : "Access to the tunnel can only be granted to a group\nof 4 people, each bringing one of the 4 elements.",
+                    "action_msg" : "Make sure your offering is perfect, otherwise the High Priest will\nnot trust you and rejects access to the secret Pyramid.\n\nHere are your personal hints:\n\n* Anubis will bring a Robe as offering, he will not kneel 2 times.\n* The one bringing the element Air will offer something other than Fruit\n"
+                  },
+                  "[T]unnel" : {
+                    "desc" : "A dark and long tunnel that leads to the Pyramid",
+                    "effects" : 0,
+                    "visible_acl" : 116,
+                    "action_mask" : 5,
+                    "open_acl" : 32,
+                    "open_acl_msg" : "The tunnel is closed, only the priest can tell the guard to let you in.",
+                    "o" : {}
+                  },
+                  "Papyrus [R]oll" : {
+                    "desc" : "Please follow these instructions carefully if you want\nto enter the tunnel. The guard is very picky on who he lets\nthrough. \n\nYou can only enter the tunnel with 4 people at\nthe same time. Each person must choose the correct\noffering (wine, fruit, robe or incense) and kneel the \nright amount of times (1, 2, 3 or 4 times).\n\nLast, but certainly not least, you must all bring one of the\nfour elements of nature (earth, air, fire or water).\n\nGood luck!\n",
+                    "visible_acl" : 116,
+                    "action_mask" : 4
+                  },
+                  "High [P]riest" : {
+                    "desc" : "The high priest is standing at the altar where you have placed your offering.",
+                    "visible_acl" : 31,
+                    "action_mask" : 12,
+                    "action_str1" : "In order to allow you access to the secret Pyramid, you need\nto work together. Please give me the sum of all of your\npersonal access-codes.",
+                    "action_str2" : "3844451",
+                    "action_msg" : "It is good to see a group work so well together, I have ordered\nthe guard to open the tunnel for you!",
+                    "action_state" : 32,
+                    "state_desc" : "The priest allows access to the tunnel"
+                  },
+                  "[A]ltar" : {
+                    "desc" : "The offering altar is where you can place your offerings to the high priest.",
+                    "effects" : 0,
+                    "visible_acl" : 116,
+                    "action_mask" : 20,
+                    "action_str1" : "1",
+                    "action_str2" : "",
+                    "action_msg" : "",
+                    "action_state" : 31,
+                    "state_desc" : "The offer made the High Priest visible"
+                  }
+                }
+              },
+              "[K]eycard" : {
+                "desc" : "You key to room 101",
+                "visible_acl" : 1,
+                "action_mask" : 20,
+                "action_state" : 10,
+                "state_desc" : "Copied the VIP keycard",
+                "item_nr" : 1
               }
             }
           },
@@ -136,85 +261,18 @@
             "action_acl_msg" : "Please play fair and don't use the ATM so often!",
             "action_acl_msg_effects" : 33,
             "action_state" : 4,
-            "state_desc" : "You have withdrawn $100"
-          },
-          "The [D]ungeon" : {
-            "desc" : "Your light is blinding me so I can't see much, please get into a dark area so my eyes can adjust.",
-            "action_mask" : 1,
-            "visible_acl" : 3,
-            "open_acl" : 3,
-            "open_acl_msg" : "",
-            "o" : {
-              "[G]uard" : {
-                "desc" : "There is a guard near the tunnel",
-                "visible_acl" : 110,
-                "action_mask" : 12,
-                "action_acl" : 124,
-                "action_acl_msg" : "Access to the tunnel can only be granted to a group\nof 4 people, each bringing one of the 4 elements.",
-                "action_msg" : "Make sure your offering is perfect, otherwise the High Priest will\nnot trust you and rejects access to the secret Pyramid.\n\nHere are your personal hints:\n\n* Khonsu will offer Incense\n* The one who kneels 3 times will bring element Water.\n"
-              },
-              "[G]uard " : {
-                "desc" : "There is a guard near the tunnel",
-                "visible_acl" : 111,
-                "action_mask" : 12,
-                "action_acl" : 124,
-                "action_acl_msg" : "Access to the tunnel can only be granted to a group\nof 4 people, each bringing one of the 4 elements.",
-                "action_msg" : "Make sure your offering is perfect, otherwise the High Priest will\nnot trust you and rejects access to the secret Pyramid.\n\nHere are your personal hints:\n\n* Khonsu will kneel more than once.\n* The one who offers Incense will bring element Fire.\n"
-              },
-              "[G]uard   " : {
-                "desc" : "There is a guard near the tunnel",
-                "visible_acl" : 112,
-                "action_mask" : 12,
-                "action_acl" : 124,
-                "action_acl_msg" : "Access to the tunnel can only be granted to a group\nof 4 people, each bringing one of the 4 elements.",
-                "action_msg" : "Make sure your offering is perfect, otherwise the High Priest will\nnot trust you and rejects access to the secret Pyramid.\n\nHere are your personal hints:\n\n* Bes will bring element Air\n* Anubis will be kneeling once more than the one bringing element Earth\n"
-              },
-              "[G]uard  " : {
-                "desc" : "There is a guard near the tunnel",
-                "visible_acl" : 113,
-                "action_mask" : 12,
-                "action_acl" : 124,
-                "action_acl_msg" : "Access to the tunnel can only be granted to a group\nof 4 people, each bringing one of the 4 elements.",
-                "action_msg" : "Make sure your offering is perfect, otherwise the High Priest will\nnot trust you and rejects access to the secret Pyramid.\n\nHere are your personal hints:\n\n* Anubis will bring a Robe as offering, he will not kneel 2 times.\n* The one bringing the element Air will offer something other than Fruit\n"
-              },
-              "[T]unnel" : {
-                "desc" : "A dark and long tunnel that leads to the Pyramid",
-                "effects" : 0,
-                "visible_acl" : 116,
-                "action_mask" : 5,
-                "open_acl" : 32,
-                "open_acl_msg" : "The tunnel is closed, only the priest can tell the guard to let you in.",
-                "o" : {}
-              },
-              "Papyrus [R]oll" : {
-                "desc" : "Please follow these instructions carefully if you want\nto enter the tunnel. The guard is very picky on who he lets\nthrough. \n\nYou can only enter the tunnel with 4 people at\nthe same time. Each person must choose the correct\noffering (wine, fruit, robe or incense) and kneel the \nright amount of times (1, 2, 3 or 4 times).\n\nLast, but certainly not least, you must all bring one of the\nfour elements of nature (earth, air, fire or water).\n\nGood luck!\n",
-                "visible_acl" : 116,
-                "action_mask" : 4
-              },
-              "High [P]riest" : {
-                "desc" : "The high priest is standing at the altar where you have placed your offering.",
-                "visible_acl" : 31,
-                "action_mask" : 12,
-                "action_str1" : "In order to allow you access to the secret Pyramid, you need\nto work together. Please give me the sum of all of your\npersonal access-codes.",
-                "action_str2" : "3844451",
-                "action_msg" : "It is good to see a group work so well together, I have ordered\nthe guard to open the tunnel for you!",
-                "action_state" : 32,
-                "state_desc" : "The priest allows access to the tunnel"
-              },
-              "[A]ltar" : {
-                "desc" : "The offering altar is where you can place your offerings to the high priest.",
-                "effects" : 0,
-                "visible_acl" : 116,
-                "action_mask" : 20,
-                "action_str1" : "1",
-                "action_str2" : "",
-                "action_msg" : "",
-                "action_state" : 31,
-                "state_desc" : "The offer made the High Priest visible"
-              }
-            }
+            "state_desc" : "You have withdrawn $100 from the ATM"
           }
         }
+      },
+      "[M]inibar" : {
+        "desc" : "How nice, the room has a minibar. You can use a drink.",
+        "action_mask" : 20,
+        "action_acl" : 130,
+        "action_acl_msg" : "The minibar is empty !?!",
+        "action_msg" : "You drank two beers from the minibar. You feel like getting another beer.",
+        "action_state" : 2,
+        "state_desc" : "drank from the minibar, still thirsty"
       }
     }
   },

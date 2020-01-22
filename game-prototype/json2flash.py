@@ -52,16 +52,18 @@ def show_eeprom(data):
 
         for i in range(len(string_fields)):
             start_offset = offset
-            s = ""
+            b = bytearray(0)
             while True:
                 l = read_byte(data,offset)
-                s = s + read_range(data,offset+1,l).decode()
+                b = b + read_range(data,offset+1,l)
                 offset = offset + 1 + l
                 if l != 255:
                     break
             if i >= string_fields.index('open_acl_msg'):
-                if len(s) > 0:
-                    s = effects(ord(s[0])) + s[1:]
+                if len(b) > 0:
+                    s = effects(b[0]) + b[1:].decode()
+            else:
+                s = b.decode()
 
             print("0x{0:04X} {4:} Level {1:}, {2:}={3:}".format(start_offset,level,string_fields[i],s,"  "*level))
 
@@ -102,26 +104,25 @@ def convert_json_to_eeprom(objects,offset=0):
 
         for i in range(1,len(string_fields)):   # skip first string field (name), as it has been processed already
             f = string_fields[i]
+            b = bytearray(0)
             if f in obj:
                 # If needed, start with sound/LED effects in the string
                 if i >= string_fields.index('open_acl_msg'):
                     e = string_fields[i] + "_effects"
                     if e in obj:
-                        s = chr(obj[e])
+                        b.append(obj[e])
                     else:
-                        s = chr(0)
-                else:
-                    s = ""
-                s = s + obj[f]
+                        b.append(0)
+                b.extend(obj[f].encode('utf8'))
                         
-                while len(s) >= 255:
+                while len(b) >= 255:
                     binary.append(255)
-                    binary.extend(s[:255].encode('utf8'))
+                    binary.extend(b[:255])
                     l = l + 256
-                    s = s[255:]
-                binary.append(len(s))
-                binary.extend(s.encode('utf8'))
-                l = l + 1 + len(s)
+                    b = b[255:]
+                binary.append(len(b))
+                binary.extend(b)
+                l = l + 1 + len(b)
             else:
                 binary.append(0x00)
                 l = l + 1

@@ -18,6 +18,7 @@ d <i>       drop item <i>\n\
 i           list items you are carrying\n\
 t <p>       talk to "person" <p>\n\
 g <i> <p>   give item <i> to person <p>\n\
+r <o>       read object <o>\n\
 u <o>       use object <o>\n\
 u <i> <o>   use item <i> on object <o>\n\
 \n\
@@ -40,6 +41,7 @@ the Reception.',
 'NOSUCHPERSON':'No such person here.',
 'WHYTALK':'Why are you trying to talk to ',
 'CANTUSE':'You can\'t use this object.',
+'CANTREAD':'You can\'t read this object.',
 'CANTUSEITEM':'You can\'t use this item on this object.',
 'RESPONSE':'(your response) ? ',
 'INCORRECT':'That is incorrect!',

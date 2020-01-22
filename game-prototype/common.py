@@ -90,8 +90,9 @@ def effects(e):
 A_ENTER =  1   # allowed to enter an object (room, elevator, etc)          NB: ENTER and OPEN are mutually exclusive !!!
 A_OPEN  =  2   # allowed to open an object (closet, drawer, etc)           NB: ENTER and OPEN are mutually exclusive !!!
 A_LOOK  =  4   # allowed to look at an object from the parent
-A_TALK  =  8   # allowed to talk to an object (barman, receptionist, etc)  NB: TALK and USE are mutually exclusive !!!
-A_USE   = 16   # allowed to use an object (like computer, knife, etc)      NB: TALK and USE are mutually exclusive !!!
+A_TALK  =  8   # allowed to talk to an object (barman, receptionist, etc)  NB: TALK, USE and READ are mutually exclusive !!!
+A_USE   = 16   # allowed to use an object (like computer, knife, etc)      NB: TALK, USE and READ are mutually exclusive !!!
+A_READ  = 32   # allowed to read an object (like computer, knife, etc)      NB: TALK, USE and READ are mutually exclusive !!!
 
 max_object_depth = 32
 max_items        = 64
@@ -259,13 +260,13 @@ def show_help(eeprom):
 
 def who_am_i(eeprom):
     if check_state(110):
-        name_offset,name_length = lit_offsets['Anubis']
+        name_offset,name_length = lit_offsets['ANUBIS']
     elif check_state(111):
-        name_offset,name_length = lit_offsets['Bes']
+        name_offset,name_length = lit_offsets['BES']
     elif check_state(112):
-        name_offset,name_length = lit_offsets['Khonsu']
+        name_offset,name_length = lit_offsets['KHONSU']
     elif check_state(113):
-        name_offset,name_length = lit_offsets['Thoth']
+        name_offset,name_length = lit_offsets['THOTH']
     else:
         printf(s(eeprom,'ERROR'))
         return
@@ -336,11 +337,11 @@ def update_state(num):
     return
 
 def check_state(state_num):
-    if state_num & status_bits == 0:
+    if (state_num & status_bits) == 0:
         needed = True
     else:
         needed = False
-    return get_state(state_num & (status_bits - 1)) == needed
+    return (get_state(state_num & (status_bits - 1)) == needed)
 
 def check_open_permission(eeprom,offset):
     if check_state(read_byte_field(eeprom,offset,'open_acl')):
@@ -429,7 +430,7 @@ def print_summary(eeprom,loc,current_loc,offset,inventory):
 
     acl = read_byte_field(eeprom,offset,'visible_acl')
     if acl != 0:
-        if get_state(acl):
+        if check_state(acl):
             c = color.GREEN
         else:
             c = color.RED
@@ -439,7 +440,7 @@ def print_summary(eeprom,loc,current_loc,offset,inventory):
 
     acl = read_byte_field(eeprom,offset,'open_acl')
     if acl != 0:
-        if get_state(acl):
+        if check_state(acl):
             c = color.GREEN
         else:
             c = color.RED
@@ -451,7 +452,7 @@ def print_summary(eeprom,loc,current_loc,offset,inventory):
     action_str = "ACT:"
     acl = read_byte_field(eeprom,offset,'action_acl')
     if acl != 0:
-        if get_state(acl):
+        if check_state(acl):
             c = color.GREEN
         else:
             c = color.RED
@@ -468,7 +469,7 @@ def print_summary(eeprom,loc,current_loc,offset,inventory):
         action_str += "{}{}I{}{}".format(sep,c,item,color.BLACK)
     state = read_byte_field(eeprom,offset,'action_state')
     if state != 0:
-        if get_state(state):
+        if check_state(state):
             c = color.GREEN
         else:
             c = color.RED

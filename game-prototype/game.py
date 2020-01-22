@@ -245,7 +245,7 @@ while True:
                 print(s(eeprom,'DONTSEE'))
 
 
-    elif cmd == 't' or cmd == 'u' or cmd == 'g':
+    elif cmd == 't' or cmd == 'u' or cmd == 'g' or cmd == 'r':
         if len(inp) < 2 or len(inp)>3:
             invalid(eeprom)
         else:
@@ -274,7 +274,7 @@ while True:
                         obj_offset = loc_parent[1]
 
             if obj_offset == 0xffff:
-                if cmd == 'u':
+                if cmd == 'u' or cmd == 'r':
                     print(s(eeprom,'NOSUCHOBJECT'))
                 else:
                     print(s(eeprom,'NOSUCHPERSON'))
@@ -288,6 +288,9 @@ while True:
                     continue
                 elif cmd == 'u' and (obj_action_mask & A_USE == 0):
                     print(s(eeprom,'CANTUSE'))
+                    continue
+                elif cmd == 'r' and (obj_action_mask & A_READ == 0):
+                    print(s(eeprom,'CANTREAD'))
                     continue
                 elif msg != "":
                     print(msg)
