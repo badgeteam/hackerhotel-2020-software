@@ -8,7 +8,8 @@
 #include <resources.h>
 #include <I2C.h>                //Fixed a semi-crappy lib found on internet, replace with interrupt driven one? If so, check hardware errata pdf!
 
-volatile uint16_t tmp16bit;     
+volatile uint16_t tmp16bit;    
+volatile uint8_t mask[8] = {0x01, 0x03, 0x07, 0x0f, 0x1f, 0x3f, 0x7f, 0xff};
 
 void Setup(){
     cli();
@@ -21,6 +22,20 @@ void Setup(){
     PORTA_DIR = 0b01001010;
     PORTB_DIR = 0b01111100;
     PORTC_DIR = 0b00111111;
+
+    //Invert some pins for correcting LED reversal error
+    PORTC_PIN0CTRL |= 0x80;
+    PORTC_PIN1CTRL |= 0x80;
+    PORTC_PIN2CTRL |= 0x80;
+    PORTC_PIN3CTRL |= 0x80;
+    PORTC_PIN4CTRL |= 0x80;
+    PORTC_PIN5CTRL |= 0x80;
+    PORTB_PIN2CTRL |= 0x80;
+    PORTB_PIN3CTRL |= 0x80;
+    PORTB_PIN4CTRL |= 0x80;
+    PORTB_PIN5CTRL |= 0x80;
+    PORTB_PIN6CTRL |= 0x80;
+    
      
     //UART (Alternative pins PA1=TxD, PA2=RxD, baudrate 9600, 8n1, RX and Buffer empty interrupts on)
     PORTMUX_CTRLB = 0x01;
@@ -147,17 +162,17 @@ ISR(TCA0_LUNF_vect){
         "in r24, %[io0]  \n"
         "cpi r24, 3      \n"
         "brne .+8        \n"
-        "sbi %[vpb], 2   \n"
+        "sbi %[vpb], 2   \n"    
         "inc r24         \n"
         "out %[io0], r24 \n"
         "rjmp .+6        \n"
-        "sbi %[vpb], 6   \n"
+        "sbi %[vpb], 6   \n"   
         "clr r24         \n"
         "out %[io0], r24 \n"
         :: [io0] "I" (&L_COL), [vpb] "I" (&VPORTB_OUT) : "r24", "cc");
     }
     
-    if(timeout_I2C) timeout_I2C--;
+    if(timeout_I2C) --timeout_I2C;
     TCA0_SPLIT_INTFLAGS = 0xFF;
 }
 
@@ -377,24 +392,33 @@ uint8_t CheckButtons(uint8_t previousValue){
               else return bNibble;  //New value  
 }
 
-/*
-unsigned char nibbleSwap(unsigned char a)
-{
-    return (a<<4) | (a>>4);
-}*/
-
-//Very cheap pseudo random, feed with previous value (XOR-ed with some ADC measurement).
-uint8_t lcg(uint8_t state){
-    state = (5 * state) + 129;
-    return state;
-}
-
 uint8_t lfsr(){
-    static uint16_t state;
+    static uint16_t state = 0xd401;
     state ^= (state << 13);
     state ^= (state >> 9);
     state ^= (state << 7);
     return (state & 0xff);
+}
+
+void floatSpeed(uint8_t bits, uint16_t min, uint16_t max){
+    uint16_t val = TCB1_CCMP;
+    bits = mask[(bits-1)&0x07];
+    val += (lfsr()&bits);
+    val -= (lfsr()&bits);
+    if (val > max) val = max;    //0x038B is normal rate, for wind we need to be a bit slower
+    if (val < min) val = min;  
+    TCB1_CCMP = val;
+}
+
+uint8_t floatAround(uint8_t sample, uint8_t bits, uint8_t min, uint8_t max){
+    bits = mask[(bits-1)&0x07];
+    sample += lfsr()&bits;
+    sample -= lfsr()&bits;
+    if (max){
+        if (sample > max) sample = max;
+        if (sample < min) sample = min;
+    }
+    return sample;
 }
 
 //Save changed data to EEPROM
@@ -411,13 +435,13 @@ uint8_t SaveGameState(){
 
 uint8_t ReadStatusBit(uint8_t number){
     number &= 0x3f;
-    if (gameState[number>>3] & (1<<(number%8))) return 1; else return 0;
+    if (gameState[number>>3] & (1<<(number&7))) return 1; else return 0;
 }
 
 void WriteStatusBit(uint8_t number, uint8_t state){
     number &= 0x3f;
-    if (state) gameState[number>>3] |= 1<<(number%8);
-    else gameState[number>>3] &= ~(1<<(number%8));
+    if (state) gameState[number>>3] |= 1<<(number&7);
+    else gameState[number>>3] &= ~(1<<(number&7));
 }
 
 void Reset(){
@@ -431,7 +455,7 @@ void Reset(){
     }
     uint8_t id = 0;
     uint8_t *serNum;
-    serNum = &SIGROW_SERNUM0;
+    serNum = (uint8_t*)&SIGROW_SERNUM0;
     
     //Give out a number 0..3, calculated using serial number fields
     for (uint8_t x=0; x<10; ++x){
@@ -445,4 +469,73 @@ void Reset(){
     else if (id == 1) WriteStatusBit(111, 1);
     else if (id == 2) WriteStatusBit(112, 1);
     else if (id == 3) WriteStatusBit(113, 1);
+
+    //Write bit 0, must always be 1!
+    WriteStatusBit(0, 1);
+}
+
+//void setupSound(uint8_t number){
+
+void GenerateAudio(){
+    static uint8_t auBuffer[128] = {0x80, 0};
+    auRepAddr = &auBuffer[0];
+
+    //Audio for text adventure
+    if ((effect&0xff00)==0) {
+
+        //Silence
+        if ((effect&0xE0)==0){
+            auRepAddr = zero;
+        }
+
+        //Bad (buzzer)
+        if ((effect&0xE0)==32){
+
+        }
+
+        //Good (bell)
+        if ((effect&0xE0)==64){
+            //auBuffer = 
+        }
+
+        //Rain storm with whistling wind
+        if ((effect&0xE0)==96){
+            auBuffer[6]= 0;        
+            auRepAddr = &auBuffer[0];
+
+            //Noise is to be generated fast, outside of buttonMark loop
+            for (uint8_t x=1; x<6; ++x){
+                if (x%3) auBuffer[x] = floatAround(0x80, 5, 0x01, 0x00);
+            }
+
+            if (buttonMark){
+                //"Floating" speed for howl (and noise, but that's hardly audible)
+                floatSpeed(5, 0x0280, 0x0400);
+            
+                //"Floating" volume and wind howl during 8 bit rainstorm needs some randomness
+                auVolume = floatAround(auVolume, 2, 0x10, 0xA0);
+                auBuffer[0] = floatAround(auBuffer[0], 2, 0x70, 0x90);
+                auBuffer[3] = 0xFF-auBuffer[0];  //Inverse value of wind[0] produces a whistle
+            }
+        }
+
+        //Footsteps
+        if ((effect&0xE0)==128){
+
+        }
+
+        //Knocking
+        if ((effect&0xE0)==160){
+
+        }
+
+        //Scream
+        if ((effect&0xE0)==192){
+
+        }
+
+        //Rain storm with whistling wind
+        else {
+        }
+    }
 }

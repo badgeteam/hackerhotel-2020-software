@@ -27,6 +27,7 @@
 #include <resources.h>          //Functions for initializing and usage of hardware resources
 #include <I2C.h>                //Fixed a semi-crappy lib found on internet, replace with interrupt driven one? If so, check hardware errata pdf!
 #include <text_adv.h>           //Text adventure stuff
+#include <simon.h>              //Bastet Dictates (Simon clone)
 #include <stdio.h>
 
 
@@ -58,30 +59,26 @@ int main(void)
     //Turn on LEDs on low setting to check for interrupt glitches
     for (uint8_t n=0; n<40; n++){
         if ((n%8)>5) n+=2;
-        if (n<40) iLED[n] = 2;
+        if (n<40) iLED[n] = 0;
     }
 
-    //Test audio play, play a waveform.
-    uint8_t beep[5]={0x60, 0x80, 0xA0, 0xFF, 0};
-    auRepAddr = &beep[0];
-    auVolume = 127;
+
 
     while (1)
     {
-        beep[3] = lfsr();
-        beep[1] = lcg(beep[1])&0x01;
+        GenerateAudio();
 
         if (buttonMark){
-            /*
-                Check if button value has changed here
-            */
+            buttonState = CheckButtons(buttonState);
             buttonMark = 0;
             
+            //GenerateLEDshow();        
+
             TextAdventure();
           
             //Other games & user interaction checks
             //MagnetMaze();
-            //BastetDictates();
+            BastetDictates();
             //MasterMind-ishThing(); //Not sure if to be implemented
             //LanyardCode();
             //MakeFriends();
@@ -91,10 +88,37 @@ int main(void)
             if (adcPhot > 100) WriteStatusBit(116, 0);
 
             //Check temperature 
-        }
+            
+    /*                    uint8_t test[30];
+                        SerSpeed(60);
+                        while(1){
+                            test[0]='P';
+                            test[1]=':';
+                            test[2]='0'+(adcPhot%32);
+                            test[3]='\n';
+                            test[4]='B';
+                            test[5]=':';
+                            test[6]='0'+(adcBtns%32);
+                            test[7]='\n';
+                            test[8]='H';
+                            test[9]=':';
+                            test[10]='0'+(adcHall%32);
+                            test[11]='\n';
+                            test[12]='T';
+                            test[13]=':';
+                            test[14]='0'+(adcTemp%32);
+                            test[15]='\n';
+                            test[16]='\n';
+                            test[17]='\n';
+                            test[18]='\n';
+                            test[19]='\0';
+                            if (serTxDone) SerSend(&test[0]);
+                        }
+      */  
+      }
 
         /* 
-            Audio and light effect control is done here:
+            Audio and light effect control explained:
             
             Audio:
                 -IMPORTANT: Only play samples (when not communicating with other badges AND) when a headphone is detected
