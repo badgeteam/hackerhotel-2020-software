@@ -13,19 +13,20 @@
     #include <main_def.h>
     #include <avr/io.h>
     #include <avr/interrupt.h>
-    //#include <util/delay.h>
     #include <stdlib.h>
 
     void Setup();
     /*
     ISR(TCA0_LUNF_vect);                                                // LED matrix interrupt routine
     ISR(TCB0_INT_vect);                                                 // Used for sending serial data and serSpeed "typing" effect
+    ISR(TCB1_INT_vect);
     ISR(USART0_RXC_vect);                                               // RX handling of serial data
     ISR(USART0_DRE_vect);                                               // TX handling of serial data, working together with TCB0_INT_vect
     ISR(ADC0_RESRDY_vect);                                              // Used for getting temperature (adcTemp) and audio input data
     ISR(ADC1_RESRDY_vect);                                              // Used for getting light (adcPhot), magnetic (adcHall) and raw button values (adcButt)
     ISR(RTC_PIT_vect);                                                  // Periodic interrupt for triggering button and sensor readout of ADC1 (32 samples per second)
     */
+
     uint8_t SerSend(unsigned char *addr);                               // Send characters beginning with *addr, stops at string_end (0 character).
     void SerSpeed(uint8_t serSpd);                                      // Change the character speed from badge to user for "typing" effects during the text adventure.
 

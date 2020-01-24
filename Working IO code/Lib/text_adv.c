@@ -171,7 +171,7 @@ uint8_t CheckLetter(uint16_t child, uint8_t letter){
         ExtEERead(child+OFF_STRINGFLDS+1, max, GAME, &data[0]);
         for (uint8_t y=0; y<max; ++y){
             if (found){
-                if (data[y] == letter) return 1; else return 0;
+                if ((data[y]|0x20) == letter) return 1; else return 0;
             }
             if (data[y] == '[') found = 1;
         }
@@ -188,8 +188,8 @@ uint16_t FindChild(uint16_t parent, uint8_t letter){
     uint8_t data[4];
 
     ExtEERead(child+L_BOILER, 4, GAME, &data[0]);
-    parent = (data[0]<<8||data[1]);    //Next object on parent level
-    child =  (data[2]<<8||data[3]);    //First object on child level
+    parent = (data[0]<<8|data[1]);    //Next object on parent level
+    child =  (data[2]<<8|data[3]);    //First object on child level
 
     //As long as the child is within the parent's range
     while (parent>child){
@@ -202,7 +202,7 @@ uint16_t FindChild(uint16_t parent, uint8_t letter){
 
         //Not visible or name not right
         ExtEERead(child+L_BOILER, 2, GAME, &data[0]);
-        child = (data[0]<<8||data[1]);    //Next object on child level
+        child = (data[0]<<8|data[1]);    //Next object on child level
         
     } return 0;
 }
@@ -324,7 +324,10 @@ uint8_t ProcessInput(uint8_t *data){
     static uint8_t toSend = 0;
 
     if (currDepth == 0) PopulateObject(route[currDepth], &currObj);
-    effect = currObj.byteField[EFFECTS];
+    if (effect ^ currObj.byteField[EFFECTS]){
+        effect = currObj.byteField[EFFECTS];
+        auStart = 1;
+    }
     CleanInput(&data[0]);
     
     //Responses to send after something has tried by the user
@@ -395,7 +398,7 @@ uint8_t ProcessInput(uint8_t *data){
                     //The candidate is found! Let's check if the action is legit
                     if (canDo) {
                         uint8_t bEnter = (data[0] == 'e');
-                        if ((actObj1.byteField[ACTION_ACL]&(bEnter?ENTER:OPEN))==0) {
+                        if ((actObj1.byteField[ACTION_MASK]&(bEnter?ENTER:OPEN))==0) {
                             PrepareSending(bEnter?A_CANTENTER:A_CANTOPEN, bEnter?L_CANTENTER:L_CANTOPEN, TEASER, CR_2);
                         
                         //Action legit, permission granted?

@@ -189,6 +189,14 @@
       <SubType>compile</SubType>
       <Link>Lib\resources.h</Link>
     </Compile>
+    <Compile Include="..\Lib\simon.c">
+      <SubType>compile</SubType>
+      <Link>Lib\simon.c</Link>
+    </Compile>
+    <Compile Include="..\Lib\simon.h">
+      <SubType>compile</SubType>
+      <Link>Lib\simon.h</Link>
+    </Compile>
     <Compile Include="..\Lib\text_adv.c">
       <SubType>compile</SubType>
       <Link>Lib\text_adv.c</Link>

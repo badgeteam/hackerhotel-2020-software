@@ -41,7 +41,7 @@
 #ifndef I2C_H_
 #define I2C_H_
 
-#define ADDR_TIMEOUT	12			// timeout (about 5ms, TCA0_LUNF interrupt)
+#define ADDR_TIMEOUT	12			// timeout (about 2.5ms, TCA0_LUNF interrupt)
 #define READ_TIMEOUT	12
 #define WRITE_TIMEOUT	12
 #define MAX_LEN			64			// maximum number of bytes for read/write transaction

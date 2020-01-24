@@ -22,6 +22,20 @@ void Setup(){
     PORTA_DIR = 0b01001010;
     PORTB_DIR = 0b01111100;
     PORTC_DIR = 0b00111111;
+
+    //Invert some pins for correcting LED reversal error
+    PORTC_PIN0CTRL |= 0x80;
+    PORTC_PIN1CTRL |= 0x80;
+    PORTC_PIN2CTRL |= 0x80;
+    PORTC_PIN3CTRL |= 0x80;
+    PORTC_PIN4CTRL |= 0x80;
+    PORTC_PIN5CTRL |= 0x80;
+    PORTB_PIN2CTRL |= 0x80;
+    PORTB_PIN3CTRL |= 0x80;
+    PORTB_PIN4CTRL |= 0x80;
+    PORTB_PIN5CTRL |= 0x80;
+    PORTB_PIN6CTRL |= 0x80;
+    
      
     //UART (Alternative pins PA1=TxD, PA2=RxD, baudrate 9600, 8n1, RX and Buffer empty interrupts on)
     PORTMUX_CTRLB = 0x01;
@@ -148,17 +162,17 @@ ISR(TCA0_LUNF_vect){
         "in r24, %[io0]  \n"
         "cpi r24, 3      \n"
         "brne .+8        \n"
-        "sbi %[vpb], 2   \n"
+        "sbi %[vpb], 2   \n"    
         "inc r24         \n"
         "out %[io0], r24 \n"
         "rjmp .+6        \n"
-        "sbi %[vpb], 6   \n"
+        "sbi %[vpb], 6   \n"   
         "clr r24         \n"
         "out %[io0], r24 \n"
         :: [io0] "I" (&L_COL), [vpb] "I" (&VPORTB_OUT) : "r24", "cc");
     }
     
-    if(timeout_I2C) timeout_I2C--;
+    if(timeout_I2C) --timeout_I2C;
     TCA0_SPLIT_INTFLAGS = 0xFF;
 }
 
@@ -460,23 +474,68 @@ void Reset(){
     WriteStatusBit(0, 1);
 }
 
+//void setupSound(uint8_t number){
+
 void GenerateAudio(){
-    //Test audio play, play a rainstorm with howling wind.
-    static uint8_t storm[7]={0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0};
-    auRepAddr = &storm[0];
+    static uint8_t auBuffer[128] = {0x80, 0};
+    auRepAddr = &auBuffer[0];
 
-    //Noise is to be generated fast, outside of buttonMark loop
-    for (uint8_t x=1; x<6; ++x){
-        if (x%3) storm[x] = floatAround(0x80, 5, 0x01, 0x00);
-    }
+    //Audio for text adventure
+    if ((effect&0xff00)==0) {
 
-    if (buttonMark){
-        //"Floating" speed for howl (and noise, but that's hardly audible)
-        floatSpeed(5, 0x0300, 0x0500);
+        //Silence
+        if ((effect&0xE0)==0){
+            auRepAddr = zero;
+        }
+
+        //Bad (buzzer)
+        if ((effect&0xE0)==32){
+
+        }
+
+        //Good (bell)
+        if ((effect&0xE0)==64){
+            //auBuffer = 
+        }
+
+        //Rain storm with whistling wind
+        if ((effect&0xE0)==96){
+            auBuffer[6]= 0;        
+            auRepAddr = &auBuffer[0];
+
+            //Noise is to be generated fast, outside of buttonMark loop
+            for (uint8_t x=1; x<6; ++x){
+                if (x%3) auBuffer[x] = floatAround(0x80, 5, 0x01, 0x00);
+            }
+
+            if (buttonMark){
+                //"Floating" speed for howl (and noise, but that's hardly audible)
+                floatSpeed(5, 0x0280, 0x0400);
             
-        //"Floating" volume and wind howl during 8 bit rainstorm needs some randomness
-        auVolume = floatAround(auVolume, 2, 0x10, 0xA0);
-        storm[0] = floatAround(storm[0], 2, 0x70, 0x90);
-        storm[3] = 0xFF-storm[0];  //Inverse value of wind[0] produces a whistle
+                //"Floating" volume and wind howl during 8 bit rainstorm needs some randomness
+                auVolume = floatAround(auVolume, 2, 0x10, 0xA0);
+                auBuffer[0] = floatAround(auBuffer[0], 2, 0x70, 0x90);
+                auBuffer[3] = 0xFF-auBuffer[0];  //Inverse value of wind[0] produces a whistle
+            }
+        }
+
+        //Footsteps
+        if ((effect&0xE0)==128){
+
+        }
+
+        //Knocking
+        if ((effect&0xE0)==160){
+
+        }
+
+        //Scream
+        if ((effect&0xE0)==192){
+
+        }
+
+        //Rain storm with whistling wind
+        else {
+        }
     }
 }
