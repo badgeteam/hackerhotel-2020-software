@@ -361,7 +361,7 @@ def check_action_permission(eeprom,offset):
 
 def object_visible(eeprom,offset):
     state_num = read_byte_field(eeprom,offset,'visible_acl')
-    return get_state(state_num)
+    return check_state(state_num)
 ### end of checkpermission()
 
 ##########################################

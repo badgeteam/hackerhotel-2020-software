@@ -21,11 +21,11 @@ from common import *
 import literals
 
 items        = ["" for i in range(max_items)]
-state_desc   = ["" for i in range(status_bits*2-1)]
-action_state = [[] for i in range(status_bits*2-1)]
-visible_acl  = [[] for i in range(status_bits*2-1)]
-open_acl     = [[] for i in range(status_bits*2-1)]
-action_acl   = [[] for i in range(status_bits*2-1)]
+state_desc   = ["" for i in range(status_bits*2)]
+action_state = [[] for i in range(status_bits*2)]
+visible_acl  = [[] for i in range(status_bits*2)]
+open_acl     = [[] for i in range(status_bits*2)]
+action_acl   = [[] for i in range(status_bits*2)]
 
 def show_eeprom(data):
     offset = 0

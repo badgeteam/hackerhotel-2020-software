@@ -1,431 +1,425 @@
 {
-  "The [S]treet" : {
-    "desc" : "You stand in front of Hotel Pyramide, an Egyptian styled\nboutique hotel. There is a Hacker Conference going on at the hotel.",
-    "effects" : 96,
-    "visible_acl" : 127,
-    "open_acl" : 127,
-    "action_mask" : 13,
-    "action_str1" : "Hahaha, you are trying to talk to a hotel!",
-    "open_acl_msg" : "No no no, you can't leave this hotel. You are locked in forever.",
+  "The [H]otel Lobby" : {
+    "desc" : "You are in the lobby of our beautiful hotel \"The Pyramid\". Here you can find our reception, the hotel bar and a shop. On your right you can find the elevator to all the rooms and on the left is of course the entrance through which you came in.",
+    "action_mask" : 1,
+    "action_msg" : "Testing",
     "o" : {
-      "The [H]otel Lobby" : {
-        "desc" : "You are in the lobby of our beautiful hotel \"The Pyramid\". Here you can find our reception, the hotel bar and a shop. On your right you can find the elevator to all the rooms and on the left is of course the entrance through which you came in.",
-        "action_mask" : 1,
-        "action_msg" : "Testing",
+      "A revolving [d]oor" : {
+        "desc" : "This revolving door is the exit of the hotel",
+        "effects" : 96,
+        "visible_acl" : 0,
+        "action_mask" : 13,
+        "action_item" : 61,
+        "action_msg" : "Thank you sir, for staying with us and\nrescuing Bastet from the Pyramid. You \nare allways welcome back at our hotel.\nYou came as a guest and are now leaving \nas a friend!",
+        "action_state" : 127,
+        "state_desc" : "You exited the hotel",
         "o" : {
-          "The [E]levator" : {
-            "desc" : "The elevator will take you to any floor you like",
-            "action_mask" : 21,
-            "action_acl" : 10,
-            "action_acl_msg" : "You don't have a VIP keycard, access denied",
-            "action_item" : 2,
-            "action_state" : 11,
-            "state_desc" : "VIP access to second floor granted.",
-            "action_msg" : "VIP access to second floor granted.",
-            "o" : {
-              "The [F]irst Floor" : {
-                "desc" : "This the hallway on the First Floor",
-                "action_mask" : 1,
-                "open_acl" : 1,
-                "open_acl_msg" : "Access to this floor is for hotel guests only!",
-                "o" : {
-                  "Room 10[1]" : {
-                    "open_acl" : 2,
-                    "open_acl_msg" : "The door is locked, please use your keycard to unlock the door",
-                    "action_mask" : 17,
-                    "desc" : "This is room 101, your hotel room during Hacker Hotel 2020. You travelled a whole day \nto get to the event. You decide to chill out for a while.",
-                    "action_item" : 1,
-                    "action_state" : 2,
-                    "action_msg" : "You unlocked room 101",
-                    "state_desc" : "You unlocked room 101",
-                    "o" : {
-                      "[M]inibar" : {
-                        "desc" : "How nice, the room has a minibar. You can use a drink.",
-                        "action_mask" : 20,
-                        "action_acl" : 131,
-                        "action_acl_msg" : "The minibar is empty !?!",
-                        "action_msg" : "You drank two beers from the minibar. You feel like getting another beer.",
-                        "action_state" : 3,
-                        "state_desc" : "drank from the minibar, still thirsty"
-                      },
-                      "[R]obe" : {
-                        "desc" : "A nice soft bathrobe of ancient egyptian cotton hangs over a chair.",
-                        "item_nr" : 32,
-                        "action_mask" : 20
-                      }
-                    }
-                  },
-                  "Room 10[2]" : {
-                    "action_mask" : 1,
-                    "desc" : "This is room 102",
-                    "open_acl" : 30,
-                    "open_acl_msg" : "The door is locked, please use your keycard to unlock the door"
-                  },
-                  "Room 10[3]" : {
-                    "action_mask" : 0,
-                    "desc" : "This is room 103",
-                    "open_acl" : 30,
-                    "open_acl_msg" : "The door is locked, please use your keycard to unlock the door"
-                  },
-                  "Room 10[4]" : {
-                    "action_mask" : 0,
-                    "desc" : "This is room 104",
-                    "open_acl" : 30,
-                    "open_acl_msg" : "The door is locked, please use your keycard to unlock the door"
-                  }
-                }
-              },
-              "The [S]econd Floor" : {
-                "desc" : "This is the hallway on the Second Floor",
-                "action_mask" : 1,
-                "open_acl" : 3,
-                "open_acl_msg" : "This floor is for VIP guests only!",
-                "o" : {
-                  "Room 20[1]" : {
-                    "action_mask" : 1,
-                    "desc" : "This is room 201",
-                    "open_acl" : 30,
-                    "open_acl_msg" : "The door is locked, please use your keycard to unlock the door"
-                  },
-                  "Room 20[2]" : {
-                    "action_mask" : 0,
-                    "desc" : "This is room 202",
-                    "open_acl" : 30,
-                    "open_acl_msg" : "The door is locked, please use your keycard to unlock the door"
-                  },
-                  "Room 20[3]" : {
-                    "open_acl" : 20,
-                    "open_acl_msg" : "The door is locked, please use your keycard to unlock the door",
-                    "action_mask" : 17,
-                    "desc" : "This is room 203, you are not supposed to be here ;-)",
-                    "action_item" : 4,
-                    "action_state" : 20,
-                    "action_msg" : "You unlocked room 203",
-                    "state_desc" : "You unlocked room 203",
-                    "o" : {
-                      "[L]aptop" : {
-                        "desc" : "This looks like a standard laptop. Nothing special except the two barcode \nstickers on the back of the laptop:\n\nSticker 1     █▐ ▌ ▐ █  ▌▌ ▐▐▌▐ ▌█  ▌▐ ██▐ ██▐ ▌█ ▌ ▐ ▌▐█▌█  ▌▌▐▌ █▌▌█     \n\nSticker 2     █▐ ▌ ▐▌██▐▌█ █▌▐▐▐▌ █????? ▐ ▌██ █▌█ ▐▐▐▌ ▌ █ ▐█▐▐▌     \n\nAs you can see, sticker 2 is a little damaged.",
-                        "action_mask" : 20,
-                        "action_item" : 0,
-                        "action_str1" : "You turn on the laptop, but it is locked by user 'hcarter'.\nPlease enter the correct password?",
-                        "action_str2" : "z2KHqZ",
-                        "action_msg" : "You have unlocked the laptop, on the desktop you found\na note with the name \"safe-code.txt\". You open it and it\ncontains the following text:\n\n* Take a product of 2 prime numbers\n* If you split my code into two 2-digit numbers, both of them are prime numbers\n* The number formed by the first 3 digits can be divided by the number formed by the 4th digit\n* The number formed by the last 3 digits can be divided by the number formed by the 1st digit\n* No digit in my code is lower than the previous digit\n* ... last but not least, I'm not a fool :-)\n"
-                      },
-                      "[C]loset" : {
-                        "desc" : "The closet contains some clothes and a safe.",
-                        "effects" : 0,
-                        "visible_acl" : 127,
-                        "action_mask" : 6,
-                        "o" : {
-                          "[S]afe" : {
-                            "desc" : "The hotel safe has a 4-digit access code",
-                            "action_mask" : 18,
-                            "action_str1" : "Please enter the code? ",
-                            "action_str2" : "1337",
-                            "action_msg" : "You have opened the safe.",
-                            "o" : {
-                              "[B]ook" : {
-                                "desc" : "This lookes like a very ancient mysterious book full of spells.",
-                                "action_mask" : 36,
-                                "action_str1" : "Are you sure you want to read this ancient spell out loud?",
-                                "action_str2" : "yes",
-                                "action_state" : 21,
-                                "action_msg" : "There is a post-it at pne of the pages. You turn to that\npage and starting reading the spell out loud. You have\nbarely finished reading it when the room light starts to \nflicker and a person seems to materialize in the room.\n\nIt has not fully materialized in full yet while it rushes out\nthe door mumbling: \"no no no... this can not be, who has\nkept me locked in the twilight zone for so long. I need to\nget to the Pyramid to set things straight.\n\nYou try to catch your breath and in the meantime you\nsee the figure rush out. You look and you see it go to \nthe reception area.",
-                                "state_desc" : "read the book out loud",
-                                "item_nr" : 0,
-                                "o" : {}
-                              }
-                            }
-                          }
-                        }
-                      },
-                      "[F]ruit" : {
-                        "desc" : "A bowl of fresh fruit.",
-                        "item_nr" : 34,
-                        "action_mask" : 20
-                      },
-                      "[N]ote" : {
-                        "desc" : "The note shows a table:\n\n                      Vigenère\n\n |ABCDEFGHIJKLMNOPQRSTUVWXYZ\n-+--------------------------\nA|ABCDEFGHIJKLMNOPQRSTUVWXYZ\nB|BCDEFGHIJKLMNOPQRSTUVWXYZA\nC|CDEFGHIJKLMNOPQRSTUVWXYZAB\nD|DEFGHIJKLMNOPQRSTUVWXYZABC\nE|EFGHIJKLMNOPQRSTUVWXYZABCD\nF|FGHIJKLMNOPQRSTUVWXYZABCDE\nG|GHIJKLMNOPQRSTUVWXYZABCDEF\nH|HIJKLMNOPQRSTUVWXYZABCDEFG\nI|IJKLMNOPQRSTUVWXYZABCDEFGH\nJ|JKLMNOPQRSTUVWXYZABCDEFGHI\nK|KLMNOPQRSTUVWXYZABCDEFGHIJ\nL|LMNOPQRSTUVWXYZABCDEFGHIJK\nM|MNOPQRSTUVWXYZABCDEFGHIJKL\nN|NOPQRSTUVWXYZABCDEFGHIJKLM\nO|OPQRSTUVWXYZABCDEFGHIJKLMN\nP|PQRSTUVWXYZABCDEFGHIJKLMNO\nQ|QRSTUVWXYZABCDEFGHIJKLMNOP\nR|RSTUVWXYZABCDEFGHIJKLMNOPQ\nS|STUVWXYZABCDEFGHIJKLMNOPQR\nT|TUVWXYZABCDEFGHIJKLMNOPQRS\nU|UVWXYZABCDEFGHIJKLMNOPQRST\nV|VWXYZABCDEFGHIJKLMNOPQRSTU\nW|WXYZABCDEFGHIJKLMNOPQRSTUV\nX|XYZABCDEFGHIJKLMNOPQRSTUVW\nY|YZABCDEFGHIJKLMNOPQRSTUVWX\nZ|ZABCDEFGHIJKLMNOPQRSTUVWXY\n\nAnd has something scribbled in the side:\n\n'The secret key can be found on the \"garden\"\nof the \"local area network\"'",
-                        "action_mask" : 4
-                      }
-                    }
-                  },
-                  "Room 20[4]" : {
-                    "action_mask" : 0,
-                    "desc" : "This is room 204",
-                    "open_acl" : 30,
-                    "open_acl_msg" : "The door is locked, please use your keycard to unlock the door"
-                  }
-                }
-              }
-            }
-          },
-          "The [B]ar" : {
-            "desc" : "This is the hotel bar",
+          "The [S]treet" : {
+            "desc" : "The outside of the hotel looks so close\nand peaceful, yet you are not able to go out!",
+            "effects" : 0,
+            "visible_acl" : 255,
             "action_mask" : 5,
-            "o" : {
-              "[V]IP guest" : {
-                "desc" : "This guest looks posh, I bet she is a VIP. Now wait, is that her keycard\nlying on the bar?",
-                "visible_acl" : 3,
-                "action_mask" : 20,
-                "action_item" : 1,
-                "action_msg" : "You succesfully copied the VIPs keycard",
-                "action_msg_effects" : 66,
-                "action_state" : 10,
-                "state_desc" : "Copied the VIPs keycard"
-              },
-              "Keycard-[C]opy" : {
-                "desc" : "A brand new copy of the VIP keycard",
-                "visible_acl" : 10,
-                "action_mask" : 20,
-                "item_nr" : 4
-              },
-              "[W]ine" : {
-                "desc" : "A bottle of wine",
-                "item_nr" : 31,
-                "action_mask" : 20
-              }
-            }
+            "open_acl" : 127,
+            "open_acl_msg" : "No no no, you can't leave this hotel. You are locked in forever."
           },
-          "The [S]hop" : {
-            "desc" : "This is the hotel shop",
-            "action_mask" : 5,
-            "o" : {
-              "[P]roxmark III" : {
-                "name" : "",
-                "desc" : "The Proxmark is an RFID swiss-army tool, allowing for both high and low level interactions with the vast majority of RFID tags and systems world-wide.",
-                "action_mask" : 20,
-                "action_acl" : 4,
-                "action_acl_msg" : "You need some money to buy the Proxmark III",
-                "action_acl_state" : 132,
-                "action_msg" : "You bought the Proxmark III",
-                "item_nr" : 1
-              }
-            }
-          },
-          "The [R]eception" : {
-            "desc" : "The reception does resemble the Hacket Hotel reception quite remarkably.",
-            "action_mask" : 1,
-            "o" : {
-              "The [R]eceptionist" : {
-                "desc" : "The receptionist looks friendly!",
-                "action_mask" : 12,
-                "action_acl" : 129,
-                "action_acl_msg" : "Hello again, you are already checked in :-)",
-                "action_msg" : "\"Hello, Can I check in please?\"\n\n\"Welcome to Hotel Pyramid and thank you for choosing us during your stay at \nHacker Hotel 2020. I have checked you in, here is your keycard. Your room \nnumber is 101, located on the 1st floor.\"",
-                "action_state" : 1,
-                "state_desc" : "checked in"
-              },
-              "[P]icture frame" : {
-                "desc" : "That's strange, I did not see this picture frame before. And why would anyone \ndraw hieroglyphs on a screenshot of an eighties music video and hang it on the wall???\n\nWait, there is something very tiny written on the picture frame...\n\n",
-                "visible_acl" : 21,
-                "action_mask" : 36,
-                "action_msg" : "\"Walk like an Egyptian\" on this picture and the entrance room to the Pyramid \nwill open up to you!",
-                "action_state" : 119,
-                "state_desc" : "Ready to play magnetic maze!"
-              },
-              "The [D]ungeon" : {
-                "desc" : "Your light is blinding me so I can't see much as it is very dark in the Dungeon.\nPlease get into a dark area so my eyes can adjust to these poor light conditions.",
-                "action_mask" : 1,
-                "visible_acl" : 120,
-                "o" : {
-                  "[G]uard" : {
-                    "desc" : "There is a guard near the tunnel",
-                    "visible_acl" : 110,
-                    "action_mask" : 12,
-                    "action_acl" : 124,
-                    "action_acl_msg" : "Access to the tunnel can only be granted to a group\nof 4 people, each bringing one of the 4 elements.",
-                    "action_msg" : "Make sure your offering is perfect, otherwise the High Priest will\nnot trust you and rejects access to the secret Pyramid.\n\nHere are your personal hints:\n\n* Khonsu will offer Incense\n* The one who kneels 3 times will bring element Water.\n"
-                  },
-                  "[G]uard " : {
-                    "desc" : "There is a guard near the tunnel",
-                    "visible_acl" : 111,
-                    "action_mask" : 12,
-                    "action_acl" : 124,
-                    "action_acl_msg" : "Access to the tunnel can only be granted to a group\nof 4 people, each bringing one of the 4 elements.",
-                    "action_msg" : "Make sure your offering is perfect, otherwise the High Priest will\nnot trust you and rejects access to the secret Pyramid.\n\nHere are your personal hints:\n\n* Khonsu will kneel more than once.\n* The one who offers Incense will bring element Fire.\n"
-                  },
-                  "[G]uard   " : {
-                    "desc" : "There is a guard near the tunnel",
-                    "visible_acl" : 112,
-                    "action_mask" : 12,
-                    "action_acl" : 124,
-                    "action_acl_msg" : "Access to the tunnel can only be granted to a group\nof 4 people, each bringing one of the 4 elements.",
-                    "action_msg" : "Make sure your offering is perfect, otherwise the High Priest will\nnot trust you and rejects access to the secret Pyramid.\n\nHere are your personal hints:\n\n* Bes will bring element Air\n* Anubis will be kneeling once more than the one bringing element Earth\n"
-                  },
-                  "[G]uard  " : {
-                    "desc" : "There is a guard near the tunnel",
-                    "visible_acl" : 113,
-                    "action_mask" : 12,
-                    "action_acl" : 124,
-                    "action_acl_msg" : "Access to the tunnel can only be granted to a group\nof 4 people, each bringing one of the 4 elements.",
-                    "action_msg" : "Make sure your offering is perfect, otherwise the High Priest will\nnot trust you and rejects access to the secret Pyramid.\n\nHere are your personal hints:\n\n* Anubis will bring a Robe as offering, he will not kneel 2 times.\n* The one bringing the element Air will offer something other than Fruit\n"
-                  },
-                  "Papyrus [R]oll" : {
-                    "desc" : "Please follow these instructions carefully if you want\nto enter the tunnel. The guard is very picky on who he lets\nthrough. \n\nYou can only enter the tunnel with 4 people at\nthe same time. Each person must choose the correct\noffering (wine, fruit, robe or incense) and kneel the \nright amount of times (1, 2, 3 or 4 times).\n\nLast, but certainly not least, you must all bring one of the\nfour elements of nature (earth, air, fire or water).\n\nGood luck!\n",
-                    "visible_acl" : 116,
-                    "action_mask" : 4
-                  },
-                  "High [P]riest" : {
-                    "desc" : "The high priest is standing at the altar where you have placed your offering.",
-                    "visible_acl" : 31,
-                    "action_mask" : 12,
-                    "action_str1" : "In order to allow you access to the secret Pyramid, you need\nto work together. Please give me the sum of all of your\npersonal access-codes.",
-                    "action_str2" : "3844451",
-                    "action_msg" : "It is good to see a group work so well together, I have ordered\nthe guard to open the tunnel for you!",
-                    "action_state" : 32,
-                    "state_desc" : "The priest allows access to the tunnel"
-                  },
-                  "[A]ltar" : {
-                    "desc" : "The offering altar is where you can place your offerings to the high priest.",
-                    "effects" : 0,
-                    "visible_acl" : 116,
-                    "action_mask" : 20,
-                    "action_str1" : "1",
-                    "action_str2" : "",
-                    "action_msg" : "",
-                    "action_state" : 31,
-                    "state_desc" : "The offer made the High Priest visible"
-                  },
-                  "[T]unnel" : {
-                    "desc" : "A dark and long tunnel that leads to the Pyramid",
-                    "effects" : 0,
-                    "visible_acl" : 116,
-                    "action_mask" : 5,
-                    "open_acl" : 32,
-                    "open_acl_msg" : "The tunnel is closed, only the priest can tell the guard to let you in.",
-                    "o" : {
-                      "[G]rand Gallery" : {
-                        "desc" : "The grand gallery is the main chamber of the pyramid.",
-                        "effects" : 0,
-                        "action_mask" : 5,
-                        "o" : {
-                          "[S]ecret message" : {
-                            "desc" : "There is a secret message on the wall",
-                            "effects" : 0,
-                            "action_mask" : 36,
-                            "action_msg" : "J'm khvkz I zth mp lgvo rpu ag mg uhw asmfl, tnx \nrpu oxvx uhw hrez ofx aap cgnpw iedi qx. Bnv rsn \neiv, B'q lp gdth rpu utqx uhal jts. I sf oxqt zhwmbgw \nbr mie Etwmfr uaefcej. Rsn oeww xh uede Vt uhw \ngeff ox fc tevwkwtsy (zbhwfn ag xaf Nggszsae) \ntrw ie obpe lngp aabt lh hh.\n\nVnxhvmvnsmiez Rs ael cewg ygeej t wifld trw daf \ngsm iedi yl vnlbp mie kiiem ik uvhlef uc 2 kfadec \napt knqffrk. Ls pf nwxh t milmpx nojx ttuiwggx.\n\nCul lsho... sghr B xide fx grwx... ege ygn xhp!"
-                          },
-                          "[G]host of Ra" : {
-                            "desc" : "This is the ghost whom you released in room 203. \nHis name is Ra, the sun-god. Unfortunately he is \nunder a spell and is not much of a help to you now.",
-                            "visible_acl" : 246,
-                            "action_mask" : 4,
-                            "action_acl" : 117,
-                            "action_acl_msg" : "You can't talk to a ghost, break the spell first!",
-                            "action_msg" : "The spell is partly broken, one more hot summer to\nrevive Ra!"
-                          },
-                          "[R]a" : {
-                            "desc" : "Ra is the Sun God",
-                            "effects" : 0,
-                            "visible_acl" : 118,
-                            "action_mask" : 12,
-                            "action_str1" : "\"Please help me Ra!\"\n\n\"Off course I will help you free our\nbeloved Cat Goddess! Please tell\nme the name of her adversary!\"",
-                            "action_str2" : "Setesh",
-                            "action_msg" : "Ohhh not Setesh again! I will end this once and \nall!",
-                            "action_state" : 61,
-                            "state_desc" : "Talked to Ra"
-                          },
-                          "[S]tone door" : {
-                            "desc" : "This door gives entrance to the master chamber.\nHowever, it is protected by a hieroglyph code that\nyou will need to solve to get in.\nMind the gap when you enter the master chamber!",
-                            "effects" : 0,
-                            "action_mask" : 0,
-                            "action_acl" : 61,
-                            "action_acl_msg" : "Don't go in here without the help of Ra.\nYou won't survive without him!",
-                            "action_item" : 0,
-                            "action_str1" : "𓂾\t𓂋\t𓂾\t𓂧\t\t\t\n\r\n𓉔 \t𓈖\t𓂧\t𓅓\t\t𓏺\t\n\r\n𓎼\t𓆓\t𓂋\t𓂾\t\t𓏻\t\n\r\n𓂾\t𓂾\t𓂋\t𓂋\t\t𓏻\t𓏺\n\r\n𓈖\t𓂋\t𓂋\t𓂧\t\t\t𓏻\n",
-                            "action_str2" : "brbd",
-                            "action_msg" : "Succeeded",
-                            "action_state" : 62,
-                            "state_desc" : "Opened the stone door"
-                          },
-                          "[M]aster Chamber" : {
-                            "desc" : "You reached the deepest most secret part\nof the Pyramid. The master chamber!",
-                            "visible_acl" : 62,
-                            "effects" : 0,
-                            "action_mask" : 1,
-                            "open_acl" : 0,
-                            "open_acl_msg" : "",
-                            "action_acl" : 0,
-                            "action_acl_msg" : "",
-                            "action_item" : 0,
-                            "action_str1" : "",
-                            "action_str2" : "",
-                            "action_msg" : "",
-                            "action_state" : 0,
-                            "state_desc" : "",
-                            "item_nr" : 0,
-                            "o" : {
-                              "[B]astet" : {
-                                "desc" : "Dummy",
-                                "effects" : 0,
-                                "visible_acl" : 127,
-                                "action_mask" : 0,
-                                "open_acl" : 0,
-                                "open_acl_msg" : "",
-                                "action_acl" : 0,
-                                "action_acl_msg" : "",
-                                "action_item" : 0,
-                                "action_str1" : "",
-                                "action_str2" : "",
-                                "action_msg" : "",
-                                "action_state" : 0,
-                                "state_desc" : "",
-                                "item_nr" : 0,
-                                "o" : {}
-                              },
-                              "[G]em" : {
-                                "desc" : "Dummy",
-                                "effects" : 0,
-                                "visible_acl" : 127,
-                                "action_mask" : 0,
-                                "open_acl" : 0,
-                                "open_acl_msg" : "",
-                                "action_acl" : 0,
-                                "action_acl_msg" : "",
-                                "action_item" : 0,
-                                "action_str1" : "",
-                                "action_str2" : "",
-                                "action_msg" : "",
-                                "action_state" : 0,
-                                "state_desc" : "",
-                                "item_nr" : 0,
-                                "o" : {}
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              },
-              "[K]eycard" : {
-                "desc" : "You key to room 101",
-                "visible_acl" : 1,
-                "action_mask" : 20,
-                "action_state" : 10,
-                "state_desc" : "Copied the VIP keycard",
-                "item_nr" : 1
-              },
-              "[I]ncense" : {
-                "desc" : "The kind of incense used for rituals.",
-                "item_nr" : 33,
-                "action_mask" : 20
-              }
-            }
-          },
-          "[A]TM machine" : {
-            "desc" : "Hey, the ATM is hacked and gives out free $100 bills",
-            "action_mask" : 20,
-            "action_msg" : "You have withdrawn $100 and put it in your wallet",
-            "action_msgeffects" : 66,
-            "action_acl" : 132,
-            "action_acl_msg" : "Please play fair and don't use the ATM so often!",
-            "action_acl_msg_effects" : 33,
-            "action_state" : 4,
-            "state_desc" : "You have withdrawn $100 from the ATM"
+          "The [S]treet " : {
+            "desc" : "The outside of the hotel looks so close\nand peaceful.",
+            "effects" : 0,
+            "visible_acl" : 127,
+            "action_mask" : 5
           }
         }
+      },
+      "The [E]levator" : {
+        "desc" : "The elevator will take you to any floor you like",
+        "action_mask" : 21,
+        "action_acl" : 10,
+        "action_acl_msg" : "You don't have a VIP keycard, access denied",
+        "action_item" : 2,
+        "action_state" : 11,
+        "state_desc" : "VIP access to second floor granted.",
+        "action_msg" : "VIP access to second floor granted.",
+        "o" : {
+          "The [F]irst Floor" : {
+            "desc" : "This the hallway on the First Floor",
+            "action_mask" : 1,
+            "open_acl" : 1,
+            "open_acl_msg" : "Access to this floor is for hotel guests only!",
+            "o" : {
+              "Room 10[1]" : {
+                "open_acl" : 2,
+                "open_acl_msg" : "The door is locked, please use your keycard to unlock the door",
+                "action_mask" : 17,
+                "desc" : "This is room 101, your hotel room during Hacker Hotel 2020. You travelled a whole day \nto get to the event. You decide to chill out for a while.",
+                "action_item" : 1,
+                "action_state" : 2,
+                "action_msg" : "You unlocked room 101",
+                "state_desc" : "You unlocked room 101",
+                "o" : {
+                  "[M]inibar" : {
+                    "desc" : "How nice, the room has a minibar. You can use a drink.",
+                    "action_mask" : 20,
+                    "action_acl" : 131,
+                    "action_acl_msg" : "The minibar is empty !?!",
+                    "action_msg" : "You drank two beers from the minibar. You feel like getting another beer.",
+                    "action_state" : 3,
+                    "state_desc" : "drank from the minibar, still thirsty"
+                  },
+                  "[R]obe" : {
+                    "desc" : "A nice soft bathrobe of ancient egyptian cotton hangs over a chair.",
+                    "item_nr" : 32,
+                    "action_mask" : 20
+                  }
+                }
+              },
+              "Room 10[2]" : {
+                "action_mask" : 1,
+                "desc" : "This is room 102",
+                "open_acl" : 30,
+                "open_acl_msg" : "The door is locked, please use your keycard to unlock the door"
+              },
+              "Room 10[3]" : {
+                "action_mask" : 0,
+                "desc" : "This is room 103",
+                "open_acl" : 30,
+                "open_acl_msg" : "The door is locked, please use your keycard to unlock the door"
+              },
+              "Room 10[4]" : {
+                "action_mask" : 0,
+                "desc" : "This is room 104",
+                "open_acl" : 30,
+                "open_acl_msg" : "The door is locked, please use your keycard to unlock the door"
+              }
+            }
+          },
+          "The [S]econd Floor" : {
+            "desc" : "This is the hallway on the Second Floor",
+            "action_mask" : 1,
+            "open_acl" : 3,
+            "open_acl_msg" : "This floor is for VIP guests only!",
+            "o" : {
+              "Room 20[1]" : {
+                "action_mask" : 1,
+                "desc" : "This is room 201",
+                "open_acl" : 30,
+                "open_acl_msg" : "The door is locked, please use your keycard to unlock the door"
+              },
+              "Room 20[2]" : {
+                "action_mask" : 0,
+                "desc" : "This is room 202",
+                "open_acl" : 30,
+                "open_acl_msg" : "The door is locked, please use your keycard to unlock the door"
+              },
+              "Room 20[3]" : {
+                "open_acl" : 20,
+                "open_acl_msg" : "The door is locked, please use your keycard to unlock the door",
+                "action_mask" : 17,
+                "desc" : "This is room 203, you are not supposed to be here ;-)",
+                "action_item" : 4,
+                "action_state" : 20,
+                "action_msg" : "You unlocked room 203",
+                "state_desc" : "You unlocked room 203",
+                "o" : {
+                  "[L]aptop" : {
+                    "desc" : "This looks like a standard laptop. Nothing special except the two barcode \nstickers on the back of the laptop:\n\nSticker 1     █▐ ▌ ▐ █  ▌▌ ▐▐▌▐ ▌█  ▌▐ ██▐ ██▐ ▌█ ▌ ▐ ▌▐█▌█  ▌▌▐▌ █▌▌█     \n\nSticker 2     █▐ ▌ ▐▌██▐▌█ █▌▐▐▐▌ █????? ▐ ▌██ █▌█ ▐▐▐▌ ▌ █ ▐█▐▐▌     \n\nAs you can see, sticker 2 is a little damaged.",
+                    "action_mask" : 20,
+                    "action_item" : 0,
+                    "action_str1" : "You turn on the laptop, but it is locked by user 'hcarter'.\nPlease enter the correct password?",
+                    "action_str2" : "z2KHqZ",
+                    "action_msg" : "You have unlocked the laptop, on the desktop you found\na note with the name \"safe-code.txt\". You open it and it\ncontains the following text:\n\n* Take a product of 2 prime numbers\n* If you split my code into two 2-digit numbers, both of them are prime numbers\n* The number formed by the first 3 digits can be divided by the number formed by the 4th digit\n* The number formed by the last 3 digits can be divided by the number formed by the 1st digit\n* No digit in my code is lower than the previous digit\n* ... last but not least, I'm not a fool :-)\n"
+                  },
+                  "[C]loset" : {
+                    "desc" : "The closet contains some clothes and a safe.",
+                    "effects" : 0,
+                    "visible_acl" : 127,
+                    "action_mask" : 6,
+                    "o" : {
+                      "[S]afe" : {
+                        "desc" : "The hotel safe has a 4-digit access code",
+                        "action_mask" : 18,
+                        "action_str1" : "Please enter the code? ",
+                        "action_str2" : "1337",
+                        "action_msg" : "You have opened the safe.",
+                        "o" : {
+                          "[B]ook" : {
+                            "desc" : "This lookes like a very ancient mysterious book full of spells.",
+                            "action_mask" : 36,
+                            "action_str1" : "Are you sure you want to read this ancient spell out loud?",
+                            "action_str2" : "yes",
+                            "action_state" : 21,
+                            "action_msg" : "There is a post-it at pne of the pages. You turn to that\npage and starting reading the spell out loud. You have\nbarely finished reading it when the room light starts to \nflicker and a person seems to materialize in the room.\n\nIt has not fully materialized in full yet while it rushes out\nthe door mumbling: \"no no no... this can not be, who has\nkept me locked in the twilight zone for so long. I need to\nget to the Pyramid to set things straight.\n\nYou try to catch your breath and in the meantime you\nsee the figure rush out. You look and you see it go to \nthe reception area.",
+                            "state_desc" : "read the book out loud",
+                            "item_nr" : 0,
+                            "o" : {}
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "[F]ruit" : {
+                    "desc" : "A bowl of fresh fruit.",
+                    "item_nr" : 34,
+                    "action_mask" : 20
+                  },
+                  "[N]ote" : {
+                    "desc" : "The note shows a table:\n\n                      Vigenère\n\n |ABCDEFGHIJKLMNOPQRSTUVWXYZ\n-+--------------------------\nA|ABCDEFGHIJKLMNOPQRSTUVWXYZ\nB|BCDEFGHIJKLMNOPQRSTUVWXYZA\nC|CDEFGHIJKLMNOPQRSTUVWXYZAB\nD|DEFGHIJKLMNOPQRSTUVWXYZABC\nE|EFGHIJKLMNOPQRSTUVWXYZABCD\nF|FGHIJKLMNOPQRSTUVWXYZABCDE\nG|GHIJKLMNOPQRSTUVWXYZABCDEF\nH|HIJKLMNOPQRSTUVWXYZABCDEFG\nI|IJKLMNOPQRSTUVWXYZABCDEFGH\nJ|JKLMNOPQRSTUVWXYZABCDEFGHI\nK|KLMNOPQRSTUVWXYZABCDEFGHIJ\nL|LMNOPQRSTUVWXYZABCDEFGHIJK\nM|MNOPQRSTUVWXYZABCDEFGHIJKL\nN|NOPQRSTUVWXYZABCDEFGHIJKLM\nO|OPQRSTUVWXYZABCDEFGHIJKLMN\nP|PQRSTUVWXYZABCDEFGHIJKLMNO\nQ|QRSTUVWXYZABCDEFGHIJKLMNOP\nR|RSTUVWXYZABCDEFGHIJKLMNOPQ\nS|STUVWXYZABCDEFGHIJKLMNOPQR\nT|TUVWXYZABCDEFGHIJKLMNOPQRS\nU|UVWXYZABCDEFGHIJKLMNOPQRST\nV|VWXYZABCDEFGHIJKLMNOPQRSTU\nW|WXYZABCDEFGHIJKLMNOPQRSTUV\nX|XYZABCDEFGHIJKLMNOPQRSTUVW\nY|YZABCDEFGHIJKLMNOPQRSTUVWX\nZ|ZABCDEFGHIJKLMNOPQRSTUVWXY\n\nAnd has something scribbled in the side:\n\n'The secret key can be found on the \"garden\"\nof the \"local area network\"'",
+                    "action_mask" : 4
+                  }
+                }
+              },
+              "Room 20[4]" : {
+                "action_mask" : 0,
+                "desc" : "This is room 204",
+                "open_acl" : 30,
+                "open_acl_msg" : "The door is locked, please use your keycard to unlock the door"
+              }
+            }
+          }
+        }
+      },
+      "The [B]ar" : {
+        "desc" : "This is the hotel bar",
+        "action_mask" : 5,
+        "o" : {
+          "[V]IP guest" : {
+            "desc" : "This guest looks posh, I bet she is a VIP. Now wait, is that her keycard\nlying on the bar?",
+            "visible_acl" : 3,
+            "action_mask" : 20,
+            "action_item" : 1,
+            "action_msg" : "You succesfully copied the VIPs keycard",
+            "action_msg_effects" : 66,
+            "action_state" : 10,
+            "state_desc" : "Copied the VIPs keycard"
+          },
+          "Keycard-[C]opy" : {
+            "desc" : "A brand new copy of the VIP keycard",
+            "visible_acl" : 10,
+            "action_mask" : 20,
+            "item_nr" : 4
+          },
+          "[W]ine" : {
+            "desc" : "A bottle of wine",
+            "item_nr" : 31,
+            "action_mask" : 20
+          }
+        }
+      },
+      "The [S]hop" : {
+        "desc" : "This is the hotel shop",
+        "action_mask" : 5,
+        "o" : {
+          "[P]roxmark III" : {
+            "name" : "",
+            "desc" : "The Proxmark is an RFID swiss-army tool, allowing for both high and low level interactions with the vast majority of RFID tags and systems world-wide.",
+            "action_mask" : 20,
+            "action_acl" : 4,
+            "action_acl_msg" : "You need some money to buy the Proxmark III",
+            "action_acl_state" : 132,
+            "action_msg" : "You bought the Proxmark III",
+            "item_nr" : 1
+          }
+        }
+      },
+      "The [R]eception" : {
+        "desc" : "The reception does resemble the Hacket Hotel reception quite remarkably.",
+        "action_mask" : 1,
+        "o" : {
+          "The [R]eceptionist" : {
+            "desc" : "The receptionist looks friendly!",
+            "action_mask" : 12,
+            "action_acl" : 129,
+            "action_acl_msg" : "Hello again, you are already checked in :-)",
+            "action_msg" : "\"Hello, Can I check in please?\"\n\n\"Welcome to Hotel Pyramid and thank you for choosing us during your stay at \nHacker Hotel 2020. I have checked you in, here is your keycard. Your room \nnumber is 101, located on the 1st floor.\"",
+            "action_state" : 1,
+            "state_desc" : "checked in"
+          },
+          "[P]icture frame" : {
+            "desc" : "That's strange, I did not see this picture frame before. And why would anyone \ndraw hieroglyphs on a screenshot of an eighties music video and hang it on the wall???\n\nWait, there is something very tiny written on the picture frame...\n\n",
+            "visible_acl" : 21,
+            "action_mask" : 36,
+            "action_msg" : "\"Walk like an Egyptian\" on this picture and the entrance room to the Pyramid \nwill open up to you!",
+            "action_state" : 119,
+            "state_desc" : "Ready to play magnetic maze!"
+          },
+          "The [D]ungeon" : {
+            "desc" : "Your light is blinding me so I can't see much as it is very dark in the Dungeon.\nPlease get into a dark area so my eyes can adjust to these poor light conditions.",
+            "action_mask" : 1,
+            "visible_acl" : 120,
+            "o" : {
+              "[G]uard" : {
+                "desc" : "There is a guard near the tunnel",
+                "visible_acl" : 110,
+                "action_mask" : 12,
+                "action_acl" : 124,
+                "action_acl_msg" : "Access to the tunnel can only be granted to a group\nof 4 people, each bringing one of the 4 elements.",
+                "action_msg" : "Make sure your offering is perfect, otherwise the High Priest will\nnot trust you and rejects access to the secret Pyramid.\n\nHere are your personal hints:\n\n* Khonsu will offer Incense\n* The one who kneels 3 times will bring element Water.\n"
+              },
+              "[G]uard " : {
+                "desc" : "There is a guard near the tunnel",
+                "visible_acl" : 111,
+                "action_mask" : 12,
+                "action_acl" : 124,
+                "action_acl_msg" : "Access to the tunnel can only be granted to a group\nof 4 people, each bringing one of the 4 elements.",
+                "action_msg" : "Make sure your offering is perfect, otherwise the High Priest will\nnot trust you and rejects access to the secret Pyramid.\n\nHere are your personal hints:\n\n* Khonsu will kneel more than once.\n* The one who offers Incense will bring element Fire.\n"
+              },
+              "[G]uard   " : {
+                "desc" : "There is a guard near the tunnel",
+                "visible_acl" : 112,
+                "action_mask" : 12,
+                "action_acl" : 124,
+                "action_acl_msg" : "Access to the tunnel can only be granted to a group\nof 4 people, each bringing one of the 4 elements.",
+                "action_msg" : "Make sure your offering is perfect, otherwise the High Priest will\nnot trust you and rejects access to the secret Pyramid.\n\nHere are your personal hints:\n\n* Bes will bring element Air\n* Anubis will be kneeling once more than the one bringing element Earth\n"
+              },
+              "[G]uard  " : {
+                "desc" : "There is a guard near the tunnel",
+                "visible_acl" : 113,
+                "action_mask" : 12,
+                "action_acl" : 124,
+                "action_acl_msg" : "Access to the tunnel can only be granted to a group\nof 4 people, each bringing one of the 4 elements.",
+                "action_msg" : "Make sure your offering is perfect, otherwise the High Priest will\nnot trust you and rejects access to the secret Pyramid.\n\nHere are your personal hints:\n\n* Anubis will bring a Robe as offering, he will not kneel 2 times.\n* The one bringing the element Air will offer something other than Fruit\n"
+              },
+              "Papyrus [R]oll" : {
+                "desc" : "Please follow these instructions carefully if you want\nto enter the tunnel. The guard is very picky on who he lets\nthrough. \n\nYou can only enter the tunnel with 4 people at\nthe same time. Each person must choose the correct\noffering (wine, fruit, robe or incense) and kneel the \nright amount of times (1, 2, 3 or 4 times).\n\nLast, but certainly not least, you must all bring one of the\nfour elements of nature (earth, air, fire or water).\n\nGood luck!\n",
+                "visible_acl" : 116,
+                "action_mask" : 4
+              },
+              "High [P]riest" : {
+                "desc" : "The high priest is standing at the altar where you have placed your offering.",
+                "visible_acl" : 31,
+                "action_mask" : 12,
+                "action_str1" : "In order to allow you access to the secret Pyramid, you need\nto work together. Please give me the sum of all of your\npersonal access-codes.",
+                "action_str2" : "3844451",
+                "action_msg" : "It is good to see a group work so well together, I have ordered\nthe guard to open the tunnel for you!",
+                "action_state" : 32,
+                "state_desc" : "The priest allows access to the tunnel"
+              },
+              "[A]ltar" : {
+                "desc" : "The offering altar is where you can place your offerings to the high priest.",
+                "effects" : 0,
+                "visible_acl" : 116,
+                "action_mask" : 20,
+                "action_str1" : "1",
+                "action_str2" : "",
+                "action_msg" : "",
+                "action_state" : 31,
+                "state_desc" : "The offer made the High Priest visible"
+              },
+              "[T]unnel" : {
+                "desc" : "A dark and long tunnel that leads to the Pyramid",
+                "effects" : 0,
+                "visible_acl" : 116,
+                "action_mask" : 5,
+                "open_acl" : 32,
+                "open_acl_msg" : "The tunnel is closed, only the priest can tell the guard to let you in.",
+                "o" : {
+                  "[G]rand Gallery" : {
+                    "desc" : "The grand gallery is the main chamber of the pyramid.",
+                    "effects" : 0,
+                    "action_mask" : 5,
+                    "o" : {
+                      "[S]ecret message" : {
+                        "desc" : "There is a secret message on the wall",
+                        "effects" : 0,
+                        "action_mask" : 36,
+                        "action_msg" : "J'm khvkz I zth mp lgvo rpu ag mg uhw asmfl, tnx \nrpu oxvx uhw hrez ofx aap cgnpw iedi qx. Bnv rsn \neiv, B'q lp gdth rpu utqx uhal jts. I sf oxqt zhwmbgw \nbr mie Etwmfr uaefcej. Rsn oeww xh uede Vt uhw \ngeff ox fc tevwkwtsy (zbhwfn ag xaf Nggszsae) \ntrw ie obpe lngp aabt lh hh.\n\nVnxhvmvnsmiez Rs ael cewg ygeej t wifld trw daf \ngsm iedi yl vnlbp mie kiiem ik uvhlef uc 2 kfadec \napt knqffrk. Ls pf nwxh t milmpx nojx ttuiwggx.\n\nCul lsho... sghr B xide fx grwx... ege ygn xhp!"
+                      },
+                      "[G]host of Ra" : {
+                        "desc" : "This is the ghost whom you released in room 203. \nHis name is Ra, the sun-god. Unfortunately he is \nunder a spell and is not much of a help to you now.",
+                        "visible_acl" : 246,
+                        "action_mask" : 4,
+                        "action_acl" : 117,
+                        "action_acl_msg" : "You can't talk to a ghost, break the spell first!",
+                        "action_msg" : "The spell is partly broken, one more hot summer to\nrevive Ra!"
+                      },
+                      "[R]a" : {
+                        "desc" : "Ra is the Sun God",
+                        "effects" : 0,
+                        "visible_acl" : 118,
+                        "action_mask" : 12,
+                        "action_str1" : "\"Please help me Ra!\"\n\n\"Off course I will help you free our\nbeloved Cat Goddess! Please tell\nme the name of her adversary!\"",
+                        "action_str2" : "Setesh",
+                        "action_msg" : "Ohhh not Setesh again! I will end this once and \nall!",
+                        "action_state" : 61,
+                        "state_desc" : "Talked to Ra"
+                      },
+                      "[S]tone door" : {
+                        "desc" : "This door gives entrance to the master chamber.\nHowever, it is protected by a hieroglyph code that\nyou will need to solve to get in.\nMind the gap when you enter the master chamber!",
+                        "effects" : 0,
+                        "action_mask" : 0,
+                        "action_acl" : 61,
+                        "action_acl_msg" : "Don't go in here without the help of Ra.\nYou won't survive without him!",
+                        "action_item" : 0,
+                        "action_str1" : "𓂾\t𓂋\t𓂾\t𓂧\t\t\t\n\r\n𓉔 \t𓈖\t𓂧\t𓅓\t\t𓏺\t\n\r\n𓎼\t𓆓\t𓂋\t𓂾\t\t𓏻\t\n\r\n𓂾\t𓂾\t𓂋\t𓂋\t\t𓏻\t𓏺\n\r\n𓈖\t𓂋\t𓂋\t𓂧\t\t\t𓏻\n",
+                        "action_str2" : "brbd",
+                        "action_msg" : "Succeeded",
+                        "action_state" : 62,
+                        "state_desc" : "Opened the stone door"
+                      },
+                      "[M]aster Chamber" : {
+                        "desc" : "You reached the deepest most secret part\nof the Pyramid. The master chamber!",
+                        "visible_acl" : 62,
+                        "effects" : 0,
+                        "action_mask" : 1,
+                        "open_acl" : 0,
+                        "open_acl_msg" : "",
+                        "action_acl" : 0,
+                        "action_acl_msg" : "",
+                        "action_item" : 0,
+                        "action_str1" : "",
+                        "action_str2" : "",
+                        "action_msg" : "",
+                        "action_state" : 0,
+                        "state_desc" : "",
+                        "item_nr" : 0,
+                        "o" : {
+                          "[B]astet" : {
+                            "desc" : "Look at that, it is Bastet! The lovely\nfigure on your badge.",
+                            "effects" : 0,
+                            "action_mask" : 12,
+                            "action_msg" : "Thank you, thank you, thank you!\nYou have done so much for me by\nreleasing Ra, breaking the spell and\nrescuing me. I will be forever in your\ndebt.\n\nPlease accept this gem as a gift as a\ntoken of my gratitude!\n\nShowing it at the hotel exit will allow\nyou to leave the hotel.",
+                            "action_state" : 63,
+                            "state_desc" : "talked to bastet"
+                          },
+                          "[G]em" : {
+                            "desc" : "This a beautiful gem!",
+                            "effects" : 0,
+                            "visible_acl" : 63,
+                            "action_mask" : 20,
+                            "item_nr" : 61
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "[K]eycard" : {
+            "desc" : "You key to room 101",
+            "visible_acl" : 1,
+            "action_mask" : 20,
+            "action_state" : 10,
+            "state_desc" : "Copied the VIP keycard",
+            "item_nr" : 1
+          },
+          "[I]ncense" : {
+            "desc" : "The kind of incense used for rituals.",
+            "item_nr" : 33,
+            "action_mask" : 20
+          }
+        }
+      },
+      "[A]TM machine" : {
+        "desc" : "Hey, the ATM is hacked and gives out free $100 bills",
+        "action_mask" : 20,
+        "action_msg" : "You have withdrawn $100 and put it in your wallet",
+        "action_msgeffects" : 66,
+        "action_acl" : 132,
+        "action_acl_msg" : "Please play fair and don't use the ATM so often!",
+        "action_acl_msg_effects" : 33,
+        "action_state" : 4,
+        "state_desc" : "You have withdrawn $100 from the ATM"
       }
     }
   },

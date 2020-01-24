@@ -65,6 +65,9 @@ while True:
 # ^^  to here   ^^ #
 ####################
 
+    if loc == [0,1]:
+        print(s(eeprom,'CONGRATS'))
+        exit()
 
     print(s(eeprom,'LOCATION') + "{}".format(read_string_field(eeprom,loc_offset,'name')),end='')
 
@@ -416,7 +419,3 @@ while True:
 
 
     ### end of command options
-
-    if loc == [] and get_state(status_bits-1):
-        print(s(eeprom,'CONGRATS'))
-        exit()
