@@ -24,7 +24,11 @@ u <i> <o>   use item <i> on object <o>\n\
 \n\
 Every object has a single letter identifier enclosed in brackets. So \n\
 when you see "The [R]eception" in the game, you can use "e r" to enter\n\
-the Reception.',
+the Reception.\n\
+\n\
+[Please note that some output is in UTF-8. However, all user input\n\
+should be entered in ASCII only]',
+
 'LOCATION':'\nLocation: ',
 'SPACE':' ',
 'PROMPT':'? ',

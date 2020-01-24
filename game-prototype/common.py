@@ -394,7 +394,7 @@ def print_summary(eeprom,loc,current_loc,offset,inventory):
 
     if loc == current_loc:
         print(color.BOLD,end='')
-    print("{:20s} ".format(str(loc)),end='')
+    print("{:30s} ".format(str(loc)),end='')
 
     tree_str  = ""
     tree_str += "{}+- ".format("|  "*len(loc))
@@ -407,6 +407,10 @@ def print_summary(eeprom,loc,current_loc,offset,inventory):
 
     logic_str = ""
     mask = read_byte_field(eeprom,offset,'action_mask')
+    if mask & A_READ:
+        logic_str += "R"
+    else:
+        logic_str += "."
     if mask & A_USE:
         logic_str += "U"
     else:
