@@ -96,6 +96,10 @@ while True:
         show_help(eeprom)
 
 
+    if cmd == 'a':
+        show_alphabet(eeprom)
+
+
     if cmd == 'w':
         who_am_i(eeprom)
 
@@ -141,27 +145,28 @@ while True:
 
     elif cmd == 'l':
         if len(inp) == 1:
-            print(read_string_field(eeprom,loc_offset,'desc'))
-            print(s(eeprom,'LOOK'),end='')
-            sep = ""
-            if loc_parent[1] != 0xffff and object_visible(eeprom,loc_parent[1]):
-                name = read_string_field(eeprom,loc_parent[1],'name')
-                print("{}".format(name),end='')
-                sep = s(eeprom,'COMMA')
-            for i in range(len(loc_children)):
-                if object_visible(eeprom,loc_children[i][1]):
-                    item = read_byte_field(eeprom,loc_children[i][1],'item_nr')
-                    in_inventory = False
-                    if item != 0:
-                        for inv in range(len(inventory)):
-                            if item == inventory[inv][0]:
-                                in_inventory = True
-                                break
-                    if  not in_inventory:
-                        name = read_string_field(eeprom,loc_children[i][1],'name')
-                        print("{}{}".format(sep,name),end='')
-                        sep = s(eeprom,'COMMA')
-            print()
+#            print(read_string_field(eeprom,loc_offset,'desc'))
+#            print(s(eeprom,'LOOK'),end='')
+#            sep = ""
+#            if loc_parent[1] != 0xffff and object_visible(eeprom,loc_parent[1]):
+#                name = read_string_field(eeprom,loc_parent[1],'name')
+#                print("{}".format(name),end='')
+#                sep = s(eeprom,'COMMA')
+#            for i in range(len(loc_children)):
+#                if object_visible(eeprom,loc_children[i][1]):
+#                    item = read_byte_field(eeprom,loc_children[i][1],'item_nr')
+#                    in_inventory = False
+#                    if item != 0:
+#                        for inv in range(len(inventory)):
+#                            if item == inventory[inv][0]:
+#                                in_inventory = True
+#                                break
+#                    if  not in_inventory:
+#                        name = read_string_field(eeprom,loc_children[i][1],'name')
+#                        print("{}{}".format(sep,name),end='')
+#                        sep = s(eeprom,'COMMA')
+#            print()
+            look_aound(eeprom, loc_offset, loc_parent, loc_children)
 
         else:
             look_offset = 0xffff
@@ -243,6 +248,7 @@ while True:
                         del(loc[-1])
                     loc_offset,loc_action_mask,loc_children,loc_parent = loc2offset(eeprom,loc)
                     current_effects = read_byte_field(eeprom,loc_offset,'effects')
+                    look_aound(eeprom, loc_offset, loc_parent, loc_children)
                     continue
             else:
                 print(s(eeprom,'DONTSEE'))

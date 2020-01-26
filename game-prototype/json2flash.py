@@ -183,8 +183,8 @@ f2.write("lit_offsets = {\n")
 literal_data   = bytearray(0)
 literal_offset = flash_size
 for short in literals.literals:
-    l = literals.literals[short]
-    literal_data = l.encode('utf8') + literal_data
+    l = literals.literals[short].encode('utf8')
+    literal_data = l + literal_data
     literal_offset = literal_offset - len(l)
     f1.write("#define A_{:20s}   {:5d}\n".format(short,literal_offset))
     f1.write("#define L_{:20s}   {:5d}\n".format(short,len(l)))

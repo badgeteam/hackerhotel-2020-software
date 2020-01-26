@@ -7,6 +7,7 @@ the end of the weekend (when the hotel will be closed up\n\
 forever, WHOAHAHAHAHAHAHA)!\n\
 \n\
 h or ?      show this help\n\
+a           show the hieroglyph alphabet\n\
 w           who am i, your avatar\n\
 x           exit to the previous location\n\
 e <room>    enter the given room\n\
@@ -28,7 +29,17 @@ the Reception.\n\
 \n\
 [Please note that some output is in UTF-8. However, all user input\n\
 should be entered in ASCII only]',
-
+'ALPHABET': 'A = 𓄿   B = 𓂾   C = 𓎡   D = 𓂧   E = 𓆄\n\
+\n\
+F = 𓆑   G = 𓎼   H = 𓉔   I = 𓆄   J = 𓆓\n\
+\n\
+K = 𓎡   L = 𓃭   M = 𓅓   N = 𓈖   O = 𓅱\n\
+\n\
+P = 𓊪   Q = 𓈎   R = 𓂋   S = 𓋴   T = 𓏏\n\
+\n\
+U = 𓅱   V = 𓆑   W = 𓅱   X = 𓋴   Y = 𓆄𓆄\n\
+\n\
+Z = 𓊃 ',
 'LOCATION':'\nLocation: ',
 'SPACE':' ',
 'PROMPT':'? ',
