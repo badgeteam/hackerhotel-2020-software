@@ -409,7 +409,7 @@ while True:
 
         else:
             for i in range(len(inventory)):
-                if inp[1] in inventory[i][1].lower():
+                if "["+inp[1][0]+"]" in inventory[i][1].lower():
                     print(s(eeprom,'DROPPING') + "{}".format(inventory[i][1]))
                     print(s(eeprom,'RETURNING'))
                     del inventory[i]

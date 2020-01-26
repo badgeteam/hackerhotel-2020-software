@@ -40,7 +40,7 @@
         "state_desc" : "VIP access to second floor granted.",
         "action_msg" : "VIP access to second floor granted.",
         "o" : {
-          "The [F]irst Floor" : {
+          "The [1]st Floor" : {
             "desc" : "This the hallway on the First Floor",
             "action_mask" : 1,
             "open_acl" : 1,
@@ -92,7 +92,7 @@
               }
             }
           },
-          "The [S]econd Floor" : {
+          "The [2]nd Floor" : {
             "desc" : "This is the hallway on the Second Floor",
             "action_mask" : 1,
             "open_acl" : 3,
@@ -105,7 +105,7 @@
                 "open_acl_msg" : "The door is locked, please use your keycard to unlock the door"
               },
               "Room 20[2]" : {
-                "action_mask" : 0,
+                "action_mask" : 1,
                 "desc" : "This is room 202",
                 "open_acl" : 30,
                 "open_acl_msg" : "The door is locked, please use your keycard to unlock the door"
@@ -162,16 +162,29 @@
                     "action_mask" : 20
                   },
                   "[N]ote" : {
-                    "desc" : "The note shows a table:\n\n                      Vigenère\n\n |ABCDEFGHIJKLMNOPQRSTUVWXYZ\n-+--------------------------\nA|ABCDEFGHIJKLMNOPQRSTUVWXYZ\nB|BCDEFGHIJKLMNOPQRSTUVWXYZA\nC|CDEFGHIJKLMNOPQRSTUVWXYZAB\nD|DEFGHIJKLMNOPQRSTUVWXYZABC\nE|EFGHIJKLMNOPQRSTUVWXYZABCD\nF|FGHIJKLMNOPQRSTUVWXYZABCDE\nG|GHIJKLMNOPQRSTUVWXYZABCDEF\nH|HIJKLMNOPQRSTUVWXYZABCDEFG\nI|IJKLMNOPQRSTUVWXYZABCDEFGH\nJ|JKLMNOPQRSTUVWXYZABCDEFGHI\nK|KLMNOPQRSTUVWXYZABCDEFGHIJ\nL|LMNOPQRSTUVWXYZABCDEFGHIJK\nM|MNOPQRSTUVWXYZABCDEFGHIJKL\nN|NOPQRSTUVWXYZABCDEFGHIJKLM\nO|OPQRSTUVWXYZABCDEFGHIJKLMN\nP|PQRSTUVWXYZABCDEFGHIJKLMNO\nQ|QRSTUVWXYZABCDEFGHIJKLMNOP\nR|RSTUVWXYZABCDEFGHIJKLMNOPQ\nS|STUVWXYZABCDEFGHIJKLMNOPQR\nT|TUVWXYZABCDEFGHIJKLMNOPQRS\nU|UVWXYZABCDEFGHIJKLMNOPQRST\nV|VWXYZABCDEFGHIJKLMNOPQRSTU\nW|WXYZABCDEFGHIJKLMNOPQRSTUV\nX|XYZABCDEFGHIJKLMNOPQRSTUVW\nY|YZABCDEFGHIJKLMNOPQRSTUVWX\nZ|ZABCDEFGHIJKLMNOPQRSTUVWXY\n\nAnd has something scribbled in the side:\n\n'The secret key can be found on the \"garden\"\nof the \"local area network\"'",
-                    "action_mask" : 4
+                    "desc" : "Hmmm.. this note looks interesting\n                      Vigenère\n\n |ABCDEFGHIJKLMNOPQRSTUVWXYZ\n-+--------------------------\nA|ABCDEFGHIJKLMNOPQRSTUVWXYZ\nB|BCDEFGHIJKLMNOPQRSTUVWXYZA\nC|CDEFGHIJKLMNOPQRSTUVWXYZAB\nD|DEFGHIJKLMNOPQRSTUVWXYZABC\nE|EFGHIJKLMNOPQRSTUVWXYZABCD\nF|FGHIJKLMNOPQRSTUVWXYZABCDE\nG|GHIJKLMNOPQRSTUVWXYZABCDEF\nH|HIJKLMNOPQRSTUVWXYZABCDEFG\nI|IJKLMNOPQRSTUVWXYZABCDEFGH\nJ|JKLMNOPQRSTUVWXYZABCDEFGHI\nK|KLMNOPQRSTUVWXYZABCDEFGHIJ\nL|LMNOPQRSTUVWXYZABCDEFGHIJK\nM|MNOPQRSTUVWXYZABCDEFGHIJKL\nN|NOPQRSTUVWXYZABCDEFGHIJKLM\nO|OPQRSTUVWXYZABCDEFGHIJKLMN\nP|PQRSTUVWXYZABCDEFGHIJKLMNO\nQ|QRSTUVWXYZABCDEFGHIJKLMNOP\nR|RSTUVWXYZABCDEFGHIJKLMNOPQ\nS|STUVWXYZABCDEFGHIJKLMNOPQR\nT|TUVWXYZABCDEFGHIJKLMNOPQRS\nU|UVWXYZABCDEFGHIJKLMNOPQRST\nV|VWXYZABCDEFGHIJKLMNOPQRSTU\nW|WXYZABCDEFGHIJKLMNOPQRSTUV\nX|XYZABCDEFGHIJKLMNOPQRSTUVW\nY|YZABCDEFGHIJKLMNOPQRSTUVWX\nZ|ZABCDEFGHIJKLMNOPQRSTUVWXY\n\nAnd has something scribbled in the side:\n\n'The secret key can be found on the \"garden\"\nof the \"local area network\"'",
+                    "action_mask" : 36,
+                    "action_msg" : "The note shows a table:\n\n                      Vigenère\n\n |ABCDEFGHIJKLMNOPQRSTUVWXYZ\n-+--------------------------\nA|ABCDEFGHIJKLMNOPQRSTUVWXYZ\nB|BCDEFGHIJKLMNOPQRSTUVWXYZA\nC|CDEFGHIJKLMNOPQRSTUVWXYZAB\nD|DEFGHIJKLMNOPQRSTUVWXYZABC\nE|EFGHIJKLMNOPQRSTUVWXYZABCD\nF|FGHIJKLMNOPQRSTUVWXYZABCDE\nG|GHIJKLMNOPQRSTUVWXYZABCDEF\nH|HIJKLMNOPQRSTUVWXYZABCDEFG\nI|IJKLMNOPQRSTUVWXYZABCDEFGH\nJ|JKLMNOPQRSTUVWXYZABCDEFGHI\nK|KLMNOPQRSTUVWXYZABCDEFGHIJ\nL|LMNOPQRSTUVWXYZABCDEFGHIJK\nM|MNOPQRSTUVWXYZABCDEFGHIJKL\nN|NOPQRSTUVWXYZABCDEFGHIJKLM\nO|OPQRSTUVWXYZABCDEFGHIJKLMN\nP|PQRSTUVWXYZABCDEFGHIJKLMNO\nQ|QRSTUVWXYZABCDEFGHIJKLMNOP\nR|RSTUVWXYZABCDEFGHIJKLMNOPQ\nS|STUVWXYZABCDEFGHIJKLMNOPQR\nT|TUVWXYZABCDEFGHIJKLMNOPQRS\nU|UVWXYZABCDEFGHIJKLMNOPQRST\nV|VWXYZABCDEFGHIJKLMNOPQRSTU\nW|WXYZABCDEFGHIJKLMNOPQRSTUV\nX|XYZABCDEFGHIJKLMNOPQRSTUVW\nY|YZABCDEFGHIJKLMNOPQRSTUVWX\nZ|ZABCDEFGHIJKLMNOPQRSTUVWXY\n\nAnd has something scribbled in the side:\n\n'The secret key can be found on the \"garden\"\nof the \"local area network\"'"
                   }
                 }
               },
               "Room 20[4]" : {
-                "action_mask" : 0,
+                "action_mask" : 1,
                 "desc" : "This is room 204",
                 "open_acl" : 30,
                 "open_acl_msg" : "The door is locked, please use your keycard to unlock the door"
+              }
+            }
+          },
+          "The [4]th Floor" : {
+            "desc" : "This is the hallway on the Fourth Floor",
+            "action_mask" : 1,
+            "o" : {
+              "Room 40[4]" : {
+                "action_mask" : 1,
+                "desc" : "This is room 404",
+                "open_acl" : 30,
+                "open_acl_msg" : "<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0//EN\">\n<html><head>\n<title>404 Not Found</title>\n</head><body>\n<h1>Not Found</h1>\n<p>The requested ROOM was not found on this floor.</p>\n</body></html>"
               }
             }
           }
@@ -185,7 +198,7 @@
             "desc" : "This guest looks posh, I bet she is a VIP. Now wait, is that her keycard\nlying on the bar?",
             "visible_acl" : 3,
             "action_mask" : 20,
-            "action_item" : 1,
+            "action_item" : 3,
             "action_msg" : "You succesfully copied the VIPs keycard",
             "action_msg_effects" : 66,
             "action_state" : 10,
@@ -209,19 +222,27 @@
         "action_mask" : 5,
         "o" : {
           "[P]roxmark III" : {
-            "name" : "",
             "desc" : "The Proxmark is an RFID swiss-army tool, allowing for both high and low level interactions with the vast majority of RFID tags and systems world-wide.",
             "action_mask" : 20,
             "action_acl" : 4,
             "action_acl_msg" : "You need some money to buy the Proxmark III",
             "action_acl_state" : 132,
             "action_msg" : "You bought the Proxmark III",
-            "item_nr" : 1
+            "item_nr" : 3
+          },
+          "[B]lue Shark" : {
+            "desc" : "This is a very nice fluffy shark (that seems to\nbe getting quite popular in certain circles).",
+            "action_mask" : 4,
+            "action_acl" : 4,
+            "action_acl_msg" : "You need some money to buy the Blue Shark",
+            "action_acl_state" : 132,
+            "action_msg" : "Congratulations on buying a nice fluffy Blue Shark",
+            "item_nr" : 5
           }
         }
       },
       "The [R]eception" : {
-        "desc" : "The reception does resemble the Hacket Hotel reception quite remarkably.",
+        "desc" : "The reception does resemble the Hacker Hotel reception quite remarkably.",
         "action_mask" : 1,
         "o" : {
           "The [R]eceptionist" : {
@@ -396,11 +417,9 @@
             }
           },
           "[K]eycard" : {
-            "desc" : "You key to room 101",
+            "desc" : "Your key to room 101",
             "visible_acl" : 1,
             "action_mask" : 20,
-            "action_state" : 10,
-            "state_desc" : "Copied the VIP keycard",
             "item_nr" : 1
           },
           "[I]ncense" : {
