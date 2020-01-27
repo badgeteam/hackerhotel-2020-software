@@ -51,7 +51,7 @@ uint16_t ReadAddr (uint16_t offset, uint8_t type){
     if (ExtEERead(offset, 2, type, &data[0])) return 0xffff; else return (data[0]<<8|data[1]);
 }
 
-//Empty all other string
+//Empty all other strings
 void ClearTxAfter(uint8_t nr){
     for (uint8_t x=(nr+1); x<TXLISTLEN; ++x) txStrLen[x]=0;
 }
@@ -270,6 +270,13 @@ uint8_t CheckInput(uint8_t *data){
             if ((serRx[x]<'A')||(serRx[x]>'Z')) data[x]=serRx[x]; else data[x]=serRx[x]|0x20;
         }
 
+        //No text
+        if (data[0] == 0){
+            RXCNT = 0;
+            serRxDone = 0;
+            return 1;
+        }
+
         //Help text
         if ((data[0] == '?')||(data[0] == 'h')){
             //Put help pointers/lengths in tx list
@@ -372,9 +379,9 @@ uint8_t ProcessInput(uint8_t *data){
                     reactStr[2][1]=PROMPT;                
                     actionList = 2;
                 }
-            } 
-        
-            else if ((data[0] == 'e')||(data[0] == 'o')) {
+            
+            
+            } else if ((data[0] == 'e')||(data[0] == 'o')) {
                 
                 //Not possible, too many/little characters
                 if (inputLen != 2){
@@ -408,6 +415,7 @@ uint8_t ProcessInput(uint8_t *data){
                             if (route[currDepth+1]) ++currDepth; else --currDepth;
                             PopulateObject(route[currDepth], &currObj);
                             effect = currObj.byteField[EFFECTS];
+                            EEWrite(16, &effect, 2);
 
                         //Not granted!
                         } else {

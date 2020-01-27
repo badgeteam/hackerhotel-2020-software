@@ -478,7 +478,7 @@ void Reset(){
 
 void GenerateAudio(){
     static uint8_t auBuffer[128] = {0x80, 0};
-    auRepAddr = &auBuffer[0];
+    //auRepAddr = &auBuffer[0];
 
     //Audio for text adventure
     if ((effect&0xff00)==0) {
