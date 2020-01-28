@@ -35,7 +35,7 @@
         "action_mask" : 21,
         "action_acl" : 10,
         "action_acl_msg" : "You don't have a VIP keycard, access denied",
-        "action_item" : 2,
+        "action_item" : 4,
         "action_state" : 11,
         "state_desc" : "VIP access to second floor granted.",
         "action_msg" : "VIP access to second floor granted.",
@@ -95,7 +95,7 @@
           "The [2]nd Floor" : {
             "desc" : "This is the hallway on the Second Floor",
             "action_mask" : 1,
-            "open_acl" : 3,
+            "open_acl" : 11,
             "open_acl_msg" : "This floor is for VIP guests only!",
             "o" : {
               "Room 20[1]" : {
@@ -131,15 +131,18 @@
                   "[C]loset" : {
                     "desc" : "The closet contains some clothes and a safe.",
                     "effects" : 0,
-                    "visible_acl" : 127,
                     "action_mask" : 6,
                     "o" : {
                       "[S]afe" : {
                         "desc" : "The hotel safe has a 4-digit access code",
+                        "open_acl" : 22,
+                        "open_acl_msg" : "The safe is closed, use the safe to enter the code.",
                         "action_mask" : 18,
                         "action_str1" : "Please enter the code? ",
                         "action_str2" : "1337",
-                        "action_msg" : "You have opened the safe.",
+                        "action_msg" : "You entered the correct code for the safe!",
+                        "action_state" : 22,
+                        "state_desc" : "You entered the correct code for the safe!",
                         "o" : {
                           "[B]ook" : {
                             "desc" : "This lookes like a very ancient mysterious book full of spells.",
