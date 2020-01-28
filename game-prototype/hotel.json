@@ -363,7 +363,7 @@
                         "action_state" : 61,
                         "state_desc" : "Talked to Ra"
                       },
-                      "[S]tone door" : {
+                      "Stone [d]oor" : {
                         "desc" : "This door gives entrance to the master chamber.\nHowever, it is protected by a hieroglyph code that\nyou will need to solve to get in.\nMind the gap when you enter the master chamber!",
                         "effects" : 0,
                         "action_mask" : 0,
