@@ -147,7 +147,7 @@
                             "action_str1" : "Are you sure you want to read this ancient spell out loud?",
                             "action_str2" : "yes",
                             "action_state" : 21,
-                            "action_msg" : "There is a post-it at pne of the pages. You turn to that\npage and starting reading the spell out loud. You have\nbarely finished reading it when the room light starts to \nflicker and a person seems to materialize in the room.\n\nIt has not fully materialized in full yet while it rushes out\nthe door mumbling: \"no no no... this can not be, who has\nkept me locked in the twilight zone for so long. I need to\nget to the Pyramid to set things straight.\n\nYou try to catch your breath and in the meantime you\nsee the figure rush out. You look and you see it go to \nthe reception area.",
+                            "action_msg" : "There is a post-it on one of the pages. You turn to that\npage and starting reading the spell out loud. You have\nbarely finished reading it when the room light starts to \nflicker and a person seems to materialize in the room.\n\nIt has not fully materialized in full yet while it rushes out\nthe door mumbling: \"no no no... this can not be, who has\nkept me locked in the twilight zone for so long. I need to\nget to the Pyramid to set things straight.\n\nYou try to catch your breath and in the meantime you\nsee the figure rush out. You look and you see it go to \nthe reception area.",
                             "state_desc" : "read the book out loud",
                             "item_nr" : 0,
                             "o" : {}
@@ -232,7 +232,7 @@
           },
           "[B]lue Shark" : {
             "desc" : "This is a very nice fluffy shark (that seems to\nbe getting quite popular in certain circles).",
-            "action_mask" : 4,
+            "action_mask" : 20,
             "action_acl" : 4,
             "action_acl_msg" : "You need some money to buy the Blue Shark",
             "action_acl_state" : 132,

@@ -166,7 +166,7 @@ while True:
 #                        print("{}{}".format(sep,name),end='')
 #                        sep = s(eeprom,'COMMA')
 #            print()
-            look_aound(eeprom, loc_offset, loc_parent, loc_children)
+            look_around(eeprom, loc_offset, loc_parent, loc_children,inventory)
 
         else:
             look_offset = 0xffff
@@ -248,7 +248,7 @@ while True:
                         del(loc[-1])
                     loc_offset,loc_action_mask,loc_children,loc_parent = loc2offset(eeprom,loc)
                     current_effects = read_byte_field(eeprom,loc_offset,'effects')
-                    look_aound(eeprom, loc_offset, loc_parent, loc_children)
+                    look_around(eeprom, loc_offset, loc_parent, loc_children,inventory)
                     continue
             else:
                 print(s(eeprom,'DONTSEE'))

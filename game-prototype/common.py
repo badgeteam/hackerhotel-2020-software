@@ -253,7 +253,7 @@ def s(eeprom,lit):
         exit()
 
 
-def look_aound(eeprom, loc_offset, loc_parent, loc_children):
+def look_around(eeprom, loc_offset, loc_parent, loc_children,inventory):
     print(read_string_field(eeprom,loc_offset,'desc'))
     print(s(eeprom,'LOOK'),end='')
     sep = ""
