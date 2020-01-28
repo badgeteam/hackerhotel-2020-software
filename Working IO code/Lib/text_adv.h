@@ -53,6 +53,8 @@
     #define MAX_OBJ_DEPTH   32
     #define MAX_ITEMS       64
     #define STATUS_BITS     sizeof(gameState)*8
+    #define MSG             7                    //Start of flexible message part
+    #define MSG_LOC         3                    //Location of in-game location in fixed message part
     
     #define EXT_EE_MAX      32767
 

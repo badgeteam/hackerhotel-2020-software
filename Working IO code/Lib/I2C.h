@@ -36,6 +36,21 @@
  *
  * 5. Parts of this software are adapted from Microchip I2C polled master driver sample code.
  * Additional license restrictions from Microchip may apply.
+ 
+ ---
+ 
+ Edited by Badge.team
+
+ Ext Progger: XGecu Pro
+ 
+ Pins progger for 24C256: 
+ - 4L = GND
+ - 3R = SCL
+ - 4R = SDA
+
+ Pins badge written on PCB
+
+
  */
 
 #ifndef I2C_H_
