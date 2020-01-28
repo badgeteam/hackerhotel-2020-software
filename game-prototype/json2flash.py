@@ -53,12 +53,9 @@ def show_eeprom(data):
         for i in range(len(string_fields)):
             start_offset = offset
             b = bytearray(0)
-            while True:
-                l = read_byte(data,offset)
-                b = b + read_range(data,offset+1,l)
-                offset = offset + 1 + l
-                if l != 255:
-                    break
+            l = read_ptr(data,offset)
+            b = b + read_range(data,offset+2,l)
+            offset = offset + 2 + l
             if i >= string_fields.index('open_acl_msg'):
                 if len(b) > 0:
                     s = effects(b[0]) + b[1:].decode()
@@ -98,9 +95,10 @@ def convert_json_to_eeprom(objects,offset=0):
             l = l + 1
 
         # Add name of the object
-        binary.append(len(name))
+        binary.append(len(name)//256)
+        binary.append(len(name)%256)
         binary.extend(name.encode('utf8'))
-        l = l + 1 + len(name)
+        l = l + 2 + len(name)
 
         for i in range(1,len(string_fields)):   # skip first string field (name), as it has been processed already
             f = string_fields[i]
@@ -114,18 +112,14 @@ def convert_json_to_eeprom(objects,offset=0):
                     else:
                         b.append(0)
                 b.extend(obj[f].encode('utf8'))
-                        
-                while len(b) >= 255:
-                    binary.append(255)
-                    binary.extend(b[:255])
-                    l = l + 256
-                    b = b[255:]
-                binary.append(len(b))
+                binary.append(len(b)//256)
+                binary.append(len(b)%256)
                 binary.extend(b)
-                l = l + 1 + len(b)
+                l = l + 2 + len(b)
             else:
                 binary.append(0x00)
-                l = l + 1
+                binary.append(0x00)
+                l = l + 2
 
         if 'item_nr' in obj:
             if obj['item_nr'] != 0:

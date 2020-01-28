@@ -102,10 +102,10 @@ elements         = ['e','a','w','f']    # Earth, Air, Water, Fire
 #exclude_words    = ('on','to','in','with','at','from')
 
 # Keys are md5 hash of 'H@ck3r H0t3l 2020', split in two
-xor_key_game   = b'\x74\xbf\xfa\x54\x1c\x96\xb2\x26'
-xor_key_teaser = b'\x1e\xeb\xd6\x8b\xc0\xc2\x0a\x61'
 xor_key_game   = b'\x00' * 8
 xor_key_teaser = b'\x00' * 8
+xor_key_game   = b'\x74\xbf\xfa\x54\x1c\x96\xb2\x26'
+xor_key_teaser = b'\x1e\xeb\xd6\x8b\xc0\xc2\x0a\x61'
 flash_size     = 32768
 boiler_plate   = b'Hacker Hotel 2020 by badge.team ' # boiler_plate must by 32 bytes long
 
@@ -130,7 +130,7 @@ def read_ptr(eeprom,offset):
 
 def read_handle(eeprom,offset):
     offset = offset + 4 + len(byte_fields)
-    l = read_byte(eeprom,offset)
+    l = read_ptr(eeprom,offset)
     while l>0:
         offset += 1
         c = chr(read_byte(eeprom,offset)).lower()
@@ -217,23 +217,18 @@ def read_string_field(eeprom,offset,field):
         if offset != 0xffff:
             offset = offset + 4 + len(byte_fields)
             for i in range(string_fields.index(field)):
-                while True:
-                    l = read_byte(eeprom,offset)
-                    offset = offset + l + 1
-                    if l != 255:
-                        break
-            s = ""
-            while True:
-                l = read_byte(eeprom,offset)
-                s += read_range(eeprom,offset+1,read_byte(eeprom,offset)).decode()
-                offset = offset + 1 + l
-                if l != 255:
-                    break
+                l = read_ptr(eeprom,offset)
+                offset = offset + l + 2
+
+            l = read_ptr(eeprom,offset)
+            b = read_range(eeprom,offset+2,l)
 
             if string_fields.index(field) >= string_fields.index('open_acl_msg'):
-                if len(s) > 0:
-                    current_effects = ord(s[0])
-                    s = effects(current_effects) + s[1:]
+                if len(b) > 0:
+                    current_effects = b[0]
+                    s = effects(current_effects) + b[1:].decode()
+            else:
+                s = b.decode()
             return s
     return "N/A"
 
