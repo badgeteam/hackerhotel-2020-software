@@ -43,15 +43,15 @@ const uint8_t QSINE[32] = {0x01,0x0d,0x19,0x26,0x32,0x3e,0x4a,0x56,0x62,0x6f,0x7
 */
 const uint8_t HCKR[2][6] = {
     {20, 18, 17, 19, 16, 21},   //Red Hacker glyphs LED locations inside iLED
-    {36, 34, 33, 35, 32, 37}    //Green Hacker glyphs LED locations inside iLED
+    {28, 26, 25, 27, 24, 29}    //Green Hacker glyphs LED locations inside iLED 
 };
 const uint8_t EYE[2][2] = {
-    {8, 24},                    //Red eyes (R, L) LED locations inside iLED
-    {9, 29}                     //Green eyes (R, L) LED locations inside iLED
+    {8, 32},                    //Red eyes (R, L) LED locations inside iLED
+    {9, 37}                     //Green eyes (R, L) LED locations inside iLED
 };
 const uint8_t WING[2][5] = {
     {2,  1,  5,  0,  3},        //Right wing LED locations inside iLED, bottom to top
-    {4,  28, 26, 25, 27}        //Left wing LED locations inside iLED, bottom to top
+    {4,  36, 34, 33, 35}        //Left wing LED locations inside iLED, bottom to top
 };
 const uint8_t GEM[2] = {12, 10};//Gem on top of cat head (red, green)
 const uint8_t RAT = 11;         //Rat gem LED location inside iLED

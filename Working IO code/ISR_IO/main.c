@@ -37,32 +37,36 @@
 int main(void)
 {
     Setup();
-    EERead(0, &gameState[0], 16);   //Load game status bits from EEPROM
 
-    uint8_t idSet = 0;
-    for (uint8_t x=0; x<4; ++x){
-        idSet += ReadStatusBit(110+x);
-    }
+    //SerSpeed(1);
+    //unsigned char strTest[]="\aHäckerHotel2020 badge pest!\b\b\b\b\bt\n";
+    //SerSend(&strTest[0]);
 
-    //idSet can be used to detect cheating. After cheating idSet will be 0, with a virgin badge idSet will be 3.
-    if (idSet != 1) {
-        Reset();
-    }
-
-    SerSpeed(1);
-    unsigned char strTest[]="\aHäckerHotel2020 badge pest!\b\b\b\b\bt\n";
-    SerSend(&strTest[0]);
-
-    //uint8_t bla = 0;
     SerSpeed(255);
 
-    //Turn on LEDs on low setting to check for interrupt glitches
-    for (uint8_t n=0; n<40; n++){
-        if ((n%8)>5) n+=2;
-        if (n<40) iLED[n] = 0;
+    ////Turn on LEDs on low setting to check for interrupt glitches
+
+    //"Hacker"
+    for (uint8_t n=0; n<6; n++){
+        iLED[HCKR[R][n]] = 1;
+        iLED[HCKR[G][n]] = 1;
     }
 
+    //"Wings"
+    for (uint8_t n=0; n<5; n++){
+        iLED[WING[L][n]] = 1;
+        iLED[WING[R][n]] = 1;
+    }    
 
+    //"Others"
+    iLED[EYE[G][R]] = 1;
+    iLED[EYE[G][L]] = 1;
+    iLED[EYE[R][R]] = 1;
+    iLED[EYE[R][L]] = 1;
+    iLED[GEM[R]] = 1;
+    iLED[GEM[G]] = 1;
+    iLED[RAT] = 1;
+    iLED[CAT] = 1;
 
     while (1)
     {
