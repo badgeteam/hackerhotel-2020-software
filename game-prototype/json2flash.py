@@ -38,16 +38,16 @@ def show_eeprom(data):
         ptr = read_ptr(data,offset)
         if ptr == 0x0000:
             break
-        print("\n0x{0:04X} {2:} ->0x{1:04X} Pointer to next object at this level".format(offset,ptr,"  "*level))
+        print("\n0x{0:04X} {2:} ->0x{1:04X} Pointer to next object at this level".format(offset+32,ptr,"  "*level))
         cache.append(ptr)
         offset += 2
 
         ptr = read_ptr(data,offset)
-        print("0x{0:04X} {2:} ->0x{1:04X} Pointer to next level".format(offset,ptr,"  "*level))
+        print("0x{0:04X} {2:} ->0x{1:04X} Pointer to next level".format(offset+32,ptr,"  "*level))
         offset += 2
 
         for i in range(len(byte_fields)):
-            print("0x{0:04X} {4:} Level {1:}, {2:}={3:}".format(offset,level,byte_fields[i],read_byte(data,offset),"  "*level))
+            print("0x{0:04X} {4:} Level {1:}, {2:}={3:}".format(offset+32,level,byte_fields[i],read_byte(data,offset),"  "*level))
             offset += 1
 
         for i in range(len(string_fields)):
@@ -56,13 +56,15 @@ def show_eeprom(data):
             l = read_ptr(data,offset)
             b = b + read_range(data,offset+2,l)
             offset = offset + 2 + l
+            if i == string_fields.index('action_str2'):
+                b = xor_nibble_swap(b)
             if i >= string_fields.index('open_acl_msg'):
                 if len(b) > 0:
                     s = effects(b[0]) + b[1:].decode()
             else:
                 s = b.decode()
 
-            print("0x{0:04X} {4:} Level {1:}, {2:}={3:}".format(start_offset,level,string_fields[i],s,"  "*level))
+            print("0x{0:04X} {4:} Level {1:}, {2:}={3:}".format(start_offset+32,level,string_fields[i],s,"  "*level))
 
         if offset == cache[-1]:
             # next object at same level
@@ -112,6 +114,8 @@ def convert_json_to_eeprom(objects,offset=0):
                     else:
                         b.append(0)
                 b.extend(obj[f].encode('utf8'))
+                if i == string_fields.index('action_str2'):
+                    b = xor_nibble_swap(b)
                 binary.append(len(b)//256)
                 binary.append(len(b)%256)
                 binary.extend(b)

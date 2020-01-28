@@ -223,6 +223,9 @@ def read_string_field(eeprom,offset,field):
             l = read_ptr(eeprom,offset)
             b = read_range(eeprom,offset+2,l)
 
+            if string_fields.index(field) == string_fields.index('action_str2'):
+                b = xor_nibble_swap(b)
+
             if string_fields.index(field) >= string_fields.index('open_acl_msg'):
                 if len(b) > 0:
                     current_effects = b[0]
@@ -233,6 +236,12 @@ def read_string_field(eeprom,offset,field):
     return "N/A"
 
 
+def xor_nibble_swap(old):
+    new = bytearray(0)
+    for b in old:
+        new.append((16*(b%16)+(b//16))^0b01010101)
+    return new
+        
 def unify(s):
     exclude = '!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~ \t'
     s = ''.join(ch for ch in s if ch not in exclude)
