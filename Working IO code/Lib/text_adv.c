@@ -138,6 +138,8 @@ void PopulateObject(uint16_t offset, object_model_t *object){
     }
 
     //Find out where all of the strings begin and how long they are
+    
+/*
     offset += OFF_STRINGFLDS;
     object->addrStr[0]=offset+1;
     for(uint8_t x=1; x<STRING_FIELDS_LEN; ++x){
@@ -151,6 +153,7 @@ void PopulateObject(uint16_t offset, object_model_t *object){
         object->addrStr[x]=(offset-1)&EXT_EE_MAX;
     }
     object->lenStr[STRING_FIELDS_LEN-1]=(offset-addrStart)&EXT_EE_MAX;
+*/
 }
 
 //Update game state: num -> vBBBBbbb v=value(0 is set!), BBBB=Byte number, bbb=bit number
@@ -253,7 +256,10 @@ uint8_t CheckSend(){
 
     //Check if more string(part)s have to be sent to the serial output if previous send operation is completed
     if ((txAddrNow < TXLISTLEN) && serTxDone){
-        if (txPart < txStrLen[txAddrNow]){
+        if (txStrLen[txAddrNow] == 0){
+            txPart = 0;
+            txAddrNow = TXLISTLEN;
+        } else if (txPart < txStrLen[txAddrNow]){
             EEreadLength = txStrLen[txAddrNow]-txPart;
             if (EEreadLength>=TXLEN) EEreadLength = TXLEN-1;
             ExtEERead(txAddrList[txAddrNow]+txPart, EEreadLength, txTypeNow, &txBuffer[0]);
@@ -448,7 +454,8 @@ uint8_t ProcessInput(uint8_t *data){
                     reactStr[0][MSG]=A_DONTSEE;
                     reactStr[1][MSG]=L_DONTSEE;
                     reactStr[2][MSG]=TEASER;
-                    actionList = MSG+1;                }
+                    actionList = MSG+1;                
+                }
             }
 
         } else

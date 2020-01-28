@@ -3,33 +3,33 @@ ISR_IO.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000090  00803800  00001b1c  00001bd0  2**0
+  0 .data         00000090  00803800  00001a8e  00001b42  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         00001ade  00000000  00000000  000000b4  2**1
+  1 .text         00001a50  00000000  00000000  000000b4  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .rodata       0000003e  00009ade  00001ade  00001b92  2**0
+  2 .rodata       0000003e  00009a50  00001a50  00001b04  2**0
                   CONTENTS, ALLOC, LOAD, READONLY, DATA
-  3 .bss          0000027f  00803890  00803890  00001c60  2**0
+  3 .bss          0000027f  00803890  00803890  00001bd2  2**0
                   ALLOC
-  4 .comment      00000030  00000000  00000000  00001c60  2**0
+  4 .comment      00000030  00000000  00000000  00001bd2  2**0
                   CONTENTS, READONLY
-  5 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  00001c90  2**2
+  5 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  00001c04  2**2
                   CONTENTS, READONLY
-  6 .debug_aranges 00000248  00000000  00000000  00001cd0  2**0
+  6 .debug_aranges 00000248  00000000  00000000  00001c44  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_info   00004080  00000000  00000000  00001f18  2**0
+  7 .debug_info   0000403e  00000000  00000000  00001e8c  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_abbrev 000022b9  00000000  00000000  00005f98  2**0
+  8 .debug_abbrev 000022c6  00000000  00000000  00005eca  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_line   00001dd7  00000000  00000000  00008251  2**0
+  9 .debug_line   00001da1  00000000  00000000  00008190  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_frame  00000748  00000000  00000000  0000a028  2**2
+ 10 .debug_frame  00000718  00000000  00000000  00009f34  2**2
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_str    000016cd  00000000  00000000  0000a770  2**0
+ 11 .debug_str    000016cd  00000000  00000000  0000a64c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_loc    00002167  00000000  00000000  0000be3d  2**0
+ 12 .debug_loc    00002017  00000000  00000000  0000bd19  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_ranges 00000270  00000000  00000000  0000dfa4  2**0
+ 13 .debug_ranges 00000258  00000000  00000000  0000dd30  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -110,8 +110,8 @@ Disassembly of section .text:
       88:	18 e3       	ldi	r17, 0x38	; 56
       8a:	a0 e0       	ldi	r26, 0x00	; 0
       8c:	b8 e3       	ldi	r27, 0x38	; 56
-      8e:	ec e1       	ldi	r30, 0x1C	; 28
-      90:	fb e1       	ldi	r31, 0x1B	; 27
+      8e:	ee e8       	ldi	r30, 0x8E	; 142
+      90:	fa e1       	ldi	r31, 0x1A	; 26
       92:	02 c0       	rjmp	.+4      	; 0x98 <__do_copy_data+0x10>
       94:	05 90       	lpm	r0, Z+
       96:	0d 92       	st	X+, r0
@@ -132,8 +132,8 @@ Disassembly of section .text:
       a8:	af 30       	cpi	r26, 0x0F	; 15
       aa:	b2 07       	cpc	r27, r18
       ac:	e1 f7       	brne	.-8      	; 0xa6 <.do_clear_bss_loop>
-      ae:	0e 94 c7 0c 	call	0x198e	; 0x198e <main>
-      b2:	0c 94 6d 0d 	jmp	0x1ada	; 0x1ada <_exit>
+      ae:	0e 94 80 0c 	call	0x1900	; 0x1900 <main>
+      b2:	0c 94 26 0d 	jmp	0x1a4c	; 0x1a4c <_exit>
 
 000000b6 <__bad_interrupt>:
       b6:	a4 cf       	rjmp	.-184    	; 0x0 <__vectors>
@@ -836,7 +836,7 @@ void SelectAuIn(){
      50e:	60 81       	ld	r22, Z
      510:	71 81       	ldd	r23, Z+1	; 0x01
      512:	82 96       	adiw	r24, 0x22	; 34
-     514:	0e 94 4a 0d 	call	0x1a94	; 0x1a94 <__udivmodhi4>
+     514:	0e 94 03 0d 	call	0x1a06	; 0x1a06 <__udivmodhi4>
      518:	80 93 ec 3a 	sts	0x3AEC, r24	; 0x803aec <tmp16bit>
      51c:	90 93 ed 3a 	sts	0x3AED, r25	; 0x803aed <tmp16bit+0x1>
      520:	e1 e4       	ldi	r30, 0x41	; 65
@@ -1278,7 +1278,7 @@ void SelectAuIn(){
      90e:	60 91 4a 01 	lds	r22, 0x014A	; 0x80014a <__TEXT_REGION_LENGTH__+0x70014a>
      912:	70 91 4b 01 	lds	r23, 0x014B	; 0x80014b <__TEXT_REGION_LENGTH__+0x70014b>
      916:	82 96       	adiw	r24, 0x22	; 34
-     918:	0e 94 4a 0d 	call	0x1a94	; 0x1a94 <__udivmodhi4>
+     918:	0e 94 03 0d 	call	0x1a06	; 0x1a06 <__udivmodhi4>
      91c:	80 93 ec 3a 	sts	0x3AEC, r24	; 0x803aec <tmp16bit>
      920:	90 93 ed 3a 	sts	0x3AED, r25	; 0x803aed <tmp16bit+0x1>
      924:	e1 e4       	ldi	r30, 0x41	; 65
@@ -2292,8 +2292,8 @@ uint8_t BastetDictates(){
      ec4:	55 1f       	adc	r21, r21
      ec6:	44 0f       	add	r20, r20
      ec8:	55 1f       	adc	r21, r21
-     eca:	44 5f       	subi	r20, 0xF4	; 244
-     ecc:	54 46       	sbci	r21, 0x64	; 100
+     eca:	42 58       	subi	r20, 0x82	; 130
+     ecc:	55 46       	sbci	r21, 0x65	; 101
      ece:	fd 01       	movw	r30, r26
      ed0:	e7 70       	andi	r30, 0x07	; 7
      ed2:	ff 27       	eor	r31, r31
@@ -2461,7 +2461,7 @@ uint8_t BastetDictates(){
     1012:	9f 01       	movw	r18, r30
     1014:	a1 e8       	ldi	r26, 0x81	; 129
     1016:	b0 e8       	ldi	r27, 0x80	; 128
-    1018:	51 d5       	rcall	.+2722   	; 0x1abc <__umulhisi3>
+    1018:	0a d5       	rcall	.+2580   	; 0x1a2e <__umulhisi3>
     101a:	88 0f       	add	r24, r24
     101c:	89 2f       	mov	r24, r25
     101e:	88 1f       	adc	r24, r24
@@ -2538,1752 +2538,1693 @@ uint8_t BastetDictates(){
     10da:	08 95       	ret
 
 000010dc <PopulateObject>:
-    10dc:	6f 92       	push	r6
-    10de:	7f 92       	push	r7
-    10e0:	8f 92       	push	r8
-    10e2:	9f 92       	push	r9
-    10e4:	af 92       	push	r10
-    10e6:	bf 92       	push	r11
-    10e8:	cf 92       	push	r12
-    10ea:	df 92       	push	r13
-    10ec:	ef 92       	push	r14
-    10ee:	ff 92       	push	r15
-    10f0:	0f 93       	push	r16
-    10f2:	1f 93       	push	r17
-    10f4:	cf 93       	push	r28
-    10f6:	df 93       	push	r29
-    10f8:	cd b7       	in	r28, 0x3d	; 61
-    10fa:	de b7       	in	r29, 0x3e	; 62
-    10fc:	2c 97       	sbiw	r28, 0x0c	; 12
-    10fe:	cd bf       	out	0x3d, r28	; 61
-    1100:	de bf       	out	0x3e, r29	; 62
-    1102:	8c 01       	movw	r16, r24
-    1104:	5b 01       	movw	r10, r22
-    1106:	9e 01       	movw	r18, r28
-    1108:	2f 5f       	subi	r18, 0xFF	; 255
-    110a:	3f 4f       	sbci	r19, 0xFF	; 255
-    110c:	40 e0       	ldi	r20, 0x00	; 0
-    110e:	6c e0       	ldi	r22, 0x0C	; 12
-    1110:	80 96       	adiw	r24, 0x20	; 32
-    1112:	ec de       	rcall	.-552    	; 0xeec <ExtEERead>
-    1114:	89 81       	ldd	r24, Y+1	; 0x01
-    1116:	90 e0       	ldi	r25, 0x00	; 0
-    1118:	98 2f       	mov	r25, r24
-    111a:	88 27       	eor	r24, r24
-    111c:	2a 81       	ldd	r18, Y+2	; 0x02
-    111e:	82 2b       	or	r24, r18
-    1120:	80 96       	adiw	r24, 0x20	; 32
-    1122:	f5 01       	movw	r30, r10
-    1124:	80 83       	st	Z, r24
-    1126:	91 83       	std	Z+1, r25	; 0x01
-    1128:	8b 81       	ldd	r24, Y+3	; 0x03
-    112a:	90 e0       	ldi	r25, 0x00	; 0
-    112c:	98 2f       	mov	r25, r24
-    112e:	88 27       	eor	r24, r24
-    1130:	2c 81       	ldd	r18, Y+4	; 0x04
-    1132:	82 2b       	or	r24, r18
-    1134:	80 96       	adiw	r24, 0x20	; 32
-    1136:	82 83       	std	Z+2, r24	; 0x02
-    1138:	93 83       	std	Z+3, r25	; 0x03
-    113a:	fe 01       	movw	r30, r28
-    113c:	35 96       	adiw	r30, 0x05	; 5
-    113e:	d5 01       	movw	r26, r10
-    1140:	14 96       	adiw	r26, 0x04	; 4
-    1142:	9e 01       	movw	r18, r28
-    1144:	23 5f       	subi	r18, 0xF3	; 243
-    1146:	3f 4f       	sbci	r19, 0xFF	; 255
-    1148:	81 91       	ld	r24, Z+
-    114a:	8d 93       	st	X+, r24
-    114c:	e2 17       	cp	r30, r18
-    114e:	f3 07       	cpc	r31, r19
-    1150:	d9 f7       	brne	.-10     	; 0x1148 <PopulateObject+0x6c>
-    1152:	38 01       	movw	r6, r16
-    1154:	fc e2       	ldi	r31, 0x2C	; 44
-    1156:	6f 0e       	add	r6, r31
-    1158:	71 1c       	adc	r7, r1
-    115a:	03 5d       	subi	r16, 0xD3	; 211
-    115c:	1f 4f       	sbci	r17, 0xFF	; 255
-    115e:	f5 01       	movw	r30, r10
-    1160:	04 87       	std	Z+12, r16	; 0x0c
-    1162:	15 87       	std	Z+13, r17	; 0x0d
-    1164:	65 01       	movw	r12, r10
-    1166:	fe e0       	ldi	r31, 0x0E	; 14
-    1168:	cf 0e       	add	r12, r31
-    116a:	d1 1c       	adc	r13, r1
-    116c:	45 01       	movw	r8, r10
-    116e:	8a e1       	ldi	r24, 0x1A	; 26
-    1170:	88 0e       	add	r8, r24
-    1172:	91 1c       	adc	r9, r1
-    1174:	73 01       	movw	r14, r6
-    1176:	02 c0       	rjmp	.+4      	; 0x117c <PopulateObject+0xa0>
-    1178:	78 01       	movw	r14, r16
-    117a:	38 01       	movw	r6, r16
-    117c:	83 01       	movw	r16, r6
-    117e:	9e 01       	movw	r18, r28
-    1180:	2f 5f       	subi	r18, 0xFF	; 255
-    1182:	3f 4f       	sbci	r19, 0xFF	; 255
-    1184:	40 e0       	ldi	r20, 0x00	; 0
-    1186:	61 e0       	ldi	r22, 0x01	; 1
-    1188:	c8 01       	movw	r24, r16
-    118a:	b0 de       	rcall	.-672    	; 0xeec <ExtEERead>
-    118c:	89 81       	ldd	r24, Y+1	; 0x01
-    118e:	98 01       	movw	r18, r16
-    1190:	28 0f       	add	r18, r24
-    1192:	31 1d       	adc	r19, r1
-    1194:	89 01       	movw	r16, r18
-    1196:	0f 5f       	subi	r16, 0xFF	; 255
-    1198:	1f 4f       	sbci	r17, 0xFF	; 255
-    119a:	12 f0       	brmi	.+4      	; 0x11a0 <PopulateObject+0xc4>
-    119c:	8f 3f       	cpi	r24, 0xFF	; 255
-    119e:	79 f3       	breq	.-34     	; 0x117e <PopulateObject+0xa2>
-    11a0:	e0 94       	com	r14
-    11a2:	f0 94       	com	r15
-    11a4:	e0 0e       	add	r14, r16
-    11a6:	f1 1e       	adc	r15, r17
-    11a8:	e8 94       	clt
-    11aa:	f7 f8       	bld	r15, 7
-    11ac:	f6 01       	movw	r30, r12
-    11ae:	e4 86       	std	Z+12, r14	; 0x0c
-    11b0:	f5 86       	std	Z+13, r15	; 0x0d
-    11b2:	3f 77       	andi	r19, 0x7F	; 127
-    11b4:	21 93       	st	Z+, r18
-    11b6:	31 93       	st	Z+, r19
-    11b8:	6f 01       	movw	r12, r30
-    11ba:	e8 15       	cp	r30, r8
-    11bc:	f9 05       	cpc	r31, r9
-    11be:	e1 f6       	brne	.-72     	; 0x1178 <PopulateObject+0x9c>
-    11c0:	06 19       	sub	r16, r6
-    11c2:	17 09       	sbc	r17, r7
-    11c4:	1f 77       	andi	r17, 0x7F	; 127
-    11c6:	f5 01       	movw	r30, r10
-    11c8:	06 a3       	std	Z+38, r16	; 0x26
-    11ca:	17 a3       	std	Z+39, r17	; 0x27
-    11cc:	2c 96       	adiw	r28, 0x0c	; 12
-    11ce:	cd bf       	out	0x3d, r28	; 61
-    11d0:	de bf       	out	0x3e, r29	; 62
-    11d2:	df 91       	pop	r29
-    11d4:	cf 91       	pop	r28
-    11d6:	1f 91       	pop	r17
-    11d8:	0f 91       	pop	r16
-    11da:	ff 90       	pop	r15
-    11dc:	ef 90       	pop	r14
-    11de:	df 90       	pop	r13
-    11e0:	cf 90       	pop	r12
-    11e2:	bf 90       	pop	r11
-    11e4:	af 90       	pop	r10
-    11e6:	9f 90       	pop	r9
-    11e8:	8f 90       	pop	r8
-    11ea:	7f 90       	pop	r7
-    11ec:	6f 90       	pop	r6
-    11ee:	08 95       	ret
+    10dc:	0f 93       	push	r16
+    10de:	1f 93       	push	r17
+    10e0:	cf 93       	push	r28
+    10e2:	df 93       	push	r29
+    10e4:	cd b7       	in	r28, 0x3d	; 61
+    10e6:	de b7       	in	r29, 0x3e	; 62
+    10e8:	2c 97       	sbiw	r28, 0x0c	; 12
+    10ea:	cd bf       	out	0x3d, r28	; 61
+    10ec:	de bf       	out	0x3e, r29	; 62
+    10ee:	8b 01       	movw	r16, r22
+    10f0:	9e 01       	movw	r18, r28
+    10f2:	2f 5f       	subi	r18, 0xFF	; 255
+    10f4:	3f 4f       	sbci	r19, 0xFF	; 255
+    10f6:	40 e0       	ldi	r20, 0x00	; 0
+    10f8:	6c e0       	ldi	r22, 0x0C	; 12
+    10fa:	80 96       	adiw	r24, 0x20	; 32
+    10fc:	f7 de       	rcall	.-530    	; 0xeec <ExtEERead>
+    10fe:	89 81       	ldd	r24, Y+1	; 0x01
+    1100:	90 e0       	ldi	r25, 0x00	; 0
+    1102:	98 2f       	mov	r25, r24
+    1104:	88 27       	eor	r24, r24
+    1106:	2a 81       	ldd	r18, Y+2	; 0x02
+    1108:	82 2b       	or	r24, r18
+    110a:	80 96       	adiw	r24, 0x20	; 32
+    110c:	f8 01       	movw	r30, r16
+    110e:	80 83       	st	Z, r24
+    1110:	91 83       	std	Z+1, r25	; 0x01
+    1112:	8b 81       	ldd	r24, Y+3	; 0x03
+    1114:	90 e0       	ldi	r25, 0x00	; 0
+    1116:	98 2f       	mov	r25, r24
+    1118:	88 27       	eor	r24, r24
+    111a:	2c 81       	ldd	r18, Y+4	; 0x04
+    111c:	82 2b       	or	r24, r18
+    111e:	80 96       	adiw	r24, 0x20	; 32
+    1120:	82 83       	std	Z+2, r24	; 0x02
+    1122:	93 83       	std	Z+3, r25	; 0x03
+    1124:	fe 01       	movw	r30, r28
+    1126:	35 96       	adiw	r30, 0x05	; 5
+    1128:	d8 01       	movw	r26, r16
+    112a:	14 96       	adiw	r26, 0x04	; 4
+    112c:	9e 01       	movw	r18, r28
+    112e:	23 5f       	subi	r18, 0xF3	; 243
+    1130:	3f 4f       	sbci	r19, 0xFF	; 255
+    1132:	81 91       	ld	r24, Z+
+    1134:	8d 93       	st	X+, r24
+    1136:	e2 17       	cp	r30, r18
+    1138:	f3 07       	cpc	r31, r19
+    113a:	d9 f7       	brne	.-10     	; 0x1132 <PopulateObject+0x56>
+    113c:	2c 96       	adiw	r28, 0x0c	; 12
+    113e:	cd bf       	out	0x3d, r28	; 61
+    1140:	de bf       	out	0x3e, r29	; 62
+    1142:	df 91       	pop	r29
+    1144:	cf 91       	pop	r28
+    1146:	1f 91       	pop	r17
+    1148:	0f 91       	pop	r16
+    114a:	08 95       	ret
 
-000011f0 <GetState>:
+0000114c <GetState>:
     }
 }
 
 //Returns the state of the bit on position "num"
 uint8_t GetState(uint8_t num){
     if ((num)&&(num<STATUS_BITS)){
-    11f0:	18 16       	cp	r1, r24
-    11f2:	14 f4       	brge	.+4      	; 0x11f8 <GetState+0x8>
+    114c:	18 16       	cp	r1, r24
+    114e:	14 f4       	brge	.+4      	; 0x1154 <GetState+0x8>
         return ReadStatusBit(num);
-    11f4:	6b cd       	rjmp	.-1322   	; 0xccc <ReadStatusBit>
-    11f6:	08 95       	ret
+    1150:	bd cd       	rjmp	.-1158   	; 0xccc <ReadStatusBit>
+    1152:	08 95       	ret
     }
     return 1;
-    11f8:	81 e0       	ldi	r24, 0x01	; 1
+    1154:	81 e0       	ldi	r24, 0x01	; 1
 }
-    11fa:	08 95       	ret
+    1156:	08 95       	ret
 
-000011fc <CheckState>:
+00001158 <CheckState>:
 
 //Checks if state of bit BBBBbbb matches with v (inverted) bit
 uint8_t CheckState(uint8_t num){
-    11fc:	cf 93       	push	r28
-    11fe:	c8 2f       	mov	r28, r24
+    1158:	cf 93       	push	r28
+    115a:	c8 2f       	mov	r28, r24
     return (GetState(num&(STATUS_BITS-1)) == (1-(num&STATUS_BITS))); 
-    1200:	8f 77       	andi	r24, 0x7F	; 127
-    1202:	f6 df       	rcall	.-20     	; 0x11f0 <GetState>
-    1204:	c0 78       	andi	r28, 0x80	; 128
-    1206:	41 e0       	ldi	r20, 0x01	; 1
-    1208:	50 e0       	ldi	r21, 0x00	; 0
-    120a:	4c 1b       	sub	r20, r28
-    120c:	51 09       	sbc	r21, r1
-    120e:	28 2f       	mov	r18, r24
-    1210:	30 e0       	ldi	r19, 0x00	; 0
-    1212:	81 e0       	ldi	r24, 0x01	; 1
-    1214:	42 17       	cp	r20, r18
-    1216:	53 07       	cpc	r21, r19
-    1218:	09 f0       	breq	.+2      	; 0x121c <CheckState+0x20>
-    121a:	80 e0       	ldi	r24, 0x00	; 0
+    115c:	8f 77       	andi	r24, 0x7F	; 127
+    115e:	f6 df       	rcall	.-20     	; 0x114c <GetState>
+    1160:	c0 78       	andi	r28, 0x80	; 128
+    1162:	41 e0       	ldi	r20, 0x01	; 1
+    1164:	50 e0       	ldi	r21, 0x00	; 0
+    1166:	4c 1b       	sub	r20, r28
+    1168:	51 09       	sbc	r21, r1
+    116a:	28 2f       	mov	r18, r24
+    116c:	30 e0       	ldi	r19, 0x00	; 0
+    116e:	81 e0       	ldi	r24, 0x01	; 1
+    1170:	42 17       	cp	r20, r18
+    1172:	53 07       	cpc	r21, r19
+    1174:	09 f0       	breq	.+2      	; 0x1178 <CheckState+0x20>
+    1176:	80 e0       	ldi	r24, 0x00	; 0
 }
-    121c:	cf 91       	pop	r28
-    121e:	08 95       	ret
+    1178:	cf 91       	pop	r28
+    117a:	08 95       	ret
 
-00001220 <CheckLetter>:
+0000117c <CheckLetter>:
 
 //
 uint8_t CheckLetter(uint16_t child, uint8_t letter){
-    1220:	cf 92       	push	r12
-    1222:	df 92       	push	r13
-    1224:	ef 92       	push	r14
-    1226:	ff 92       	push	r15
-    1228:	0f 93       	push	r16
-    122a:	1f 93       	push	r17
-    122c:	cf 93       	push	r28
-    122e:	df 93       	push	r29
-    1230:	cd b7       	in	r28, 0x3d	; 61
-    1232:	de b7       	in	r29, 0x3e	; 62
-    1234:	a0 97       	sbiw	r28, 0x20	; 32
-    1236:	cd bf       	out	0x3d, r28	; 61
-    1238:	de bf       	out	0x3e, r29	; 62
-    123a:	c6 2e       	mov	r12, r22
+    117c:	cf 92       	push	r12
+    117e:	df 92       	push	r13
+    1180:	ef 92       	push	r14
+    1182:	ff 92       	push	r15
+    1184:	0f 93       	push	r16
+    1186:	1f 93       	push	r17
+    1188:	cf 93       	push	r28
+    118a:	df 93       	push	r29
+    118c:	cd b7       	in	r28, 0x3d	; 61
+    118e:	de b7       	in	r29, 0x3e	; 62
+    1190:	a0 97       	sbiw	r28, 0x20	; 32
+    1192:	cd bf       	out	0x3d, r28	; 61
+    1194:	de bf       	out	0x3e, r29	; 62
+    1196:	c6 2e       	mov	r12, r22
     
     uint8_t found = 0;
     uint8_t data[32];
 
     child += L_BOILER;
-    123c:	7c 01       	movw	r14, r24
-    123e:	20 e2       	ldi	r18, 0x20	; 32
-    1240:	e2 0e       	add	r14, r18
-    1242:	f1 1c       	adc	r15, r1
+    1198:	7c 01       	movw	r14, r24
+    119a:	20 e2       	ldi	r18, 0x20	; 32
+    119c:	e2 0e       	add	r14, r18
+    119e:	f1 1c       	adc	r15, r1
     ExtEERead(child+OFF_STRINGFLDS, 1, GAME, &data[0]);
-    1244:	9e 01       	movw	r18, r28
-    1246:	2f 5f       	subi	r18, 0xFF	; 255
-    1248:	3f 4f       	sbci	r19, 0xFF	; 255
-    124a:	40 e0       	ldi	r20, 0x00	; 0
-    124c:	61 e0       	ldi	r22, 0x01	; 1
-    124e:	8c 96       	adiw	r24, 0x2c	; 44
-    1250:	4d de       	rcall	.-870    	; 0xeec <ExtEERead>
+    11a0:	9e 01       	movw	r18, r28
+    11a2:	2f 5f       	subi	r18, 0xFF	; 255
+    11a4:	3f 4f       	sbci	r19, 0xFF	; 255
+    11a6:	40 e0       	ldi	r20, 0x00	; 0
+    11a8:	61 e0       	ldi	r22, 0x01	; 1
+    11aa:	8c 96       	adiw	r24, 0x2c	; 44
+    11ac:	9f de       	rcall	.-706    	; 0xeec <ExtEERead>
     uint8_t x = data[0];
-    1252:	09 81       	ldd	r16, Y+1	; 0x01
+    11ae:	09 81       	ldd	r16, Y+1	; 0x01
 
     while (x){
-    1254:	00 23       	and	r16, r16
-    1256:	59 f1       	breq	.+86     	; 0x12ae <CheckLetter+0x8e>
-    1258:	d1 2c       	mov	r13, r1
+    11b0:	00 23       	and	r16, r16
+    11b2:	59 f1       	breq	.+86     	; 0x120a <CheckLetter+0x8e>
+    11b4:	d1 2c       	mov	r13, r1
         uint8_t max = (x>32)?32:x;
-    125a:	10 2f       	mov	r17, r16
-    125c:	01 32       	cpi	r16, 0x21	; 33
-    125e:	08 f0       	brcs	.+2      	; 0x1262 <CheckLetter+0x42>
-    1260:	10 e2       	ldi	r17, 0x20	; 32
+    11b6:	10 2f       	mov	r17, r16
+    11b8:	01 32       	cpi	r16, 0x21	; 33
+    11ba:	08 f0       	brcs	.+2      	; 0x11be <CheckLetter+0x42>
+    11bc:	10 e2       	ldi	r17, 0x20	; 32
         ExtEERead(child+OFF_STRINGFLDS+1, max, GAME, &data[0]);
-    1262:	9e 01       	movw	r18, r28
-    1264:	2f 5f       	subi	r18, 0xFF	; 255
-    1266:	3f 4f       	sbci	r19, 0xFF	; 255
-    1268:	40 e0       	ldi	r20, 0x00	; 0
-    126a:	61 2f       	mov	r22, r17
-    126c:	c7 01       	movw	r24, r14
-    126e:	0d 96       	adiw	r24, 0x0d	; 13
-    1270:	3d de       	rcall	.-902    	; 0xeec <ExtEERead>
+    11be:	9e 01       	movw	r18, r28
+    11c0:	2f 5f       	subi	r18, 0xFF	; 255
+    11c2:	3f 4f       	sbci	r19, 0xFF	; 255
+    11c4:	40 e0       	ldi	r20, 0x00	; 0
+    11c6:	61 2f       	mov	r22, r17
+    11c8:	c7 01       	movw	r24, r14
+    11ca:	0d 96       	adiw	r24, 0x0d	; 13
+    11cc:	8f de       	rcall	.-738    	; 0xeec <ExtEERead>
         for (uint8_t y=0; y<max; ++y){
-    1272:	11 23       	and	r17, r17
-    1274:	b1 f0       	breq	.+44     	; 0x12a2 <CheckLetter+0x82>
+    11ce:	11 23       	and	r17, r17
+    11d0:	b1 f0       	breq	.+44     	; 0x11fe <CheckLetter+0x82>
             if (found){
-    1276:	dd 20       	and	r13, r13
-    1278:	59 f0       	breq	.+22     	; 0x1290 <CheckLetter+0x70>
+    11d2:	dd 20       	and	r13, r13
+    11d4:	59 f0       	breq	.+22     	; 0x11ec <CheckLetter+0x70>
     uint8_t x = data[0];
 
     while (x){
         uint8_t max = (x>32)?32:x;
         ExtEERead(child+OFF_STRINGFLDS+1, max, GAME, &data[0]);
         for (uint8_t y=0; y<max; ++y){
-    127a:	80 e0       	ldi	r24, 0x00	; 0
+    11d6:	80 e0       	ldi	r24, 0x00	; 0
             if (found){
                 if ((data[y]|0x20) == letter) return 1; else return 0;
-    127c:	fe 01       	movw	r30, r28
-    127e:	e8 0f       	add	r30, r24
-    1280:	f1 1d       	adc	r31, r1
-    1282:	91 81       	ldd	r25, Z+1	; 0x01
-    1284:	90 62       	ori	r25, 0x20	; 32
-    1286:	81 e0       	ldi	r24, 0x01	; 1
-    1288:	9c 15       	cp	r25, r12
-    128a:	c9 f0       	breq	.+50     	; 0x12be <CheckLetter+0x9e>
-    128c:	80 e0       	ldi	r24, 0x00	; 0
-    128e:	17 c0       	rjmp	.+46     	; 0x12be <CheckLetter+0x9e>
-    1290:	fe 01       	movw	r30, r28
-    1292:	31 96       	adiw	r30, 0x01	; 1
+    11d8:	fe 01       	movw	r30, r28
+    11da:	e8 0f       	add	r30, r24
+    11dc:	f1 1d       	adc	r31, r1
+    11de:	91 81       	ldd	r25, Z+1	; 0x01
+    11e0:	90 62       	ori	r25, 0x20	; 32
+    11e2:	81 e0       	ldi	r24, 0x01	; 1
+    11e4:	9c 15       	cp	r25, r12
+    11e6:	c9 f0       	breq	.+50     	; 0x121a <CheckLetter+0x9e>
+    11e8:	80 e0       	ldi	r24, 0x00	; 0
+    11ea:	17 c0       	rjmp	.+46     	; 0x121a <CheckLetter+0x9e>
+    11ec:	fe 01       	movw	r30, r28
+    11ee:	31 96       	adiw	r30, 0x01	; 1
 
     while (x){
         uint8_t max = (x>32)?32:x;
         ExtEERead(child+OFF_STRINGFLDS+1, max, GAME, &data[0]);
         for (uint8_t y=0; y<max; ++y){
             if (found){
-    1294:	80 e0       	ldi	r24, 0x00	; 0
+    11f0:	80 e0       	ldi	r24, 0x00	; 0
                 if ((data[y]|0x20) == letter) return 1; else return 0;
             }
             if (data[y] == '[') found = 1;
-    1296:	91 91       	ld	r25, Z+
-    1298:	9b 35       	cpi	r25, 0x5B	; 91
-    129a:	59 f0       	breq	.+22     	; 0x12b2 <CheckLetter+0x92>
+    11f2:	91 91       	ld	r25, Z+
+    11f4:	9b 35       	cpi	r25, 0x5B	; 91
+    11f6:	59 f0       	breq	.+22     	; 0x120e <CheckLetter+0x92>
     uint8_t x = data[0];
 
     while (x){
         uint8_t max = (x>32)?32:x;
         ExtEERead(child+OFF_STRINGFLDS+1, max, GAME, &data[0]);
         for (uint8_t y=0; y<max; ++y){
-    129c:	8f 5f       	subi	r24, 0xFF	; 255
-    129e:	18 13       	cpse	r17, r24
-    12a0:	fa cf       	rjmp	.-12     	; 0x1296 <CheckLetter+0x76>
+    11f8:	8f 5f       	subi	r24, 0xFF	; 255
+    11fa:	18 13       	cpse	r17, r24
+    11fc:	fa cf       	rjmp	.-12     	; 0x11f2 <CheckLetter+0x76>
             if (found){
                 if ((data[y]|0x20) == letter) return 1; else return 0;
             }
             if (data[y] == '[') found = 1;
         }
         child += max;
-    12a2:	e1 0e       	add	r14, r17
-    12a4:	f1 1c       	adc	r15, r1
+    11fe:	e1 0e       	add	r14, r17
+    1200:	f1 1c       	adc	r15, r1
         x -= max;
-    12a6:	01 1b       	sub	r16, r17
+    1202:	01 1b       	sub	r16, r17
 
     child += L_BOILER;
     ExtEERead(child+OFF_STRINGFLDS, 1, GAME, &data[0]);
     uint8_t x = data[0];
 
     while (x){
-    12a8:	c1 f6       	brne	.-80     	; 0x125a <CheckLetter+0x3a>
+    1204:	c1 f6       	brne	.-80     	; 0x11b6 <CheckLetter+0x3a>
             if (data[y] == '[') found = 1;
         }
         child += max;
         x -= max;
     }
     return 0;
-    12aa:	80 e0       	ldi	r24, 0x00	; 0
-    12ac:	08 c0       	rjmp	.+16     	; 0x12be <CheckLetter+0x9e>
-    12ae:	80 e0       	ldi	r24, 0x00	; 0
-    12b0:	06 c0       	rjmp	.+12     	; 0x12be <CheckLetter+0x9e>
+    1206:	80 e0       	ldi	r24, 0x00	; 0
+    1208:	08 c0       	rjmp	.+16     	; 0x121a <CheckLetter+0x9e>
+    120a:	80 e0       	ldi	r24, 0x00	; 0
+    120c:	06 c0       	rjmp	.+12     	; 0x121a <CheckLetter+0x9e>
     uint8_t x = data[0];
 
     while (x){
         uint8_t max = (x>32)?32:x;
         ExtEERead(child+OFF_STRINGFLDS+1, max, GAME, &data[0]);
         for (uint8_t y=0; y<max; ++y){
-    12b2:	8f 5f       	subi	r24, 0xFF	; 255
-    12b4:	81 17       	cp	r24, r17
-    12b6:	10 f3       	brcs	.-60     	; 0x127c <CheckLetter+0x5c>
+    120e:	8f 5f       	subi	r24, 0xFF	; 255
+    1210:	81 17       	cp	r24, r17
+    1212:	10 f3       	brcs	.-60     	; 0x11d8 <CheckLetter+0x5c>
             if (found){
                 if ((data[y]|0x20) == letter) return 1; else return 0;
             }
             if (data[y] == '[') found = 1;
-    12b8:	dd 24       	eor	r13, r13
-    12ba:	d3 94       	inc	r13
-    12bc:	f2 cf       	rjmp	.-28     	; 0x12a2 <CheckLetter+0x82>
+    1214:	dd 24       	eor	r13, r13
+    1216:	d3 94       	inc	r13
+    1218:	f2 cf       	rjmp	.-28     	; 0x11fe <CheckLetter+0x82>
         }
         child += max;
         x -= max;
     }
     return 0;
 }
-    12be:	a0 96       	adiw	r28, 0x20	; 32
-    12c0:	cd bf       	out	0x3d, r28	; 61
-    12c2:	de bf       	out	0x3e, r29	; 62
-    12c4:	df 91       	pop	r29
-    12c6:	cf 91       	pop	r28
-    12c8:	1f 91       	pop	r17
-    12ca:	0f 91       	pop	r16
-    12cc:	ff 90       	pop	r15
-    12ce:	ef 90       	pop	r14
-    12d0:	df 90       	pop	r13
-    12d2:	cf 90       	pop	r12
-    12d4:	08 95       	ret
+    121a:	a0 96       	adiw	r28, 0x20	; 32
+    121c:	cd bf       	out	0x3d, r28	; 61
+    121e:	de bf       	out	0x3e, r29	; 62
+    1220:	df 91       	pop	r29
+    1222:	cf 91       	pop	r28
+    1224:	1f 91       	pop	r17
+    1226:	0f 91       	pop	r16
+    1228:	ff 90       	pop	r15
+    122a:	ef 90       	pop	r14
+    122c:	df 90       	pop	r13
+    122e:	cf 90       	pop	r12
+    1230:	08 95       	ret
 
-000012d6 <FindChild>:
+00001232 <FindChild>:
 
 //Returns the child's address if the child is visible and the search letter matches
 uint16_t FindChild(uint16_t parent, uint8_t letter){
-    12d6:	df 92       	push	r13
-    12d8:	ef 92       	push	r14
-    12da:	ff 92       	push	r15
-    12dc:	0f 93       	push	r16
-    12de:	1f 93       	push	r17
-    12e0:	cf 93       	push	r28
-    12e2:	df 93       	push	r29
-    12e4:	00 d0       	rcall	.+0      	; 0x12e6 <FindChild+0x10>
-    12e6:	00 d0       	rcall	.+0      	; 0x12e8 <FindChild+0x12>
-    12e8:	cd b7       	in	r28, 0x3d	; 61
-    12ea:	de b7       	in	r29, 0x3e	; 62
-    12ec:	d6 2e       	mov	r13, r22
+    1232:	df 92       	push	r13
+    1234:	ef 92       	push	r14
+    1236:	ff 92       	push	r15
+    1238:	0f 93       	push	r16
+    123a:	1f 93       	push	r17
+    123c:	cf 93       	push	r28
+    123e:	df 93       	push	r29
+    1240:	00 d0       	rcall	.+0      	; 0x1242 <FindChild+0x10>
+    1242:	00 d0       	rcall	.+0      	; 0x1244 <FindChild+0x12>
+    1244:	cd b7       	in	r28, 0x3d	; 61
+    1246:	de b7       	in	r29, 0x3e	; 62
+    1248:	d6 2e       	mov	r13, r22
     
     uint16_t child = parent;
     uint8_t data[4];
 
     ExtEERead(child+L_BOILER, 4, GAME, &data[0]);
-    12ee:	9e 01       	movw	r18, r28
-    12f0:	2f 5f       	subi	r18, 0xFF	; 255
-    12f2:	3f 4f       	sbci	r19, 0xFF	; 255
-    12f4:	40 e0       	ldi	r20, 0x00	; 0
-    12f6:	64 e0       	ldi	r22, 0x04	; 4
-    12f8:	80 96       	adiw	r24, 0x20	; 32
-    12fa:	f8 dd       	rcall	.-1040   	; 0xeec <ExtEERead>
+    124a:	9e 01       	movw	r18, r28
+    124c:	2f 5f       	subi	r18, 0xFF	; 255
+    124e:	3f 4f       	sbci	r19, 0xFF	; 255
+    1250:	40 e0       	ldi	r20, 0x00	; 0
+    1252:	64 e0       	ldi	r22, 0x04	; 4
+    1254:	80 96       	adiw	r24, 0x20	; 32
+    1256:	4a de       	rcall	.-876    	; 0xeec <ExtEERead>
     parent = (data[0]<<8|data[1]);    //Next object on parent level
-    12fc:	e9 80       	ldd	r14, Y+1	; 0x01
-    12fe:	f1 2c       	mov	r15, r1
-    1300:	fe 2c       	mov	r15, r14
-    1302:	ee 24       	eor	r14, r14
-    1304:	8a 81       	ldd	r24, Y+2	; 0x02
-    1306:	e8 2a       	or	r14, r24
+    1258:	e9 80       	ldd	r14, Y+1	; 0x01
+    125a:	f1 2c       	mov	r15, r1
+    125c:	fe 2c       	mov	r15, r14
+    125e:	ee 24       	eor	r14, r14
+    1260:	8a 81       	ldd	r24, Y+2	; 0x02
+    1262:	e8 2a       	or	r14, r24
     child =  (data[2]<<8|data[3]);    //First object on child level
-    1308:	0b 81       	ldd	r16, Y+3	; 0x03
-    130a:	10 e0       	ldi	r17, 0x00	; 0
-    130c:	10 2f       	mov	r17, r16
-    130e:	00 27       	eor	r16, r16
-    1310:	8c 81       	ldd	r24, Y+4	; 0x04
-    1312:	08 2b       	or	r16, r24
+    1264:	0b 81       	ldd	r16, Y+3	; 0x03
+    1266:	10 e0       	ldi	r17, 0x00	; 0
+    1268:	10 2f       	mov	r17, r16
+    126a:	00 27       	eor	r16, r16
+    126c:	8c 81       	ldd	r24, Y+4	; 0x04
+    126e:	08 2b       	or	r16, r24
 
     //As long as the child is within the parent's range
     while (parent>child){
-    1314:	0e 15       	cp	r16, r14
-    1316:	1f 05       	cpc	r17, r15
-    1318:	28 f5       	brcc	.+74     	; 0x1364 <FindChild+0x8e>
+    1270:	0e 15       	cp	r16, r14
+    1272:	1f 05       	cpc	r17, r15
+    1274:	28 f5       	brcc	.+74     	; 0x12c0 <FindChild+0x8e>
 
         //Find out if the found child is visible and check letter
         ExtEERead(child+OFF_BYTEFLDS+VISIBLE_ACL+L_BOILER, 1, GAME, &data[0]);
-    131a:	9e 01       	movw	r18, r28
-    131c:	2f 5f       	subi	r18, 0xFF	; 255
-    131e:	3f 4f       	sbci	r19, 0xFF	; 255
-    1320:	40 e0       	ldi	r20, 0x00	; 0
-    1322:	61 e0       	ldi	r22, 0x01	; 1
-    1324:	c8 01       	movw	r24, r16
-    1326:	85 96       	adiw	r24, 0x25	; 37
-    1328:	e1 dd       	rcall	.-1086   	; 0xeec <ExtEERead>
+    1276:	9e 01       	movw	r18, r28
+    1278:	2f 5f       	subi	r18, 0xFF	; 255
+    127a:	3f 4f       	sbci	r19, 0xFF	; 255
+    127c:	40 e0       	ldi	r20, 0x00	; 0
+    127e:	61 e0       	ldi	r22, 0x01	; 1
+    1280:	c8 01       	movw	r24, r16
+    1282:	85 96       	adiw	r24, 0x25	; 37
+    1284:	33 de       	rcall	.-922    	; 0xeec <ExtEERead>
         if (CheckState(data[0])) {
-    132a:	89 81       	ldd	r24, Y+1	; 0x01
-    132c:	67 df       	rcall	.-306    	; 0x11fc <CheckState>
-    132e:	88 23       	and	r24, r24
-    1330:	29 f0       	breq	.+10     	; 0x133c <FindChild+0x66>
+    1286:	89 81       	ldd	r24, Y+1	; 0x01
+    1288:	67 df       	rcall	.-306    	; 0x1158 <CheckState>
+    128a:	88 23       	and	r24, r24
+    128c:	29 f0       	breq	.+10     	; 0x1298 <FindChild+0x66>
             if (CheckLetter(child, letter)) return child;
-    1332:	6d 2d       	mov	r22, r13
-    1334:	c8 01       	movw	r24, r16
-    1336:	74 df       	rcall	.-280    	; 0x1220 <CheckLetter>
-    1338:	81 11       	cpse	r24, r1
-    133a:	17 c0       	rjmp	.+46     	; 0x136a <FindChild+0x94>
-    133c:	9e 01       	movw	r18, r28
+    128e:	6d 2d       	mov	r22, r13
+    1290:	c8 01       	movw	r24, r16
+    1292:	74 df       	rcall	.-280    	; 0x117c <CheckLetter>
+    1294:	81 11       	cpse	r24, r1
+    1296:	17 c0       	rjmp	.+46     	; 0x12c6 <FindChild+0x94>
+    1298:	9e 01       	movw	r18, r28
         }
 
         //Not visible or name not right
         ExtEERead(child+L_BOILER, 2, GAME, &data[0]);
-    133e:	2f 5f       	subi	r18, 0xFF	; 255
-    1340:	3f 4f       	sbci	r19, 0xFF	; 255
-    1342:	40 e0       	ldi	r20, 0x00	; 0
-    1344:	62 e0       	ldi	r22, 0x02	; 2
-    1346:	c8 01       	movw	r24, r16
-    1348:	80 96       	adiw	r24, 0x20	; 32
-    134a:	d0 dd       	rcall	.-1120   	; 0xeec <ExtEERead>
-    134c:	09 81       	ldd	r16, Y+1	; 0x01
+    129a:	2f 5f       	subi	r18, 0xFF	; 255
+    129c:	3f 4f       	sbci	r19, 0xFF	; 255
+    129e:	40 e0       	ldi	r20, 0x00	; 0
+    12a0:	62 e0       	ldi	r22, 0x02	; 2
+    12a2:	c8 01       	movw	r24, r16
+    12a4:	80 96       	adiw	r24, 0x20	; 32
+    12a6:	22 de       	rcall	.-956    	; 0xeec <ExtEERead>
+    12a8:	09 81       	ldd	r16, Y+1	; 0x01
         child = (data[0]<<8|data[1]);    //Next object on child level
-    134e:	10 e0       	ldi	r17, 0x00	; 0
-    1350:	10 2f       	mov	r17, r16
-    1352:	00 27       	eor	r16, r16
-    1354:	8a 81       	ldd	r24, Y+2	; 0x02
-    1356:	08 2b       	or	r16, r24
-    1358:	0e 15       	cp	r16, r14
+    12aa:	10 e0       	ldi	r17, 0x00	; 0
+    12ac:	10 2f       	mov	r17, r16
+    12ae:	00 27       	eor	r16, r16
+    12b0:	8a 81       	ldd	r24, Y+2	; 0x02
+    12b2:	08 2b       	or	r16, r24
+    12b4:	0e 15       	cp	r16, r14
     ExtEERead(child+L_BOILER, 4, GAME, &data[0]);
     parent = (data[0]<<8|data[1]);    //Next object on parent level
     child =  (data[2]<<8|data[3]);    //First object on child level
 
     //As long as the child is within the parent's range
     while (parent>child){
-    135a:	1f 05       	cpc	r17, r15
-    135c:	f0 f2       	brcs	.-68     	; 0x131a <FindChild+0x44>
-    135e:	80 e0       	ldi	r24, 0x00	; 0
+    12b6:	1f 05       	cpc	r17, r15
+    12b8:	f0 f2       	brcs	.-68     	; 0x1276 <FindChild+0x44>
+    12ba:	80 e0       	ldi	r24, 0x00	; 0
 
         //Not visible or name not right
         ExtEERead(child+L_BOILER, 2, GAME, &data[0]);
         child = (data[0]<<8|data[1]);    //Next object on child level
         
     } return 0;
-    1360:	90 e0       	ldi	r25, 0x00	; 0
-    1362:	05 c0       	rjmp	.+10     	; 0x136e <FindChild+0x98>
-    1364:	80 e0       	ldi	r24, 0x00	; 0
-    1366:	90 e0       	ldi	r25, 0x00	; 0
-    1368:	02 c0       	rjmp	.+4      	; 0x136e <FindChild+0x98>
-    136a:	80 2f       	mov	r24, r16
-    136c:	91 2f       	mov	r25, r17
-    136e:	24 96       	adiw	r28, 0x04	; 4
+    12bc:	90 e0       	ldi	r25, 0x00	; 0
+    12be:	05 c0       	rjmp	.+10     	; 0x12ca <FindChild+0x98>
+    12c0:	80 e0       	ldi	r24, 0x00	; 0
+    12c2:	90 e0       	ldi	r25, 0x00	; 0
+    12c4:	02 c0       	rjmp	.+4      	; 0x12ca <FindChild+0x98>
+    12c6:	80 2f       	mov	r24, r16
+    12c8:	91 2f       	mov	r25, r17
+    12ca:	24 96       	adiw	r28, 0x04	; 4
 }
-    1370:	cd bf       	out	0x3d, r28	; 61
-    1372:	de bf       	out	0x3e, r29	; 62
-    1374:	df 91       	pop	r29
-    1376:	cf 91       	pop	r28
-    1378:	1f 91       	pop	r17
-    137a:	0f 91       	pop	r16
-    137c:	ff 90       	pop	r15
-    137e:	ef 90       	pop	r14
-    1380:	df 90       	pop	r13
-    1382:	08 95       	ret
+    12cc:	cd bf       	out	0x3d, r28	; 61
+    12ce:	de bf       	out	0x3e, r29	; 62
+    12d0:	df 91       	pop	r29
+    12d2:	cf 91       	pop	r28
+    12d4:	1f 91       	pop	r17
+    12d6:	0f 91       	pop	r16
+    12d8:	ff 90       	pop	r15
+    12da:	ef 90       	pop	r14
+    12dc:	df 90       	pop	r13
+    12de:	08 95       	ret
 
-00001384 <InpOkChk>:
-    1384:	9f e9       	ldi	r25, 0x9F	; 159
+000012e0 <InpOkChk>:
+    12e0:	9f e9       	ldi	r25, 0x9F	; 159
 
 //
 uint8_t InpOkChk(uint8_t test){
     if ((test>='a')&&(test<='z')) return 1;
-    1386:	98 0f       	add	r25, r24
-    1388:	9a 31       	cpi	r25, 0x1A	; 26
-    138a:	38 f0       	brcs	.+14     	; 0x139a <InpOkChk+0x16>
-    138c:	90 ed       	ldi	r25, 0xD0	; 208
-    138e:	98 0f       	add	r25, r24
-    1390:	81 e0       	ldi	r24, 0x01	; 1
-    1392:	9a 30       	cpi	r25, 0x0A	; 10
-    1394:	18 f0       	brcs	.+6      	; 0x139c <InpOkChk+0x18>
-    1396:	80 e0       	ldi	r24, 0x00	; 0
-    1398:	08 95       	ret
-    139a:	81 e0       	ldi	r24, 0x01	; 1
+    12e2:	98 0f       	add	r25, r24
+    12e4:	9a 31       	cpi	r25, 0x1A	; 26
+    12e6:	38 f0       	brcs	.+14     	; 0x12f6 <InpOkChk+0x16>
+    12e8:	90 ed       	ldi	r25, 0xD0	; 208
+    12ea:	98 0f       	add	r25, r24
+    12ec:	81 e0       	ldi	r24, 0x01	; 1
+    12ee:	9a 30       	cpi	r25, 0x0A	; 10
+    12f0:	18 f0       	brcs	.+6      	; 0x12f8 <InpOkChk+0x18>
+    12f2:	80 e0       	ldi	r24, 0x00	; 0
+    12f4:	08 95       	ret
+    12f6:	81 e0       	ldi	r24, 0x01	; 1
     if ((test>='0')&&(test<='9')) return 1;
     return 0;
 }
-    139c:	08 95       	ret
+    12f8:	08 95       	ret
 
-0000139e <CleanInput>:
+000012fa <CleanInput>:
 
 //Cleans input of garbage and returns length of cleaned input "o->d2  !\0" becomes "od2\0"
 uint8_t CleanInput(uint8_t *data){
-    139e:	0f 93       	push	r16
-    13a0:	1f 93       	push	r17
-    13a2:	cf 93       	push	r28
-    13a4:	df 93       	push	r29
-    13a6:	8c 01       	movw	r16, r24
+    12fa:	0f 93       	push	r16
+    12fc:	1f 93       	push	r17
+    12fe:	cf 93       	push	r28
+    1300:	df 93       	push	r29
+    1302:	8c 01       	movw	r16, r24
     uint8_t cnt = 0;
     for (uint8_t x=0; data[x]!=0; ++x){
-    13a8:	fc 01       	movw	r30, r24
-    13aa:	80 81       	ld	r24, Z
-    13ac:	88 23       	and	r24, r24
-    13ae:	91 f0       	breq	.+36     	; 0x13d4 <CleanInput+0x36>
-    13b0:	c0 e0       	ldi	r28, 0x00	; 0
-    13b2:	d0 e0       	ldi	r29, 0x00	; 0
+    1304:	fc 01       	movw	r30, r24
+    1306:	80 81       	ld	r24, Z
+    1308:	88 23       	and	r24, r24
+    130a:	91 f0       	breq	.+36     	; 0x1330 <CleanInput+0x36>
+    130c:	c0 e0       	ldi	r28, 0x00	; 0
+    130e:	d0 e0       	ldi	r29, 0x00	; 0
         data[cnt] = data[x];
-    13b4:	d8 01       	movw	r26, r16
-    13b6:	ad 0f       	add	r26, r29
-    13b8:	b1 1d       	adc	r27, r1
-    13ba:	8c 93       	st	X, r24
+    1310:	d8 01       	movw	r26, r16
+    1312:	ad 0f       	add	r26, r29
+    1314:	b1 1d       	adc	r27, r1
+    1316:	8c 93       	st	X, r24
         if (InpOkChk(data[x])) ++cnt;
-    13bc:	80 81       	ld	r24, Z
-    13be:	e2 df       	rcall	.-60     	; 0x1384 <InpOkChk>
-    13c0:	81 11       	cpse	r24, r1
-    13c2:	df 5f       	subi	r29, 0xFF	; 255
+    1318:	80 81       	ld	r24, Z
+    131a:	e2 df       	rcall	.-60     	; 0x12e0 <InpOkChk>
+    131c:	81 11       	cpse	r24, r1
+    131e:	df 5f       	subi	r29, 0xFF	; 255
 }
 
 //Cleans input of garbage and returns length of cleaned input "o->d2  !\0" becomes "od2\0"
 uint8_t CleanInput(uint8_t *data){
     uint8_t cnt = 0;
     for (uint8_t x=0; data[x]!=0; ++x){
-    13c4:	cf 5f       	subi	r28, 0xFF	; 255
-    13c6:	f8 01       	movw	r30, r16
-    13c8:	ec 0f       	add	r30, r28
-    13ca:	f1 1d       	adc	r31, r1
-    13cc:	80 81       	ld	r24, Z
-    13ce:	81 11       	cpse	r24, r1
-    13d0:	f1 cf       	rjmp	.-30     	; 0x13b4 <CleanInput+0x16>
-    13d2:	01 c0       	rjmp	.+2      	; 0x13d6 <CleanInput+0x38>
+    1320:	cf 5f       	subi	r28, 0xFF	; 255
+    1322:	f8 01       	movw	r30, r16
+    1324:	ec 0f       	add	r30, r28
+    1326:	f1 1d       	adc	r31, r1
+    1328:	80 81       	ld	r24, Z
+    132a:	81 11       	cpse	r24, r1
+    132c:	f1 cf       	rjmp	.-30     	; 0x1310 <CleanInput+0x16>
+    132e:	01 c0       	rjmp	.+2      	; 0x1332 <CleanInput+0x38>
     return 0;
 }
 
 //Cleans input of garbage and returns length of cleaned input "o->d2  !\0" becomes "od2\0"
 uint8_t CleanInput(uint8_t *data){
     uint8_t cnt = 0;
-    13d4:	d0 e0       	ldi	r29, 0x00	; 0
+    1330:	d0 e0       	ldi	r29, 0x00	; 0
     for (uint8_t x=0; data[x]!=0; ++x){
         data[cnt] = data[x];
         if (InpOkChk(data[x])) ++cnt;
     }
     data[cnt] = 0;
-    13d6:	f8 01       	movw	r30, r16
-    13d8:	ed 0f       	add	r30, r29
-    13da:	f1 1d       	adc	r31, r1
-    13dc:	10 82       	st	Z, r1
+    1332:	f8 01       	movw	r30, r16
+    1334:	ed 0f       	add	r30, r29
+    1336:	f1 1d       	adc	r31, r1
+    1338:	10 82       	st	Z, r1
     return cnt;
 }
-    13de:	8d 2f       	mov	r24, r29
-    13e0:	df 91       	pop	r29
-    13e2:	cf 91       	pop	r28
-    13e4:	1f 91       	pop	r17
-    13e6:	0f 91       	pop	r16
-    13e8:	08 95       	ret
+    133a:	8d 2f       	mov	r24, r29
+    133c:	df 91       	pop	r29
+    133e:	cf 91       	pop	r28
+    1340:	1f 91       	pop	r17
+    1342:	0f 91       	pop	r16
+    1344:	08 95       	ret
 
-000013ea <CheckSend>:
+00001346 <CheckSend>:
 
 //Send routine, optimized for low memory usage
 uint8_t CheckSend(){
-    13ea:	cf 93       	push	r28
+    1346:	cf 93       	push	r28
     static uint8_t txPart;
     uint8_t EEreadLength=0;
 
     //Check if more string(part)s have to be sent to the serial output if previous send operation is completed
     if ((txAddrNow < TXLISTLEN) && serTxDone){
-    13ec:	80 91 2c 3a 	lds	r24, 0x3A2C	; 0x803a2c <txAddrNow>
-    13f0:	88 30       	cpi	r24, 0x08	; 8
-    13f2:	d8 f5       	brcc	.+118    	; 0x146a <CheckSend+0x80>
-    13f4:	90 91 04 38 	lds	r25, 0x3804	; 0x803804 <serTxDone>
-    13f8:	99 23       	and	r25, r25
-    13fa:	b9 f1       	breq	.+110    	; 0x146a <CheckSend+0x80>
-        if (txPart < txStrLen[txAddrNow]){
-    13fc:	28 2f       	mov	r18, r24
-    13fe:	30 e0       	ldi	r19, 0x00	; 0
-    1400:	f9 01       	movw	r30, r18
-    1402:	e3 5d       	subi	r30, 0xD3	; 211
-    1404:	f5 4c       	sbci	r31, 0xC5	; 197
-    1406:	e0 81       	ld	r30, Z
-    1408:	90 91 01 39 	lds	r25, 0x3901	; 0x803901 <txPart.3905>
-    140c:	9e 17       	cp	r25, r30
-    140e:	30 f5       	brcc	.+76     	; 0x145c <CheckSend+0x72>
+    1348:	80 91 2c 3a 	lds	r24, 0x3A2C	; 0x803a2c <txAddrNow>
+    134c:	88 30       	cpi	r24, 0x08	; 8
+    134e:	08 f0       	brcs	.+2      	; 0x1352 <CheckSend+0xc>
+    1350:	45 c0       	rjmp	.+138    	; 0x13dc <CheckSend+0x96>
+    1352:	90 91 04 38 	lds	r25, 0x3804	; 0x803804 <serTxDone>
+    1356:	99 23       	and	r25, r25
+    1358:	09 f4       	brne	.+2      	; 0x135c <CheckSend+0x16>
+    135a:	40 c0       	rjmp	.+128    	; 0x13dc <CheckSend+0x96>
+        if (txStrLen[txAddrNow] == 0){
+    135c:	28 2f       	mov	r18, r24
+    135e:	30 e0       	ldi	r19, 0x00	; 0
+    1360:	f9 01       	movw	r30, r18
+    1362:	e3 5d       	subi	r30, 0xD3	; 211
+    1364:	f5 4c       	sbci	r31, 0xC5	; 197
+    1366:	e0 81       	ld	r30, Z
+    1368:	e1 11       	cpse	r30, r1
+    136a:	07 c0       	rjmp	.+14     	; 0x137a <CheckSend+0x34>
+            txPart = 0;
+    136c:	10 92 01 39 	sts	0x3901, r1	; 0x803901 <txPart.3899>
+            txAddrNow = TXLISTLEN;
+    1370:	88 e0       	ldi	r24, 0x08	; 8
+    1372:	80 93 2c 3a 	sts	0x3A2C, r24	; 0x803a2c <txAddrNow>
+        } else {
+            txPart = 0;
+            ++txAddrNow;
+        }
+    } else if (serTxDone) return 0; //All is sent!
+    return 1; //Still sending, do not change the data in the tx variables
+    1376:	81 e0       	ldi	r24, 0x01	; 1
+    1378:	36 c0       	rjmp	.+108    	; 0x13e6 <CheckSend+0xa0>
+    //Check if more string(part)s have to be sent to the serial output if previous send operation is completed
+    if ((txAddrNow < TXLISTLEN) && serTxDone){
+        if (txStrLen[txAddrNow] == 0){
+            txPart = 0;
+            txAddrNow = TXLISTLEN;
+        } else if (txPart < txStrLen[txAddrNow]){
+    137a:	90 91 01 39 	lds	r25, 0x3901	; 0x803901 <txPart.3899>
+    137e:	9e 17       	cp	r25, r30
+    1380:	30 f5       	brcc	.+76     	; 0x13ce <CheckSend+0x88>
             EEreadLength = txStrLen[txAddrNow]-txPart;
-    1410:	ce 2f       	mov	r28, r30
-    1412:	c9 1b       	sub	r28, r25
-    1414:	c1 32       	cpi	r28, 0x21	; 33
-    1416:	08 f0       	brcs	.+2      	; 0x141a <CheckSend+0x30>
-    1418:	c0 e2       	ldi	r28, 0x20	; 32
+    1382:	ce 2f       	mov	r28, r30
+    1384:	c9 1b       	sub	r28, r25
+    1386:	c1 32       	cpi	r28, 0x21	; 33
+    1388:	08 f0       	brcs	.+2      	; 0x138c <CheckSend+0x46>
+    138a:	c0 e2       	ldi	r28, 0x20	; 32
             if (EEreadLength>=TXLEN) EEreadLength = TXLEN-1;
             ExtEERead(txAddrList[txAddrNow]+txPart, EEreadLength, txTypeNow, &txBuffer[0]);
-    141a:	22 0f       	add	r18, r18
-    141c:	33 1f       	adc	r19, r19
-    141e:	f9 01       	movw	r30, r18
-    1420:	eb 5c       	subi	r30, 0xCB	; 203
-    1422:	f5 4c       	sbci	r31, 0xC5	; 197
-    1424:	01 90       	ld	r0, Z+
-    1426:	f0 81       	ld	r31, Z
-    1428:	e0 2d       	mov	r30, r0
-    142a:	2e ee       	ldi	r18, 0xEE	; 238
-    142c:	3a e3       	ldi	r19, 0x3A	; 58
-    142e:	40 91 2b 3a 	lds	r20, 0x3A2B	; 0x803a2b <txTypeNow>
-    1432:	6c 2f       	mov	r22, r28
-    1434:	df 01       	movw	r26, r30
-    1436:	a9 0f       	add	r26, r25
-    1438:	b1 1d       	adc	r27, r1
-    143a:	cd 01       	movw	r24, r26
-    143c:	57 dd       	rcall	.-1362   	; 0xeec <ExtEERead>
+    138c:	22 0f       	add	r18, r18
+    138e:	33 1f       	adc	r19, r19
+    1390:	f9 01       	movw	r30, r18
+    1392:	eb 5c       	subi	r30, 0xCB	; 203
+    1394:	f5 4c       	sbci	r31, 0xC5	; 197
+    1396:	01 90       	ld	r0, Z+
+    1398:	f0 81       	ld	r31, Z
+    139a:	e0 2d       	mov	r30, r0
+    139c:	2e ee       	ldi	r18, 0xEE	; 238
+    139e:	3a e3       	ldi	r19, 0x3A	; 58
+    13a0:	40 91 2b 3a 	lds	r20, 0x3A2B	; 0x803a2b <txTypeNow>
+    13a4:	6c 2f       	mov	r22, r28
+    13a6:	df 01       	movw	r26, r30
+    13a8:	a9 0f       	add	r26, r25
+    13aa:	b1 1d       	adc	r27, r1
+    13ac:	cd 01       	movw	r24, r26
+    13ae:	9e dd       	rcall	.-1220   	; 0xeec <ExtEERead>
             txPart += EEreadLength;
-    143e:	80 91 01 39 	lds	r24, 0x3901	; 0x803901 <txPart.3905>
-    1442:	8c 0f       	add	r24, r28
-    1444:	80 93 01 39 	sts	0x3901, r24	; 0x803901 <txPart.3905>
+    13b0:	80 91 01 39 	lds	r24, 0x3901	; 0x803901 <txPart.3899>
+    13b4:	8c 0f       	add	r24, r28
+    13b6:	80 93 01 39 	sts	0x3901, r24	; 0x803901 <txPart.3899>
             txBuffer[EEreadLength] = 0; //Add string terminator after piece to send to plug memory leak
-    1448:	ec 2f       	mov	r30, r28
-    144a:	f0 e0       	ldi	r31, 0x00	; 0
-    144c:	e2 51       	subi	r30, 0x12	; 18
-    144e:	f5 4c       	sbci	r31, 0xC5	; 197
-    1450:	10 82       	st	Z, r1
+    13ba:	ec 2f       	mov	r30, r28
+    13bc:	f0 e0       	ldi	r31, 0x00	; 0
+    13be:	e2 51       	subi	r30, 0x12	; 18
+    13c0:	f5 4c       	sbci	r31, 0xC5	; 197
+    13c2:	10 82       	st	Z, r1
             SerSend(&txBuffer[0]);
-    1452:	8e ee       	ldi	r24, 0xEE	; 238
-    1454:	9a e3       	ldi	r25, 0x3A	; 58
-    1456:	fe da       	rcall	.-2564   	; 0xa54 <SerSend>
+    13c4:	8e ee       	ldi	r24, 0xEE	; 238
+    13c6:	9a e3       	ldi	r25, 0x3A	; 58
+    13c8:	45 db       	rcall	.-2422   	; 0xa54 <SerSend>
         } else {
             txPart = 0;
             ++txAddrNow;
         }
     } else if (serTxDone) return 0; //All is sent!
     return 1; //Still sending, do not change the data in the tx variables
-    1458:	81 e0       	ldi	r24, 0x01	; 1
-    145a:	0c c0       	rjmp	.+24     	; 0x1474 <CheckSend+0x8a>
+    13ca:	81 e0       	ldi	r24, 0x01	; 1
+    13cc:	0c c0       	rjmp	.+24     	; 0x13e6 <CheckSend+0xa0>
             ExtEERead(txAddrList[txAddrNow]+txPart, EEreadLength, txTypeNow, &txBuffer[0]);
             txPart += EEreadLength;
             txBuffer[EEreadLength] = 0; //Add string terminator after piece to send to plug memory leak
             SerSend(&txBuffer[0]);
         } else {
             txPart = 0;
-    145c:	10 92 01 39 	sts	0x3901, r1	; 0x803901 <txPart.3905>
+    13ce:	10 92 01 39 	sts	0x3901, r1	; 0x803901 <txPart.3899>
             ++txAddrNow;
-    1460:	8f 5f       	subi	r24, 0xFF	; 255
-    1462:	80 93 2c 3a 	sts	0x3A2C, r24	; 0x803a2c <txAddrNow>
+    13d2:	8f 5f       	subi	r24, 0xFF	; 255
+    13d4:	80 93 2c 3a 	sts	0x3A2C, r24	; 0x803a2c <txAddrNow>
         }
     } else if (serTxDone) return 0; //All is sent!
     return 1; //Still sending, do not change the data in the tx variables
-    1466:	81 e0       	ldi	r24, 0x01	; 1
-    1468:	05 c0       	rjmp	.+10     	; 0x1474 <CheckSend+0x8a>
+    13d8:	81 e0       	ldi	r24, 0x01	; 1
+    13da:	05 c0       	rjmp	.+10     	; 0x13e6 <CheckSend+0xa0>
             SerSend(&txBuffer[0]);
         } else {
             txPart = 0;
             ++txAddrNow;
         }
     } else if (serTxDone) return 0; //All is sent!
-    146a:	90 91 04 38 	lds	r25, 0x3804	; 0x803804 <serTxDone>
-    146e:	81 e0       	ldi	r24, 0x01	; 1
-    1470:	91 11       	cpse	r25, r1
-    1472:	80 e0       	ldi	r24, 0x00	; 0
+    13dc:	90 91 04 38 	lds	r25, 0x3804	; 0x803804 <serTxDone>
+    13e0:	81 e0       	ldi	r24, 0x01	; 1
+    13e2:	91 11       	cpse	r25, r1
+    13e4:	80 e0       	ldi	r24, 0x00	; 0
     return 1; //Still sending, do not change the data in the tx variables
 }
-    1474:	cf 91       	pop	r28
-    1476:	08 95       	ret
+    13e6:	cf 91       	pop	r28
+    13e8:	08 95       	ret
 
-00001478 <CheckInput>:
+000013ea <CheckInput>:
 
 //User input check (and validation)
 uint8_t CheckInput(uint8_t *data){
-    1478:	ef 92       	push	r14
-    147a:	ff 92       	push	r15
-    147c:	0f 93       	push	r16
-    147e:	1f 93       	push	r17
-    1480:	cf 93       	push	r28
-    1482:	df 93       	push	r29
-    1484:	cd b7       	in	r28, 0x3d	; 61
-    1486:	de b7       	in	r29, 0x3e	; 62
-    1488:	2a 97       	sbiw	r28, 0x0a	; 10
-    148a:	cd bf       	out	0x3d, r28	; 61
-    148c:	de bf       	out	0x3e, r29	; 62
-    148e:	8c 01       	movw	r16, r24
+    13ea:	ef 92       	push	r14
+    13ec:	ff 92       	push	r15
+    13ee:	0f 93       	push	r16
+    13f0:	1f 93       	push	r17
+    13f2:	cf 93       	push	r28
+    13f4:	df 93       	push	r29
+    13f6:	cd b7       	in	r28, 0x3d	; 61
+    13f8:	de b7       	in	r29, 0x3e	; 62
+    13fa:	2a 97       	sbiw	r28, 0x0a	; 10
+    13fc:	cd bf       	out	0x3d, r28	; 61
+    13fe:	de bf       	out	0x3e, r29	; 62
+    1400:	8c 01       	movw	r16, r24
     
     //Load game data after reboot
     if (currDepth == 0xff) {
-    1490:	80 91 8f 38 	lds	r24, 0x388F	; 0x80388f <currDepth>
-    1494:	8f 3f       	cpi	r24, 0xFF	; 255
-    1496:	21 f5       	brne	.+72     	; 0x14e0 <CheckInput+0x68>
+    1402:	80 91 8f 38 	lds	r24, 0x388F	; 0x80388f <currDepth>
+    1406:	8f 3f       	cpi	r24, 0xFF	; 255
+    1408:	21 f5       	brne	.+72     	; 0x1452 <CheckInput+0x68>
         //Load things from EEPROM
         EERead(0, &gameState[0], 16);   //Load game status bits from EEPROM
-    1498:	40 e1       	ldi	r20, 0x10	; 16
-    149a:	67 e4       	ldi	r22, 0x47	; 71
-    149c:	7a e3       	ldi	r23, 0x3A	; 58
-    149e:	80 e0       	ldi	r24, 0x00	; 0
-    14a0:	7d da       	rcall	.-2822   	; 0x99c <EERead>
-    14a2:	0f 2e       	mov	r0, r31
-    14a4:	fe e6       	ldi	r31, 0x6E	; 110
-    14a6:	ef 2e       	mov	r14, r31
-    14a8:	f0 2d       	mov	r31, r0
+    140a:	40 e1       	ldi	r20, 0x10	; 16
+    140c:	67 e4       	ldi	r22, 0x47	; 71
+    140e:	7a e3       	ldi	r23, 0x3A	; 58
+    1410:	80 e0       	ldi	r24, 0x00	; 0
+    1412:	c4 da       	rcall	.-2680   	; 0x99c <EERead>
+    1414:	0f 2e       	mov	r0, r31
+    1416:	fe e6       	ldi	r31, 0x6E	; 110
+    1418:	ef 2e       	mov	r14, r31
+    141a:	f0 2d       	mov	r31, r0
 
         //idSet can be used to detect cheating. After cheating idSet will be 0, with a virgin badge idSet will be 3.
         uint8_t idSet = 0;
-    14aa:	f1 2c       	mov	r15, r1
+    141c:	f1 2c       	mov	r15, r1
         for (uint8_t x=0; x<4; ++x){
             idSet += ReadStatusBit(110+x);
-    14ac:	8e 2d       	mov	r24, r14
-    14ae:	0e dc       	rcall	.-2020   	; 0xccc <ReadStatusBit>
-    14b0:	f8 0e       	add	r15, r24
-    14b2:	e3 94       	inc	r14
+    141e:	8e 2d       	mov	r24, r14
+    1420:	55 dc       	rcall	.-1878   	; 0xccc <ReadStatusBit>
+    1422:	f8 0e       	add	r15, r24
+    1424:	e3 94       	inc	r14
         //Load things from EEPROM
         EERead(0, &gameState[0], 16);   //Load game status bits from EEPROM
 
         //idSet can be used to detect cheating. After cheating idSet will be 0, with a virgin badge idSet will be 3.
         uint8_t idSet = 0;
         for (uint8_t x=0; x<4; ++x){
-    14b4:	82 e7       	ldi	r24, 0x72	; 114
-    14b6:	e8 12       	cpse	r14, r24
-    14b8:	f9 cf       	rjmp	.-14     	; 0x14ac <CheckInput+0x34>
+    1426:	82 e7       	ldi	r24, 0x72	; 114
+    1428:	e8 12       	cpse	r14, r24
+    142a:	f9 cf       	rjmp	.-14     	; 0x141e <CheckInput+0x34>
             idSet += ReadStatusBit(110+x);
         }
 
         if (idSet == 1) {
-    14ba:	e1 e0       	ldi	r30, 0x01	; 1
-    14bc:	fe 16       	cp	r15, r30
-    14be:	31 f0       	breq	.+12     	; 0x14cc <CheckInput+0x54>
+    142c:	e1 e0       	ldi	r30, 0x01	; 1
+    142e:	fe 16       	cp	r15, r30
+    1430:	31 f0       	breq	.+12     	; 0x143e <CheckInput+0x54>
             ;
         } else if (idSet == 3) {
-    14c0:	f3 e0       	ldi	r31, 0x03	; 3
-    14c2:	ff 12       	cpse	r15, r31
+    1432:	f3 e0       	ldi	r31, 0x03	; 3
+    1434:	ff 12       	cpse	r15, r31
             //TODO: Test all functions program (for badge check during sweatshop), skip if already passed (save result + temperature calibration in EEPROM location)
             Reset();
-    14c4:	02 c0       	rjmp	.+4      	; 0x14ca <CheckInput+0x52>
+    1436:	02 c0       	rjmp	.+4      	; 0x143c <CheckInput+0x52>
         } else {
             //Data not as expected, cheated or corrupted memory
             Reset();
-    14c6:	43 dc       	rcall	.-1914   	; 0xd4e <Reset>
-    14c8:	01 c0       	rjmp	.+2      	; 0x14cc <CheckInput+0x54>
+    1438:	8a dc       	rcall	.-1772   	; 0xd4e <Reset>
+    143a:	01 c0       	rjmp	.+2      	; 0x143e <CheckInput+0x54>
         }
 
         //Start at first location
         SetStandardResponse();
-    14ca:	41 dc       	rcall	.-1918   	; 0xd4e <Reset>
-    14cc:	ba dd       	rcall	.-1164   	; 0x1042 <SetStandardResponse>
+    143c:	88 dc       	rcall	.-1776   	; 0xd4e <Reset>
+    143e:	01 de       	rcall	.-1022   	; 0x1042 <SetStandardResponse>
         PopulateObject(route[0], &currObj);
-    14ce:	63 e0       	ldi	r22, 0x03	; 3
-    14d0:	7a e3       	ldi	r23, 0x3A	; 58
-    14d2:	80 91 c3 39 	lds	r24, 0x39C3	; 0x8039c3 <route>
-    14d6:	90 91 c4 39 	lds	r25, 0x39C4	; 0x8039c4 <route+0x1>
-    14da:	00 de       	rcall	.-1024   	; 0x10dc <PopulateObject>
+    1440:	63 e0       	ldi	r22, 0x03	; 3
+    1442:	7a e3       	ldi	r23, 0x3A	; 58
+    1444:	80 91 c3 39 	lds	r24, 0x39C3	; 0x8039c3 <route>
+    1448:	90 91 c4 39 	lds	r25, 0x39C4	; 0x8039c4 <route+0x1>
+    144c:	47 de       	rcall	.-882    	; 0x10dc <PopulateObject>
         currDepth = 0;
-    14dc:	10 92 8f 38 	sts	0x388F, r1	; 0x80388f <currDepth>
+    144e:	10 92 8f 38 	sts	0x388F, r1	; 0x80388f <currDepth>
     }
 
     //Play an effect if configured 
     if ((effect < 0xFF) && (effect ^ currObj.byteField[EFFECTS])){
-    14e0:	80 91 93 38 	lds	r24, 0x3893	; 0x803893 <effect>
-    14e4:	90 91 94 38 	lds	r25, 0x3894	; 0x803894 <effect+0x1>
-    14e8:	8f 3f       	cpi	r24, 0xFF	; 255
-    14ea:	91 05       	cpc	r25, r1
-    14ec:	d0 f4       	brcc	.+52     	; 0x1522 <CheckInput+0xaa>
-    14ee:	80 91 07 3a 	lds	r24, 0x3A07	; 0x803a07 <currObj+0x4>
-    14f2:	90 e0       	ldi	r25, 0x00	; 0
-    14f4:	20 91 93 38 	lds	r18, 0x3893	; 0x803893 <effect>
-    14f8:	30 91 94 38 	lds	r19, 0x3894	; 0x803894 <effect+0x1>
-    14fc:	82 17       	cp	r24, r18
-    14fe:	93 07       	cpc	r25, r19
-    1500:	81 f0       	breq	.+32     	; 0x1522 <CheckInput+0xaa>
+    1452:	80 91 93 38 	lds	r24, 0x3893	; 0x803893 <effect>
+    1456:	90 91 94 38 	lds	r25, 0x3894	; 0x803894 <effect+0x1>
+    145a:	8f 3f       	cpi	r24, 0xFF	; 255
+    145c:	91 05       	cpc	r25, r1
+    145e:	d0 f4       	brcc	.+52     	; 0x1494 <CheckInput+0xaa>
+    1460:	80 91 07 3a 	lds	r24, 0x3A07	; 0x803a07 <currObj+0x4>
+    1464:	90 e0       	ldi	r25, 0x00	; 0
+    1466:	20 91 93 38 	lds	r18, 0x3893	; 0x803893 <effect>
+    146a:	30 91 94 38 	lds	r19, 0x3894	; 0x803894 <effect+0x1>
+    146e:	82 17       	cp	r24, r18
+    1470:	93 07       	cpc	r25, r19
+    1472:	81 f0       	breq	.+32     	; 0x1494 <CheckInput+0xaa>
         effect = currObj.byteField[EFFECTS];
-    1502:	80 93 93 38 	sts	0x3893, r24	; 0x803893 <effect>
-    1506:	90 93 94 38 	sts	0x3894, r25	; 0x803894 <effect+0x1>
+    1474:	80 93 93 38 	sts	0x3893, r24	; 0x803893 <effect>
+    1478:	90 93 94 38 	sts	0x3894, r25	; 0x803894 <effect+0x1>
         auStart = ((effect&0xE0)>0);
-    150a:	80 91 93 38 	lds	r24, 0x3893	; 0x803893 <effect>
-    150e:	90 91 94 38 	lds	r25, 0x3894	; 0x803894 <effect+0x1>
-    1512:	80 7e       	andi	r24, 0xE0	; 224
-    1514:	99 27       	eor	r25, r25
-    1516:	21 e0       	ldi	r18, 0x01	; 1
-    1518:	89 2b       	or	r24, r25
-    151a:	09 f4       	brne	.+2      	; 0x151e <CheckInput+0xa6>
-    151c:	20 e0       	ldi	r18, 0x00	; 0
-    151e:	20 93 92 38 	sts	0x3892, r18	; 0x803892 <auStart>
+    147c:	80 91 93 38 	lds	r24, 0x3893	; 0x803893 <effect>
+    1480:	90 91 94 38 	lds	r25, 0x3894	; 0x803894 <effect+0x1>
+    1484:	80 7e       	andi	r24, 0xE0	; 224
+    1486:	99 27       	eor	r25, r25
+    1488:	21 e0       	ldi	r18, 0x01	; 1
+    148a:	89 2b       	or	r24, r25
+    148c:	09 f4       	brne	.+2      	; 0x1490 <CheckInput+0xa6>
+    148e:	20 e0       	ldi	r18, 0x00	; 0
+    1490:	20 93 92 38 	sts	0x3892, r18	; 0x803892 <auStart>
     }
 
     if (serRxDone){
-    1522:	80 91 97 38 	lds	r24, 0x3897	; 0x803897 <serRxDone>
-    1526:	88 23       	and	r24, r24
-    1528:	09 f4       	brne	.+2      	; 0x152c <CheckInput+0xb4>
-    152a:	90 c0       	rjmp	.+288    	; 0x164c <CheckInput+0x1d4>
+    1494:	80 91 97 38 	lds	r24, 0x3897	; 0x803897 <serRxDone>
+    1498:	88 23       	and	r24, r24
+    149a:	09 f4       	brne	.+2      	; 0x149e <CheckInput+0xb4>
+    149c:	90 c0       	rjmp	.+288    	; 0x15be <CheckInput+0x1d4>
         //Read up to the \0 character and convert to lower case.
         for (uint8_t x=0; serRx[x]!=0; ++x){
-    152c:	80 91 57 3a 	lds	r24, 0x3A57	; 0x803a57 <serRx>
-    1530:	88 23       	and	r24, r24
-    1532:	51 f1       	breq	.+84     	; 0x1588 <CheckInput+0x110>
-    1534:	80 e0       	ldi	r24, 0x00	; 0
-    1536:	90 e0       	ldi	r25, 0x00	; 0
-    1538:	20 e0       	ldi	r18, 0x00	; 0
+    149e:	80 91 57 3a 	lds	r24, 0x3A57	; 0x803a57 <serRx>
+    14a2:	88 23       	and	r24, r24
+    14a4:	51 f1       	breq	.+84     	; 0x14fa <CheckInput+0x110>
+    14a6:	80 e0       	ldi	r24, 0x00	; 0
+    14a8:	90 e0       	ldi	r25, 0x00	; 0
+    14aa:	20 e0       	ldi	r18, 0x00	; 0
             if ((serRx[x]<'A')||(serRx[x]>'Z')) data[x]=serRx[x]; else data[x]=serRx[x]|0x20;
-    153a:	fc 01       	movw	r30, r24
-    153c:	e9 5a       	subi	r30, 0xA9	; 169
-    153e:	f5 4c       	sbci	r31, 0xC5	; 197
-    1540:	30 81       	ld	r19, Z
-    1542:	31 34       	cpi	r19, 0x41	; 65
-    1544:	30 f0       	brcs	.+12     	; 0x1552 <CheckInput+0xda>
-    1546:	fc 01       	movw	r30, r24
-    1548:	e9 5a       	subi	r30, 0xA9	; 169
-    154a:	f5 4c       	sbci	r31, 0xC5	; 197
-    154c:	30 81       	ld	r19, Z
-    154e:	3b 35       	cpi	r19, 0x5B	; 91
-    1550:	48 f0       	brcs	.+18     	; 0x1564 <CheckInput+0xec>
-    1552:	fc 01       	movw	r30, r24
-    1554:	e9 5a       	subi	r30, 0xA9	; 169
-    1556:	f5 4c       	sbci	r31, 0xC5	; 197
-    1558:	80 81       	ld	r24, Z
-    155a:	f8 01       	movw	r30, r16
-    155c:	e2 0f       	add	r30, r18
-    155e:	f1 1d       	adc	r31, r1
-    1560:	80 83       	st	Z, r24
-    1562:	09 c0       	rjmp	.+18     	; 0x1576 <CheckInput+0xfe>
-    1564:	fc 01       	movw	r30, r24
-    1566:	e9 5a       	subi	r30, 0xA9	; 169
-    1568:	f5 4c       	sbci	r31, 0xC5	; 197
-    156a:	80 81       	ld	r24, Z
-    156c:	f8 01       	movw	r30, r16
-    156e:	e2 0f       	add	r30, r18
-    1570:	f1 1d       	adc	r31, r1
-    1572:	80 62       	ori	r24, 0x20	; 32
-    1574:	80 83       	st	Z, r24
+    14ac:	fc 01       	movw	r30, r24
+    14ae:	e9 5a       	subi	r30, 0xA9	; 169
+    14b0:	f5 4c       	sbci	r31, 0xC5	; 197
+    14b2:	30 81       	ld	r19, Z
+    14b4:	31 34       	cpi	r19, 0x41	; 65
+    14b6:	30 f0       	brcs	.+12     	; 0x14c4 <CheckInput+0xda>
+    14b8:	fc 01       	movw	r30, r24
+    14ba:	e9 5a       	subi	r30, 0xA9	; 169
+    14bc:	f5 4c       	sbci	r31, 0xC5	; 197
+    14be:	30 81       	ld	r19, Z
+    14c0:	3b 35       	cpi	r19, 0x5B	; 91
+    14c2:	48 f0       	brcs	.+18     	; 0x14d6 <CheckInput+0xec>
+    14c4:	fc 01       	movw	r30, r24
+    14c6:	e9 5a       	subi	r30, 0xA9	; 169
+    14c8:	f5 4c       	sbci	r31, 0xC5	; 197
+    14ca:	80 81       	ld	r24, Z
+    14cc:	f8 01       	movw	r30, r16
+    14ce:	e2 0f       	add	r30, r18
+    14d0:	f1 1d       	adc	r31, r1
+    14d2:	80 83       	st	Z, r24
+    14d4:	09 c0       	rjmp	.+18     	; 0x14e8 <CheckInput+0xfe>
+    14d6:	fc 01       	movw	r30, r24
+    14d8:	e9 5a       	subi	r30, 0xA9	; 169
+    14da:	f5 4c       	sbci	r31, 0xC5	; 197
+    14dc:	80 81       	ld	r24, Z
+    14de:	f8 01       	movw	r30, r16
+    14e0:	e2 0f       	add	r30, r18
+    14e2:	f1 1d       	adc	r31, r1
+    14e4:	80 62       	ori	r24, 0x20	; 32
+    14e6:	80 83       	st	Z, r24
         auStart = ((effect&0xE0)>0);
     }
 
     if (serRxDone){
         //Read up to the \0 character and convert to lower case.
         for (uint8_t x=0; serRx[x]!=0; ++x){
-    1576:	2f 5f       	subi	r18, 0xFF	; 255
-    1578:	82 2f       	mov	r24, r18
-    157a:	90 e0       	ldi	r25, 0x00	; 0
-    157c:	fc 01       	movw	r30, r24
-    157e:	e9 5a       	subi	r30, 0xA9	; 169
-    1580:	f5 4c       	sbci	r31, 0xC5	; 197
-    1582:	30 81       	ld	r19, Z
-    1584:	31 11       	cpse	r19, r1
-    1586:	d9 cf       	rjmp	.-78     	; 0x153a <CheckInput+0xc2>
+    14e8:	2f 5f       	subi	r18, 0xFF	; 255
+    14ea:	82 2f       	mov	r24, r18
+    14ec:	90 e0       	ldi	r25, 0x00	; 0
+    14ee:	fc 01       	movw	r30, r24
+    14f0:	e9 5a       	subi	r30, 0xA9	; 169
+    14f2:	f5 4c       	sbci	r31, 0xC5	; 197
+    14f4:	30 81       	ld	r19, Z
+    14f6:	31 11       	cpse	r19, r1
+    14f8:	d9 cf       	rjmp	.-78     	; 0x14ac <CheckInput+0xc2>
             if ((serRx[x]<'A')||(serRx[x]>'Z')) data[x]=serRx[x]; else data[x]=serRx[x]|0x20;
         }
 
         //No text
         if (serRx[0] == 0){
-    1588:	80 91 57 3a 	lds	r24, 0x3A57	; 0x803a57 <serRx>
-    158c:	81 11       	cpse	r24, r1
-    158e:	07 c0       	rjmp	.+14     	; 0x159e <CheckInput+0x126>
+    14fa:	80 91 57 3a 	lds	r24, 0x3A57	; 0x803a57 <serRx>
+    14fe:	81 11       	cpse	r24, r1
+    1500:	07 c0       	rjmp	.+14     	; 0x1510 <CheckInput+0x126>
             data[0] = 0;
-    1590:	f8 01       	movw	r30, r16
-    1592:	10 82       	st	Z, r1
+    1502:	f8 01       	movw	r30, r16
+    1504:	10 82       	st	Z, r1
             RXCNT = 0;
-    1594:	1d ba       	out	0x1d, r1	; 29
+    1506:	1d ba       	out	0x1d, r1	; 29
             serRxDone = 0;
-    1596:	10 92 97 38 	sts	0x3897, r1	; 0x803897 <serRxDone>
+    1508:	10 92 97 38 	sts	0x3897, r1	; 0x803897 <serRxDone>
             return 1;
-    159a:	81 e0       	ldi	r24, 0x01	; 1
-    159c:	58 c0       	rjmp	.+176    	; 0x164e <CheckInput+0x1d6>
+    150c:	81 e0       	ldi	r24, 0x01	; 1
+    150e:	58 c0       	rjmp	.+176    	; 0x15c0 <CheckInput+0x1d6>
         }
 
         //Help text
         if ((data[0] == '?')||(data[0] == 'h')){
-    159e:	f8 01       	movw	r30, r16
-    15a0:	80 81       	ld	r24, Z
-    15a2:	8f 33       	cpi	r24, 0x3F	; 63
-    15a4:	11 f0       	breq	.+4      	; 0x15aa <CheckInput+0x132>
-    15a6:	88 36       	cpi	r24, 0x68	; 104
-    15a8:	b9 f4       	brne	.+46     	; 0x15d8 <CheckInput+0x160>
+    1510:	f8 01       	movw	r30, r16
+    1512:	80 81       	ld	r24, Z
+    1514:	8f 33       	cpi	r24, 0x3F	; 63
+    1516:	11 f0       	breq	.+4      	; 0x151c <CheckInput+0x132>
+    1518:	88 36       	cpi	r24, 0x68	; 104
+    151a:	b9 f4       	brne	.+46     	; 0x154a <CheckInput+0x160>
             //Put help pointers/lengths in tx list
             reactStr[0][MSG] = A_HELP;
-    15aa:	81 eb       	ldi	r24, 0xB1	; 177
-    15ac:	9b e7       	ldi	r25, 0x7B	; 123
-    15ae:	80 93 11 39 	sts	0x3911, r24	; 0x803911 <reactStr+0xe>
-    15b2:	90 93 12 39 	sts	0x3912, r25	; 0x803912 <reactStr+0xf>
+    151c:	81 eb       	ldi	r24, 0xB1	; 177
+    151e:	9b e7       	ldi	r25, 0x7B	; 123
+    1520:	80 93 11 39 	sts	0x3911, r24	; 0x803911 <reactStr+0xe>
+    1524:	90 93 12 39 	sts	0x3912, r25	; 0x803912 <reactStr+0xf>
             reactStr[1][MSG] = L_HELP;
-    15b6:	8f e4       	ldi	r24, 0x4F	; 79
-    15b8:	94 e0       	ldi	r25, 0x04	; 4
-    15ba:	80 93 51 39 	sts	0x3951, r24	; 0x803951 <reactStr+0x4e>
-    15be:	90 93 52 39 	sts	0x3952, r25	; 0x803952 <reactStr+0x4f>
+    1528:	8f e4       	ldi	r24, 0x4F	; 79
+    152a:	94 e0       	ldi	r25, 0x04	; 4
+    152c:	80 93 51 39 	sts	0x3951, r24	; 0x803951 <reactStr+0x4e>
+    1530:	90 93 52 39 	sts	0x3952, r25	; 0x803952 <reactStr+0x4f>
             reactStr[2][MSG] = TEASER;
-    15c2:	81 e0       	ldi	r24, 0x01	; 1
-    15c4:	90 e0       	ldi	r25, 0x00	; 0
-    15c6:	80 93 91 39 	sts	0x3991, r24	; 0x803991 <reactStr+0x8e>
-    15ca:	90 93 92 39 	sts	0x3992, r25	; 0x803992 <reactStr+0x8f>
+    1534:	81 e0       	ldi	r24, 0x01	; 1
+    1536:	90 e0       	ldi	r25, 0x00	; 0
+    1538:	80 93 91 39 	sts	0x3991, r24	; 0x803991 <reactStr+0x8e>
+    153c:	90 93 92 39 	sts	0x3992, r25	; 0x803992 <reactStr+0x8f>
             actionList = MSG+1;
-    15ce:	88 e0       	ldi	r24, 0x08	; 8
-    15d0:	80 93 02 39 	sts	0x3902, r24	; 0x803902 <actionList>
+    1540:	88 e0       	ldi	r24, 0x08	; 8
+    1542:	80 93 02 39 	sts	0x3902, r24	; 0x803902 <actionList>
 
             return 1;
-    15d4:	81 e0       	ldi	r24, 0x01	; 1
-    15d6:	3b c0       	rjmp	.+118    	; 0x164e <CheckInput+0x1d6>
+    1546:	81 e0       	ldi	r24, 0x01	; 1
+    1548:	3b c0       	rjmp	.+118    	; 0x15c0 <CheckInput+0x1d6>
         }
 
         //Quit text
         if (data[0] == 'q'){
-    15d8:	81 37       	cpi	r24, 0x71	; 113
-    15da:	b9 f4       	brne	.+46     	; 0x160a <CheckInput+0x192>
+    154a:	81 37       	cpi	r24, 0x71	; 113
+    154c:	b9 f4       	brne	.+46     	; 0x157c <CheckInput+0x192>
             //Put quit pointers/lengths in tx list
             reactStr[0][MSG] = A_QUIT;
-    15dc:	84 e3       	ldi	r24, 0x34	; 52
-    15de:	9a e7       	ldi	r25, 0x7A	; 122
-    15e0:	80 93 11 39 	sts	0x3911, r24	; 0x803911 <reactStr+0xe>
-    15e4:	90 93 12 39 	sts	0x3912, r25	; 0x803912 <reactStr+0xf>
+    154e:	84 e3       	ldi	r24, 0x34	; 52
+    1550:	9a e7       	ldi	r25, 0x7A	; 122
+    1552:	80 93 11 39 	sts	0x3911, r24	; 0x803911 <reactStr+0xe>
+    1556:	90 93 12 39 	sts	0x3912, r25	; 0x803912 <reactStr+0xf>
             reactStr[1][MSG] = L_QUIT;
-    15e8:	84 e5       	ldi	r24, 0x54	; 84
-    15ea:	90 e0       	ldi	r25, 0x00	; 0
-    15ec:	80 93 51 39 	sts	0x3951, r24	; 0x803951 <reactStr+0x4e>
-    15f0:	90 93 52 39 	sts	0x3952, r25	; 0x803952 <reactStr+0x4f>
+    155a:	84 e5       	ldi	r24, 0x54	; 84
+    155c:	90 e0       	ldi	r25, 0x00	; 0
+    155e:	80 93 51 39 	sts	0x3951, r24	; 0x803951 <reactStr+0x4e>
+    1562:	90 93 52 39 	sts	0x3952, r25	; 0x803952 <reactStr+0x4f>
             reactStr[2][MSG] = TEASER;
-    15f4:	81 e0       	ldi	r24, 0x01	; 1
-    15f6:	90 e0       	ldi	r25, 0x00	; 0
-    15f8:	80 93 91 39 	sts	0x3991, r24	; 0x803991 <reactStr+0x8e>
-    15fc:	90 93 92 39 	sts	0x3992, r25	; 0x803992 <reactStr+0x8f>
+    1566:	81 e0       	ldi	r24, 0x01	; 1
+    1568:	90 e0       	ldi	r25, 0x00	; 0
+    156a:	80 93 91 39 	sts	0x3991, r24	; 0x803991 <reactStr+0x8e>
+    156e:	90 93 92 39 	sts	0x3992, r25	; 0x803992 <reactStr+0x8f>
             actionList = MSG+1;
-    1600:	88 e0       	ldi	r24, 0x08	; 8
-    1602:	80 93 02 39 	sts	0x3902, r24	; 0x803902 <actionList>
+    1572:	88 e0       	ldi	r24, 0x08	; 8
+    1574:	80 93 02 39 	sts	0x3902, r24	; 0x803902 <actionList>
             return 1;
-    1606:	81 e0       	ldi	r24, 0x01	; 1
+    1578:	81 e0       	ldi	r24, 0x01	; 1
         }
 
         //Cheat = reset badge!
         if (StartsWith(&data[0], "iddqd")){
-    1608:	22 c0       	rjmp	.+68     	; 0x164e <CheckInput+0x1d6>
-    160a:	6c ef       	ldi	r22, 0xFC	; 252
-    160c:	7a e9       	ldi	r23, 0x9A	; 154
-    160e:	c8 01       	movw	r24, r16
-    1610:	ab dc       	rcall	.-1706   	; 0xf68 <StartsWith>
-    1612:	88 23       	and	r24, r24
-    1614:	e1 f0       	breq	.+56     	; 0x164e <CheckInput+0x1d6>
+    157a:	22 c0       	rjmp	.+68     	; 0x15c0 <CheckInput+0x1d6>
+    157c:	6e e6       	ldi	r22, 0x6E	; 110
+    157e:	7a e9       	ldi	r23, 0x9A	; 154
+    1580:	c8 01       	movw	r24, r16
+    1582:	f2 dc       	rcall	.-1564   	; 0xf68 <StartsWith>
+    1584:	88 23       	and	r24, r24
+    1586:	e1 f0       	breq	.+56     	; 0x15c0 <CheckInput+0x1d6>
             
             //Reset game data by wiping the UUID bits
             for (uint8_t x=0; x<4; ++x){
                 WriteStatusBit(110+x, 0);
-    1616:	1e e6       	ldi	r17, 0x6E	; 110
-    1618:	60 e0       	ldi	r22, 0x00	; 0
-    161a:	81 2f       	mov	r24, r17
-    161c:	6b db       	rcall	.-2346   	; 0xcf4 <WriteStatusBit>
-    161e:	1f 5f       	subi	r17, 0xFF	; 255
+    1588:	1e e6       	ldi	r17, 0x6E	; 110
+    158a:	60 e0       	ldi	r22, 0x00	; 0
+    158c:	81 2f       	mov	r24, r17
+    158e:	b2 db       	rcall	.-2204   	; 0xcf4 <WriteStatusBit>
+    1590:	1f 5f       	subi	r17, 0xFF	; 255
 
         //Cheat = reset badge!
         if (StartsWith(&data[0], "iddqd")){
             
             //Reset game data by wiping the UUID bits
             for (uint8_t x=0; x<4; ++x){
-    1620:	12 37       	cpi	r17, 0x72	; 114
-    1622:	d1 f7       	brne	.-12     	; 0x1618 <CheckInput+0x1a0>
+    1592:	12 37       	cpi	r17, 0x72	; 114
+    1594:	d1 f7       	brne	.-12     	; 0x158a <CheckInput+0x1a0>
                 WriteStatusBit(110+x, 0);
             }
             SaveGameState();
-    1624:	1a db       	rcall	.-2508   	; 0xc5a <SaveGameState>
-    1626:	8a e0       	ldi	r24, 0x0A	; 10
+    1596:	61 db       	rcall	.-2366   	; 0xc5a <SaveGameState>
+    1598:	8a e0       	ldi	r24, 0x0A	; 10
 
             uint8_t cheat[] = "Cheater! ";
-    1628:	e2 e0       	ldi	r30, 0x02	; 2
-    162a:	fb e9       	ldi	r31, 0x9B	; 155
-    162c:	de 01       	movw	r26, r28
-    162e:	11 96       	adiw	r26, 0x01	; 1
-    1630:	01 90       	ld	r0, Z+
-    1632:	0d 92       	st	X+, r0
-    1634:	8a 95       	dec	r24
-    1636:	e1 f7       	brne	.-8      	; 0x1630 <CheckInput+0x1b8>
+    159a:	e4 e7       	ldi	r30, 0x74	; 116
+    159c:	fa e9       	ldi	r31, 0x9A	; 154
+    159e:	de 01       	movw	r26, r28
+    15a0:	11 96       	adiw	r26, 0x01	; 1
+    15a2:	01 90       	ld	r0, Z+
+    15a4:	0d 92       	st	X+, r0
+    15a6:	8a 95       	dec	r24
+    15a8:	e1 f7       	brne	.-8      	; 0x15a2 <CheckInput+0x1b8>
             SerSpeed(60);
-    1638:	8c e3       	ldi	r24, 0x3C	; 60
-    163a:	1e da       	rcall	.-3012   	; 0xa78 <SerSpeed>
-    163c:	80 91 04 38 	lds	r24, 0x3804	; 0x803804 <serTxDone>
+    15aa:	8c e3       	ldi	r24, 0x3C	; 60
+    15ac:	65 da       	rcall	.-2870   	; 0xa78 <SerSpeed>
+    15ae:	80 91 04 38 	lds	r24, 0x3804	; 0x803804 <serTxDone>
             while(1){
                 if (serTxDone) SerSend(&cheat[0]);
-    1640:	88 23       	and	r24, r24
-    1642:	e1 f3       	breq	.-8      	; 0x163c <CheckInput+0x1c4>
-    1644:	ce 01       	movw	r24, r28
-    1646:	01 96       	adiw	r24, 0x01	; 1
-    1648:	05 da       	rcall	.-3062   	; 0xa54 <SerSend>
-    164a:	f8 cf       	rjmp	.-16     	; 0x163c <CheckInput+0x1c4>
-    164c:	81 e0       	ldi	r24, 0x01	; 1
-    164e:	2a 96       	adiw	r28, 0x0a	; 10
+    15b2:	88 23       	and	r24, r24
+    15b4:	e1 f3       	breq	.-8      	; 0x15ae <CheckInput+0x1c4>
+    15b6:	ce 01       	movw	r24, r28
+    15b8:	01 96       	adiw	r24, 0x01	; 1
+    15ba:	4c da       	rcall	.-2920   	; 0xa54 <SerSend>
+    15bc:	f8 cf       	rjmp	.-16     	; 0x15ae <CheckInput+0x1c4>
+    15be:	81 e0       	ldi	r24, 0x01	; 1
+    15c0:	2a 96       	adiw	r28, 0x0a	; 10
         //Data received, but not any of the commands above
         return 0;
     }
 
     //Serial input not available yet
     return 1;
-    1650:	cd bf       	out	0x3d, r28	; 61
+    15c2:	cd bf       	out	0x3d, r28	; 61
 }
-    1652:	de bf       	out	0x3e, r29	; 62
-    1654:	df 91       	pop	r29
-    1656:	cf 91       	pop	r28
-    1658:	1f 91       	pop	r17
-    165a:	0f 91       	pop	r16
-    165c:	ff 90       	pop	r15
-    165e:	ef 90       	pop	r14
-    1660:	08 95       	ret
+    15c4:	de bf       	out	0x3e, r29	; 62
+    15c6:	df 91       	pop	r29
+    15c8:	cf 91       	pop	r28
+    15ca:	1f 91       	pop	r17
+    15cc:	0f 91       	pop	r16
+    15ce:	ff 90       	pop	r15
+    15d0:	ef 90       	pop	r14
+    15d2:	08 95       	ret
 
-00001662 <ProcessInput>:
-    1662:	0f 93       	push	r16
-    1664:	1f 93       	push	r17
+000015d4 <ProcessInput>:
+    15d4:	0f 93       	push	r16
+    15d6:	1f 93       	push	r17
 
 //The game logic!
 uint8_t ProcessInput(uint8_t *data){
-    1666:	cf 93       	push	r28
-    1668:	df 93       	push	r29
-    166a:	ec 01       	movw	r28, r24
+    15d8:	cf 93       	push	r28
+    15da:	df 93       	push	r29
+    15dc:	ec 01       	movw	r28, r24
 //    enum {NAME, DESC, ACTION_STR1, ACTION_STR2, OPEN_ACL_MSG, ACTION_ACL_MSG, ACTION_MSG};
     static object_model_t actObj1, actObj2;
 
     CleanInput(&data[0]);
-    166c:	98 de       	rcall	.-720    	; 0x139e <CleanInput>
+    15de:	8d de       	rcall	.-742    	; 0x12fa <CleanInput>
     uint8_t inputLen = CleanInput(&data[0]);
-    166e:	ce 01       	movw	r24, r28
-    1670:	96 de       	rcall	.-724    	; 0x139e <CleanInput>
+    15e0:	ce 01       	movw	r24, r28
+    15e2:	8b de       	rcall	.-746    	; 0x12fa <CleanInput>
 
     if (inputLen) {
-    1672:	88 23       	and	r24, r24
-    1674:	09 f4       	brne	.+2      	; 0x1678 <ProcessInput+0x16>
-    1676:	36 c1       	rjmp	.+620    	; 0x18e4 <ProcessInput+0x282>
+    15e4:	88 23       	and	r24, r24
+    15e6:	09 f4       	brne	.+2      	; 0x15ea <ProcessInput+0x16>
+    15e8:	36 c1       	rjmp	.+620    	; 0x1856 <ProcessInput+0x282>
         if (data[0] == 'x'){
-    1678:	98 81       	ld	r25, Y
-    167a:	98 37       	cpi	r25, 0x78	; 120
-    167c:	09 f0       	breq	.+2      	; 0x1680 <ProcessInput+0x1e>
-    167e:	64 c0       	rjmp	.+200    	; 0x1748 <ProcessInput+0xe6>
+    15ea:	98 81       	ld	r25, Y
+    15ec:	98 37       	cpi	r25, 0x78	; 120
+    15ee:	09 f0       	breq	.+2      	; 0x15f2 <ProcessInput+0x1e>
+    15f0:	64 c0       	rjmp	.+200    	; 0x16ba <ProcessInput+0xe6>
 
             //Standing in the Lobby?
             if ((route[currDepth] == 0)||(currDepth == 0)){
-    1680:	80 91 8f 38 	lds	r24, 0x388F	; 0x80388f <currDepth>
-    1684:	e8 2f       	mov	r30, r24
-    1686:	f0 e0       	ldi	r31, 0x00	; 0
-    1688:	ee 0f       	add	r30, r30
-    168a:	ff 1f       	adc	r31, r31
-    168c:	ed 53       	subi	r30, 0x3D	; 61
-    168e:	f6 4c       	sbci	r31, 0xC6	; 198
-    1690:	20 81       	ld	r18, Z
-    1692:	31 81       	ldd	r19, Z+1	; 0x01
-    1694:	23 2b       	or	r18, r19
-    1696:	11 f0       	breq	.+4      	; 0x169c <ProcessInput+0x3a>
-    1698:	81 11       	cpse	r24, r1
-    169a:	16 c0       	rjmp	.+44     	; 0x16c8 <ProcessInput+0x66>
+    15f2:	80 91 8f 38 	lds	r24, 0x388F	; 0x80388f <currDepth>
+    15f6:	e8 2f       	mov	r30, r24
+    15f8:	f0 e0       	ldi	r31, 0x00	; 0
+    15fa:	ee 0f       	add	r30, r30
+    15fc:	ff 1f       	adc	r31, r31
+    15fe:	ed 53       	subi	r30, 0x3D	; 61
+    1600:	f6 4c       	sbci	r31, 0xC6	; 198
+    1602:	20 81       	ld	r18, Z
+    1604:	31 81       	ldd	r19, Z+1	; 0x01
+    1606:	23 2b       	or	r18, r19
+    1608:	11 f0       	breq	.+4      	; 0x160e <ProcessInput+0x3a>
+    160a:	81 11       	cpse	r24, r1
+    160c:	16 c0       	rjmp	.+44     	; 0x163a <ProcessInput+0x66>
                 reactStr[0][MSG]=A_NOTPOSSIBLE;
-    169c:	82 eb       	ldi	r24, 0xB2	; 178
-    169e:	96 e7       	ldi	r25, 0x76	; 118
-    16a0:	80 93 11 39 	sts	0x3911, r24	; 0x803911 <reactStr+0xe>
-    16a4:	90 93 12 39 	sts	0x3912, r25	; 0x803912 <reactStr+0xf>
+    160e:	82 eb       	ldi	r24, 0xB2	; 178
+    1610:	96 e7       	ldi	r25, 0x76	; 118
+    1612:	80 93 11 39 	sts	0x3911, r24	; 0x803911 <reactStr+0xe>
+    1616:	90 93 12 39 	sts	0x3912, r25	; 0x803912 <reactStr+0xf>
                 reactStr[1][MSG]=L_NOTPOSSIBLE;
-    16a8:	8b e1       	ldi	r24, 0x1B	; 27
-    16aa:	90 e0       	ldi	r25, 0x00	; 0
-    16ac:	80 93 51 39 	sts	0x3951, r24	; 0x803951 <reactStr+0x4e>
-    16b0:	90 93 52 39 	sts	0x3952, r25	; 0x803952 <reactStr+0x4f>
+    161a:	8b e1       	ldi	r24, 0x1B	; 27
+    161c:	90 e0       	ldi	r25, 0x00	; 0
+    161e:	80 93 51 39 	sts	0x3951, r24	; 0x803951 <reactStr+0x4e>
+    1622:	90 93 52 39 	sts	0x3952, r25	; 0x803952 <reactStr+0x4f>
                 reactStr[2][MSG]=TEASER;
-    16b4:	81 e0       	ldi	r24, 0x01	; 1
-    16b6:	90 e0       	ldi	r25, 0x00	; 0
-    16b8:	80 93 91 39 	sts	0x3991, r24	; 0x803991 <reactStr+0x8e>
-    16bc:	90 93 92 39 	sts	0x3992, r25	; 0x803992 <reactStr+0x8f>
+    1626:	81 e0       	ldi	r24, 0x01	; 1
+    1628:	90 e0       	ldi	r25, 0x00	; 0
+    162a:	80 93 91 39 	sts	0x3991, r24	; 0x803991 <reactStr+0x8e>
+    162e:	90 93 92 39 	sts	0x3992, r25	; 0x803992 <reactStr+0x8f>
                 actionList = MSG+1;
-    16c0:	88 e0       	ldi	r24, 0x08	; 8
-    16c2:	80 93 02 39 	sts	0x3902, r24	; 0x803902 <actionList>
-    16c6:	f2 c0       	rjmp	.+484    	; 0x18ac <ProcessInput+0x24a>
+    1632:	88 e0       	ldi	r24, 0x08	; 8
+    1634:	80 93 02 39 	sts	0x3902, r24	; 0x803902 <actionList>
+    1638:	f2 c0       	rjmp	.+484    	; 0x181e <ProcessInput+0x24a>
             
             //Is there a way to go back?
             } else if (CheckState(currObj.byteField[OPEN_ACL])){
-    16c8:	80 91 09 3a 	lds	r24, 0x3A09	; 0x803a09 <currObj+0x6>
-    16cc:	97 dd       	rcall	.-1234   	; 0x11fc <CheckState>
-    16ce:	88 23       	and	r24, r24
-    16d0:	29 f1       	breq	.+74     	; 0x171c <ProcessInput+0xba>
+    163a:	80 91 09 3a 	lds	r24, 0x3A09	; 0x803a09 <currObj+0x6>
+    163e:	8c dd       	rcall	.-1256   	; 0x1158 <CheckState>
+    1640:	88 23       	and	r24, r24
+    1642:	29 f1       	breq	.+74     	; 0x168e <ProcessInput+0xba>
                 --currDepth;
-    16d2:	e0 91 8f 38 	lds	r30, 0x388F	; 0x80388f <currDepth>
-    16d6:	e1 50       	subi	r30, 0x01	; 1
-    16d8:	e0 93 8f 38 	sts	0x388F, r30	; 0x80388f <currDepth>
+    1644:	e0 91 8f 38 	lds	r30, 0x388F	; 0x80388f <currDepth>
+    1648:	e1 50       	subi	r30, 0x01	; 1
+    164a:	e0 93 8f 38 	sts	0x388F, r30	; 0x80388f <currDepth>
                 PopulateObject(route[currDepth], &currObj);
-    16dc:	f0 e0       	ldi	r31, 0x00	; 0
-    16de:	ee 0f       	add	r30, r30
-    16e0:	ff 1f       	adc	r31, r31
-    16e2:	ed 53       	subi	r30, 0x3D	; 61
-    16e4:	f6 4c       	sbci	r31, 0xC6	; 198
-    16e6:	63 e0       	ldi	r22, 0x03	; 3
-    16e8:	7a e3       	ldi	r23, 0x3A	; 58
-    16ea:	80 81       	ld	r24, Z
-    16ec:	91 81       	ldd	r25, Z+1	; 0x01
-    16ee:	f6 dc       	rcall	.-1556   	; 0x10dc <PopulateObject>
+    164e:	f0 e0       	ldi	r31, 0x00	; 0
+    1650:	ee 0f       	add	r30, r30
+    1652:	ff 1f       	adc	r31, r31
+    1654:	ed 53       	subi	r30, 0x3D	; 61
+    1656:	f6 4c       	sbci	r31, 0xC6	; 198
+    1658:	63 e0       	ldi	r22, 0x03	; 3
+    165a:	7a e3       	ldi	r23, 0x3A	; 58
+    165c:	80 81       	ld	r24, Z
+    165e:	91 81       	ldd	r25, Z+1	; 0x01
+    1660:	3d dd       	rcall	.-1414   	; 0x10dc <PopulateObject>
                 reactStr[0][MSG]=currObj.addrStr[NAME];
-    16f0:	e3 e0       	ldi	r30, 0x03	; 3
-    16f2:	fa e3       	ldi	r31, 0x3A	; 58
-    16f4:	84 85       	ldd	r24, Z+12	; 0x0c
-    16f6:	95 85       	ldd	r25, Z+13	; 0x0d
-    16f8:	80 93 11 39 	sts	0x3911, r24	; 0x803911 <reactStr+0xe>
-    16fc:	90 93 12 39 	sts	0x3912, r25	; 0x803912 <reactStr+0xf>
+    1662:	e3 e0       	ldi	r30, 0x03	; 3
+    1664:	fa e3       	ldi	r31, 0x3A	; 58
+    1666:	84 85       	ldd	r24, Z+12	; 0x0c
+    1668:	95 85       	ldd	r25, Z+13	; 0x0d
+    166a:	80 93 11 39 	sts	0x3911, r24	; 0x803911 <reactStr+0xe>
+    166e:	90 93 12 39 	sts	0x3912, r25	; 0x803912 <reactStr+0xf>
                 reactStr[1][MSG]=currObj.lenStr[NAME];
-    1700:	82 8d       	ldd	r24, Z+26	; 0x1a
-    1702:	93 8d       	ldd	r25, Z+27	; 0x1b
-    1704:	80 93 51 39 	sts	0x3951, r24	; 0x803951 <reactStr+0x4e>
-    1708:	90 93 52 39 	sts	0x3952, r25	; 0x803952 <reactStr+0x4f>
+    1672:	82 8d       	ldd	r24, Z+26	; 0x1a
+    1674:	93 8d       	ldd	r25, Z+27	; 0x1b
+    1676:	80 93 51 39 	sts	0x3951, r24	; 0x803951 <reactStr+0x4e>
+    167a:	90 93 52 39 	sts	0x3952, r25	; 0x803952 <reactStr+0x4f>
                 reactStr[2][MSG]=GAME;             
-    170c:	10 92 91 39 	sts	0x3991, r1	; 0x803991 <reactStr+0x8e>
-    1710:	10 92 92 39 	sts	0x3992, r1	; 0x803992 <reactStr+0x8f>
+    167e:	10 92 91 39 	sts	0x3991, r1	; 0x803991 <reactStr+0x8e>
+    1682:	10 92 92 39 	sts	0x3992, r1	; 0x803992 <reactStr+0x8f>
                 actionList = MSG+1;
-    1714:	88 e0       	ldi	r24, 0x08	; 8
-    1716:	80 93 02 39 	sts	0x3902, r24	; 0x803902 <actionList>
-    171a:	c8 c0       	rjmp	.+400    	; 0x18ac <ProcessInput+0x24a>
+    1686:	88 e0       	ldi	r24, 0x08	; 8
+    1688:	80 93 02 39 	sts	0x3902, r24	; 0x803902 <actionList>
+    168c:	c8 c0       	rjmp	.+400    	; 0x181e <ProcessInput+0x24a>
             
             //No way out, print denied message of location
             } else {
                 reactStr[0][MSG]=currObj.addrStr[OPEN_ACL_MSG];
-    171c:	e3 e0       	ldi	r30, 0x03	; 3
-    171e:	fa e3       	ldi	r31, 0x3A	; 58
-    1720:	84 89       	ldd	r24, Z+20	; 0x14
-    1722:	95 89       	ldd	r25, Z+21	; 0x15
-    1724:	80 93 11 39 	sts	0x3911, r24	; 0x803911 <reactStr+0xe>
-    1728:	90 93 12 39 	sts	0x3912, r25	; 0x803912 <reactStr+0xf>
+    168e:	e3 e0       	ldi	r30, 0x03	; 3
+    1690:	fa e3       	ldi	r31, 0x3A	; 58
+    1692:	84 89       	ldd	r24, Z+20	; 0x14
+    1694:	95 89       	ldd	r25, Z+21	; 0x15
+    1696:	80 93 11 39 	sts	0x3911, r24	; 0x803911 <reactStr+0xe>
+    169a:	90 93 12 39 	sts	0x3912, r25	; 0x803912 <reactStr+0xf>
                 reactStr[1][MSG]=currObj.lenStr[OPEN_ACL_MSG];
-    172c:	82 a1       	ldd	r24, Z+34	; 0x22
-    172e:	93 a1       	ldd	r25, Z+35	; 0x23
-    1730:	80 93 51 39 	sts	0x3951, r24	; 0x803951 <reactStr+0x4e>
-    1734:	90 93 52 39 	sts	0x3952, r25	; 0x803952 <reactStr+0x4f>
+    169e:	82 a1       	ldd	r24, Z+34	; 0x22
+    16a0:	93 a1       	ldd	r25, Z+35	; 0x23
+    16a2:	80 93 51 39 	sts	0x3951, r24	; 0x803951 <reactStr+0x4e>
+    16a6:	90 93 52 39 	sts	0x3952, r25	; 0x803952 <reactStr+0x4f>
                 reactStr[2][MSG]=GAME;                
-    1738:	10 92 91 39 	sts	0x3991, r1	; 0x803991 <reactStr+0x8e>
-    173c:	10 92 92 39 	sts	0x3992, r1	; 0x803992 <reactStr+0x8f>
+    16aa:	10 92 91 39 	sts	0x3991, r1	; 0x803991 <reactStr+0x8e>
+    16ae:	10 92 92 39 	sts	0x3992, r1	; 0x803992 <reactStr+0x8f>
                 actionList = MSG+1;
-    1740:	88 e0       	ldi	r24, 0x08	; 8
-    1742:	80 93 02 39 	sts	0x3902, r24	; 0x803902 <actionList>
-    1746:	b2 c0       	rjmp	.+356    	; 0x18ac <ProcessInput+0x24a>
+    16b2:	88 e0       	ldi	r24, 0x08	; 8
+    16b4:	80 93 02 39 	sts	0x3902, r24	; 0x803902 <actionList>
+    16b8:	b2 c0       	rjmp	.+356    	; 0x181e <ProcessInput+0x24a>
             }   
             
         } else if ((data[0] == 'e')||(data[0] == 'o')) {
-    1748:	95 36       	cpi	r25, 0x65	; 101
-    174a:	19 f0       	breq	.+6      	; 0x1752 <ProcessInput+0xf0>
-    174c:	9f 36       	cpi	r25, 0x6F	; 111
-    174e:	09 f0       	breq	.+2      	; 0x1752 <ProcessInput+0xf0>
-    1750:	ad c0       	rjmp	.+346    	; 0x18ac <ProcessInput+0x24a>
+    16ba:	95 36       	cpi	r25, 0x65	; 101
+    16bc:	19 f0       	breq	.+6      	; 0x16c4 <ProcessInput+0xf0>
+    16be:	9f 36       	cpi	r25, 0x6F	; 111
+    16c0:	09 f0       	breq	.+2      	; 0x16c4 <ProcessInput+0xf0>
+    16c2:	ad c0       	rjmp	.+346    	; 0x181e <ProcessInput+0x24a>
                 
             //Not possible, too many/little characters
             if (inputLen != 2){
-    1752:	82 30       	cpi	r24, 0x02	; 2
-    1754:	b1 f0       	breq	.+44     	; 0x1782 <ProcessInput+0x120>
+    16c4:	82 30       	cpi	r24, 0x02	; 2
+    16c6:	b1 f0       	breq	.+44     	; 0x16f4 <ProcessInput+0x120>
                 reactStr[0][MSG]=A_NOTPOSSIBLE;
-    1756:	82 eb       	ldi	r24, 0xB2	; 178
-    1758:	96 e7       	ldi	r25, 0x76	; 118
-    175a:	80 93 11 39 	sts	0x3911, r24	; 0x803911 <reactStr+0xe>
-    175e:	90 93 12 39 	sts	0x3912, r25	; 0x803912 <reactStr+0xf>
+    16c8:	82 eb       	ldi	r24, 0xB2	; 178
+    16ca:	96 e7       	ldi	r25, 0x76	; 118
+    16cc:	80 93 11 39 	sts	0x3911, r24	; 0x803911 <reactStr+0xe>
+    16d0:	90 93 12 39 	sts	0x3912, r25	; 0x803912 <reactStr+0xf>
                 reactStr[1][MSG]=L_NOTPOSSIBLE;
-    1762:	8b e1       	ldi	r24, 0x1B	; 27
-    1764:	90 e0       	ldi	r25, 0x00	; 0
-    1766:	80 93 51 39 	sts	0x3951, r24	; 0x803951 <reactStr+0x4e>
-    176a:	90 93 52 39 	sts	0x3952, r25	; 0x803952 <reactStr+0x4f>
+    16d4:	8b e1       	ldi	r24, 0x1B	; 27
+    16d6:	90 e0       	ldi	r25, 0x00	; 0
+    16d8:	80 93 51 39 	sts	0x3951, r24	; 0x803951 <reactStr+0x4e>
+    16dc:	90 93 52 39 	sts	0x3952, r25	; 0x803952 <reactStr+0x4f>
                 reactStr[2][MSG]=TEASER;
-    176e:	81 e0       	ldi	r24, 0x01	; 1
-    1770:	90 e0       	ldi	r25, 0x00	; 0
-    1772:	80 93 91 39 	sts	0x3991, r24	; 0x803991 <reactStr+0x8e>
-    1776:	90 93 92 39 	sts	0x3992, r25	; 0x803992 <reactStr+0x8f>
+    16e0:	81 e0       	ldi	r24, 0x01	; 1
+    16e2:	90 e0       	ldi	r25, 0x00	; 0
+    16e4:	80 93 91 39 	sts	0x3991, r24	; 0x803991 <reactStr+0x8e>
+    16e8:	90 93 92 39 	sts	0x3992, r25	; 0x803992 <reactStr+0x8f>
                 actionList = MSG+1;
-    177a:	88 e0       	ldi	r24, 0x08	; 8
-    177c:	80 93 02 39 	sts	0x3902, r24	; 0x803902 <actionList>
-    1780:	95 c0       	rjmp	.+298    	; 0x18ac <ProcessInput+0x24a>
+    16ec:	88 e0       	ldi	r24, 0x08	; 8
+    16ee:	80 93 02 39 	sts	0x3902, r24	; 0x803902 <actionList>
+    16f2:	95 c0       	rjmp	.+298    	; 0x181e <ProcessInput+0x24a>
             } else {
                 uint8_t canDo = 0;
                 route[currDepth+1] = FindChild(route[currDepth], data[1]);
-    1782:	00 91 8f 38 	lds	r16, 0x388F	; 0x80388f <currDepth>
-    1786:	10 e0       	ldi	r17, 0x00	; 0
-    1788:	f8 01       	movw	r30, r16
-    178a:	ee 0f       	add	r30, r30
-    178c:	ff 1f       	adc	r31, r31
-    178e:	ed 53       	subi	r30, 0x3D	; 61
-    1790:	f6 4c       	sbci	r31, 0xC6	; 198
-    1792:	69 81       	ldd	r22, Y+1	; 0x01
-    1794:	80 81       	ld	r24, Z
-    1796:	91 81       	ldd	r25, Z+1	; 0x01
-    1798:	9e dd       	rcall	.-1220   	; 0x12d6 <FindChild>
-    179a:	00 0f       	add	r16, r16
-    179c:	11 1f       	adc	r17, r17
-    179e:	f8 01       	movw	r30, r16
-    17a0:	eb 53       	subi	r30, 0x3B	; 59
-    17a2:	f6 4c       	sbci	r31, 0xC6	; 198
-    17a4:	80 83       	st	Z, r24
-    17a6:	91 83       	std	Z+1, r25	; 0x01
+    16f4:	00 91 8f 38 	lds	r16, 0x388F	; 0x80388f <currDepth>
+    16f8:	10 e0       	ldi	r17, 0x00	; 0
+    16fa:	f8 01       	movw	r30, r16
+    16fc:	ee 0f       	add	r30, r30
+    16fe:	ff 1f       	adc	r31, r31
+    1700:	ed 53       	subi	r30, 0x3D	; 61
+    1702:	f6 4c       	sbci	r31, 0xC6	; 198
+    1704:	69 81       	ldd	r22, Y+1	; 0x01
+    1706:	80 81       	ld	r24, Z
+    1708:	91 81       	ldd	r25, Z+1	; 0x01
+    170a:	93 dd       	rcall	.-1242   	; 0x1232 <FindChild>
+    170c:	00 0f       	add	r16, r16
+    170e:	11 1f       	adc	r17, r17
+    1710:	f8 01       	movw	r30, r16
+    1712:	eb 53       	subi	r30, 0x3B	; 59
+    1714:	f6 4c       	sbci	r31, 0xC6	; 198
+    1716:	80 83       	st	Z, r24
+    1718:	91 83       	std	Z+1, r25	; 0x01
                     
                 //Child found?
                 if (route[currDepth+1]) {
-    17a8:	90 91 8f 38 	lds	r25, 0x388F	; 0x80388f <currDepth>
-    17ac:	29 2f       	mov	r18, r25
-    17ae:	30 e0       	ldi	r19, 0x00	; 0
-    17b0:	f9 01       	movw	r30, r18
-    17b2:	ee 0f       	add	r30, r30
-    17b4:	ff 1f       	adc	r31, r31
-    17b6:	eb 53       	subi	r30, 0x3B	; 59
-    17b8:	f6 4c       	sbci	r31, 0xC6	; 198
-    17ba:	40 81       	ld	r20, Z
-    17bc:	51 81       	ldd	r21, Z+1	; 0x01
-    17be:	41 15       	cp	r20, r1
-    17c0:	51 05       	cpc	r21, r1
+    171a:	90 91 8f 38 	lds	r25, 0x388F	; 0x80388f <currDepth>
+    171e:	29 2f       	mov	r18, r25
+    1720:	30 e0       	ldi	r19, 0x00	; 0
+    1722:	f9 01       	movw	r30, r18
+    1724:	ee 0f       	add	r30, r30
+    1726:	ff 1f       	adc	r31, r31
+    1728:	eb 53       	subi	r30, 0x3B	; 59
+    172a:	f6 4c       	sbci	r31, 0xC6	; 198
+    172c:	40 81       	ld	r20, Z
+    172e:	51 81       	ldd	r21, Z+1	; 0x01
+    1730:	41 15       	cp	r20, r1
+    1732:	51 05       	cpc	r21, r1
                     PopulateObject(route[currDepth+1], &actObj1);
-    17c2:	29 f0       	breq	.+10     	; 0x17ce <ProcessInput+0x16c>
-    17c4:	69 ed       	ldi	r22, 0xD9	; 217
-    17c6:	78 e3       	ldi	r23, 0x38	; 56
-    17c8:	ca 01       	movw	r24, r20
-    17ca:	88 dc       	rcall	.-1776   	; 0x10dc <PopulateObject>
-    17cc:	16 c0       	rjmp	.+44     	; 0x17fa <ProcessInput+0x198>
+    1734:	29 f0       	breq	.+10     	; 0x1740 <ProcessInput+0x16c>
+    1736:	69 ed       	ldi	r22, 0xD9	; 217
+    1738:	78 e3       	ldi	r23, 0x38	; 56
+    173a:	ca 01       	movw	r24, r20
+    173c:	cf dc       	rcall	.-1634   	; 0x10dc <PopulateObject>
+    173e:	16 c0       	rjmp	.+44     	; 0x176c <ProcessInput+0x198>
                     canDo = 1;
                 //No child, maybe a step back, letter ok?
                 } else if (currDepth) {
-    17ce:	99 23       	and	r25, r25
-    17d0:	09 f4       	brne	.+2      	; 0x17d4 <ProcessInput+0x172>
-    17d2:	57 c0       	rjmp	.+174    	; 0x1882 <ProcessInput+0x220>
+    1740:	99 23       	and	r25, r25
+    1742:	09 f4       	brne	.+2      	; 0x1746 <ProcessInput+0x172>
+    1744:	57 c0       	rjmp	.+174    	; 0x17f4 <ProcessInput+0x220>
                     PopulateObject(route[currDepth-1], &actObj1);
-    17d4:	22 0f       	add	r18, r18
-    17d6:	33 1f       	adc	r19, r19
-    17d8:	f9 01       	movw	r30, r18
-    17da:	ef 53       	subi	r30, 0x3F	; 63
-    17dc:	f6 4c       	sbci	r31, 0xC6	; 198
-    17de:	69 ed       	ldi	r22, 0xD9	; 217
-    17e0:	78 e3       	ldi	r23, 0x38	; 56
-    17e2:	80 81       	ld	r24, Z
-    17e4:	91 81       	ldd	r25, Z+1	; 0x01
+    1746:	22 0f       	add	r18, r18
+    1748:	33 1f       	adc	r19, r19
+    174a:	f9 01       	movw	r30, r18
+    174c:	ef 53       	subi	r30, 0x3F	; 63
+    174e:	f6 4c       	sbci	r31, 0xC6	; 198
+    1750:	69 ed       	ldi	r22, 0xD9	; 217
+    1752:	78 e3       	ldi	r23, 0x38	; 56
+    1754:	80 81       	ld	r24, Z
+    1756:	91 81       	ldd	r25, Z+1	; 0x01
                     if (CheckLetter(actObj1.addrStr[NAME], data[1])) {
-    17e6:	7a dc       	rcall	.-1804   	; 0x10dc <PopulateObject>
-    17e8:	69 81       	ldd	r22, Y+1	; 0x01
-    17ea:	80 91 e5 38 	lds	r24, 0x38E5	; 0x8038e5 <actObj1.3928+0xc>
-    17ee:	90 91 e6 38 	lds	r25, 0x38E6	; 0x8038e6 <actObj1.3928+0xd>
-    17f2:	16 dd       	rcall	.-1492   	; 0x1220 <CheckLetter>
+    1758:	c1 dc       	rcall	.-1662   	; 0x10dc <PopulateObject>
+    175a:	69 81       	ldd	r22, Y+1	; 0x01
+    175c:	80 91 e5 38 	lds	r24, 0x38E5	; 0x8038e5 <actObj1.3922+0xc>
+    1760:	90 91 e6 38 	lds	r25, 0x38E6	; 0x8038e6 <actObj1.3922+0xd>
+    1764:	0b dd       	rcall	.-1514   	; 0x117c <CheckLetter>
                         canDo = 1; 
                     }
                 }
 
                 //The candidate is found! Let's check if the action is legit
                 if (canDo) {
-    17f4:	88 23       	and	r24, r24
-    17f6:	09 f4       	brne	.+2      	; 0x17fa <ProcessInput+0x198>
-    17f8:	44 c0       	rjmp	.+136    	; 0x1882 <ProcessInput+0x220>
+    1766:	88 23       	and	r24, r24
+    1768:	09 f4       	brne	.+2      	; 0x176c <ProcessInput+0x198>
+    176a:	44 c0       	rjmp	.+136    	; 0x17f4 <ProcessInput+0x220>
                     uint8_t bEnter = (data[0] == 'e');
                     if ((actObj1.byteField[ACTION_MASK]&(bEnter?ENTER:OPEN))==0) {
-    17fa:	80 91 e1 38 	lds	r24, 0x38E1	; 0x8038e1 <actObj1.3928+0x8>
-    17fe:	98 81       	ld	r25, Y
-    1800:	95 36       	cpi	r25, 0x65	; 101
-    1802:	09 f0       	breq	.+2      	; 0x1806 <ProcessInput+0x1a4>
-    1804:	69 c0       	rjmp	.+210    	; 0x18d8 <ProcessInput+0x276>
-    1806:	6b c0       	rjmp	.+214    	; 0x18de <ProcessInput+0x27c>
+    176c:	80 91 e1 38 	lds	r24, 0x38E1	; 0x8038e1 <actObj1.3922+0x8>
+    1770:	98 81       	ld	r25, Y
+    1772:	95 36       	cpi	r25, 0x65	; 101
+    1774:	09 f0       	breq	.+2      	; 0x1778 <ProcessInput+0x1a4>
+    1776:	69 c0       	rjmp	.+210    	; 0x184a <ProcessInput+0x276>
+    1778:	6b c0       	rjmp	.+214    	; 0x1850 <ProcessInput+0x27c>
                         reactStr[0][MSG]=bEnter?A_CANTENTER:A_CANTOPEN;
                         reactStr[1][MSG]=bEnter?L_CANTENTER:L_CANTOPEN;
-    1808:	80 93 51 39 	sts	0x3951, r24	; 0x803951 <reactStr+0x4e>
-    180c:	90 93 52 39 	sts	0x3952, r25	; 0x803952 <reactStr+0x4f>
+    177a:	80 93 51 39 	sts	0x3951, r24	; 0x803951 <reactStr+0x4e>
+    177e:	90 93 52 39 	sts	0x3952, r25	; 0x803952 <reactStr+0x4f>
                         reactStr[2][MSG]=TEASER;
-    1810:	81 e0       	ldi	r24, 0x01	; 1
-    1812:	90 e0       	ldi	r25, 0x00	; 0
-    1814:	80 93 91 39 	sts	0x3991, r24	; 0x803991 <reactStr+0x8e>
-    1818:	90 93 92 39 	sts	0x3992, r25	; 0x803992 <reactStr+0x8f>
+    1782:	81 e0       	ldi	r24, 0x01	; 1
+    1784:	90 e0       	ldi	r25, 0x00	; 0
+    1786:	80 93 91 39 	sts	0x3991, r24	; 0x803991 <reactStr+0x8e>
+    178a:	90 93 92 39 	sts	0x3992, r25	; 0x803992 <reactStr+0x8f>
                         actionList = MSG+1;
-    181c:	88 e0       	ldi	r24, 0x08	; 8
-    181e:	80 93 02 39 	sts	0x3902, r24	; 0x803902 <actionList>
+    178e:	88 e0       	ldi	r24, 0x08	; 8
+    1790:	80 93 02 39 	sts	0x3902, r24	; 0x803902 <actionList>
                         
                     //Action legit, permission granted?
                     } else if (CheckState(actObj1.byteField[OPEN_ACL])) {
-    1822:	44 c0       	rjmp	.+136    	; 0x18ac <ProcessInput+0x24a>
-    1824:	80 91 df 38 	lds	r24, 0x38DF	; 0x8038df <actObj1.3928+0x6>
-    1828:	e9 dc       	rcall	.-1582   	; 0x11fc <CheckState>
-    182a:	88 23       	and	r24, r24
-    182c:	01 f1       	breq	.+64     	; 0x186e <ProcessInput+0x20c>
+    1794:	44 c0       	rjmp	.+136    	; 0x181e <ProcessInput+0x24a>
+    1796:	80 91 df 38 	lds	r24, 0x38DF	; 0x8038df <actObj1.3922+0x6>
+    179a:	de dc       	rcall	.-1604   	; 0x1158 <CheckState>
+    179c:	88 23       	and	r24, r24
+    179e:	01 f1       	breq	.+64     	; 0x17e0 <ProcessInput+0x20c>
                             
                         //Yes! Check if we must move forward or backwards.
                         if (route[currDepth+1]) ++currDepth; else --currDepth;
-    182e:	80 91 8f 38 	lds	r24, 0x388F	; 0x80388f <currDepth>
-    1832:	e8 2f       	mov	r30, r24
-    1834:	f0 e0       	ldi	r31, 0x00	; 0
-    1836:	ee 0f       	add	r30, r30
-    1838:	ff 1f       	adc	r31, r31
-    183a:	eb 53       	subi	r30, 0x3B	; 59
-    183c:	f6 4c       	sbci	r31, 0xC6	; 198
-    183e:	20 81       	ld	r18, Z
-    1840:	31 81       	ldd	r19, Z+1	; 0x01
-    1842:	23 2b       	or	r18, r19
-    1844:	21 f0       	breq	.+8      	; 0x184e <ProcessInput+0x1ec>
-    1846:	8f 5f       	subi	r24, 0xFF	; 255
-    1848:	80 93 8f 38 	sts	0x388F, r24	; 0x80388f <currDepth>
-    184c:	03 c0       	rjmp	.+6      	; 0x1854 <ProcessInput+0x1f2>
-    184e:	81 50       	subi	r24, 0x01	; 1
-    1850:	80 93 8f 38 	sts	0x388F, r24	; 0x80388f <currDepth>
+    17a0:	80 91 8f 38 	lds	r24, 0x388F	; 0x80388f <currDepth>
+    17a4:	e8 2f       	mov	r30, r24
+    17a6:	f0 e0       	ldi	r31, 0x00	; 0
+    17a8:	ee 0f       	add	r30, r30
+    17aa:	ff 1f       	adc	r31, r31
+    17ac:	eb 53       	subi	r30, 0x3B	; 59
+    17ae:	f6 4c       	sbci	r31, 0xC6	; 198
+    17b0:	20 81       	ld	r18, Z
+    17b2:	31 81       	ldd	r19, Z+1	; 0x01
+    17b4:	23 2b       	or	r18, r19
+    17b6:	21 f0       	breq	.+8      	; 0x17c0 <ProcessInput+0x1ec>
+    17b8:	8f 5f       	subi	r24, 0xFF	; 255
+    17ba:	80 93 8f 38 	sts	0x388F, r24	; 0x80388f <currDepth>
+    17be:	03 c0       	rjmp	.+6      	; 0x17c6 <ProcessInput+0x1f2>
+    17c0:	81 50       	subi	r24, 0x01	; 1
+    17c2:	80 93 8f 38 	sts	0x388F, r24	; 0x80388f <currDepth>
                         PopulateObject(route[currDepth], &currObj);
-    1854:	e0 91 8f 38 	lds	r30, 0x388F	; 0x80388f <currDepth>
-    1858:	f0 e0       	ldi	r31, 0x00	; 0
-    185a:	ee 0f       	add	r30, r30
-    185c:	ff 1f       	adc	r31, r31
-    185e:	ed 53       	subi	r30, 0x3D	; 61
-    1860:	f6 4c       	sbci	r31, 0xC6	; 198
-    1862:	63 e0       	ldi	r22, 0x03	; 3
-    1864:	7a e3       	ldi	r23, 0x3A	; 58
-    1866:	80 81       	ld	r24, Z
-    1868:	91 81       	ldd	r25, Z+1	; 0x01
-    186a:	38 dc       	rcall	.-1936   	; 0x10dc <PopulateObject>
-    186c:	1f c0       	rjmp	.+62     	; 0x18ac <ProcessInput+0x24a>
+    17c6:	e0 91 8f 38 	lds	r30, 0x388F	; 0x80388f <currDepth>
+    17ca:	f0 e0       	ldi	r31, 0x00	; 0
+    17cc:	ee 0f       	add	r30, r30
+    17ce:	ff 1f       	adc	r31, r31
+    17d0:	ed 53       	subi	r30, 0x3D	; 61
+    17d2:	f6 4c       	sbci	r31, 0xC6	; 198
+    17d4:	63 e0       	ldi	r22, 0x03	; 3
+    17d6:	7a e3       	ldi	r23, 0x3A	; 58
+    17d8:	80 81       	ld	r24, Z
+    17da:	91 81       	ldd	r25, Z+1	; 0x01
+    17dc:	7f dc       	rcall	.-1794   	; 0x10dc <PopulateObject>
+    17de:	1f c0       	rjmp	.+62     	; 0x181e <ProcessInput+0x24a>
                           
                     //Not granted!
                     } else {
                         route[currDepth+1] = 0;
-    186e:	e0 91 8f 38 	lds	r30, 0x388F	; 0x80388f <currDepth>
-    1872:	f0 e0       	ldi	r31, 0x00	; 0
-    1874:	ee 0f       	add	r30, r30
-    1876:	ff 1f       	adc	r31, r31
-    1878:	eb 53       	subi	r30, 0x3B	; 59
-    187a:	f6 4c       	sbci	r31, 0xC6	; 198
-    187c:	10 82       	st	Z, r1
-    187e:	11 82       	std	Z+1, r1	; 0x01
-    1880:	15 c0       	rjmp	.+42     	; 0x18ac <ProcessInput+0x24a>
+    17e0:	e0 91 8f 38 	lds	r30, 0x388F	; 0x80388f <currDepth>
+    17e4:	f0 e0       	ldi	r31, 0x00	; 0
+    17e6:	ee 0f       	add	r30, r30
+    17e8:	ff 1f       	adc	r31, r31
+    17ea:	eb 53       	subi	r30, 0x3B	; 59
+    17ec:	f6 4c       	sbci	r31, 0xC6	; 198
+    17ee:	10 82       	st	Z, r1
+    17f0:	11 82       	std	Z+1, r1	; 0x01
+    17f2:	15 c0       	rjmp	.+42     	; 0x181e <ProcessInput+0x24a>
                     }
 
                 //No candidate
                 } else {
                     reactStr[0][MSG]=A_DONTSEE;
-    1882:	82 e0       	ldi	r24, 0x02	; 2
-    1884:	9a e7       	ldi	r25, 0x7A	; 122
-    1886:	80 93 11 39 	sts	0x3911, r24	; 0x803911 <reactStr+0xe>
-    188a:	90 93 12 39 	sts	0x3912, r25	; 0x803912 <reactStr+0xf>
+    17f4:	82 e0       	ldi	r24, 0x02	; 2
+    17f6:	9a e7       	ldi	r25, 0x7A	; 122
+    17f8:	80 93 11 39 	sts	0x3911, r24	; 0x803911 <reactStr+0xe>
+    17fc:	90 93 12 39 	sts	0x3912, r25	; 0x803912 <reactStr+0xf>
                     reactStr[1][MSG]=L_DONTSEE;
-    188e:	8a e1       	ldi	r24, 0x1A	; 26
-    1890:	90 e0       	ldi	r25, 0x00	; 0
-    1892:	80 93 51 39 	sts	0x3951, r24	; 0x803951 <reactStr+0x4e>
-    1896:	90 93 52 39 	sts	0x3952, r25	; 0x803952 <reactStr+0x4f>
+    1800:	8a e1       	ldi	r24, 0x1A	; 26
+    1802:	90 e0       	ldi	r25, 0x00	; 0
+    1804:	80 93 51 39 	sts	0x3951, r24	; 0x803951 <reactStr+0x4e>
+    1808:	90 93 52 39 	sts	0x3952, r25	; 0x803952 <reactStr+0x4f>
                     reactStr[2][MSG]=TEASER;
-    189a:	81 e0       	ldi	r24, 0x01	; 1
-    189c:	90 e0       	ldi	r25, 0x00	; 0
-    189e:	80 93 91 39 	sts	0x3991, r24	; 0x803991 <reactStr+0x8e>
-    18a2:	90 93 92 39 	sts	0x3992, r25	; 0x803992 <reactStr+0x8f>
-                    actionList = MSG+1;                }
-    18a6:	88 e0       	ldi	r24, 0x08	; 8
-    18a8:	80 93 02 39 	sts	0x3902, r24	; 0x803902 <actionList>
+    180c:	81 e0       	ldi	r24, 0x01	; 1
+    180e:	90 e0       	ldi	r25, 0x00	; 0
+    1810:	80 93 91 39 	sts	0x3991, r24	; 0x803991 <reactStr+0x8e>
+    1814:	90 93 92 39 	sts	0x3992, r25	; 0x803992 <reactStr+0x8f>
+                    actionList = MSG+1;                
+    1818:	88 e0       	ldi	r24, 0x08	; 8
+    181a:	80 93 02 39 	sts	0x3902, r24	; 0x803902 <actionList>
                 
         }
             
         //Input handled
         //data[0] = 0;
         serRxDone = 0;
-    18ac:	10 92 97 38 	sts	0x3897, r1	; 0x803897 <serRxDone>
+    181e:	10 92 97 38 	sts	0x3897, r1	; 0x803897 <serRxDone>
         RXCNT = 0;
-    18b0:	1d ba       	out	0x1d, r1	; 29
+    1822:	1d ba       	out	0x1d, r1	; 29
     }
     
     return 0;
-    18b2:	18 c0       	rjmp	.+48     	; 0x18e4 <ProcessInput+0x282>
+    1824:	18 c0       	rjmp	.+48     	; 0x1856 <ProcessInput+0x282>
 
                 //The candidate is found! Let's check if the action is legit
                 if (canDo) {
                     uint8_t bEnter = (data[0] == 'e');
                     if ((actObj1.byteField[ACTION_MASK]&(bEnter?ENTER:OPEN))==0) {
                         reactStr[0][MSG]=bEnter?A_CANTENTER:A_CANTOPEN;
-    18b4:	83 eb       	ldi	r24, 0xB3	; 179
-    18b6:	99 e7       	ldi	r25, 0x79	; 121
-    18b8:	80 93 11 39 	sts	0x3911, r24	; 0x803911 <reactStr+0xe>
-    18bc:	90 93 12 39 	sts	0x3912, r25	; 0x803912 <reactStr+0xf>
+    1826:	83 eb       	ldi	r24, 0xB3	; 179
+    1828:	99 e7       	ldi	r25, 0x79	; 121
+    182a:	80 93 11 39 	sts	0x3911, r24	; 0x803911 <reactStr+0xe>
+    182e:	90 93 12 39 	sts	0x3912, r25	; 0x803912 <reactStr+0xf>
                         reactStr[1][MSG]=bEnter?L_CANTENTER:L_CANTOPEN;
-    18c0:	8b e1       	ldi	r24, 0x1B	; 27
-    18c2:	90 e0       	ldi	r25, 0x00	; 0
-    18c4:	a1 cf       	rjmp	.-190    	; 0x1808 <ProcessInput+0x1a6>
+    1832:	8b e1       	ldi	r24, 0x1B	; 27
+    1834:	90 e0       	ldi	r25, 0x00	; 0
+    1836:	a1 cf       	rjmp	.-190    	; 0x177a <ProcessInput+0x1a6>
 
                 //The candidate is found! Let's check if the action is legit
                 if (canDo) {
                     uint8_t bEnter = (data[0] == 'e');
                     if ((actObj1.byteField[ACTION_MASK]&(bEnter?ENTER:OPEN))==0) {
                         reactStr[0][MSG]=bEnter?A_CANTENTER:A_CANTOPEN;
-    18c6:	8e ec       	ldi	r24, 0xCE	; 206
-    18c8:	99 e7       	ldi	r25, 0x79	; 121
-    18ca:	80 93 11 39 	sts	0x3911, r24	; 0x803911 <reactStr+0xe>
-    18ce:	90 93 12 39 	sts	0x3912, r25	; 0x803912 <reactStr+0xf>
+    1838:	8e ec       	ldi	r24, 0xCE	; 206
+    183a:	99 e7       	ldi	r25, 0x79	; 121
+    183c:	80 93 11 39 	sts	0x3911, r24	; 0x803911 <reactStr+0xe>
+    1840:	90 93 12 39 	sts	0x3912, r25	; 0x803912 <reactStr+0xf>
                         reactStr[1][MSG]=bEnter?L_CANTENTER:L_CANTOPEN;
-    18d2:	8e e1       	ldi	r24, 0x1E	; 30
-    18d4:	90 e0       	ldi	r25, 0x00	; 0
-    18d6:	98 cf       	rjmp	.-208    	; 0x1808 <ProcessInput+0x1a6>
+    1844:	8e e1       	ldi	r24, 0x1E	; 30
+    1846:	90 e0       	ldi	r25, 0x00	; 0
+    1848:	98 cf       	rjmp	.-208    	; 0x177a <ProcessInput+0x1a6>
                 }
 
                 //The candidate is found! Let's check if the action is legit
                 if (canDo) {
                     uint8_t bEnter = (data[0] == 'e');
                     if ((actObj1.byteField[ACTION_MASK]&(bEnter?ENTER:OPEN))==0) {
-    18d8:	81 ff       	sbrs	r24, 1
-    18da:	ec cf       	rjmp	.-40     	; 0x18b4 <ProcessInput+0x252>
-    18dc:	a3 cf       	rjmp	.-186    	; 0x1824 <ProcessInput+0x1c2>
-    18de:	80 ff       	sbrs	r24, 0
-    18e0:	f2 cf       	rjmp	.-28     	; 0x18c6 <ProcessInput+0x264>
-    18e2:	a0 cf       	rjmp	.-192    	; 0x1824 <ProcessInput+0x1c2>
+    184a:	81 ff       	sbrs	r24, 1
+    184c:	ec cf       	rjmp	.-40     	; 0x1826 <ProcessInput+0x252>
+    184e:	a3 cf       	rjmp	.-186    	; 0x1796 <ProcessInput+0x1c2>
+    1850:	80 ff       	sbrs	r24, 0
+    1852:	f2 cf       	rjmp	.-28     	; 0x1838 <ProcessInput+0x264>
+    1854:	a0 cf       	rjmp	.-192    	; 0x1796 <ProcessInput+0x1c2>
         serRxDone = 0;
         RXCNT = 0;
     }
     
     return 0;
 }
-    18e4:	80 e0       	ldi	r24, 0x00	; 0
-    18e6:	df 91       	pop	r29
-    18e8:	cf 91       	pop	r28
-    18ea:	1f 91       	pop	r17
-    18ec:	0f 91       	pop	r16
-    18ee:	08 95       	ret
+    1856:	80 e0       	ldi	r24, 0x00	; 0
+    1858:	df 91       	pop	r29
+    185a:	cf 91       	pop	r28
+    185c:	1f 91       	pop	r17
+    185e:	0f 91       	pop	r16
+    1860:	08 95       	ret
 
-000018f0 <TextAdventure>:
+00001862 <TextAdventure>:
 
 
 // Main game loop
 uint8_t TextAdventure(){
-    18f0:	cf 93       	push	r28
-    18f2:	df 93       	push	r29
+    1862:	cf 93       	push	r28
+    1864:	df 93       	push	r29
     static uint8_t serInput[RXLEN];
     if (CheckSend()) return 1;                      //Still sending data to serial output, return 1
-    18f4:	7a dd       	rcall	.-1292   	; 0x13ea <CheckSend>
-    18f6:	c8 2f       	mov	r28, r24
-    18f8:	81 11       	cpse	r24, r1
-    18fa:	42 c0       	rjmp	.+132    	; 0x1980 <TextAdventure+0x90>
+    1866:	6f dd       	rcall	.-1314   	; 0x1346 <CheckSend>
+    1868:	c8 2f       	mov	r28, r24
+    186a:	81 11       	cpse	r24, r1
+    186c:	42 c0       	rjmp	.+132    	; 0x18f2 <TextAdventure+0x90>
 
     //Process responses to send
     if (actionList){
-    18fc:	d0 91 02 39 	lds	r29, 0x3902	; 0x803902 <actionList>
-    1900:	dd 23       	and	r29, r29
-    1902:	99 f1       	breq	.+102    	; 0x196a <TextAdventure+0x7a>
+    186e:	d0 91 02 39 	lds	r29, 0x3902	; 0x803902 <actionList>
+    1872:	dd 23       	and	r29, r29
+    1874:	99 f1       	breq	.+102    	; 0x18dc <TextAdventure+0x7a>
         --actionList;
-    1904:	d1 50       	subi	r29, 0x01	; 1
-    1906:	d0 93 02 39 	sts	0x3902, r29	; 0x803902 <actionList>
+    1876:	d1 50       	subi	r29, 0x01	; 1
+    1878:	d0 93 02 39 	sts	0x3902, r29	; 0x803902 <actionList>
         if (actionList == MSG_LOC) {
-    190a:	d3 30       	cpi	r29, 0x03	; 3
-    190c:	49 f4       	brne	.+18     	; 0x1920 <TextAdventure+0x30>
+    187c:	d3 30       	cpi	r29, 0x03	; 3
+    187e:	49 f4       	brne	.+18     	; 0x1892 <TextAdventure+0x30>
             PrepareSending(currObj.addrStr[NAME], currObj.lenStr[NAME], GAME);
-    190e:	e3 e0       	ldi	r30, 0x03	; 3
-    1910:	fa e3       	ldi	r31, 0x3A	; 58
-    1912:	62 8d       	ldd	r22, Z+26	; 0x1a
-    1914:	73 8d       	ldd	r23, Z+27	; 0x1b
-    1916:	40 e0       	ldi	r20, 0x00	; 0
-    1918:	84 85       	ldd	r24, Z+12	; 0x0c
-    191a:	95 85       	ldd	r25, Z+13	; 0x0d
-    191c:	36 db       	rcall	.-2452   	; 0xf8a <PrepareSending>
-    191e:	33 c0       	rjmp	.+102    	; 0x1986 <TextAdventure+0x96>
+    1880:	e3 e0       	ldi	r30, 0x03	; 3
+    1882:	fa e3       	ldi	r31, 0x3A	; 58
+    1884:	62 8d       	ldd	r22, Z+26	; 0x1a
+    1886:	73 8d       	ldd	r23, Z+27	; 0x1b
+    1888:	40 e0       	ldi	r20, 0x00	; 0
+    188a:	84 85       	ldd	r24, Z+12	; 0x0c
+    188c:	95 85       	ldd	r25, Z+13	; 0x0d
+    188e:	7d db       	rcall	.-2310   	; 0xf8a <PrepareSending>
+    1890:	33 c0       	rjmp	.+102    	; 0x18f8 <TextAdventure+0x96>
         } else PrepareSending(reactStr[0][actionList], reactStr[1][actionList], reactStr[2][actionList]);
-    1920:	8d 2f       	mov	r24, r29
-    1922:	90 e0       	ldi	r25, 0x00	; 0
-    1924:	dc 01       	movw	r26, r24
-    1926:	aa 0f       	add	r26, r26
-    1928:	bb 1f       	adc	r27, r27
-    192a:	ad 57       	subi	r26, 0x7D	; 125
-    192c:	b6 4c       	sbci	r27, 0xC6	; 198
-    192e:	fc 01       	movw	r30, r24
-    1930:	ee 0f       	add	r30, r30
-    1932:	ff 1f       	adc	r31, r31
-    1934:	ed 5b       	subi	r30, 0xBD	; 189
-    1936:	f6 4c       	sbci	r31, 0xC6	; 198
-    1938:	60 81       	ld	r22, Z
-    193a:	71 81       	ldd	r23, Z+1	; 0x01
-    193c:	88 0f       	add	r24, r24
-    193e:	99 1f       	adc	r25, r25
-    1940:	fc 01       	movw	r30, r24
-    1942:	ed 5f       	subi	r30, 0xFD	; 253
-    1944:	f6 4c       	sbci	r31, 0xC6	; 198
-    1946:	4c 91       	ld	r20, X
-    1948:	80 81       	ld	r24, Z
-    194a:	91 81       	ldd	r25, Z+1	; 0x01
-    194c:	1e db       	rcall	.-2500   	; 0xf8a <PrepareSending>
+    1892:	8d 2f       	mov	r24, r29
+    1894:	90 e0       	ldi	r25, 0x00	; 0
+    1896:	dc 01       	movw	r26, r24
+    1898:	aa 0f       	add	r26, r26
+    189a:	bb 1f       	adc	r27, r27
+    189c:	ad 57       	subi	r26, 0x7D	; 125
+    189e:	b6 4c       	sbci	r27, 0xC6	; 198
+    18a0:	fc 01       	movw	r30, r24
+    18a2:	ee 0f       	add	r30, r30
+    18a4:	ff 1f       	adc	r31, r31
+    18a6:	ed 5b       	subi	r30, 0xBD	; 189
+    18a8:	f6 4c       	sbci	r31, 0xC6	; 198
+    18aa:	60 81       	ld	r22, Z
+    18ac:	71 81       	ldd	r23, Z+1	; 0x01
+    18ae:	88 0f       	add	r24, r24
+    18b0:	99 1f       	adc	r25, r25
+    18b2:	fc 01       	movw	r30, r24
+    18b4:	ed 5f       	subi	r30, 0xFD	; 253
+    18b6:	f6 4c       	sbci	r31, 0xC6	; 198
+    18b8:	4c 91       	ld	r20, X
+    18ba:	80 81       	ld	r24, Z
+    18bc:	91 81       	ldd	r25, Z+1	; 0x01
+    18be:	65 db       	rcall	.-2358   	; 0xf8a <PrepareSending>
         if (actionList == 0) {
-    194e:	d1 11       	cpse	r29, r1
-    1950:	1a c0       	rjmp	.+52     	; 0x1986 <TextAdventure+0x96>
+    18c0:	d1 11       	cpse	r29, r1
+    18c2:	1a c0       	rjmp	.+52     	; 0x18f8 <TextAdventure+0x96>
             effect = currObj.byteField[EFFECTS];
-    1952:	80 91 07 3a 	lds	r24, 0x3A07	; 0x803a07 <currObj+0x4>
-    1956:	90 e0       	ldi	r25, 0x00	; 0
-    1958:	80 93 93 38 	sts	0x3893, r24	; 0x803893 <effect>
-    195c:	90 93 94 38 	sts	0x3894, r25	; 0x803894 <effect+0x1>
+    18c4:	80 91 07 3a 	lds	r24, 0x3A07	; 0x803a07 <currObj+0x4>
+    18c8:	90 e0       	ldi	r25, 0x00	; 0
+    18ca:	80 93 93 38 	sts	0x3893, r24	; 0x803893 <effect>
+    18ce:	90 93 94 38 	sts	0x3894, r25	; 0x803894 <effect+0x1>
             RXCNT = 0;
-    1960:	1d ba       	out	0x1d, r1	; 29
+    18d2:	1d ba       	out	0x1d, r1	; 29
             serRxDone = 0;
-    1962:	10 92 97 38 	sts	0x3897, r1	; 0x803897 <serRxDone>
+    18d4:	10 92 97 38 	sts	0x3897, r1	; 0x803897 <serRxDone>
     //Input found, process and save (changes only)
     } else {
         ProcessInput(&serInput[0]);                     //Check which response to generate and fill tx arrays
         SaveGameState();                                //Check if things are changed, write to EEPROM
     }
     return 0;
-    1966:	cd 2f       	mov	r28, r29
+    18d8:	cd 2f       	mov	r28, r29
             RXCNT = 0;
             serRxDone = 0;
         }
     
     //No responses to send, check if there is user input.
     } else if (CheckInput(&serInput[0])) {
-    1968:	0e c0       	rjmp	.+28     	; 0x1986 <TextAdventure+0x96>
-    196a:	88 e9       	ldi	r24, 0x98	; 152
-    196c:	98 e3       	ldi	r25, 0x38	; 56
-    196e:	84 dd       	rcall	.-1272   	; 0x1478 <CheckInput>
-    1970:	c8 2f       	mov	r28, r24
-    1972:	81 11       	cpse	r24, r1
+    18da:	0e c0       	rjmp	.+28     	; 0x18f8 <TextAdventure+0x96>
+    18dc:	88 e9       	ldi	r24, 0x98	; 152
+    18de:	98 e3       	ldi	r25, 0x38	; 56
+    18e0:	84 dd       	rcall	.-1272   	; 0x13ea <CheckInput>
+    18e2:	c8 2f       	mov	r28, r24
+    18e4:	81 11       	cpse	r24, r1
         return 2; //No valid input
 
     //Input found, process and save (changes only)
     } else {
         ProcessInput(&serInput[0]);                     //Check which response to generate and fill tx arrays
-    1974:	07 c0       	rjmp	.+14     	; 0x1984 <TextAdventure+0x94>
-    1976:	88 e9       	ldi	r24, 0x98	; 152
-    1978:	98 e3       	ldi	r25, 0x38	; 56
-    197a:	73 de       	rcall	.-794    	; 0x1662 <ProcessInput>
+    18e6:	07 c0       	rjmp	.+14     	; 0x18f6 <TextAdventure+0x94>
+    18e8:	88 e9       	ldi	r24, 0x98	; 152
+    18ea:	98 e3       	ldi	r25, 0x38	; 56
+    18ec:	73 de       	rcall	.-794    	; 0x15d4 <ProcessInput>
         SaveGameState();                                //Check if things are changed, write to EEPROM
-    197c:	6e d9       	rcall	.-3364   	; 0xc5a <SaveGameState>
-    197e:	03 c0       	rjmp	.+6      	; 0x1986 <TextAdventure+0x96>
-    1980:	c1 e0       	ldi	r28, 0x01	; 1
+    18ee:	b5 d9       	rcall	.-3222   	; 0xc5a <SaveGameState>
+    18f0:	03 c0       	rjmp	.+6      	; 0x18f8 <TextAdventure+0x96>
+    18f2:	c1 e0       	ldi	r28, 0x01	; 1
 
 
 // Main game loop
 uint8_t TextAdventure(){
     static uint8_t serInput[RXLEN];
     if (CheckSend()) return 1;                      //Still sending data to serial output, return 1
-    1982:	01 c0       	rjmp	.+2      	; 0x1986 <TextAdventure+0x96>
-    1984:	c2 e0       	ldi	r28, 0x02	; 2
+    18f4:	01 c0       	rjmp	.+2      	; 0x18f8 <TextAdventure+0x96>
+    18f6:	c2 e0       	ldi	r28, 0x02	; 2
             serRxDone = 0;
         }
     
     //No responses to send, check if there is user input.
     } else if (CheckInput(&serInput[0])) {
         return 2; //No valid input
-    1986:	8c 2f       	mov	r24, r28
+    18f8:	8c 2f       	mov	r24, r28
     } else {
         ProcessInput(&serInput[0]);                     //Check which response to generate and fill tx arrays
         SaveGameState();                                //Check if things are changed, write to EEPROM
     }
     return 0;
-    1988:	df 91       	pop	r29
-    198a:	cf 91       	pop	r28
-    198c:	08 95       	ret
+    18fa:	df 91       	pop	r29
+    18fc:	cf 91       	pop	r28
+    18fe:	08 95       	ret
 
-0000198e <main>:
-    198e:	0e 94 aa 01 	call	0x354	; 0x354 <Setup>
+00001900 <main>:
+    1900:	0e 94 aa 01 	call	0x354	; 0x354 <Setup>
 
     //SerSpeed(1);
     //unsigned char strTest[]="\aHäckerHotel2020 badge pest!\b\b\b\b\bt\n";
     //SerSend(&strTest[0]);
 
     SerSpeed(255);
-    1992:	8f ef       	ldi	r24, 0xFF	; 255
-    1994:	71 d8       	rcall	.-3870   	; 0xa78 <SerSpeed>
-    1996:	a0 ef       	ldi	r26, 0xF0	; 240
-    1998:	ba e9       	ldi	r27, 0x9A	; 154
-    199a:	26 ef       	ldi	r18, 0xF6	; 246
-    199c:	3a e9       	ldi	r19, 0x9A	; 154
+    1904:	8f ef       	ldi	r24, 0xFF	; 255
+    1906:	b8 d8       	rcall	.-3728   	; 0xa78 <SerSpeed>
+    1908:	a2 e6       	ldi	r26, 0x62	; 98
+    190a:	ba e9       	ldi	r27, 0x9A	; 154
+    190c:	28 e6       	ldi	r18, 0x68	; 104
+    190e:	3a e9       	ldi	r19, 0x9A	; 154
 
     ////Turn on LEDs on low setting to check for interrupt glitches
 
     //"Hacker"
     for (uint8_t n=0; n<6; n++){
         iLED[HCKR[R][n]] = 1;
-    199e:	81 e0       	ldi	r24, 0x01	; 1
-    19a0:	ed 91       	ld	r30, X+
-    19a2:	f0 e0       	ldi	r31, 0x00	; 0
-    19a4:	ee 53       	subi	r30, 0x3E	; 62
-    19a6:	f5 4c       	sbci	r31, 0xC5	; 197
-    19a8:	80 83       	st	Z, r24
+    1910:	81 e0       	ldi	r24, 0x01	; 1
+    1912:	ed 91       	ld	r30, X+
+    1914:	f0 e0       	ldi	r31, 0x00	; 0
+    1916:	ee 53       	subi	r30, 0x3E	; 62
+    1918:	f5 4c       	sbci	r31, 0xC5	; 197
+    191a:	80 83       	st	Z, r24
         iLED[HCKR[G][n]] = 1;
-    19aa:	15 96       	adiw	r26, 0x05	; 5
-    19ac:	ec 91       	ld	r30, X
-    19ae:	15 97       	sbiw	r26, 0x05	; 5
-    19b0:	f0 e0       	ldi	r31, 0x00	; 0
-    19b2:	ee 53       	subi	r30, 0x3E	; 62
-    19b4:	f5 4c       	sbci	r31, 0xC5	; 197
-    19b6:	80 83       	st	Z, r24
+    191c:	15 96       	adiw	r26, 0x05	; 5
+    191e:	ec 91       	ld	r30, X
+    1920:	15 97       	sbiw	r26, 0x05	; 5
+    1922:	f0 e0       	ldi	r31, 0x00	; 0
+    1924:	ee 53       	subi	r30, 0x3E	; 62
+    1926:	f5 4c       	sbci	r31, 0xC5	; 197
+    1928:	80 83       	st	Z, r24
     SerSpeed(255);
 
     ////Turn on LEDs on low setting to check for interrupt glitches
 
     //"Hacker"
     for (uint8_t n=0; n<6; n++){
-    19b8:	a2 17       	cp	r26, r18
-    19ba:	b3 07       	cpc	r27, r19
-    19bc:	89 f7       	brne	.-30     	; 0x19a0 <main+0x12>
-    19be:	e2 ee       	ldi	r30, 0xE2	; 226
-    19c0:	fa e9       	ldi	r31, 0x9A	; 154
-    19c2:	27 ee       	ldi	r18, 0xE7	; 231
-    19c4:	3a e9       	ldi	r19, 0x9A	; 154
+    192a:	a2 17       	cp	r26, r18
+    192c:	b3 07       	cpc	r27, r19
+    192e:	89 f7       	brne	.-30     	; 0x1912 <main+0x12>
+    1930:	e4 e5       	ldi	r30, 0x54	; 84
+    1932:	fa e9       	ldi	r31, 0x9A	; 154
+    1934:	29 e5       	ldi	r18, 0x59	; 89
+    1936:	3a e9       	ldi	r19, 0x9A	; 154
         iLED[HCKR[G][n]] = 1;
     }
 
     //"Wings"
     for (uint8_t n=0; n<5; n++){
         iLED[WING[L][n]] = 1;
-    19c6:	81 e0       	ldi	r24, 0x01	; 1
-    19c8:	ef 01       	movw	r28, r30
-    19ca:	a5 81       	ldd	r26, Z+5	; 0x05
-    19cc:	b0 e0       	ldi	r27, 0x00	; 0
-    19ce:	ae 53       	subi	r26, 0x3E	; 62
-    19d0:	b5 4c       	sbci	r27, 0xC5	; 197
-    19d2:	8c 93       	st	X, r24
-    19d4:	31 96       	adiw	r30, 0x01	; 1
+    1938:	81 e0       	ldi	r24, 0x01	; 1
+    193a:	ef 01       	movw	r28, r30
+    193c:	a5 81       	ldd	r26, Z+5	; 0x05
+    193e:	b0 e0       	ldi	r27, 0x00	; 0
+    1940:	ae 53       	subi	r26, 0x3E	; 62
+    1942:	b5 4c       	sbci	r27, 0xC5	; 197
+    1944:	8c 93       	st	X, r24
+    1946:	31 96       	adiw	r30, 0x01	; 1
         iLED[WING[R][n]] = 1;
-    19d6:	a8 81       	ld	r26, Y
-    19d8:	b0 e0       	ldi	r27, 0x00	; 0
-    19da:	ae 53       	subi	r26, 0x3E	; 62
-    19dc:	b5 4c       	sbci	r27, 0xC5	; 197
-    19de:	8c 93       	st	X, r24
+    1948:	a8 81       	ld	r26, Y
+    194a:	b0 e0       	ldi	r27, 0x00	; 0
+    194c:	ae 53       	subi	r26, 0x3E	; 62
+    194e:	b5 4c       	sbci	r27, 0xC5	; 197
+    1950:	8c 93       	st	X, r24
         iLED[HCKR[R][n]] = 1;
         iLED[HCKR[G][n]] = 1;
     }
 
     //"Wings"
     for (uint8_t n=0; n<5; n++){
-    19e0:	e2 17       	cp	r30, r18
-    19e2:	f3 07       	cpc	r31, r19
-    19e4:	89 f7       	brne	.-30     	; 0x19c8 <main+0x3a>
+    1952:	e2 17       	cp	r30, r18
+    1954:	f3 07       	cpc	r31, r19
+    1956:	89 f7       	brne	.-30     	; 0x193a <main+0x3a>
         iLED[WING[L][n]] = 1;
         iLED[WING[R][n]] = 1;
     }    
 
     //"Others"
     iLED[EYE[G][R]] = 1;
-    19e6:	ac ee       	ldi	r26, 0xEC	; 236
-    19e8:	ba e9       	ldi	r27, 0x9A	; 154
-    19ea:	12 96       	adiw	r26, 0x02	; 2
-    19ec:	ec 91       	ld	r30, X
-    19ee:	12 97       	sbiw	r26, 0x02	; 2
-    19f0:	f0 e0       	ldi	r31, 0x00	; 0
-    19f2:	ee 53       	subi	r30, 0x3E	; 62
-    19f4:	f5 4c       	sbci	r31, 0xC5	; 197
-    19f6:	81 e0       	ldi	r24, 0x01	; 1
-    19f8:	80 83       	st	Z, r24
+    1958:	ae e5       	ldi	r26, 0x5E	; 94
+    195a:	ba e9       	ldi	r27, 0x9A	; 154
+    195c:	12 96       	adiw	r26, 0x02	; 2
+    195e:	ec 91       	ld	r30, X
+    1960:	12 97       	sbiw	r26, 0x02	; 2
+    1962:	f0 e0       	ldi	r31, 0x00	; 0
+    1964:	ee 53       	subi	r30, 0x3E	; 62
+    1966:	f5 4c       	sbci	r31, 0xC5	; 197
+    1968:	81 e0       	ldi	r24, 0x01	; 1
+    196a:	80 83       	st	Z, r24
     iLED[EYE[G][L]] = 1;
-    19fa:	13 96       	adiw	r26, 0x03	; 3
-    19fc:	ec 91       	ld	r30, X
-    19fe:	13 97       	sbiw	r26, 0x03	; 3
-    1a00:	f0 e0       	ldi	r31, 0x00	; 0
-    1a02:	ee 53       	subi	r30, 0x3E	; 62
-    1a04:	f5 4c       	sbci	r31, 0xC5	; 197
-    1a06:	80 83       	st	Z, r24
+    196c:	13 96       	adiw	r26, 0x03	; 3
+    196e:	ec 91       	ld	r30, X
+    1970:	13 97       	sbiw	r26, 0x03	; 3
+    1972:	f0 e0       	ldi	r31, 0x00	; 0
+    1974:	ee 53       	subi	r30, 0x3E	; 62
+    1976:	f5 4c       	sbci	r31, 0xC5	; 197
+    1978:	80 83       	st	Z, r24
     iLED[EYE[R][R]] = 1;
-    1a08:	ec 91       	ld	r30, X
-    1a0a:	f0 e0       	ldi	r31, 0x00	; 0
-    1a0c:	ee 53       	subi	r30, 0x3E	; 62
-    1a0e:	f5 4c       	sbci	r31, 0xC5	; 197
-    1a10:	80 83       	st	Z, r24
+    197a:	ec 91       	ld	r30, X
+    197c:	f0 e0       	ldi	r31, 0x00	; 0
+    197e:	ee 53       	subi	r30, 0x3E	; 62
+    1980:	f5 4c       	sbci	r31, 0xC5	; 197
+    1982:	80 83       	st	Z, r24
     iLED[EYE[R][L]] = 1;
-    1a12:	11 96       	adiw	r26, 0x01	; 1
-    1a14:	ec 91       	ld	r30, X
-    1a16:	f0 e0       	ldi	r31, 0x00	; 0
-    1a18:	ee 53       	subi	r30, 0x3E	; 62
-    1a1a:	f5 4c       	sbci	r31, 0xC5	; 197
-    1a1c:	80 83       	st	Z, r24
+    1984:	11 96       	adiw	r26, 0x01	; 1
+    1986:	ec 91       	ld	r30, X
+    1988:	f0 e0       	ldi	r31, 0x00	; 0
+    198a:	ee 53       	subi	r30, 0x3E	; 62
+    198c:	f5 4c       	sbci	r31, 0xC5	; 197
+    198e:	80 83       	st	Z, r24
     iLED[GEM[R]] = 1;
-    1a1e:	a0 ee       	ldi	r26, 0xE0	; 224
-    1a20:	ba e9       	ldi	r27, 0x9A	; 154
-    1a22:	ec 91       	ld	r30, X
-    1a24:	f0 e0       	ldi	r31, 0x00	; 0
-    1a26:	ee 53       	subi	r30, 0x3E	; 62
-    1a28:	f5 4c       	sbci	r31, 0xC5	; 197
-    1a2a:	80 83       	st	Z, r24
+    1990:	a2 e5       	ldi	r26, 0x52	; 82
+    1992:	ba e9       	ldi	r27, 0x9A	; 154
+    1994:	ec 91       	ld	r30, X
+    1996:	f0 e0       	ldi	r31, 0x00	; 0
+    1998:	ee 53       	subi	r30, 0x3E	; 62
+    199a:	f5 4c       	sbci	r31, 0xC5	; 197
+    199c:	80 83       	st	Z, r24
     iLED[GEM[G]] = 1;
-    1a2c:	11 96       	adiw	r26, 0x01	; 1
-    1a2e:	ec 91       	ld	r30, X
-    1a30:	f0 e0       	ldi	r31, 0x00	; 0
-    1a32:	ee 53       	subi	r30, 0x3E	; 62
-    1a34:	f5 4c       	sbci	r31, 0xC5	; 197
-    1a36:	80 83       	st	Z, r24
+    199e:	11 96       	adiw	r26, 0x01	; 1
+    19a0:	ec 91       	ld	r30, X
+    19a2:	f0 e0       	ldi	r31, 0x00	; 0
+    19a4:	ee 53       	subi	r30, 0x3E	; 62
+    19a6:	f5 4c       	sbci	r31, 0xC5	; 197
+    19a8:	80 83       	st	Z, r24
     iLED[RAT] = 1;
-    1a38:	e0 91 df 9a 	lds	r30, 0x9ADF	; 0x809adf <__bss_end+0x5fd0>
-    1a3c:	f0 e0       	ldi	r31, 0x00	; 0
-    1a3e:	ee 53       	subi	r30, 0x3E	; 62
-    1a40:	f5 4c       	sbci	r31, 0xC5	; 197
-    1a42:	80 83       	st	Z, r24
+    19aa:	e0 91 51 9a 	lds	r30, 0x9A51	; 0x809a51 <__bss_end+0x5f42>
+    19ae:	f0 e0       	ldi	r31, 0x00	; 0
+    19b0:	ee 53       	subi	r30, 0x3E	; 62
+    19b2:	f5 4c       	sbci	r31, 0xC5	; 197
+    19b4:	80 83       	st	Z, r24
     iLED[CAT] = 1;
-    1a44:	e0 91 de 9a 	lds	r30, 0x9ADE	; 0x809ade <__bss_end+0x5fcf>
-    1a48:	f0 e0       	ldi	r31, 0x00	; 0
-    1a4a:	ee 53       	subi	r30, 0x3E	; 62
-    1a4c:	f5 4c       	sbci	r31, 0xC5	; 197
+    19b6:	e0 91 50 9a 	lds	r30, 0x9A50	; 0x809a50 <__bss_end+0x5f41>
+    19ba:	f0 e0       	ldi	r31, 0x00	; 0
+    19bc:	ee 53       	subi	r30, 0x3E	; 62
+    19be:	f5 4c       	sbci	r31, 0xC5	; 197
 
     while (1)
     {
         GenerateAudio();
-    1a4e:	80 83       	st	Z, r24
-    1a50:	b4 d9       	rcall	.-3224   	; 0xdba <GenerateAudio>
+    19c0:	80 83       	st	Z, r24
+    19c2:	fb d9       	rcall	.-3082   	; 0xdba <GenerateAudio>
 
         if (buttonMark){
-    1a52:	80 91 95 38 	lds	r24, 0x3895	; 0x803895 <buttonMark>
-    1a56:	88 23       	and	r24, r24
-    1a58:	d9 f3       	breq	.-10     	; 0x1a50 <main+0xc2>
+    19c4:	80 91 95 38 	lds	r24, 0x3895	; 0x803895 <buttonMark>
+    19c8:	88 23       	and	r24, r24
+    19ca:	d9 f3       	breq	.-10     	; 0x19c2 <main+0xc2>
             buttonState = CheckButtons(buttonState);
-    1a5a:	80 91 45 3a 	lds	r24, 0x3A45	; 0x803a45 <buttonState>
-    1a5e:	1d d8       	rcall	.-4038   	; 0xa9a <CheckButtons>
-    1a60:	80 93 45 3a 	sts	0x3A45, r24	; 0x803a45 <buttonState>
+    19cc:	80 91 45 3a 	lds	r24, 0x3A45	; 0x803a45 <buttonState>
+    19d0:	64 d8       	rcall	.-3896   	; 0xa9a <CheckButtons>
+    19d2:	80 93 45 3a 	sts	0x3A45, r24	; 0x803a45 <buttonState>
             buttonMark = 0;
-    1a64:	10 92 95 38 	sts	0x3895, r1	; 0x803895 <buttonMark>
+    19d6:	10 92 95 38 	sts	0x3895, r1	; 0x803895 <buttonMark>
             
             //GenerateLEDshow();        
 
             TextAdventure();
-    1a68:	43 df       	rcall	.-378    	; 0x18f0 <TextAdventure>
+    19da:	43 df       	rcall	.-378    	; 0x1862 <TextAdventure>
           
             //Other games & user interaction checks
             //MagnetMaze();
             BastetDictates();
-    1a6a:	20 da       	rcall	.-3008   	; 0xeac <BastetDictates>
-    1a6c:	80 91 9f 3a 	lds	r24, 0x3A9F	; 0x803a9f <adcPhot>
+    19dc:	67 da       	rcall	.-2866   	; 0xeac <BastetDictates>
+    19de:	80 91 9f 3a 	lds	r24, 0x3A9F	; 0x803a9f <adcPhot>
             //MasterMind-ishThing(); //Not sure if to be implemented
             //LanyardCode();
             //MakeFriends();
              
             //Check light sensor status (added hysteresis to preserve writing cycles to internal EEPROM)
             if (adcPhot < 10) WriteStatusBit(116, 1);
-    1a70:	90 91 a0 3a 	lds	r25, 0x3AA0	; 0x803aa0 <adcPhot+0x1>
-    1a74:	0a 97       	sbiw	r24, 0x0a	; 10
-    1a76:	18 f4       	brcc	.+6      	; 0x1a7e <main+0xf0>
-    1a78:	61 e0       	ldi	r22, 0x01	; 1
-    1a7a:	84 e7       	ldi	r24, 0x74	; 116
-    1a7c:	3b d9       	rcall	.-3466   	; 0xcf4 <WriteStatusBit>
-    1a7e:	80 91 9f 3a 	lds	r24, 0x3A9F	; 0x803a9f <adcPhot>
+    19e2:	90 91 a0 3a 	lds	r25, 0x3AA0	; 0x803aa0 <adcPhot+0x1>
+    19e6:	0a 97       	sbiw	r24, 0x0a	; 10
+    19e8:	18 f4       	brcc	.+6      	; 0x19f0 <main+0xf0>
+    19ea:	61 e0       	ldi	r22, 0x01	; 1
+    19ec:	84 e7       	ldi	r24, 0x74	; 116
+    19ee:	82 d9       	rcall	.-3324   	; 0xcf4 <WriteStatusBit>
+    19f0:	80 91 9f 3a 	lds	r24, 0x3A9F	; 0x803a9f <adcPhot>
             if (adcPhot > 100) WriteStatusBit(116, 0);
-    1a82:	90 91 a0 3a 	lds	r25, 0x3AA0	; 0x803aa0 <adcPhot+0x1>
-    1a86:	85 36       	cpi	r24, 0x65	; 101
-    1a88:	91 05       	cpc	r25, r1
-    1a8a:	10 f3       	brcs	.-60     	; 0x1a50 <main+0xc2>
-    1a8c:	60 e0       	ldi	r22, 0x00	; 0
-    1a8e:	84 e7       	ldi	r24, 0x74	; 116
-    1a90:	31 d9       	rcall	.-3486   	; 0xcf4 <WriteStatusBit>
-    1a92:	de cf       	rjmp	.-68     	; 0x1a50 <main+0xc2>
+    19f4:	90 91 a0 3a 	lds	r25, 0x3AA0	; 0x803aa0 <adcPhot+0x1>
+    19f8:	85 36       	cpi	r24, 0x65	; 101
+    19fa:	91 05       	cpc	r25, r1
+    19fc:	10 f3       	brcs	.-60     	; 0x19c2 <main+0xc2>
+    19fe:	60 e0       	ldi	r22, 0x00	; 0
+    1a00:	84 e7       	ldi	r24, 0x74	; 116
+    1a02:	78 d9       	rcall	.-3344   	; 0xcf4 <WriteStatusBit>
+    1a04:	de cf       	rjmp	.-68     	; 0x19c2 <main+0xc2>
 
-00001a94 <__udivmodhi4>:
-    1a94:	aa 1b       	sub	r26, r26
-    1a96:	bb 1b       	sub	r27, r27
-    1a98:	51 e1       	ldi	r21, 0x11	; 17
-    1a9a:	07 c0       	rjmp	.+14     	; 0x1aaa <__udivmodhi4_ep>
+00001a06 <__udivmodhi4>:
+    1a06:	aa 1b       	sub	r26, r26
+    1a08:	bb 1b       	sub	r27, r27
+    1a0a:	51 e1       	ldi	r21, 0x11	; 17
+    1a0c:	07 c0       	rjmp	.+14     	; 0x1a1c <__udivmodhi4_ep>
 
-00001a9c <__udivmodhi4_loop>:
-    1a9c:	aa 1f       	adc	r26, r26
-    1a9e:	bb 1f       	adc	r27, r27
-    1aa0:	a6 17       	cp	r26, r22
-    1aa2:	b7 07       	cpc	r27, r23
-    1aa4:	10 f0       	brcs	.+4      	; 0x1aaa <__udivmodhi4_ep>
-    1aa6:	a6 1b       	sub	r26, r22
-    1aa8:	b7 0b       	sbc	r27, r23
+00001a0e <__udivmodhi4_loop>:
+    1a0e:	aa 1f       	adc	r26, r26
+    1a10:	bb 1f       	adc	r27, r27
+    1a12:	a6 17       	cp	r26, r22
+    1a14:	b7 07       	cpc	r27, r23
+    1a16:	10 f0       	brcs	.+4      	; 0x1a1c <__udivmodhi4_ep>
+    1a18:	a6 1b       	sub	r26, r22
+    1a1a:	b7 0b       	sbc	r27, r23
 
-00001aaa <__udivmodhi4_ep>:
-    1aaa:	88 1f       	adc	r24, r24
-    1aac:	99 1f       	adc	r25, r25
-    1aae:	5a 95       	dec	r21
-    1ab0:	a9 f7       	brne	.-22     	; 0x1a9c <__udivmodhi4_loop>
-    1ab2:	80 95       	com	r24
-    1ab4:	90 95       	com	r25
-    1ab6:	bc 01       	movw	r22, r24
-    1ab8:	cd 01       	movw	r24, r26
-    1aba:	08 95       	ret
+00001a1c <__udivmodhi4_ep>:
+    1a1c:	88 1f       	adc	r24, r24
+    1a1e:	99 1f       	adc	r25, r25
+    1a20:	5a 95       	dec	r21
+    1a22:	a9 f7       	brne	.-22     	; 0x1a0e <__udivmodhi4_loop>
+    1a24:	80 95       	com	r24
+    1a26:	90 95       	com	r25
+    1a28:	bc 01       	movw	r22, r24
+    1a2a:	cd 01       	movw	r24, r26
+    1a2c:	08 95       	ret
 
-00001abc <__umulhisi3>:
-    1abc:	a2 9f       	mul	r26, r18
-    1abe:	b0 01       	movw	r22, r0
-    1ac0:	b3 9f       	mul	r27, r19
-    1ac2:	c0 01       	movw	r24, r0
-    1ac4:	a3 9f       	mul	r26, r19
-    1ac6:	70 0d       	add	r23, r0
-    1ac8:	81 1d       	adc	r24, r1
-    1aca:	11 24       	eor	r1, r1
-    1acc:	91 1d       	adc	r25, r1
-    1ace:	b2 9f       	mul	r27, r18
-    1ad0:	70 0d       	add	r23, r0
-    1ad2:	81 1d       	adc	r24, r1
-    1ad4:	11 24       	eor	r1, r1
-    1ad6:	91 1d       	adc	r25, r1
-    1ad8:	08 95       	ret
+00001a2e <__umulhisi3>:
+    1a2e:	a2 9f       	mul	r26, r18
+    1a30:	b0 01       	movw	r22, r0
+    1a32:	b3 9f       	mul	r27, r19
+    1a34:	c0 01       	movw	r24, r0
+    1a36:	a3 9f       	mul	r26, r19
+    1a38:	70 0d       	add	r23, r0
+    1a3a:	81 1d       	adc	r24, r1
+    1a3c:	11 24       	eor	r1, r1
+    1a3e:	91 1d       	adc	r25, r1
+    1a40:	b2 9f       	mul	r27, r18
+    1a42:	70 0d       	add	r23, r0
+    1a44:	81 1d       	adc	r24, r1
+    1a46:	11 24       	eor	r1, r1
+    1a48:	91 1d       	adc	r25, r1
+    1a4a:	08 95       	ret
 
-00001ada <_exit>:
-    1ada:	f8 94       	cli
+00001a4c <_exit>:
+    1a4c:	f8 94       	cli
 
-00001adc <__stop_program>:
-    1adc:	ff cf       	rjmp	.-2      	; 0x1adc <__stop_program>
+00001a4e <__stop_program>:
+    1a4e:	ff cf       	rjmp	.-2      	; 0x1a4e <__stop_program>
