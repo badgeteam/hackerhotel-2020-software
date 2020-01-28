@@ -24,6 +24,13 @@ uint8_t sendPrompt = 0;
 uint8_t txTypeNow = GAME;                   //Type of data that is being sent.
 uint8_t txBuffer[TXLEN];                    //Buffer for string data
 
+static object_model_t currObj;              //Object data for current posistion in game
+static uint8_t currDepth = 0xff;            //Depth of position in game, 0xff indicates game data is not loaded from eeprom yet.
+static uint16_t route[MAX_OBJ_DEPTH] = {0};
+static uint16_t reactStr[3][32] = {{0},{0},{0}};
+
+
+
 //Decrypts data read from I2C EEPROM, max 255 bytes at a time
 void DecryptData(uint16_t offset, uint8_t length, uint8_t type, uint8_t *data){
     //offset += L_BOILER;
@@ -67,7 +74,7 @@ uint8_t StartsWith(uint8_t *data, char *compare){
     return 1;
 }
 
-//Put the addresses
+//Put the addresses of text that has to be sent in the address/length lists.
 uint8_t PrepareSending(uint16_t address, uint16_t length, uint8_t type, uint8_t prompt){
     uint8_t x=0;
     if (length){
@@ -122,15 +129,7 @@ void PopulateObject(uint16_t offset, object_model_t *object){
     object->lenStr[STRING_FIELDS_LEN-1]=(offset-addrStart)&EXT_EE_MAX;
 }
 
-//Sends numCR LFs and a literal, total
-void SendLiteral(uint16_t address, uint16_t length, uint8_t numCR){
-    numCR %= (TXLEN-1);
-    length %= (TXLEN-numCR-1);
-    for (uint8_t x=0; x<numCR; ++x) txBuffer[x]='\n';
-    if (length) ExtEERead(address, length, TEASER, &txBuffer[numCR]);
-    txBuffer[numCR+length]='\0';
-    SerSend(&txBuffer[0]);
-}
+
 
 //Update game state: num -> vBBBBbbb v=value(0 is set!), BBBB=Byte number, bbb=bit number
 void UpdateState(uint8_t num){
@@ -224,6 +223,15 @@ uint8_t CleanInput(uint8_t *data){
     return cnt;
 }
 
+//Sends numCR LFs and a literal, total
+void SendLiteral(uint16_t address, uint16_t length, uint8_t numCR){
+    numCR %= (TXLEN-1);
+    length %= (TXLEN-numCR-1);
+    for (uint8_t x=0; x<numCR; ++x) txBuffer[x]='\n';
+    if (length) ExtEERead(address, length, TEASER, &txBuffer[numCR]);
+    txBuffer[numCR+length]='\0';
+    SerSend(&txBuffer[0]);
+}
 
 //Send routine, optimized for low memory usage
 uint8_t CheckSend(){
@@ -243,7 +251,7 @@ uint8_t CheckSend(){
             txPart = 0;
             ++txAddrNow;
         }
-    
+/*    
     //Check if prompt needs to be sent afterward or something else
     } else if (serTxDone&&sendPrompt) {
         if (sendPrompt == PROMPT){
@@ -258,12 +266,45 @@ uint8_t CheckSend(){
             SendLiteral(A_LOCATION, L_LOCATION, 0);
         }
         sendPrompt=0;
-    } else if (serTxDone) return 0; //All is sent!
+*/    } else if (serTxDone) return 0; //All is sent!
     return 1; //Still sending, do not change the data in the tx variables
 }
 
 //User input check (and validation)
 uint8_t CheckInput(uint8_t *data){
+    
+    //Load game data after reboot
+    if (currDepth == 0xff) {
+        //Load things from EEPROM
+        EERead(0, &gameState[0], 16);   //Load game status bits from EEPROM
+
+        //idSet can be used to detect cheating. After cheating idSet will be 0, with a virgin badge idSet will be 3.
+        uint8_t idSet = 0;
+        for (uint8_t x=0; x<4; ++x){
+            idSet += ReadStatusBit(110+x);
+        }
+
+        if (idSet == 1) {
+            ;
+        } else if (idSet == 3) {
+            //TODO: Test all functions program (for badge check during sweatshop), skip if already passed (save result + temperature calibration in EEPROM location)
+            Reset();
+        } else {
+            //Data not as expected, cheated or corrupted memory
+            Reset();
+        }
+
+        //Start at first location
+        PopulateObject(route[0], &currObj);
+        currDepth = 0;
+    }
+
+    //Play an effect if configured 
+    if ((effect < 0xFF) && (effect ^ currObj.byteField[EFFECTS])){
+        effect = currObj.byteField[EFFECTS];
+        auStart = ((effect&0xE0)>0);
+    }
+
     if (serRxDone){
         //Read up to the \0 character and convert to lower case.
         for (uint8_t x=0; serRx[x]!=0; ++x){
@@ -271,7 +312,8 @@ uint8_t CheckInput(uint8_t *data){
         }
 
         //No text
-        if (data[0] == 0){
+        if (serRx[0] == 0){
+            data[0] = 0;
             RXCNT = 0;
             serRxDone = 0;
             return 1;
@@ -322,27 +364,21 @@ uint8_t CheckInput(uint8_t *data){
 //The game logic!
 uint8_t ProcessInput(uint8_t *data){
 //    enum {NAME, DESC, ACTION_STR1, ACTION_STR2, OPEN_ACL_MSG, ACTION_ACL_MSG, ACTION_MSG};
-    static object_model_t currObj, actObj1, actObj2;
-    static uint16_t route[MAX_OBJ_DEPTH] = {0};
-    static uint8_t currDepth = 0;
-    
-    static uint16_t reactStr[3][8] = {{0},{0},{0}};
+    static object_model_t actObj1, actObj2;
     static uint8_t actionList = 0;
     static uint8_t toSend = 0;
 
-    if (currDepth == 0) PopulateObject(route[currDepth], &currObj);
-    if (effect ^ currObj.byteField[EFFECTS]){
-        effect = currObj.byteField[EFFECTS];
-        auStart = 1;
-    }
+
     CleanInput(&data[0]);
     
     //Responses to send after something has tried by the user
     if (actionList){
+        //[3]=Locdata
         PrepareSending(reactStr[0][toSend], reactStr[1][toSend], GAME, reactStr[2][toSend]);
         ++toSend;
         --actionList;
         if (actionList == 0) {
+            effect = currObj.byteField[EFFECTS];
             RXCNT = 0;
             serRxDone = 0;
         }
@@ -414,9 +450,7 @@ uint8_t ProcessInput(uint8_t *data){
                             //Yes! Check if we must move forward or backwards.
                             if (route[currDepth+1]) ++currDepth; else --currDepth;
                             PopulateObject(route[currDepth], &currObj);
-                            effect = currObj.byteField[EFFECTS];
-                            EEWrite(16, &effect, 2);
-
+                          
                         //Not granted!
                         } else {
                             route[currDepth+1] = 0;

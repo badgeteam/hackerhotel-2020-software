@@ -37,24 +37,10 @@
 int main(void)
 {
     Setup();
-    EERead(0, &gameState[0], 16);   //Load game status bits from EEPROM
-    EERead(16, &effect, 2);         //Load last saved effect
 
-    uint8_t idSet = 0;
-    for (uint8_t x=0; x<4; ++x){
-        idSet += ReadStatusBit(110+x);
-    }
-
-    //idSet can be used to detect cheating. After cheating idSet will be 0, with a virgin badge idSet will be 3.
-    if (idSet != 1) {
-        Reset();
-        effect = 96;
-        EEWrite(16, &effect, 2);
-    }
-
-    SerSpeed(1);
-    unsigned char strTest[]="\aHäckerHotel2020 badge pest!\b\b\b\b\bt\n";
-    SerSend(&strTest[0]);
+    //SerSpeed(1);
+    //unsigned char strTest[]="\aHäckerHotel2020 badge pest!\b\b\b\b\bt\n";
+    //SerSend(&strTest[0]);
 
     SerSpeed(255);
 
