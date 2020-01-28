@@ -80,3 +80,5 @@
 #define L_BADOFFERING               61
 #define A_YOURPART               30053
 #define L_YOURPART                  32
+#define A_LF                     30049
+#define L_LF                         4
