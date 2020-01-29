@@ -104,7 +104,7 @@ void SetStandardResponse(void){
     reactStr[1][1] = L_PROMPT;
     reactStr[2][1] = TEASER;
 
-    reactStr[0][2] = A_LF;
+    //reactStr[0][2] = A_LF;
     reactStr[1][2] = 1;
     reactStr[2][2] = TEASER;
 
@@ -118,14 +118,14 @@ void SetStandardResponse(void){
     reactStr[1][5] = L_LOCATION;
     reactStr[2][5] = TEASER;
 
-    reactStr[0][6] = A_LF;
+    //reactStr[0][6] = A_LF;
     reactStr[1][6] = 2;
     reactStr[2][6] = TEASER;
 }
 
 //Get all the relevant data and string addresses of an object
 void PopulateObject(uint16_t offset, object_model_t *object){
-    uint16_t addrStart;
+    uint16_t parStr;
     offset += L_BOILER;
 
     //Fill things with fixed distance to offset
@@ -138,7 +138,18 @@ void PopulateObject(uint16_t offset, object_model_t *object){
     }
 
     //Find out where all of the strings begin and how long they are
-    
+    offset += OFF_STRINGFLDS;
+    for(uint8_t x=0; x<STRING_FIELDS_LEN; ++x){
+        //Determine length
+        ExtEERead(offset, 2, GAME, &data[0]);
+        parStr = (data[0]<<8|data[1]);
+        object->lenStr[x]= parStr;
+        
+        //Determine string start location and add length to offset for next field
+        offset += 2;
+        object->addrStr[x]=offset;
+        offset += parStr;
+    }    
 /*
     offset += OFF_STRINGFLDS;
     object->addrStr[0]=offset+1;
