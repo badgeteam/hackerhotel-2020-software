@@ -43,7 +43,6 @@ int main(void)
     //SerSend(&strTest[0]);
 
     SerSpeed(255);
-
     ////Turn on LEDs on low setting to check for interrupt glitches
 
     //"Hacker"
@@ -67,6 +66,7 @@ int main(void)
     iLED[GEM[G]] = 1;
     iLED[RAT] = 1;
     iLED[CAT] = 1;
+    //uint8_t txBuffer[TXLEN];                    //Buffer for string data
 
     while (1)
     {
@@ -77,7 +77,13 @@ int main(void)
             buttonMark = 0;
             
             //GenerateLEDshow();        
-
+    
+/*                txBuffer[1]=0;
+                    if (serTxDone){
+                        txBuffer[0] = buttonState;
+                        SerSend(&txBuffer[0]);
+                    }
+*/
             TextAdventure();
           
             //Other games & user interaction checks

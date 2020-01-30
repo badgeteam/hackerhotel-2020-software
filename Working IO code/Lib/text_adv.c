@@ -28,7 +28,7 @@ static object_model_t currObj;              //Object data for current posistion 
 static uint8_t currDepth = 0xff;            //Depth of position in game, 0xff indicates game data is not loaded from eeprom yet.
 static uint16_t route[MAX_OBJ_DEPTH] = {0};
 static uint16_t reactStr[3][32] = {{0},{0},{0}};
-static uint8_t actionList = 0;
+static uint8_t responseList = 0;
 
 //Decrypts data read from I2C EEPROM, max 255 bytes at a time
 void DecryptData(uint16_t offset, uint8_t length, uint8_t type, uint8_t *data){
@@ -95,32 +95,23 @@ uint8_t PrepareSending(uint16_t address, uint16_t length, uint8_t type){
     return 0;
 }
 
-void SetStandardResponse(void){
-    reactStr[0][0] = A_SPACE;
-    reactStr[1][0] = L_SPACE;
-    reactStr[2][0] = TEASER;
+void SetResponse(uint8_t number, uint16_t address, uint16_t length, uint8_t type){
+    reactStr[0][number]=address;
+    reactStr[1][number]=length;
+    reactStr[2][number]=type;
+}
 
-    reactStr[0][1] = A_PROMPT;
-    reactStr[1][1] = L_PROMPT;
-    reactStr[2][1] = TEASER;
+uint8_t SetStandardResponse(uint8_t custStrEnd){
 
-    //reactStr[0][2] = A_LF;
-    reactStr[1][2] = 1;
-    reactStr[2][2] = TEASER;
+    SetResponse(custStrEnd++, A_LF, 2, TEASER);
+    SetResponse(custStrEnd++, A_LOCATION, L_LOCATION, TEASER);
+    SetResponse(custStrEnd++, A_SPACE, L_SPACE, TEASER);
+    reactStr[0][custStrEnd++] = CURR_LOC;
+    SetResponse(custStrEnd++, A_LF, 1, TEASER);
+    SetResponse(custStrEnd++, A_PROMPT, L_PROMPT, TEASER);
+    SetResponse(custStrEnd++, A_SPACE, L_SPACE, TEASER);
 
-    //reactStr[x][3(MSG_LOC)] is current location in game
-
-    reactStr[0][4] = A_SPACE;
-    reactStr[1][4] = L_SPACE;
-    reactStr[2][4] = TEASER;
-
-    reactStr[0][5] = A_LOCATION;
-    reactStr[1][5] = L_LOCATION;
-    reactStr[2][5] = TEASER;
-
-    //reactStr[0][6] = A_LF;
-    reactStr[1][6] = 2;
-    reactStr[2][6] = TEASER;
+    return custStrEnd;
 }
 
 //Get all the relevant data and string addresses of an object
@@ -150,21 +141,6 @@ void PopulateObject(uint16_t offset, object_model_t *object){
         object->addrStr[x]=offset;
         offset += parStr;
     }    
-/*
-    offset += OFF_STRINGFLDS;
-    object->addrStr[0]=offset+1;
-    for(uint8_t x=1; x<STRING_FIELDS_LEN; ++x){
-        addrStart = offset;
-        do {
-            ExtEERead(offset, 1, GAME, &data[0]);
-            offset += (uint16_t)(data[0])+1;
-            if (offset>EXT_EE_MAX) break;
-        } while (data[0]==255);
-        object->lenStr[x-1]=(offset-addrStart-1)&EXT_EE_MAX;
-        object->addrStr[x]=(offset-1)&EXT_EE_MAX;
-    }
-    object->lenStr[STRING_FIELDS_LEN-1]=(offset-addrStart)&EXT_EE_MAX;
-*/
 }
 
 //Update game state: num -> vBBBBbbb v=value(0 is set!), BBBB=Byte number, bbb=bit number
@@ -191,15 +167,15 @@ uint8_t CheckState(uint8_t num){
     return (GetState(num&(STATUS_BITS-1)) == (1-(num&STATUS_BITS))); 
 }
 
-//
+//Check if the entered letter corresponds with a name
 uint8_t CheckLetter(uint16_t child, uint8_t letter){
     
     uint8_t found = 0;
     uint8_t data[32];
 
     child += L_BOILER;
-    ExtEERead(child+OFF_STRINGFLDS, 1, GAME, &data[0]);
-    uint8_t x = data[0];
+    ExtEERead(child+OFF_STRINGFLDS, 2, GAME, &data[0]);
+    uint8_t x = data[1]; //Assuming a name is not longer than 255 characters.
 
     while (x){
         uint8_t max = (x>32)?32:x;
@@ -217,7 +193,7 @@ uint8_t CheckLetter(uint16_t child, uint8_t letter){
 }
 
 //Returns the child's address if the child is visible and the search letter matches
-uint16_t FindChild(uint16_t parent, uint8_t letter){
+uint16_t FindChild(uint16_t parent, uint8_t letter, uint16_t start){
     
     uint16_t child = parent;
     uint8_t data[4];
@@ -229,10 +205,12 @@ uint16_t FindChild(uint16_t parent, uint8_t letter){
     //As long as the child is within the parent's range
     while (parent>child){
 
-        //Find out if the found child is visible and check letter
-        ExtEERead(child+OFF_BYTEFLDS+VISIBLE_ACL+L_BOILER, 1, GAME, &data[0]);
-        if (CheckState(data[0])) {
-            if (CheckLetter(child, letter)) return child;
+        //If child's address is higher than the start address, perform search for letter
+        if (child>start){
+            ExtEERead(child+OFF_BYTEFLDS+VISIBLE_ACL+L_BOILER, 1, GAME, &data[0]);
+            if ((data[0] == 0)||(CheckState(data[0]))) {
+                if ((letter == 0)||(CheckLetter(child, letter))) return child;
+            }
         }
 
         //Not visible or name not right
@@ -285,6 +263,30 @@ uint8_t CheckSend(){
     return 1; //Still sending, do not change the data in the tx variables
 }
 
+//Send another part of the response and play the effect afterwards
+uint8_t CheckResponse(){
+    static uint8_t number = 0;
+    if (responseList){
+        --responseList;
+        if (reactStr[0][number] == CURR_LOC) {
+            PrepareSending(currObj.addrStr[NAME], currObj.lenStr[NAME], GAME);
+        } else {
+            PrepareSending(reactStr[0][number], reactStr[1][number], reactStr[2][number]);
+        }
+        ++number;
+
+        if (responseList == 0) {
+            effect = currObj.byteField[EFFECTS];
+            RXCNT = 0;
+            serRxDone = 0;
+            number = 0;
+            return 0;
+        }
+        return 1;
+    }
+    return 0;
+}
+
 //User input check (and validation)
 uint8_t CheckInput(uint8_t *data){
     
@@ -310,13 +312,12 @@ uint8_t CheckInput(uint8_t *data){
         }
 
         //Start at first location
-        SetStandardResponse();
         PopulateObject(route[0], &currObj);
         currDepth = 0;
     }
 
-    //Play an effect if configured 
-    if ((effect < 0xFF) && (effect ^ currObj.byteField[EFFECTS])){
+    //Play an effect if configured (if )
+    if ((effect < 0x0100) && (effect ^ currObj.byteField[EFFECTS])){
         effect = currObj.byteField[EFFECTS];
         auStart = ((effect&0xE0)>0);
     }
@@ -338,21 +339,16 @@ uint8_t CheckInput(uint8_t *data){
         //Help text
         if ((data[0] == '?')||(data[0] == 'h')){
             //Put help pointers/lengths in tx list
-            reactStr[0][MSG] = A_HELP;
-            reactStr[1][MSG] = L_HELP;
-            reactStr[2][MSG] = TEASER;
-            actionList = MSG+1;
-
+            SetResponse(0, A_HELP, L_HELP, TEASER);
+            responseList = SetStandardResponse(1);
             return 1;
         }
 
         //Quit text
         if (data[0] == 'q'){
             //Put quit pointers/lengths in tx list
-            reactStr[0][MSG] = A_QUIT;
-            reactStr[1][MSG] = L_QUIT;
-            reactStr[2][MSG] = TEASER;
-            actionList = MSG+1;
+            SetResponse(0, A_QUIT, L_QUIT, TEASER);
+            responseList = SetStandardResponse(1);
             return 1;
         }
 
@@ -393,39 +389,30 @@ uint8_t ProcessInput(uint8_t *data){
 
             //Standing in the Lobby?
             if ((route[currDepth] == 0)||(currDepth == 0)){
-                reactStr[0][MSG]=A_NOTPOSSIBLE;
-                reactStr[1][MSG]=L_NOTPOSSIBLE;
-                reactStr[2][MSG]=TEASER;
-                actionList = MSG+1;
+                SetResponse(0, A_NOTPOSSIBLE, L_NOTPOSSIBLE, TEASER);
+                responseList = SetStandardResponse(1);
             
             //Is there a way to go back?
             } else if (CheckState(currObj.byteField[OPEN_ACL])){
                 --currDepth;
                 PopulateObject(route[currDepth], &currObj);
-                reactStr[0][MSG]=currObj.addrStr[NAME];
-                reactStr[1][MSG]=currObj.lenStr[NAME];
-                reactStr[2][MSG]=GAME;             
-                actionList = MSG+1;
+                responseList = SetStandardResponse(0);
             
             //No way out, print denied message of location
             } else {
-                reactStr[0][MSG]=currObj.addrStr[OPEN_ACL_MSG];
-                reactStr[1][MSG]=currObj.lenStr[OPEN_ACL_MSG];
-                reactStr[2][MSG]=GAME;                
-                actionList = MSG+1;
+                SetResponse(0, currObj.addrStr[OPEN_ACL_MSG], currObj.lenStr[OPEN_ACL_MSG], GAME);               
+                responseList = SetStandardResponse(1);
             }   
             
         } else if ((data[0] == 'e')||(data[0] == 'o')) {
                 
             //Not possible, too many/little characters
             if (inputLen != 2){
-                reactStr[0][MSG]=A_NOTPOSSIBLE;
-                reactStr[1][MSG]=L_NOTPOSSIBLE;
-                reactStr[2][MSG]=TEASER;
-                actionList = MSG+1;
+                SetResponse(0, A_NOTPOSSIBLE, L_NOTPOSSIBLE, TEASER);
+                responseList = SetStandardResponse(1);
             } else {
                 uint8_t canDo = 0;
-                route[currDepth+1] = FindChild(route[currDepth], data[1]);
+                route[currDepth+1] = FindChild(route[currDepth], data[1], 0);
                     
                 //Child found?
                 if (route[currDepth+1]) {
@@ -441,12 +428,10 @@ uint8_t ProcessInput(uint8_t *data){
 
                 //The candidate is found! Let's check if the action is legit
                 if (canDo) {
-                    uint8_t bEnter = (data[0] == 'e');
+                    volatile uint8_t bEnter = (data[0] == 'e');
                     if ((actObj1.byteField[ACTION_MASK]&(bEnter?ENTER:OPEN))==0) {
-                        reactStr[0][MSG]=bEnter?A_CANTENTER:A_CANTOPEN;
-                        reactStr[1][MSG]=bEnter?L_CANTENTER:L_CANTOPEN;
-                        reactStr[2][MSG]=TEASER;
-                        actionList = MSG+1;
+                        SetResponse(0, bEnter?A_CANTENTER:A_CANTOPEN, bEnter?L_CANTENTER:L_CANTOPEN, TEASER);
+                        responseList = SetStandardResponse(1);
                         
                     //Action legit, permission granted?
                     } else if (CheckState(actObj1.byteField[OPEN_ACL])) {
@@ -454,23 +439,54 @@ uint8_t ProcessInput(uint8_t *data){
                         //Yes! Check if we must move forward or backwards.
                         if (route[currDepth+1]) ++currDepth; else --currDepth;
                         PopulateObject(route[currDepth], &currObj);
-                          
+                        responseList = SetStandardResponse(0);
+                                                  
                     //Not granted!
                     } else {
                         route[currDepth+1] = 0;
+                        SetResponse(0, currObj.addrStr[OPEN_ACL_MSG], currObj.lenStr[OPEN_ACL_MSG], GAME);                
+                        responseList = SetStandardResponse(1);
                     }
 
                 //No candidate
                 } else {
-                    reactStr[0][MSG]=A_DONTSEE;
-                    reactStr[1][MSG]=L_DONTSEE;
-                    reactStr[2][MSG]=TEASER;
-                    actionList = MSG+1;                
+                    SetResponse(0, A_DONTSEE, L_DONTSEE, TEASER);                
+                    responseList = SetStandardResponse(1);
                 }
             }
 
-        } else
-        if (data[0] == 'l') {
+        } else if (data[0] == 'l') {
+            if (inputLen == 1) {
+                uint8_t elements = 0;
+
+                //Show info about this area first
+                SetResponse(elements++, currObj.addrStr[DESC], currObj.lenStr[DESC],GAME);
+                SetResponse(elements++, A_COMMA, L_COMMA, TEASER);
+                SetResponse(elements++, A_SPACE, L_SPACE, TEASER);
+
+                //Check the visible children first
+                route[currDepth+1] = 0;
+                do{
+                    route[currDepth+1] = FindChild(route[currDepth], 0, route[currDepth+1]);
+                    if (route[currDepth+1]) {
+                        PopulateObject(route[currDepth+1], &actObj1);
+                        SetResponse(elements++, actObj1.addrStr[NAME], actObj1.lenStr[NAME],GAME);
+                        SetResponse(elements++, A_COMMA, L_COMMA, TEASER);
+                        SetResponse(elements++, A_SPACE, L_SPACE, TEASER);
+                    }
+                }while (route[currDepth+1]);
+
+                //Look back if not on level 0
+                if (currDepth) {
+                    PopulateObject(route[currDepth-1], &actObj1);
+                    SetResponse(elements++, actObj1.addrStr[NAME], actObj1.lenStr[NAME],GAME);
+                } else --elements;
+                responseList = SetStandardResponse(elements);
+
+            } else {
+
+            }
+            
         /*
             if len(inp) == 1:
             print(read_string_field(eeprom,loc_offset,'desc'))
@@ -653,7 +669,7 @@ uint8_t ProcessInput(uint8_t *data){
         }
             
         //Input handled
-        //data[0] = 0;
+        data[0] = 0;
         serRxDone = 0;
         RXCNT = 0;
     }
@@ -665,28 +681,19 @@ uint8_t ProcessInput(uint8_t *data){
 // Main game loop
 uint8_t TextAdventure(){
     static uint8_t serInput[RXLEN];
-    if (CheckSend()) return 1;                      //Still sending data to serial output, return 1
-
-    //Process responses to send
-    if (actionList){
-        --actionList;
-        if (actionList == MSG_LOC) {
-            PrepareSending(currObj.addrStr[NAME], currObj.lenStr[NAME], GAME);
-        } else PrepareSending(reactStr[0][actionList], reactStr[1][actionList], reactStr[2][actionList]);
-        if (actionList == 0) {
-            effect = currObj.byteField[EFFECTS];
-            RXCNT = 0;
-            serRxDone = 0;
-        }
     
+    //Sending data to serial?
+    if (CheckSend()) return 1;
+
+    //Not sending? Process next response part to send
+    if (CheckResponse()) return 1;        
+
     //No responses to send, check if there is user input.
-    } else if (CheckInput(&serInput[0])) {
-        return 2; //No valid input
+    if (CheckInput(&serInput[0])) return 2; //No (valid) input
 
     //Input found, process and save (changes only)
-    } else {
-        ProcessInput(&serInput[0]);                     //Check which response to generate and fill tx arrays
-        SaveGameState();                                //Check if things are changed, write to EEPROM
-    }
+    ProcessInput(&serInput[0]);                     //Check which response to generate and fill tx arrays
+    SaveGameState();                                //Check if things are changed, write to EEPROM
+
     return 0;
 }
