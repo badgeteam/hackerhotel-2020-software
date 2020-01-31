@@ -24,11 +24,11 @@ uint8_t sendPrompt = 0;
 uint8_t txTypeNow = GAME;                   //Type of data that is being sent.
 uint8_t txBuffer[TXLEN];                    //Buffer for string data
 
-static object_model_t currObj;              //Object data for current posistion in game
-static uint8_t currDepth = 0xff;            //Depth of position in game, 0xff indicates game data is not loaded from eeprom yet.
-static uint16_t route[MAX_OBJ_DEPTH] = {0};
-static uint16_t reactStr[3][32] = {{0},{0},{0}};
-static uint8_t responseList = 0;
+static object_model_t currObj;                      //Object data for current posistion in game
+static uint8_t currDepth = 0xff;                    //Depth of position in game, 0xff indicates game data is not loaded from eeprom yet.
+static uint16_t route[MAX_OBJ_DEPTH] = {0};         //
+static uint16_t reactStr[3][32] = {{0},{0},{0}};    //
+static volatile uint8_t responseList = 0;                    //
 
 //Decrypts data read from I2C EEPROM, max 255 bytes at a time
 void DecryptData(uint16_t offset, uint8_t length, uint8_t type, uint8_t *data){
@@ -62,7 +62,10 @@ uint8_t StartsWith(uint8_t *data, char *compare){
     while (data[x] && compare[x]){
         if(data[x] != compare[x]) return 0;
         ++x;
-        if ((x>=(sizeof(*compare)-1))||(x>=(sizeof(*data)))) break;
+        if ((x>=(sizeof(*compare)-1))||(x>=(sizeof(*data)))){
+            if(data[x] != compare[x]) return 0;
+            break;
+        }
     }
     return 1;
 }
@@ -103,7 +106,7 @@ void SetResponse(uint8_t number, uint16_t address, uint16_t length, uint8_t type
 
 uint8_t SetStandardResponse(uint8_t custStrEnd){
 
-    SetResponse(custStrEnd++, A_LF, 2, TEASER);
+    SetResponse(custStrEnd++, A_LF, 1, TEASER);
     SetResponse(custStrEnd++, A_LOCATION, L_LOCATION, TEASER);
     SetResponse(custStrEnd++, A_SPACE, L_SPACE, TEASER);
     reactStr[0][custStrEnd++] = CURR_LOC;
@@ -168,25 +171,25 @@ uint8_t CheckState(uint8_t num){
 }
 
 //Check if the entered letter corresponds with a name
-uint8_t CheckLetter(uint16_t child, uint8_t letter){
+uint8_t CheckLetter(uint16_t object, uint8_t letter){
     
     uint8_t found = 0;
     uint8_t data[32];
 
-    child += L_BOILER;
-    ExtEERead(child+OFF_STRINGFLDS, 2, GAME, &data[0]);
+    object += L_BOILER;
+    ExtEERead(object+OFF_STRINGFLDS, 2, GAME, &data[0]);
     uint8_t x = data[1]; //Assuming a name is not longer than 255 characters.
 
     while (x){
         uint8_t max = (x>32)?32:x;
-        ExtEERead(child+OFF_STRINGFLDS+1, max, GAME, &data[0]);
+        ExtEERead(object+OFF_STRINGFLDS+1, max, GAME, &data[0]);
         for (uint8_t y=0; y<max; ++y){
             if (found){
                 if ((data[y]|0x20) == letter) return 1; else return 0;
             }
             if (data[y] == '[') found = 1;
         }
-        child += max;
+        object += max;
         x -= max;
     }
     return 0;
@@ -220,7 +223,7 @@ uint16_t FindChild(uint16_t parent, uint8_t letter, uint16_t start){
     } return 0;
 }
 
-//
+//Allow only a(A) to z(Z) and 0 to 9 as input
 uint8_t InpOkChk(uint8_t test){
     if ((test>='a')&&(test<='z')) return 1;
     if ((test>='0')&&(test<='9')) return 1;
@@ -293,39 +296,39 @@ uint8_t CheckInput(uint8_t *data){
     //Load game data after reboot
     if (currDepth == 0xff) {
         //Load things from EEPROM
-        EERead(0, &gameState[0], 16);   //Load game status bits from EEPROM
+        EERead(0, &gameState[0], BOOTCHK);   //Load game status bits from EEPROM
+        inventory[0] = (gameState[INVADDR]<<8|gameState[INVADDR+1]);
+        inventory[1] = (gameState[INVADDR+2]<<8|gameState[INVADDR+3]);
 
-        //idSet can be used to detect cheating. After cheating idSet will be 0, with a virgin badge idSet will be 3.
         uint8_t idSet = 0;
         for (uint8_t x=0; x<4; ++x){
             idSet += ReadStatusBit(110+x);
         }
 
-        if (idSet == 1) {
-            ;
-        } else if (idSet == 3) {
-            //TODO: Test all functions program (for badge check during sweatshop), skip if already passed (save result + temperature calibration in EEPROM location)
+        //Check if badge is reset (cheated!)
+        if (idSet == 0) {
             Reset();
-        } else {
-            //Data not as expected, cheated or corrupted memory
-            Reset();
-        }
+        } else getID();
 
         //Start at first location
         PopulateObject(route[0], &currObj);
         currDepth = 0;
-    }
 
-    //Play an effect if configured (if )
-    if ((effect < 0x0100) && (effect ^ currObj.byteField[EFFECTS])){
-        effect = currObj.byteField[EFFECTS];
-        auStart = ((effect&0xE0)>0);
+        //Play an effect if configured
+        if ((effect < 0x0100) && (effect ^ currObj.byteField[EFFECTS])){
+            effect = currObj.byteField[EFFECTS];
+            auStart = ((effect&0xE0)>0);
+        }
     }
 
     if (serRxDone){
         //Read up to the \0 character and convert to lower case.
-        for (uint8_t x=0; serRx[x]!=0; ++x){
+        for (uint8_t x=0; x<RXLEN; ++x){
             if ((serRx[x]<'A')||(serRx[x]>'Z')) data[x]=serRx[x]; else data[x]=serRx[x]|0x20;
+            if (serRx[x] == 0) {
+                data[x] = 0;
+                break;
+            }
         }
 
         //No text
@@ -338,15 +341,39 @@ uint8_t CheckInput(uint8_t *data){
 
         //Help text
         if ((data[0] == '?')||(data[0] == 'h')){
-            //Put help pointers/lengths in tx list
             SetResponse(0, A_HELP, L_HELP, TEASER);
             responseList = SetStandardResponse(1);
+            return 1;
+        }        
+        
+        //Alphabet text
+        if (data[0] == 'a'){
+            SetResponse(0, A_ALPHABET, L_ALPHABET, TEASER);
+            responseList = SetStandardResponse(1);
+            return 1;
+        }
+
+        //Whoami text
+        if (data[0] == 'w'){
+            SetResponse(0, A_HELLO, L_HELLO, TEASER);
+            if (whoami == 1) {
+                SetResponse(1, A_ANUBIS, L_ANUBIS, TEASER);
+            } else if (whoami == 2) {
+                SetResponse(1, A_BES, L_BES, TEASER);
+            } else if (whoami == 3) {
+                SetResponse(1, A_KHONSU, L_KHONSU, TEASER);
+            } else if (whoami == 4) {
+                SetResponse(1, A_THOTH, L_THOTH, TEASER);
+            } else {
+                SetResponse(1, A_ERROR, L_ERROR, TEASER);
+            }
+            SetResponse(2, A_PLEASED, L_PLEASED, TEASER);
+            responseList = SetStandardResponse(3);
             return 1;
         }
 
         //Quit text
         if (data[0] == 'q'){
-            //Put quit pointers/lengths in tx list
             SetResponse(0, A_QUIT, L_QUIT, TEASER);
             responseList = SetStandardResponse(1);
             return 1;
@@ -380,36 +407,36 @@ uint8_t CheckInput(uint8_t *data){
 uint8_t ProcessInput(uint8_t *data){
 //    enum {NAME, DESC, ACTION_STR1, ACTION_STR2, OPEN_ACL_MSG, ACTION_ACL_MSG, ACTION_MSG};
     static object_model_t actObj1, actObj2;
+    uint8_t elements = 0;
 
     CleanInput(&data[0]);
     uint8_t inputLen = CleanInput(&data[0]);
 
     if (inputLen) {
+
+        //eXit to previous location
         if (data[0] == 'x'){
 
             //Standing in the Lobby?
             if ((route[currDepth] == 0)||(currDepth == 0)){
-                SetResponse(0, A_NOTPOSSIBLE, L_NOTPOSSIBLE, TEASER);
-                responseList = SetStandardResponse(1);
+                SetResponse(elements++, A_NOTPOSSIBLE, L_NOTPOSSIBLE, TEASER);
             
             //Is there a way to go back?
             } else if (CheckState(currObj.byteField[OPEN_ACL])){
                 --currDepth;
                 PopulateObject(route[currDepth], &currObj);
-                responseList = SetStandardResponse(0);
             
             //No way out, print denied message of location
             } else {
-                SetResponse(0, currObj.addrStr[OPEN_ACL_MSG], currObj.lenStr[OPEN_ACL_MSG], GAME);               
-                responseList = SetStandardResponse(1);
+                SetResponse(elements++, currObj.addrStr[OPEN_ACL_MSG], currObj.lenStr[OPEN_ACL_MSG], GAME);               
             }   
-            
+        
+        //Enter locations or Open objects    
         } else if ((data[0] == 'e')||(data[0] == 'o')) {
                 
             //Not possible, too many/little characters
             if (inputLen != 2){
-                SetResponse(0, A_NOTPOSSIBLE, L_NOTPOSSIBLE, TEASER);
-                responseList = SetStandardResponse(1);
+                SetResponse(elements++, A_NOTPOSSIBLE, L_NOTPOSSIBLE, TEASER);
             } else {
                 uint8_t canDo = 0;
                 route[currDepth+1] = FindChild(route[currDepth], data[1], 0);
@@ -430,8 +457,7 @@ uint8_t ProcessInput(uint8_t *data){
                 if (canDo) {
                     volatile uint8_t bEnter = (data[0] == 'e');
                     if ((actObj1.byteField[ACTION_MASK]&(bEnter?ENTER:OPEN))==0) {
-                        SetResponse(0, bEnter?A_CANTENTER:A_CANTOPEN, bEnter?L_CANTENTER:L_CANTOPEN, TEASER);
-                        responseList = SetStandardResponse(1);
+                        SetResponse(elements++, bEnter?A_CANTENTER:A_CANTOPEN, bEnter?L_CANTENTER:L_CANTOPEN, TEASER);
                         
                     //Action legit, permission granted?
                     } else if (CheckState(actObj1.byteField[OPEN_ACL])) {
@@ -439,40 +465,40 @@ uint8_t ProcessInput(uint8_t *data){
                         //Yes! Check if we must move forward or backwards.
                         if (route[currDepth+1]) ++currDepth; else --currDepth;
                         PopulateObject(route[currDepth], &currObj);
-                        responseList = SetStandardResponse(0);
                                                   
                     //Not granted!
                     } else {
                         route[currDepth+1] = 0;
-                        SetResponse(0, currObj.addrStr[OPEN_ACL_MSG], currObj.lenStr[OPEN_ACL_MSG], GAME);                
-                        responseList = SetStandardResponse(1);
+                        SetResponse(elements++, currObj.addrStr[OPEN_ACL_MSG], currObj.lenStr[OPEN_ACL_MSG], GAME);                
                     }
 
                 //No candidate
                 } else {
-                    SetResponse(0, A_DONTSEE, L_DONTSEE, TEASER);                
-                    responseList = SetStandardResponse(1);
+                    SetResponse(elements++, A_DONTSEE, L_DONTSEE, TEASER);                
                 }
             }
 
+        //Look around or at objects
         } else if (data[0] == 'l') {
             if (inputLen == 1) {
-                uint8_t elements = 0;
 
                 //Show info about this area first
                 SetResponse(elements++, currObj.addrStr[DESC], currObj.lenStr[DESC],GAME);
-                SetResponse(elements++, A_COMMA, L_COMMA, TEASER);
-                SetResponse(elements++, A_SPACE, L_SPACE, TEASER);
+                SetResponse(elements++, A_LF, 1, TEASER);
+                SetResponse(elements++, A_LOOK, L_LOOK, TEASER);
+                //SetResponse(elements++, A_SPACE, L_SPACE, TEASER);
 
                 //Check the visible children first
                 route[currDepth+1] = 0;
                 do{
                     route[currDepth+1] = FindChild(route[currDepth], 0, route[currDepth+1]);
                     if (route[currDepth+1]) {
-                        PopulateObject(route[currDepth+1], &actObj1);
-                        SetResponse(elements++, actObj1.addrStr[NAME], actObj1.lenStr[NAME],GAME);
-                        SetResponse(elements++, A_COMMA, L_COMMA, TEASER);
-                        SetResponse(elements++, A_SPACE, L_SPACE, TEASER);
+                        if ((route[currDepth+1] != inventory[0])&&(route[currDepth+1] != inventory[1])) {
+                            PopulateObject(route[currDepth+1], &actObj1);
+                            SetResponse(elements++, actObj1.addrStr[NAME], actObj1.lenStr[NAME],GAME);
+                            SetResponse(elements++, A_COMMA, L_COMMA, TEASER);
+                            //SetResponse(elements++, A_SPACE, L_SPACE, TEASER);
+                        }
                     }
                 }while (route[currDepth+1]);
 
@@ -480,124 +506,97 @@ uint8_t ProcessInput(uint8_t *data){
                 if (currDepth) {
                     PopulateObject(route[currDepth-1], &actObj1);
                     SetResponse(elements++, actObj1.addrStr[NAME], actObj1.lenStr[NAME],GAME);
-                } else --elements;
-                responseList = SetStandardResponse(elements);
+                } else elements-=2;
 
             } else {
-
+                route[currDepth+1] = FindChild(route[currDepth], data[1], 0);
+                if (route[currDepth+1]) {
+                    PopulateObject(route[currDepth+1], &actObj1);
+                    SetResponse(elements++, actObj1.addrStr[DESC], actObj1.lenStr[DESC],GAME);   
+                } else if (currDepth) {
+                    if (CheckLetter(route[currDepth-1], data[1])) {
+                        PopulateObject(route[currDepth-1], &actObj1);
+                        SetResponse(elements++, actObj1.addrStr[DESC], actObj1.lenStr[DESC],GAME);
+                    }
+                } else {
+                    SetResponse(elements++, A_DONTSEE, L_DONTSEE, TEASER);
+                }
             }
-            
-        /*
-            if len(inp) == 1:
-            print(read_string_field(eeprom,loc_offset,'desc'))
-            print(s(eeprom,'LOOK'),end='')
-            sep = ""
-            if loc_parent[1] != 0xffff and object_visible(eeprom,loc_parent[1]):
-            name = read_string_field(eeprom,loc_parent[1],'name')
-            print("{}".format(name),end='')
-            sep = s(eeprom,'COMMA')
-            for i in range(len(loc_children)):
-            if object_visible(eeprom,loc_children[i][1]):
-            item = read_byte_field(eeprom,loc_children[i][1],'item_nr')
-            in_inventory = False
-            if item != 0:
-            for inv in range(len(inventory)):
-            if item == inventory[inv][0]:
-            in_inventory = True
-            break
-            if  not in_inventory:
-            name = read_string_field(eeprom,loc_children[i][1],'name')
-            print("{}{}".format(sep,name),end='')
-            sep = s(eeprom,'COMMA')
-            print()
-
-            else:
-            if len(inp) > 2 and inp[1] in exclude_words:
-            del(inp[1])
-            if len(inp) != 2:
-            invalid(eeprom)
-            continue
-
-            look_offset = 0xffff
-            for i in range(len(loc_children)):
-            if object_visible(eeprom,loc_children[i][1]):
-            if inp[1] == loc_children[i][0]:
-            look_offset = loc_children[i][1]
-            break
-            else:
-            if object_visible(eeprom,loc_parent[1]):
-            if inp[1] == loc_parent[0]:
-            look_offset = loc_parent[1]
-            else:
-            print(s(eeprom,'DONTSEE'))
-            continue
-            if look_offset != 0xffff:
-            if (read_byte_field(eeprom,look_offset,'action_mask') & A_LOOK == 0):
-            name = read_string_field(eeprom,look_offset,'name')
-            print(s(eeprom,'CANTLOOK') + "{}".format(name))
-            continue
-            else:
-            desc = read_string_field(eeprom,look_offset,'desc')
-            print(desc)
-            continue
-            else:
-            invalid(eeprom)        
-        */
+        
+        //Pick up an object
+        } else if (data[0] == 'p') {
+            if (inventory[0]&&inventory[1]) {
+                SetResponse(elements++, A_CARRYTWO, L_CARRYTWO, TEASER);
+            } else if (inputLen != 2) {
+                SetResponse(elements++, A_NOTPOSSIBLE, L_NOTPOSSIBLE, TEASER);
+            } else {
+                route[currDepth+1] = FindChild(route[currDepth], data[1], route[currDepth+1]);
+                if (route[currDepth+1]) {
+                    if ((route[currDepth+1] == inventory[0])||(route[currDepth+1] == inventory[1])) {
+                        SetResponse(elements++, A_ALREADYCARRYING, L_ALREADYCARRYING, TEASER);
+                        route[currDepth+1] = 0;
+                    } else {
+                        //Put item in the inventory if possible
+                        PopulateObject(route[currDepth+1], &actObj1);                      
+                        if (actObj1.byteField[ITEM_NR]) {
+                            if (inventory[0]) {
+                                inventory[1] = route[currDepth+1];
+                            } else {
+                                inventory[0] = route[currDepth+1];
+                            }
+                            SetResponse(elements++, A_NOWCARRING, L_NOWCARRING, TEASER);
+                            SetResponse(elements++, A_SPACE, L_SPACE, TEASER);
+                            SetResponse(elements++, actObj1.addrStr[NAME], actObj1.lenStr[NAME], GAME);
+                        } else {
+                            SetResponse(elements++, A_NOTPOSSIBLE, L_NOTPOSSIBLE, TEASER);
+                        }
+                    }
+                } else SetResponse(elements++, A_NOSUCHOBJECT, L_NOSUCHOBJECT, TEASER);
+            }
         } else
-        if (data[0] == 'p') {
-        /*
-                if len(inventory) >= 2:
-                print(s(eeprom,'CARRYTWO'))
-         
-                elif len(inp) < 2:
-                invalid(eeprom)
 
-                else:
-                obj_loc,obj_offset,obj_parent = name2loc(eeprom,loc,loc_offset,inp[1])
-                if obj_loc is None:
-                invalid(eeprom)
-                else:
-                obj_id   = read_byte_field(eeprom,obj_offset,'item_nr')
-                if obj_id != 0:
-                obj_name = read_string_field(eeprom,obj_offset,'name')
-                if [obj_id,obj_name] in inventory:
-                print(s(eeprom,'ALREADYCARRYING'))
-                else:
-                msg = check_action_permission(eeprom,obj_offset)
-                if msg != "":
-                print(msg)
-                continue
-                print(s(eeprom,'NOWCARRING') + "{}".format(obj_name))
-                inventory.append([obj_id,obj_name])
-                else:
-                invalid(eeprom)
-        */
-        } else
+        //Drop item if in inventory
         if (data[0] == 'd') {
-        /*
-            if len(inventory) == 0:
-            print(s(eeprom,'EMPTYHANDS'))
+            if ((inventory[0] == 0)&&(inventory[1] == 0)){
+                SetResponse(elements++, A_EMPTYHANDS, L_EMPTYHANDS, TEASER);
+            } else if (inputLen != 2) {
+                SetResponse(elements++, A_NOTPOSSIBLE, L_NOTPOSSIBLE, TEASER);
+            } else {
+                for (uint8_t x=0; x<2; ++x) {
+                    if (inventory[x]) {
+                        if (CheckLetter(inventory[x], data[1])) {
+                            PopulateObject(inventory[x], &actObj1);
+                            SetResponse(elements++, A_DROPPING, L_DROPPING, TEASER);
+                            SetResponse(elements++, actObj1.addrStr[NAME], actObj1.lenStr[NAME], GAME);
+                            SetResponse(elements++, A_LF, 1, TEASER);
+                            SetResponse(elements++, A_RETURNING, L_RETURNING, TEASER);
+                            inventory[x] = 0;
+                            break;
+                        }
+                    }
+                    if (x) SetResponse(elements++, A_NOTCARRYING, L_NOTCARRYING, TEASER);
+                }
+            }
+        } else if (data[0] == 'i') {
+            if ((inventory[0] == 0)&&(inventory[1] == 0)){
+                SetResponse(elements++, A_EMPTYHANDS, L_EMPTYHANDS, TEASER);
+            } else {
+                SetResponse(elements++, A_NOWCARRING, L_NOWCARRING, TEASER);
+                SetResponse(elements++, A_SPACE, L_SPACE, TEASER);
+                
+                for (uint8_t x=0; x<2; ++x) {
+                    if (inventory[x]) {
+                        PopulateObject(inventory[x], &actObj1);
+                        SetResponse(elements++, actObj1.addrStr[NAME], actObj1.lenStr[NAME], GAME);
+                        SetResponse(elements++, A_COMMA, L_COMMA, TEASER);
+                        SetResponse(elements++, A_SPACE, L_SPACE, TEASER);
+                    }
+                }
+                elements -= 2;
+            }            
         
-            elif len(inp) < 2:
-            invalid(eeprom)
-
-            else:
-            for i in range(len(inventory)):
-            if inp[1] in inventory[i][1].lower():
-            print(s(eeprom,'DROPPING') + "{}".format(inventory[i][1]))
-            print(s(eeprom,'RETURNING'))
-            del inventory[i]
-            break
-            else:
-            print(s(eeprom,'NOTCARRYING'))
-        */
-        } else
-        if (data[0] == 'i') {
-        /*
-        
-        */
-        } else
-        if ((data[0] == 't')||(data[0] == 'u')||(data[0] == 'g')) {
+        //Talk, use, g
+        } else if ((data[0] == 't')||(data[0] == 'u')||(data[0] == 'g')) {
         /*
             if len(inp) > 2 and inp[1] in exclude_words:
             del(inp[1])
@@ -672,6 +671,7 @@ uint8_t ProcessInput(uint8_t *data){
         data[0] = 0;
         serRxDone = 0;
         RXCNT = 0;
+        responseList = SetStandardResponse(elements);
     }
     
     return 0;
@@ -692,8 +692,8 @@ uint8_t TextAdventure(){
     if (CheckInput(&serInput[0])) return 2; //No (valid) input
 
     //Input found, process and save (changes only)
-    ProcessInput(&serInput[0]);                     //Check which response to generate and fill tx arrays
-    SaveGameState();                                //Check if things are changed, write to EEPROM
+    ProcessInput(&serInput[0]);
+    SaveGameState();
 
     return 0;
 }

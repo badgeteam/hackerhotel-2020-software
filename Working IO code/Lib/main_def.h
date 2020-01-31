@@ -26,6 +26,12 @@
 
     #define BTN_TMR 34      //RTC Compare incremental value for button readout timing (512 = 1 second)
 
+    //Internal EEPROM
+    #define STATLEN     16          //Length of game progress data
+    #define INVADDR     STATLEN     //Address of inventory (2x uint16_t)
+    #define BOOTCHK     STATLEN+4   //Address of boot check result in internal EEPROM
+
+
     #define EE_I2C_ADDR 0x50 //External EEPROM address
 
     //Global vars
@@ -49,8 +55,10 @@
 
     // Global challenge data
     extern uint8_t buttonState;
-    extern uint8_t gameState[16];     
-    
+    extern uint8_t gameState[BOOTCHK];
+    extern uint16_t inventory[2];               //     
+    extern uint8_t whoami;
+
     //Things for audio and LEDs
     extern volatile uint16_t effect;
 

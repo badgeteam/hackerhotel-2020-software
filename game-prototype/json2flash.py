@@ -168,7 +168,7 @@ def convert_json_to_eeprom(objects,offset=0):
 
 
 ### Read and convert the JSON file
-with open('hotel.json', 'r') as f:
+with open('hotel.json', 'rb') as f:
     hotel = json.load(f)
 game_data = convert_json_to_eeprom(hotel)
 game_data.append(0x00)
