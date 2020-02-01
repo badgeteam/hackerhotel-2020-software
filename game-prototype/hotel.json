@@ -1,6 +1,6 @@
 {
   "The Hotel [L]obby" : {
-    "desc" : "You are in the lobby of our beautiful hotel \"The Pyramid\". Here you can\nfind our reception, the hotel bar and a shop. On your right you can find\nthe elevator to all the rooms and on the left is of course the entrance\nthrough which you came in.",
+    "desc" : "You are in the lobby of our beautiful hotel \"The Pyramid\". Here you can\r\nfind our reception, the hotel bar and a shop. On your right you can find\r\nthe elevator to all the rooms and on the left is of course the entrance\r\nthrough which you came in.",
     "action_mask" : 1,
     "action_msg" : "Testing",
     "o" : {
@@ -10,12 +10,12 @@
         "visible_acl" : 0,
         "action_mask" : 13,
         "action_item" : 61,
-        "action_msg" : "Thank you sir, for staying with us and\nrescuing Bastet from the Pyramid. You \nare allways welcome back at our hotel.\nYou came as a guest and are now leaving \nas a friend!",
+        "action_msg" : "Thank you sir, for staying with us and\r\nrescuing Bastet from the Pyramid. You \r\nare allways welcome back at our hotel.\r\nYou came as a guest and are now leaving \r\nas a friend!",
         "action_state" : 127,
         "state_desc" : "You exited the hotel",
         "o" : {
           "The [S]treet" : {
-            "desc" : "Despite the rainstorm, the outside of the hotel looks so \nclose and peaceful, yet you are not able to go out!",
+            "desc" : "Despite the rainstorm, the outside of the hotel looks so \r\nclose and peaceful, yet you are not able to go out!",
             "effects" : 0,
             "visible_acl" : 255,
             "action_mask" : 5,
@@ -23,7 +23,7 @@
             "open_acl_msg" : "No no no, you can't leave this hotel. You are locked in forever."
           },
           "The [S]treet " : {
-            "desc" : "Despite the rainstorm, the outside of the hotel looks so \nclose and peaceful, yet you are not able to go out! ",
+            "desc" : "Despite the rainstorm, the outside of the hotel looks so \r\nclose and peaceful, yet you are not able to go out! ",
             "effects" : 0,
             "visible_acl" : 127,
             "action_mask" : 5
@@ -50,7 +50,7 @@
                 "open_acl" : 2,
                 "open_acl_msg" : "The door is locked, please use your keycard to unlock the door",
                 "action_mask" : 17,
-                "desc" : "This is room 101, your hotel room during Hacker Hotel 2020.\nYou travelled a whole day to get to the event.\nYou decide to chill out for a while.",
+                "desc" : "This is room 101, your hotel room during Hacker Hotel 2020. You travelled a whole day \r\nto get to the event. You decide to chill out for a while.",
                 "action_item" : 1,
                 "action_state" : 2,
                 "action_msg" : "You unlocked room 101",
@@ -121,12 +121,12 @@
                 "state_desc" : "You unlocked room 203",
                 "o" : {
                   "[L]aptop" : {
-                    "desc" : "This looks like a standard laptop. Nothing special except the two barcode \nstickers on the back of the laptop:\n\nSticker 1     █▐ ▌ ▐ █  ▌▌ ▐▐▌▐ ▌█  ▌▐ ██▐ ██▐ ▌█ ▌ ▐ ▌▐█▌█  ▌▌▐▌ █▌▌█     \n\nSticker 2     █▐ ▌ ▐▌██▐▌█ █▌▐▐▐▌ █????? ▐ ▌██ █▌█ ▐▐▐▌ ▌ █ ▐█▐▐▌     \n\nAs you can see, sticker 2 is a little damaged.",
+                    "desc" : "This looks like a standard laptop. Nothing special except the two barcode \r\nstickers on the back of the laptop:\r\n\r\nSticker 1     █▐ ▌ ▐ █  ▌▌ ▐▐▌▐ ▌█  ▌▐ ██▐ ██▐ ▌█ ▌ ▐ ▌▐█▌█  ▌▌▐▌ █▌▌█     \r\n\r\nSticker 2     █▐ ▌ ▐▌██▐▌█ █▌▐▐▐▌ █????? ▐ ▌██ █▌█ ▐▐▐▌ ▌ █ ▐█▐▐▌     \r\n\r\nAs you can see, sticker 2 is a little damaged.",
                     "action_mask" : 20,
                     "action_item" : 0,
-                    "action_str1" : "You turn on the laptop, but it is locked by user 'hcarter'.\nPlease enter the correct password?",
+                    "action_str1" : "You turn on the laptop, but it is locked by user 'hcarter'.\r\nPlease enter the correct password?",
                     "action_str2" : "z2KHqZ",
-                    "action_msg" : "You have unlocked the laptop, on the desktop you found\na note with the name \"safe-code.txt\". You open it and it\ncontains the following text:\n\n* Take a product of 2 prime numbers\n* If you split my code into two 2-digit numbers, both of them are prime numbers\n* The number formed by the first 3 digits can be divided by the number\n  formed by the 4th digit\n* The number formed by the last 3 digits can be divided by the number\n  formed by the 1st digit\n* No digit in my code is lower than the previous digit\n* ... last but not least, I'm not a fool :-)\n"
+                    "action_msg" : "You have unlocked the laptop, on the desktop you found\r\na note with the name \"safe-code.txt\". You open it and it\r\ncontains the following text:\r\n\r\n* Take a product of 2 prime numbers\r\n* If you split my code into two 2-digit numbers, both of them are prime numbers\r\n* The number formed by the first 3 digits can be divided by the number\r\n  formed by the 4th digit\r\n* The number formed by the last 3 digits can be divided by the number\r\n  formed by the 1st digit\r\n* No digit in my code is lower than the previous digit\r\n* ... last but not least, I'm not a fool :-)"
                   },
                   "[C]loset" : {
                     "desc" : "The closet contains some clothes and a safe.",
@@ -150,7 +150,7 @@
                             "action_str1" : "Are you sure you want to read this ancient spell out loud?",
                             "action_str2" : "yes",
                             "action_state" : 21,
-                            "action_msg" : "There is a post-it on one of the pages. You turn to that\npage and starting reading the spell out loud. You have\nbarely finished reading it when the room light starts to \nflicker and a person seems to materialize in the room.\n\nIt has not fully materialized in full yet while it rushes out\nthe door mumbling: \"no no no... this can not be, who has\nkept me locked in the twilight zone for so long. I need to\nget to the Pyramid to set things straight.\n\nYou try to catch your breath and in the meantime you\nsee the figure rush out. You look and you see it go to \nthe reception area.",
+                            "action_msg" : "There is a post-it on one of the pages. You turn to that\r\npage and starting reading the spell out loud. You have\r\nbarely finished reading it when the room light starts to \r\nflicker and a person seems to materialize in the room.\r\n\r\nIt has not fully materialized in full yet while it rushes out\r\nthe door mumbling: \"no no no... this can not be, who has\r\nkept me locked in the twilight zone for so long. I need to\r\nget to the Pyramid to set things straight.\r\n\r\nYou try to catch your breath and in the meantime you\r\nsee the figure rush out. You look and you see it go to \r\nthe reception area.",
                             "state_desc" : "read the book out loud",
                             "item_nr" : 0,
                             "o" : {}
@@ -167,7 +167,7 @@
                   "[N]ote" : {
                     "desc" : "Hmmm.. this note looks interesting",
                     "action_mask" : 36,
-                    "action_msg" : "The note shows a table:\n\n                      Vigenère\n\n |ABCDEFGHIJKLMNOPQRSTUVWXYZ\n-+--------------------------\nA|ABCDEFGHIJKLMNOPQRSTUVWXYZ\nB|BCDEFGHIJKLMNOPQRSTUVWXYZA\nC|CDEFGHIJKLMNOPQRSTUVWXYZAB\nD|DEFGHIJKLMNOPQRSTUVWXYZABC\nE|EFGHIJKLMNOPQRSTUVWXYZABCD\nF|FGHIJKLMNOPQRSTUVWXYZABCDE\nG|GHIJKLMNOPQRSTUVWXYZABCDEF\nH|HIJKLMNOPQRSTUVWXYZABCDEFG\nI|IJKLMNOPQRSTUVWXYZABCDEFGH\nJ|JKLMNOPQRSTUVWXYZABCDEFGHI\nK|KLMNOPQRSTUVWXYZABCDEFGHIJ\nL|LMNOPQRSTUVWXYZABCDEFGHIJK\nM|MNOPQRSTUVWXYZABCDEFGHIJKL\nN|NOPQRSTUVWXYZABCDEFGHIJKLM\nO|OPQRSTUVWXYZABCDEFGHIJKLMN\nP|PQRSTUVWXYZABCDEFGHIJKLMNO\nQ|QRSTUVWXYZABCDEFGHIJKLMNOP\nR|RSTUVWXYZABCDEFGHIJKLMNOPQ\nS|STUVWXYZABCDEFGHIJKLMNOPQR\nT|TUVWXYZABCDEFGHIJKLMNOPQRS\nU|UVWXYZABCDEFGHIJKLMNOPQRST\nV|VWXYZABCDEFGHIJKLMNOPQRSTU\nW|WXYZABCDEFGHIJKLMNOPQRSTUV\nX|XYZABCDEFGHIJKLMNOPQRSTUVW\nY|YZABCDEFGHIJKLMNOPQRSTUVWX\nZ|ZABCDEFGHIJKLMNOPQRSTUVWXY\n\nAnd has something scribbled in the side:\n\n'The secret key can be found on the \"garden\"\nof the \"local area network\"'"
+                    "action_msg" : "The note shows a table:\r\n\r\n                      Vigenère\r\n\r\n |ABCDEFGHIJKLMNOPQRSTUVWXYZ\r\n-+--------------------------\r\nA|ABCDEFGHIJKLMNOPQRSTUVWXYZ\r\nB|BCDEFGHIJKLMNOPQRSTUVWXYZA\r\nC|CDEFGHIJKLMNOPQRSTUVWXYZAB\r\nD|DEFGHIJKLMNOPQRSTUVWXYZABC\r\nE|EFGHIJKLMNOPQRSTUVWXYZABCD\r\nF|FGHIJKLMNOPQRSTUVWXYZABCDE\r\nG|GHIJKLMNOPQRSTUVWXYZABCDEF\r\nH|HIJKLMNOPQRSTUVWXYZABCDEFG\r\nI|IJKLMNOPQRSTUVWXYZABCDEFGH\r\nJ|JKLMNOPQRSTUVWXYZABCDEFGHI\r\nK|KLMNOPQRSTUVWXYZABCDEFGHIJ\r\nL|LMNOPQRSTUVWXYZABCDEFGHIJK\r\nM|MNOPQRSTUVWXYZABCDEFGHIJKL\r\nN|NOPQRSTUVWXYZABCDEFGHIJKLM\r\nO|OPQRSTUVWXYZABCDEFGHIJKLMN\r\nP|PQRSTUVWXYZABCDEFGHIJKLMNO\r\nQ|QRSTUVWXYZABCDEFGHIJKLMNOP\r\nR|RSTUVWXYZABCDEFGHIJKLMNOPQ\r\nS|STUVWXYZABCDEFGHIJKLMNOPQR\r\nT|TUVWXYZABCDEFGHIJKLMNOPQRS\r\nU|UVWXYZABCDEFGHIJKLMNOPQRST\r\nV|VWXYZABCDEFGHIJKLMNOPQRSTU\r\nW|WXYZABCDEFGHIJKLMNOPQRSTUV\r\nX|XYZABCDEFGHIJKLMNOPQRSTUVW\r\nY|YZABCDEFGHIJKLMNOPQRSTUVWX\r\nZ|ZABCDEFGHIJKLMNOPQRSTUVWXY\r\n\r\nAnd has something scribbled in the side:\r\n\r\n'The secret key can be found on the \"garden\"\r\nof the \"local area network\"'"
                   }
                 }
               },
@@ -187,7 +187,7 @@
                 "action_mask" : 1,
                 "desc" : "This is room 404",
                 "open_acl" : 30,
-                "open_acl_msg" : "<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0//EN\">\n<html><head>\n<title>404 Not Found</title>\n</head><body>\n<h1>Not Found</h1>\n<p>The requested ROOM was not found on this floor.</p>\n</body></html>"
+                "open_acl_msg" : "<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0//EN\">\r\n<html><head>\r\n<title>404 Not Found</title>\r\n</head><body>\r\n<h1>Not Found</h1>\r\n<p>The requested ROOM was not found on this floor.</p>\r\n</body></html>"
               }
             }
           }
@@ -198,7 +198,7 @@
         "action_mask" : 5,
         "o" : {
           "[V]IP guest" : {
-            "desc" : "This guest looks posh, I bet she is a VIP. Now wait, is that her keycard\nlying on the bar?",
+            "desc" : "This guest looks posh, I bet she is a VIP. Now wait, is that her keycard\r\nlying on the bar?",
             "visible_acl" : 3,
             "action_mask" : 20,
             "action_item" : 3,
@@ -234,7 +234,7 @@
             "item_nr" : 3
           },
           "[B]lue Shark" : {
-            "desc" : "This is a very nice fluffy shark (that seems to\nbe getting quite popular in certain circles).",
+            "desc" : "This is a very nice fluffy shark (that seems to\r\nbe getting quite popular in certain circles).",
             "action_mask" : 20,
             "action_acl" : 4,
             "action_acl_msg" : "You need some money to buy the Blue Shark",
@@ -254,20 +254,20 @@
             "action_mask" : 12,
             "action_acl" : 129,
             "action_acl_msg" : "Hello again, you are already checked in :-)",
-            "action_msg" : "\"Hello, Can I check in please?\"\n\n\"Welcome to Hotel Pyramid and thank you for choosing us during your stay at \nHacker Hotel 2020. I have checked you in, here is your keycard. Your room \nnumber is 101, located on the 1st floor.\"",
+            "action_msg" : "\"Hello, Can I check in please?\"\r\n\r\n\"Welcome to Hotel Pyramid and thank you for choosing us during your stay at \r\nHacker Hotel 2020. I have checked you in, here is your keycard. Your room \r\nnumber is 101, located on the 1st floor.\"",
             "action_state" : 1,
             "state_desc" : "checked in"
           },
           "[P]icture frame" : {
-            "desc" : "That's strange, I did not see this picture frame before.\nAnd why would anyone draw hieroglyphs on a screenshot of an\neighties music video and hang it on the wall???\n\nWait, there is something very tiny written on the picture frame...\n\n",
+            "desc" : "That's strange, I did not see this picture frame before. And why would anyone \r\ndraw hieroglyphs on a screenshot of an eighties music video and hang it on the wall???\r\n\r\nWait, there is something very tiny written on the picture frame...",
             "visible_acl" : 21,
             "action_mask" : 36,
-            "action_msg" : "\"Walk like an Egyptian\" on this picture and the entrance room to the Pyramid \nwill open up to you!",
+            "action_msg" : "\"Walk like an Egyptian\" on this picture and the entrance room to the Pyramid \r\nwill open up to you!",
             "action_state" : 119,
             "state_desc" : "Ready to play magnetic maze!"
           },
           "The [D]ungeon" : {
-            "desc" : "Your light is blinding me so I can't see much as it is very dark in\nthe Dungeon. Please get into a dark area so my eyes can adjust\nto these poor light conditions.",
+            "desc" : "Your light is blinding me so I can't see much as it is very dark in the Dungeon.\r\nPlease get into a dark area so my eyes can adjust to these poor light conditions.",
             "action_mask" : 1,
             "visible_acl" : 125,
             "o" : {
@@ -276,46 +276,46 @@
                 "visible_acl" : 110,
                 "action_mask" : 12,
                 "action_acl" : 124,
-                "action_acl_msg" : "Access to the tunnel can only be granted to a group of 4\npeople, each bringing one of the basic 4 elements of nature.",
-                "action_msg" : "Make sure your offering is perfect, otherwise the High Priest will\nnot trust you and rejects access to the secret Pyramid.\n\nHere are your personal hints:\n\n* Khonsu will offer Incense\n* The one who kneels 3 times will bring element Water.\n"
+                "action_acl_msg" : "Access to the tunnel can only be granted to a group of 4\r\npeople, each bringing one of the basic 4 elements of nature.",
+                "action_msg" : "Make sure your offering is perfect, otherwise the High Priest will\r\nnot trust you and rejects access to the secret Pyramid.\r\n\r\nHere are your personal hints:\r\n\r\n* Khonsu will offer Incense\r\n* The one who kneels 3 times will bring element Water."
               },
               "[G]uard " : {
                 "desc" : "There is a guard near the tunnel",
                 "visible_acl" : 111,
                 "action_mask" : 12,
                 "action_acl" : 124,
-                "action_acl_msg" : "Access to the tunnel can only be granted to a group of 4\npeople, each bringing one of the basic 4 elements of nature.",
-                "action_msg" : "Make sure your offering is perfect, otherwise the High Priest will\nnot trust you and rejects access to the secret Pyramid.\n\nHere are your personal hints:\n\n* Khonsu will kneel more than once.\n* The one who offers Incense will bring element Fire.\n"
+                "action_acl_msg" : "Access to the tunnel can only be granted to a group of 4\r\npeople, each bringing one of the basic 4 elements of nature.",
+                "action_msg" : "Make sure your offering is perfect, otherwise the High Priest will\r\nnot trust you and rejects access to the secret Pyramid.\r\n\r\nHere are your personal hints:\r\n\r\n* Khonsu will kneel more than once.\r\n* The one who offers Incense will bring element Fire."
               },
               "[G]uard   " : {
                 "desc" : "There is a guard near the tunnel",
                 "visible_acl" : 112,
                 "action_mask" : 12,
                 "action_acl" : 124,
-                "action_acl_msg" : "Access to the tunnel can only be granted to a group of 4\npeople, each bringing one of the basic 4 elements of nature.",
-                "action_msg" : "Make sure your offering is perfect, otherwise the High Priest will\nnot trust you and rejects access to the secret Pyramid.\n\nHere are your personal hints:\n\n* Bes will bring element Air\n* Anubis will be kneeling once more than the one bringing element Earth\n"
+                "action_acl_msg" : "Access to the tunnel can only be granted to a group of 4\r\npeople, each bringing one of the basic 4 elements of nature.",
+                "action_msg" : "Make sure your offering is perfect, otherwise the High Priest will\r\nnot trust you and rejects access to the secret Pyramid.\r\n\r\nHere are your personal hints:\r\n\r\n* Bes will bring element Air\r\n* Anubis will be kneeling once more than the one bringing element Earth"
               },
               "[G]uard  " : {
                 "desc" : "There is a guard near the tunnel",
                 "visible_acl" : 113,
                 "action_mask" : 12,
                 "action_acl" : 124,
-                "action_acl_msg" : "Access to the tunnel can only be granted to a group of 4\npeople, each bringing one of the basic 4 elements of nature.",
-                "action_msg" : "Make sure your offering is perfect, otherwise the High Priest will\nnot trust you and rejects access to the secret Pyramid.\n\nHere are your personal hints:\n\n* Anubis will bring a Robe as offering, he will not kneel 2 times.\n* The one bringing the element Air will offer something other than Fruit\n"
+                "action_acl_msg" : "Access to the tunnel can only be granted to a group of 4\r\npeople, each bringing one of the basic 4 elements of nature.",
+                "action_msg" : "Make sure your offering is perfect, otherwise the High Priest will\r\nnot trust you and rejects access to the secret Pyramid.\r\n\r\nHere are your personal hints:\r\n\r\n* Anubis will bring a Robe as offering, he will not kneel 2 times.\r\n* The one bringing the element Air will offer something other than Fruit"
               },
               "Papyrus [R]oll" : {
                 "desc" : "The papyrus roll is inscribed by some text.",
                 "visible_acl" : 116,
                 "action_mask" : 36,
-                "action_msg" : "Please follow these instructions carefully if you want\nto enter the tunnel. The guard is very picky on who he lets\nthrough. \n\nYou can only enter the tunnel with 4 people at\nthe same time. Each person must choose the correct\noffering (wine, fruit, robe or incense) and kneel the \nright amount of times (1, 2, 3 or 4 times).\n\nLast, but certainly not least, you must all bring one of the\nfour elements of nature (earth, air, fire or water).\n\nGood luck!\n"
+                "action_msg" : "Please follow these instructions carefully if you want\r\nto enter the tunnel. The guard is very picky on who he lets\r\nthrough. \r\n\r\nYou can only enter the tunnel with 4 people at\r\nthe same time. Each person must choose the correct\r\noffering (wine, fruit, robe or incense) and kneel the \r\nright amount of times (1, 2, 3 or 4 times).\r\n\r\nLast, but certainly not least, you must all bring one of the\r\nfour elements of nature (earth, air, fire or water).\r\n\r\nGood luck!"
               },
               "High [P]riest" : {
                 "desc" : "The high priest is standing at the altar where you have placed your offering.",
                 "visible_acl" : 31,
                 "action_mask" : 12,
-                "action_str1" : "In order to allow you access to the secret Pyramid, you need\nto work together. Please give me the sum of all of your\npersonal access-codes.",
+                "action_str1" : "In order to allow you access to the secret Pyramid, you need\r\nto work together. Please give me the sum of all of your\r\npersonal access-codes.",
                 "action_str2" : "3844451",
-                "action_msg" : "It is good to see a group work so well together, I have ordered\nthe guard to open the tunnel for you!",
+                "action_msg" : "It is good to see a group work so well together, I have ordered\r\nthe guard to open the tunnel for you!",
                 "action_state" : 126,
                 "state_desc" : "The priest allows access to the tunnel"
               },
@@ -347,42 +347,42 @@
                         "desc" : "There is a secret message on the wall",
                         "effects" : 0,
                         "action_mask" : 36,
-                        "action_msg" : "J AE LSKSY A AEW UO DHGD ZOM BR BO TZX LHUED, UYM \nZOM PIKF TZX SGMY GGI PIO UHYEE HWET FF. AFW CHV \nDAW, M TN SG ZPTE YGN GTNE LAML GAJ. B EF LEHM LHTTSZI \nBO TZX QTTTWK GABMTXV. RPU FXIW UO LXPE SA LAI \nGBMW HJ FZ AVOIKTAJR EGE HW PMEM KFHA PIAL MS WP.\nI ZTZX IIVWIG UHW GEFF IF MLX OOFHKKBM\n\nMGJHSTMGEMFLQ KE ABS TXIG VNVXV T TPWEP TOD UTR \nGPT ZXPI VS MGXBM TZX WIFLD BW USOCXR UZ TOH VXBLDR \nLHU SMFQXSS. KH AX OEWW E EJTLEI FPRW IEMJEFVI.\n\nUVT KHSG... TOGG M PJLD UI YSEW... TRW ZOM MSH!"
+                        "action_msg" : "J AE LSKSY A AEW UO DHGD ZOM BR BO TZX LHUED, UYM \r\nZOM PIKF TZX SGMY GGI PIO UHYEE HWET FF. AFW CHV \r\nDAW, M TN SG ZPTE YGN GTNE LAML GAJ. B EF LEHM LHTTSZI \r\nBO TZX QTTTWK GABMTXV. RPU FXIW UO LXPE SA LAI \r\nGBMW HJ FZ AVOIKTAJR EGE HW PMEM KFHA PIAL MS WP.\r\nI ZTZX IIVWIG UHW GEFF IF MLX OOFHKKBM\r\n\r\nMGJHSTMGEMFLQ KE ABS TXIG VNVXV T TPWEP TOD UTR \r\nGPT ZXPI VS MGXBM TZX WIFLD BW USOCXR UZ TOH VXBLDR \r\nLHU SMFQXSS. KH AX OEWW E EJTLEI FPRW IEMJEFVI.\r\n\r\nUVT KHSG... TOGG M PJLD UI YSEW... TRW ZOM MSH!"
                       },
                       "[G]host of Ra" : {
-                        "desc" : "This is the ghost whom you released in room 203. \nHis name is Ra, the sun-god. Unfortunately he is \nunder a spell and is not much of a help to you now.",
+                        "desc" : "This is the ghost whom you released in room 203. \r\nHis name is Ra, the sun-god. Unfortunately he is \r\nunder a spell and is not much of a help to you now.",
                         "visible_acl" : 246,
                         "action_mask" : 4,
                         "action_acl" : 117,
                         "action_acl_msg" : "You can't talk to a ghost, break the spell first!",
-                        "action_msg" : "The spell is partly broken, one more hot summer to\nrevive Ra!"
+                        "action_msg" : "The spell is partly broken, one more hot summer to\r\nrevive Ra!"
                       },
                       "[R]a" : {
                         "desc" : "Ra is the Sun God",
                         "effects" : 0,
                         "visible_acl" : 118,
                         "action_mask" : 12,
-                        "action_str1" : "\"Please help me Ra!\"\n\n\"Off course I will help you free our\nbeloved Cat Goddess! Please tell\nme the name of her adversary!\"",
+                        "action_str1" : "\"Please help me Ra!\"\r\n\r\n\"Off course I will help you free our\r\nbeloved Cat Goddess! Please tell\r\nme the name of her adversary!\"",
                         "action_str2" : "Setesh",
                         "action_msg" : "Ohhh not Setesh again! I will end this once and for all!",
                         "action_state" : 61,
                         "state_desc" : "Talked to Ra"
                       },
                       "Stone [d]oor" : {
-                        "desc" : "This door gives entrance to the master chamber.\nHowever, it is protected by a hieroglyph code that\nyou will need to solve to get in.\nOnly the mind of a master can solve this puzzle!",
+                        "desc" : "This door gives entrance to the master chamber.\r\nHowever, it is protected by a hieroglyph code that\r\nyou will need to solve to get in.\r\nMind the gap when you enter the master chamber!",
                         "effects" : 0,
                         "action_mask" : 20,
                         "action_acl" : 61,
-                        "action_acl_msg" : "Don't go in here without the help of Ra.\nYou won't survive without him!",
+                        "action_acl_msg" : "Don't go in here without the help of Ra.\r\nYou won't survive without him!",
                         "action_item" : 0,
-                        "action_str1" : "\r\n𓉔 \t𓈖\t𓂧\t𓅓\t\tI\t\n\r\n𓎼\t𓆓\t𓂋\t𓂾\t\tII\t\n\r\n𓂾\t𓂾\t𓂋\t𓂋\t\tII\tI\n\r\n𓈖\t𓂋\t𓂋\t𓂧\t\t\tII\n",
+                        "action_str1" : "\r\n𓉔 \t𓈖\t𓂧\t𓅓\t\tI\t\r\n\r\n𓎼\t𓆓\t𓂋\t𓂾\t\tII\t\r\n\r\n𓂾\t𓂾\t𓂋\t𓂋\t\tII\tI\r\n\r\n𓈖\t𓂋\t𓂋\t𓂧\t\t\tII",
                         "action_str2" : "brbd",
                         "action_msg" : "That is correct, the stone door slided away and the master\nchamber is now visible!",
                         "action_state" : 62,
                         "state_desc" : "Opened the stone door"
                       },
                       "[M]aster Chamber" : {
-                        "desc" : "You reached the deepest most secret part\nof the Pyramid. The master chamber!",
+                        "desc" : "You reached the deepest most secret part\r\nof the Pyramid. The master chamber!",
                         "visible_acl" : 62,
                         "effects" : 0,
                         "action_mask" : 1,
@@ -399,10 +399,10 @@
                         "item_nr" : 0,
                         "o" : {
                           "[B]astet" : {
-                            "desc" : "Look at that, it is Bastet! The lovely\nfigure on your badge.",
+                            "desc" : "Look at that, it is Bastet! The lovely\r\nfigure on your badge.",
                             "effects" : 0,
                             "action_mask" : 12,
-                            "action_msg" : "Thank you, thank you, thank you!\nYou have done so much for me by releasing Ra, breaking the spell and\nrescuing me. I will be forever in your debt.\n\nPlease accept this gem as a gift as a token of my gratitude!\n\nShowing it at the hotel exit will allow you to leave the hotel.",
+                            "action_msg" : "Thank you, thank you, thank you!\r\nYou have done so much for me by releasing Ra, breaking the spell and\r\nrescuing me. I will be forever in your debt.\r\n\r\nPlease accept this gem as a gift as a token of my gratitude!\r\n\r\nShowing it at the hotel exit will allow you to leave the hotel.",
                             "action_state" : 63,
                             "state_desc" : "talked to bastet"
                           },
