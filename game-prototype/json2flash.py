@@ -106,6 +106,9 @@ def convert_json_to_eeprom(objects,offset=0):
             f = string_fields[i]
             b = bytearray(0)
             if f in obj:
+                for line in obj[f].split('\n'):
+                    if len(line) > 79:
+                        print("WARNING: long line : {}".format(line))
                 # If needed, start with sound/LED effects in the string
                 if i >= string_fields.index('open_acl_msg'):
                     e = string_fields[i] + "_effects"
@@ -168,7 +171,7 @@ def convert_json_to_eeprom(objects,offset=0):
 
 
 ### Read and convert the JSON file
-with open('hotel.json', 'r') as f:
+with open('hotel.json', 'rb') as f:
     hotel = json.load(f)
 game_data = convert_json_to_eeprom(hotel)
 game_data.append(0x00)

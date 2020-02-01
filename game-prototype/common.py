@@ -35,21 +35,21 @@ string_fields = ['name',            # name to show in lists
 # vv from here  vv #
 ####################
 sound_effects = ['<none>',
-                 'bad (buzzer)',            # can be used when a bad answer is given
-                 'good (bell)',             # can be used when a good answer is given
-                 'wind',                    # 
-                 'footsteps',
-                 'knocking',
-                 'screaming',
-                 '<free>']
+                 'bad (buzzer)',            # 1 can be used when a bad answer is given
+                 'good (bell)',             # 2 can be used when a good answer is given
+                 'wind',                    # 3
+                 'footsteps',               # 4
+                 'bleeps',                  # 5 ATM, laptop
+                 'movingstone',             # 6 
+                 'meow']                    # 7
 
 led_effects   = ['<none>',
-                 'flashing red eyes',       # can be used when a bad answer is given
-                 'flashing green eyes',     # can be used when a good answer is given
-                 '<free>',
-                 '<free>',
-                 '<free>',
-                 '<free>',
+                 'flashing red eyes',       # 1 can be used when a bad answer is given
+                 'flashing green eyes',     # 2 can be used when a good answer is given
+                 'left wing leds up',       # 3
+                 'left wing leds down',     # 4
+                 'flash both wings',        # 5
+                 '<free>',                  # 6
                  '<free>',
                  '<free>',
                  '<free>',
@@ -83,7 +83,7 @@ global current_effects
 def effects(e):
     sound = e>>5
     led   = e&31
-    return "[" + sound_effects[sound] + "," + led_effects[led] + "]"
+    return "[" + sound_effects[sound] + "," + led_effects[led] + "]\n"
 
 
 # Action constants, defining the bits in 'action_mask'
@@ -213,6 +213,7 @@ def read_byte_field(eeprom,offset,field):
 def read_string_field(eeprom,offset,field):
     global current_effects
 
+    s = ""
     if field in string_fields:
         if offset != 0xffff:
             offset = offset + 4 + len(byte_fields)
@@ -332,14 +333,15 @@ offering   = -1
 # 117   set to 1 by FW after one normal-hot-normal cycle of the temp sensor
 # 118   set to 1 by FW after a second normal-hot-normal cycle of the temp sensor
 # 119   read by FW to enable the magnetic maze game (only allow the game when this bit is 1)
-# 120   set to 1 by FW after the maze game is succesfully finished
+# #120   set to 1 by FW after the maze game is succesfully finished ==> changed to 125
 # 121   <free>
 # 122   H turns green, set to 1 by FW after reaching level 6 of Bastet dictates
 # 123   A turns green, set to 1 by FW after Lanyard code has been entered correctly
-# 124   C turns green, set to 1 by FW after Connected to other 3 badge types / personas (UUID MOD 4) 
-# 125   K turns green, set to 1 by game after Reached first floor in hotel (hotel guests only)
-# 126   E turns green, set to 1 by game after Reached second floor in hotel (VIPs only)
+# 124   C turns green, set to 1 by FW after Connected to other 3 badge types / personas (UUID MOD 4)
+# 125   K turns green, set to 1 by FW after entrance to dungeon is enabled by completing magnetic maze
+# 126   E turns green, set to 1 by game after access to the tunnel is granted
 # 127   R turns green, set to 1 by game Was able to leave the hotel (need to solve puzzles in secret room to get antidote)
+
 
 
 # get_state() returns True if the status bit <num> is set to 1.

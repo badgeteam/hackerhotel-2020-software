@@ -39,6 +39,9 @@ lit_offsets = {
     'NOTPOSSIBLE': [30382,27], # 'b'Sorry, that is not possible''
     'ERROR': [30316,66], # 'b'Hmm... something is wrong, please cont'
     'PRIEST': [30142,174], # 'b"I'm sorry my child, I'm a little blind'
-    'BADOFFERING': [30081,61], # 'b'You call that an offering, you should '
-    'YOURPART': [30049,32], # 'b'Your part of the access code is ''
+    'PLEASEOFFER': [30099,43], # 'b'Please offer something from your inven'
+    'BADOFFERING': [30038,61], # 'b'You call that an offering, you should '
+    'YOURPART': [30006,32], # 'b'Your part of the access code is ''
+    'IDLE': [29984,22], # 'b'Press ? for game help!''
+    'SALT': [29965,19], # 'b'H\xc3\xa4ck\xc3\xa9rH\xc3\xb8t\xc3\xa8'
 }

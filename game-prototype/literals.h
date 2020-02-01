@@ -78,7 +78,13 @@
 #define L_ERROR                     66
 #define A_PRIEST                 30142
 #define L_PRIEST                   174
-#define A_BADOFFERING            30081
+#define A_PLEASEOFFER            30099
+#define L_PLEASEOFFER               43
+#define A_BADOFFERING            30038
 #define L_BADOFFERING               61
-#define A_YOURPART               30049
+#define A_YOURPART               30006
 #define L_YOURPART                  32
+#define A_IDLE                   29984
+#define L_IDLE                      22
+#define A_SALT                   29965
+#define L_SALT                      19

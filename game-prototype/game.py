@@ -307,7 +307,10 @@ while True:
                 if len(request) == 1:
                     if request == '1':
                         # Offer an item by placing it on the altar
-                        print("Special game/challenge 1")
+                        # print("Special game/challenge 1")
+                        if item == 0: 
+                            print(s(eeprom,'PLEASEOFFER'))
+                            continue
                         if item == 31 or item == 32 or item == 33 or item == 34:
                             offering = item - 31
                             print(s(eeprom,'PRIEST'))
@@ -400,6 +403,8 @@ while True:
                     if msg != "":
                         print(msg)
                         continue
+                    update_state(read_byte_field(eeprom,obj_offset,'action_state'))
+                    print("{}".format(read_string_field(eeprom,obj_offset,'action_msg')))
                     print(s(eeprom,'NOWCARRING') + "{}".format(obj_name))
                     inventory.append([obj_id,obj_name])
             else:
