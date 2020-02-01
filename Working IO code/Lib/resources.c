@@ -208,6 +208,7 @@ ISR(TCB1_INT_vect){
 ISR(USART0_RXC_vect){
     if (serRxDone == 0){
         serRx[RXCNT] = USART0.RXDATAL;
+        USART0_TXDATAL = serRx[RXCNT];
         if (serRx[RXCNT] == 0x0A){
             serRx[RXCNT] = 0;
             serRxDone = 1;

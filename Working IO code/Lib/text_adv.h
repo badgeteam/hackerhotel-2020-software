@@ -44,7 +44,7 @@
     } object_model_t;
 
     //Action constants
-    enum {ENTER = 1, OPEN = 2, LOOK = 4, TALK = 8, USE = 16};
+    enum {ENTER = 1, OPEN = 2, LOOK = 4, TALK = 8, USE = 16, READ = 32};
 
     //Extra text additions constants
     enum {PROMPT = 1, SPACE, CR_1, CR_2, LOCATION};
@@ -52,7 +52,6 @@
     //
     #define MAX_OBJ_DEPTH   32
     #define MAX_ITEMS       64
-    #define STATUS_BITS     sizeof(gameState)*8
     #define CURR_LOC        0xfff0
     
     #define EXT_EE_MAX      32767
