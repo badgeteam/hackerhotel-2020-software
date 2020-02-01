@@ -45,7 +45,8 @@
     uint8_t SaveGameState();
     uint8_t ReadStatusBit(uint8_t number);
     void WriteStatusBit(uint8_t number, uint8_t state);
-
+    
+    uint8_t getID();
     void Reset();
 
     void GenerateAudio();

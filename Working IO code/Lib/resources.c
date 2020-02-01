@@ -24,18 +24,20 @@ void Setup(){
     PORTC_DIR = 0b00111111;
 
     //Invert some pins for correcting LED reversal error
-    PORTC_PIN0CTRL |= 0x80;
-    PORTC_PIN1CTRL |= 0x80;
-    PORTC_PIN2CTRL |= 0x80;
     PORTC_PIN3CTRL |= 0x80;
     PORTC_PIN4CTRL |= 0x80;
     PORTC_PIN5CTRL |= 0x80;
-    PORTB_PIN2CTRL |= 0x80;
     PORTB_PIN3CTRL |= 0x80;
     PORTB_PIN4CTRL |= 0x80;
     PORTB_PIN5CTRL |= 0x80;
-    PORTB_PIN6CTRL |= 0x80;
     
+    //FET drive pins
+    /*PORTC_PIN0CTRL |= 0x80;
+    PORTC_PIN1CTRL |= 0x80;
+    PORTC_PIN2CTRL |= 0x80;
+    PORTB_PIN2CTRL |= 0x80;
+    PORTB_PIN6CTRL |= 0x80;
+    */
      
     //UART (Alternative pins PA1=TxD, PA2=RxD, baudrate 9600, 8n1, RX and Buffer empty interrupts on)
     PORTMUX_CTRLB = 0x01;
@@ -208,6 +210,7 @@ ISR(TCB1_INT_vect){
 ISR(USART0_RXC_vect){
     if (serRxDone == 0){
         serRx[RXCNT] = USART0.RXDATAL;
+        USART0_TXDATAL = serRx[RXCNT];
         if (serRx[RXCNT] == 0x0A){
             serRx[RXCNT] = 0;
             serRxDone = 1;
@@ -423,25 +426,57 @@ uint8_t floatAround(uint8_t sample, uint8_t bits, uint8_t min, uint8_t max){
 
 //Save changed data to EEPROM
 uint8_t SaveGameState(){
-    uint8_t gameCheck[16];
-    EERead(0, &gameCheck[0], 16);
-    for (uint8_t x=0; x<16; ++x){
+    uint8_t gameCheck[BOOTCHK];
+
+    //Read all data up to the boot/check result address from EEPROM
+    EERead(0, &gameCheck[0], BOOTCHK);
+
+    //Check game status bits
+    for (uint8_t x=0; x<STATLEN; ++x){
         if (gameState[x] != gameCheck[x]){
             if (EEWrite(x, &gameState[x], 1)) return 1;
         }
     }
+
+    //Check the inventory too
+    gameState[INVADDR] = (uint8_t)(inventory[0]>>8);
+    gameState[INVADDR+1] = (uint8_t)(inventory[0]&0xff);
+    gameState[INVADDR+2] = (uint8_t)(inventory[1]>>8);
+    gameState[INVADDR+3] = (uint8_t)(inventory[1]&0xff);
+    if (inventory[0] != (gameCheck[INVADDR]<<8|gameCheck[INVADDR+1])) {
+        if (EEWrite(INVADDR, &gameState[INVADDR], 2)) return 1;
+    }
+    if (inventory[1] != (gameCheck[INVADDR+2]<<8|gameCheck[INVADDR+3])) {
+        if (EEWrite(INVADDR+2, &gameState[INVADDR+2], 2)) return 1;
+    }
+
     return 0;
 }
 
 uint8_t ReadStatusBit(uint8_t number){
-    number &= 0x3f;
+    number &= 0x7f;
     if (gameState[number>>3] & (1<<(number&7))) return 1; else return 0;
 }
 
 void WriteStatusBit(uint8_t number, uint8_t state){
-    number &= 0x3f;
+    number &= 0x7f;
     if (state) gameState[number>>3] |= 1<<(number&7);
     else gameState[number>>3] &= ~(1<<(number&7));
+}
+
+uint8_t getID(){
+    //Give out a number 0..3, calculated using serial number fields
+    uint8_t id = 0;
+    uint8_t *serNum;
+    serNum = (uint8_t*)&SIGROW_SERNUM0;
+
+    for (uint8_t x=0; x<10; ++x){
+        id += *serNum;
+        ++serNum;
+    }
+    id %= 4;
+    whoami = id+1;
+    return whoami;
 }
 
 void Reset(){
@@ -453,16 +488,8 @@ void Reset(){
     for (uint8_t x=0; x<sizeof(gameState); ++x){
         gameState[x] = 0;
     }
-    uint8_t id = 0;
-    uint8_t *serNum;
-    serNum = (uint8_t*)&SIGROW_SERNUM0;
-    
-    //Give out a number 0..3, calculated using serial number fields
-    for (uint8_t x=0; x<10; ++x){
-        id += *serNum;
-        ++serNum;
-    }
-    id %= 4;
+
+    uint8_t id = getID();
 
     //Write bit in gameState location 110..113
     if (id == 0) WriteStatusBit(110, 1);
@@ -485,7 +512,7 @@ void GenerateAudio(){
 
         //Silence
         if ((effect&0xE0)==0){
-            auRepAddr = zero;
+            auRepAddr = &zero;
         }
 
         //Bad (buzzer)

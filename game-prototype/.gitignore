@@ -2,3 +2,5 @@ __pycache__
 **/\.*\.swp
 .idea
 todo.txt
+hotel.bin
+literals.h
