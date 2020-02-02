@@ -44,12 +44,7 @@ int main(void)
 
     SerSpeed(255);
     ////Turn on LEDs on low setting to check for interrupt glitches
-    for (uint8_t l=0; l<10; l++){
-        for (uint8_t x=0; x<40; x++){
-            iLED[x] = (1-(l%2))*255;
-            for(uint32_t p = 0; p<50000; p++);
-        }
-    }
+
     //"Hacker"
     for (uint8_t n=0; n<6; n++){
         iLED[HCKR[R][n]] = 1;
@@ -94,7 +89,6 @@ int main(void)
             //Other games & user interaction checks
             //MagnetMaze();
             BastetDictates();
-            //MasterMind-ishThing(); //Not sure if to be implemented
             //LanyardCode();
             //MakeFriends();
              

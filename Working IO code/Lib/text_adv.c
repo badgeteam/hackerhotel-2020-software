@@ -29,7 +29,7 @@ static uint8_t currDepth = 0xff;                    //Depth of position in game,
 static uint16_t route[MAX_OBJ_DEPTH] = {0};         //
 static uint16_t reactStr[3][32] = {{0},{0},{0}};    //
 static uint8_t responseList = 0;                    //
-static char specialInput[16] = {0};                 //Sometimes a special input is requested by the game. When this is set, input is compared to this string first.
+static char specialInput[INP_LENGTH] = {0};         //Sometimes a special input is requested by the game. When this is set, input is compared to this string first.
 static uint8_t specialPassed = 0;                   //If user input matches specialInput, this is set.
 
 //Decrypts data read from I2C EEPROM, max 255 bytes at a time
@@ -40,6 +40,14 @@ void DecryptData(uint16_t offset, uint8_t length, uint8_t type, uint8_t *data){
         ++data;
         ++offset;
         --length;
+    }
+}
+
+//Un-flips the extra "encrypted" data for answers
+void UnflipData(uint8_t length, uint8_t *data){
+    for (uint8_t x = 0; x<length; ++x){
+        data[x] = (data[x]<<4)|(data[x]>>4);
+        data[x] ^= 0x55; 
     }
 }
 
@@ -107,13 +115,13 @@ void SetResponse(uint8_t number, uint16_t address, uint16_t length, uint8_t type
 //
 uint8_t SetStandardResponse(uint8_t custStrEnd){
 
-    SetResponse(custStrEnd++, A_LF, 1, TEASER);
+    SetResponse(custStrEnd++, A_LF, 2, TEASER);
     SetResponse(custStrEnd++, A_LOCATION, L_LOCATION, TEASER);
-    SetResponse(custStrEnd++, A_SPACE, L_SPACE, TEASER);
+    //SetResponse(custStrEnd++, A_SPACE, L_SPACE, TEASER);
     reactStr[0][custStrEnd++] = CURR_LOC;
-    SetResponse(custStrEnd++, A_LF, 1, TEASER);
+    SetResponse(custStrEnd++, A_LF, 2, TEASER);
     SetResponse(custStrEnd++, A_PROMPT, L_PROMPT, TEASER);
-    SetResponse(custStrEnd++, A_SPACE, L_SPACE, TEASER);
+    //SetResponse(custStrEnd++, A_SPACE, L_SPACE, TEASER);
 
     return custStrEnd;
 }
@@ -136,10 +144,14 @@ void PopulateObject(uint16_t offset, object_model_t *object){
     offset += OFF_STRINGFLDS;
     for(uint8_t x=0; x<STRING_FIELDS_LEN; ++x){
         //Determine length
-        ExtEERead(offset, 2, GAME, &data[0]);
+        ExtEERead(offset, 3, GAME, &data[0]);
         parStr = (data[0]<<8|data[1]);
-        object->lenStr[x]= parStr;
-        
+        if (x >= OPEN_ACL_MSG){
+            object->lenStr[x]= parStr-1;
+            object->effect[x-OPEN_ACL_MSG] = data[2];
+        } else {
+            object->lenStr[x]= parStr;
+        }
         //Determine string start location and add length to offset for next field
         offset += 2;
         object->addrStr[x]=offset;
@@ -158,17 +170,16 @@ void UpdateState(uint8_t num){
     }
 }
 
-//Returns the state of the bit on position "num"
-uint8_t GetState(uint8_t num){
-    if ((num)&&(num<0x80)){
-        return ReadStatusBit(num);
-    }
-    return 1;
-}
-
 //Checks if state of bit BBBBbbb matches with v (inverted) bit
 uint8_t CheckState(uint8_t num){
-    return (GetState(num&(0x7f)) == (1-((num&0x80)?1:0))); 
+    uint8_t bitSet = 0;
+    if (ReadStatusBit(num & 0x7f)){
+        bitSet = 1;
+    }
+    if (((num & 0x80)>0)^(bitSet>0)){
+        return 1;
+    }
+    return 0;
 }
 
 //Check if the entered letter corresponds with a name
@@ -306,8 +317,8 @@ uint8_t CheckInput(uint8_t *data){
             idSet += ReadStatusBit(110+x);
         }
 
-        //Check if badge is reset (cheated!)
-        if (idSet == 0) {
+        //Check if badge is reset(0 = cheated!) or new(3) or error(2)
+        if (idSet != 1) {
             Reset();
         } else getID();
 
@@ -512,7 +523,7 @@ uint8_t ProcessInput(uint8_t *data){
 
                 //Show info about this area first
                 SetResponse(elements++, currObj.addrStr[DESC], currObj.lenStr[DESC],GAME);
-                SetResponse(elements++, A_LF, 1, TEASER);
+                SetResponse(elements++, A_LF, 2, TEASER);
                 SetResponse(elements++, A_LOOK, L_LOOK, TEASER);
                 //SetResponse(elements++, A_SPACE, L_SPACE, TEASER);
 
@@ -534,7 +545,7 @@ uint8_t ProcessInput(uint8_t *data){
                 if (currDepth) {
                     PopulateObject(route[currDepth-1], &actObj1);
                     SetResponse(elements++, actObj1.addrStr[NAME], actObj1.lenStr[NAME],GAME);
-                } else elements-=2;
+                } else elements-=1;
 
             } else {
                 route[currDepth+1] = FindChild(route[currDepth], data[1], 0);
@@ -573,7 +584,7 @@ uint8_t ProcessInput(uint8_t *data){
                                 inventory[0] = route[currDepth+1];
                             }
                             SetResponse(elements++, A_NOWCARRING, L_NOWCARRING, TEASER);
-                            SetResponse(elements++, A_SPACE, L_SPACE, TEASER);
+                            //SetResponse(elements++, A_SPACE, L_SPACE, TEASER);
                             SetResponse(elements++, actObj1.addrStr[NAME], actObj1.lenStr[NAME], GAME);
                         } else {
                             SetResponse(elements++, A_NOTPOSSIBLE, L_NOTPOSSIBLE, TEASER);
@@ -596,7 +607,7 @@ uint8_t ProcessInput(uint8_t *data){
                             PopulateObject(inventory[x], &actObj1);
                             SetResponse(elements++, A_DROPPING, L_DROPPING, TEASER);
                             SetResponse(elements++, actObj1.addrStr[NAME], actObj1.lenStr[NAME], GAME);
-                            SetResponse(elements++, A_LF, 1, TEASER);
+                            SetResponse(elements++, A_LF, 2, TEASER);
                             SetResponse(elements++, A_RETURNING, L_RETURNING, TEASER);
                             inventory[x] = 0;
                             break;
@@ -612,17 +623,17 @@ uint8_t ProcessInput(uint8_t *data){
                 SetResponse(elements++, A_EMPTYHANDS, L_EMPTYHANDS, TEASER);
             } else {
                 SetResponse(elements++, A_NOWCARRING, L_NOWCARRING, TEASER);
-                SetResponse(elements++, A_SPACE, L_SPACE, TEASER);
+                //SetResponse(elements++, A_SPACE, L_SPACE, TEASER);
                 
                 for (uint8_t x=0; x<2; ++x) {
                     if (inventory[x]) {
                         PopulateObject(inventory[x], &actObj1);
                         SetResponse(elements++, actObj1.addrStr[NAME], actObj1.lenStr[NAME], GAME);
                         SetResponse(elements++, A_COMMA, L_COMMA, TEASER);
-                        SetResponse(elements++, A_SPACE, L_SPACE, TEASER);
+                        //SetResponse(elements++, A_SPACE, L_SPACE, TEASER);
                     }
                 }
-                elements -= 2;
+                elements -= 1;
             }            
         
         //Talk, use, give, read
@@ -668,38 +679,38 @@ uint8_t ProcessInput(uint8_t *data){
                     //Talk to person, read or use object (without item)                          
                     } else {
                         PopulateObject(route[currDepth+1], &actObj1);
-                        SetResponse(elements+1, A_SPACE, L_SPACE, TEASER);
-                        SetResponse(elements+2, actObj1.addrStr[NAME], actObj1.lenStr[NAME], GAME);
-                        elements += 3;
-                        if ((data[0] == 't')&&(~actObj1.byteField[ACTION_MASK] & TALK)) {
-                            SetResponse(elements-3, A_WHYTALK, L_WHYTALK, TEASER);
-                        } else if ((data[0] == 'u')&&(~actObj1.byteField[ACTION_MASK] & USE)) {
-                            SetResponse(elements-3, A_CANTUSE, L_CANTUSE, TEASER);
-                        } else if ((data[0] == 'r')&&(~actObj1.byteField[ACTION_MASK] & READ)) {
-                            SetResponse(elements-3, A_CANTREAD, L_CANTREAD, TEASER);
+                        if ((data[0] == 't')&&((255 - actObj1.byteField[ACTION_MASK]) & TALK)) {
+                            SetResponse(elements++, A_WHYTALK, L_WHYTALK, TEASER);
+                            SetResponse(elements++, actObj1.addrStr[NAME], actObj1.lenStr[NAME], GAME);
+                        } else if ((data[0] == 'u')&&((255-actObj1.byteField[ACTION_MASK]) & USE)) {
+                            SetResponse(elements++, A_CANTUSE, L_CANTUSE, TEASER);
+                        } else if ((data[0] == 'r')&&((255-actObj1.byteField[ACTION_MASK]) & READ)) {
+                            SetResponse(elements++, A_CANTREAD, L_CANTREAD, TEASER);
                         } else {
-                            elements -= 3;
-                            if (CheckState(actObj1.byteField[ACTION_ACL])){
-                                SetResponse(elements++, actObj1.addrStr[ACTION_MSG], actObj1.lenStr[ACTION_MSG], GAME);
-                                UpdateState(actObj1.byteField[ACTION_STATE]);
-                            } else {
-                                SetResponse(elements++, actObj1.addrStr[ACTION_ACL_MSG], actObj1.lenStr[ACTION_ACL_MSG], GAME);
-                            }
-
                             //Special game
                             if (actObj1.lenStr[ACTION_STR1] == 1) {
+                                ExtEERead(actObj1.addrStr[ACTION_STR1], 1, GAME, &data[2]);
+                                if (data[2] == '1') {
+                                    //SetResponse(elements++, A_, L_RESPONSE, TEASER);
+                                }
                                 
 
                             //General request
                             } else if (actObj1.lenStr[ACTION_STR1]) {
                                 SetResponse(elements++, actObj1.addrStr[ACTION_STR1], actObj1.lenStr[ACTION_STR1], GAME);
-                                SetResponse(elements++, A_LF, 1, TEASER);
+                                SetResponse(elements++, A_LF, 2, TEASER);
                                 SetResponse(elements++, A_RESPONSE, L_RESPONSE, TEASER);
-                                if (actObj1.lenStr[ACTION_STR2]>15) actObj1.lenStr[ACTION_STR2] = 15;
+                                if (actObj1.lenStr[ACTION_STR2]>(INP_LENGTH-1)) actObj1.lenStr[ACTION_STR2] = (INP_LENGTH-1);
                                 ExtEERead(actObj1.addrStr[ACTION_STR2], actObj1.lenStr[ACTION_STR2], GAME, (uint8_t *)&specialInput[0]);
+                                UnflipData(actObj1.lenStr[ACTION_STR2], &specialInput[0]);
+                                specialInput[actObj1.lenStr[ACTION_STR2]] = 0;
                                 specialPassed = 0;
+                            } else if (CheckState(actObj1.byteField[ACTION_ACL])){
+                                SetResponse(elements++, actObj1.addrStr[ACTION_MSG], actObj1.lenStr[ACTION_MSG], GAME);
+                                UpdateState(actObj1.byteField[ACTION_STATE]);
+                            } else {
+                                SetResponse(elements++, actObj1.addrStr[ACTION_ACL_MSG], actObj1.lenStr[ACTION_ACL_MSG], GAME);
                             }
-
                         }
                     }
 
@@ -718,10 +729,13 @@ uint8_t ProcessInput(uint8_t *data){
             if (specialPassed == 2) {
 
             } else if (specialPassed == 1) {
-                
+                PopulateObject(route[currDepth+1], &actObj1);
+                SetResponse(elements++, actObj1.addrStr[ACTION_MSG], actObj1.lenStr[ACTION_MSG], GAME);
+                UpdateState(actObj1.byteField[ACTION_STATE]);
                 specialInput[0] = 0;
             } else {
-
+                PopulateObject(route[currDepth+1], &actObj1);
+                SetResponse(elements++, A_INCORRECT, L_INCORRECT, TEASER);
                 specialInput[0] = 0;
             }
 
@@ -744,18 +758,18 @@ uint8_t ProcessInput(uint8_t *data){
 }
 
 
-// Main game loop
+//MAIN GAME STRUCTURE
 uint8_t TextAdventure(){
     static uint8_t serInput[RXLEN];
     
-    //Sending data to serial?
+    //Still sending data to serial?
     if (CheckSend()) return 1;
 
-    //Not sending? Process next response part to send
+    //Not sending? Process next response part to send, if any.
     if (CheckResponse()) return 1;        
 
     //No responses to send, check if there is user input.
-    if (CheckInput(&serInput[0])) return 2; //No (valid) input
+    if (CheckInput(&serInput[0])) return 2; 
 
     //Input found, process and save (changes only)
     ProcessInput(&serInput[0]);

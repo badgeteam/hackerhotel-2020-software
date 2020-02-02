@@ -29,7 +29,7 @@
     enum {EFFECTS, VISIBLE_ACL, OPEN_ACL, ACTION_ACL, ACTION_MASK, ACTION_ITEM, ACTION_STATE, ITEM_NR};
     #define BYTE_FIELDS_LEN     ITEM_NR+1
 
-    //string fields
+    //string fields OPEN_ACL_MSG, ACTION_ACL_MSG, ACTION_MSG: first byte is effect byte
     enum {NAME, DESC, ACTION_STR1, ACTION_STR2, OPEN_ACL_MSG, ACTION_ACL_MSG, ACTION_MSG};
     #define STRING_FIELDS_LEN   ACTION_MSG+1
     #define OFF_STRINGFLDS      OFF_BYTEFLDS+BYTE_FIELDS_LEN
@@ -41,13 +41,14 @@
         uint8_t  byteField[BYTE_FIELDS_LEN];
         uint16_t addrStr[STRING_FIELDS_LEN];
         uint16_t lenStr[STRING_FIELDS_LEN];
+        uint8_t effect[STRING_FIELDS_LEN-OPEN_ACL_MSG];
     } object_model_t;
 
     //Action constants
     enum {ENTER = 1, OPEN = 2, LOOK = 4, TALK = 8, USE = 16, READ = 32};
 
     //Extra text additions constants
-    enum {PROMPT = 1, SPACE, CR_1, CR_2, LOCATION};
+    //enum {PROMPT = 1, SPACE, CR_1, CR_2, LOCATION};
 
     //
     #define MAX_OBJ_DEPTH   32
@@ -58,6 +59,7 @@
 
     //Keys are md5 hash of 'H@ck3r H0t3l 2020', split in two
     #define KEY_LENGTH      8
+    #define INP_LENGTH      16
     enum {GAME = 0, TEASER = 1};
     extern const uint8_t xor_key[2][KEY_LENGTH];
 

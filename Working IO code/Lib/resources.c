@@ -32,13 +32,14 @@ void Setup(){
     PORTB_PIN5CTRL |= 0x80;
     
     //FET drive pins
-    /*PORTC_PIN0CTRL |= 0x80;
+    /*
+    PORTC_PIN0CTRL |= 0x80;
     PORTC_PIN1CTRL |= 0x80;
     PORTC_PIN2CTRL |= 0x80;
     PORTB_PIN2CTRL |= 0x80;
     PORTB_PIN6CTRL |= 0x80;
     */
-     
+
     //UART (Alternative pins PA1=TxD, PA2=RxD, baudrate 9600, 8n1, RX and Buffer empty interrupts on)
     PORTMUX_CTRLB = 0x01;
     PORTA_OUTSET = 0x02;
@@ -211,7 +212,7 @@ ISR(USART0_RXC_vect){
     if (serRxDone == 0){
         serRx[RXCNT] = USART0.RXDATAL;
         USART0_TXDATAL = serRx[RXCNT];
-        if (serRx[RXCNT] == 0x0A){
+        if ((serRx[RXCNT] == 0x0A)||(serRx[RXCNT] == 0x0D)){
             serRx[RXCNT] = 0;
             serRxDone = 1;
         } else if (RXCNT < (RXLEN-1)) RXCNT++;
