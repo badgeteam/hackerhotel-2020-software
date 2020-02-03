@@ -238,6 +238,7 @@ uint16_t FindChild(uint16_t parent, uint8_t letter, uint16_t start){
 
 //Allow only a(A) to z(Z) and 0 to 9 as input
 uint8_t InpOkChk(uint8_t test){
+    test |= 0x20;
     if ((test>='a')&&(test<='z')) return 1;
     if ((test>='0')&&(test<='9')) return 1;
     return 0;
@@ -347,17 +348,32 @@ uint8_t CheckInput(uint8_t *data){
             //Normal code challenge
             if (StartsWith((uint8_t *)&serRx[0], &specialInput[0])) {
                 specialPassed = 1;
-                specialInput[0] = 0;
-                data[1] = 0;
+                //specialInput[0] = 0;
+                //data[1] = 0;
 
             //Special challenge 1
-            } else if ((specialInput[0] == '1')&&(specialInput[1] == '\0')) {
-            
-            //Wrong answer
-            } else {
-                specialInput[0] = 0;
+            } else if ((specialInput[0] == '1')&&(specialInput[2] == 0)) {
+                uint8_t inputLen = CleanInput((uint8_t *)&serRx[0]);
+                specialPassed = 2;
                 data[1] = 0;
+
+                if (inputLen >= 2) {
+                    if ((serRx[0] == '0')||(serRx[0] == '1')||(serRx[0] == '2')||(serRx[0] == '3')) {
+                        serRx[1] |= 0x20;
+                        if ((serRx[1] == 'a')||(serRx[1] == 'e')||(serRx[1] == 'f')||(serRx[1] == 'w')) {
+                            data[1] = specialInput[1];
+                            data[2] = serRx[0];
+                            data[3] = serRx[1];
+                            data[4] = 0;
+                        }
+                    }
+                }
             }
+            //Wrong answer
+            //} else {
+                //specialInput[0] = 0;
+                //data[1] = 0;
+            //}
         
         //Normal input
         } else {
@@ -664,7 +680,28 @@ uint8_t ProcessInput(uint8_t *data){
                         //Both the item and person/object are found, check if action is legit
                         if (data[0]){
                             PopulateObject(route[currDepth+1], &actObj1);
-                            if (actObj1.byteField[ACTION_ITEM] == actObj2.byteField[ITEM_NR]) {
+
+                            //Special game
+                            if (actObj1.lenStr[ACTION_STR1] == 1) {
+                                ExtEERead(actObj1.addrStr[ACTION_STR1], 1, GAME, &data[2]);
+                                if (data[2] == '1') {
+                                    uint8_t item = actObj2.byteField[ITEM_NR];
+                                    if ((item < 31)||(item > 34)) {
+                                        SetResponse(elements++, A_CANTUSE, L_CANTUSE, TEASER);
+                                    } else {
+                                        SetResponse(elements++, A_PRIEST, L_PRIEST, TEASER);
+                                        SetResponse(elements++, A_LF, 2, TEASER);
+                                        SetResponse(elements++, A_RESPONSE, L_RESPONSE, TEASER);
+                                        specialInput[0] = '1';
+                                        specialInput[1] = item;
+                                        specialInput[2] = 0;
+                                    }
+                                } else {
+                                    SetResponse(elements++, A_ERROR, L_ERROR, TEASER);
+                                }
+
+                            //Normal "use ... on ..." or "give ... to ..." action
+                            } else if (actObj1.byteField[ACTION_ITEM] == actObj2.byteField[ITEM_NR]) {
                                 UpdateState(actObj1.byteField[ACTION_STATE]);
                                 SetResponse(elements++, actObj1.addrStr[ACTION_MSG], actObj1.lenStr[ACTION_MSG], GAME);
                             } else {
@@ -687,13 +724,13 @@ uint8_t ProcessInput(uint8_t *data){
                         } else if ((data[0] == 'r')&&((255-actObj1.byteField[ACTION_MASK]) & READ)) {
                             SetResponse(elements++, A_CANTREAD, L_CANTREAD, TEASER);
                         } else {
-                            //Special game
+
+                            //Special game, not enough characters
                             if (actObj1.lenStr[ACTION_STR1] == 1) {
                                 ExtEERead(actObj1.addrStr[ACTION_STR1], 1, GAME, &data[2]);
                                 if (data[2] == '1') {
-                                    //SetResponse(elements++, A_, L_RESPONSE, TEASER);
+                                    SetResponse(elements++, A_PLEASEOFFER, L_PLEASEOFFER, TEASER);
                                 }
-                                
 
                             //General request
                             } else if (actObj1.lenStr[ACTION_STR1]) {
@@ -704,7 +741,7 @@ uint8_t ProcessInput(uint8_t *data){
                                 ExtEERead(actObj1.addrStr[ACTION_STR2], actObj1.lenStr[ACTION_STR2], GAME, (uint8_t *)&specialInput[0]);
                                 UnflipData(actObj1.lenStr[ACTION_STR2], &specialInput[0]);
                                 specialInput[actObj1.lenStr[ACTION_STR2]] = 0;
-                                specialPassed = 0;
+                                //specialPassed = 0;
                             } else if (CheckState(actObj1.byteField[ACTION_ACL])){
                                 SetResponse(elements++, actObj1.addrStr[ACTION_MSG], actObj1.lenStr[ACTION_MSG], GAME);
                                 UpdateState(actObj1.byteField[ACTION_STATE]);
@@ -726,8 +763,31 @@ uint8_t ProcessInput(uint8_t *data){
         
         //Special answer given
         } else if (data[0] == 'a'){
-            if (specialPassed == 2) {
+            
+            //Priest offerings
+            if (specialPassed >= 2) {
+                if (data[1] > 0) {
+                    uint8_t dig = 0;
+                    uint32_t num = 0;
 
+                    /* CALCULATION                    
+                        data[x]: x=1->offering x=2->kneelings x=3->element whoami->person
+                    
+                        answer = ((offering  & 2) << 19) + ((offering  & 1) << 8) + \
+                        ((element   & 2) << 15) + ((element   & 1) << 4) + \
+                        ((kneelings & 2) << 11) + ((kneelings & 1))
+                        answer = answer << (3-person)
+                    */
+
+                    SetResponse(elements++, A_YOURPART, L_YOURPART, TEASER);
+                    
+                    //Send out number
+                    SetResponse(elements++, A_DIGITS+dig, 1, TEASER);
+                } else {
+                    SetResponse(elements++, A_BADOFFERING, L_BADOFFERING, TEASER);
+                }
+            
+            //Other questions    
             } else if (specialPassed == 1) {
                 PopulateObject(route[currDepth+1], &actObj1);
                 SetResponse(elements++, actObj1.addrStr[ACTION_MSG], actObj1.lenStr[ACTION_MSG], GAME);
