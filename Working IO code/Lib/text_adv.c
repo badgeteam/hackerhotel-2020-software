@@ -361,7 +361,7 @@ uint8_t CheckInput(uint8_t *data){
                     if ((serRx[0] == '0')||(serRx[0] == '1')||(serRx[0] == '2')||(serRx[0] == '3')) {
                         serRx[1] |= 0x20;
                         if ((serRx[1] == 'a')||(serRx[1] == 'e')||(serRx[1] == 'f')||(serRx[1] == 'w')) {
-                            data[1] = specialInput[1];
+                            data[1] = specialInput[1]+0x11;
                             data[2] = serRx[0];
                             data[3] = serRx[1];
                             data[4] = 0;
@@ -798,10 +798,19 @@ uint8_t ProcessInput(uint8_t *data){
                         ((kneelings & 2) << 11) + ((kneelings & 1))
                         answer = answer << (3-person)
                     */
+                    data[1]-='0';
+                    data[2]-='0';
+                    if (data[3] == 'a') data[3] = 1;
+                    else if (data[3] == 'e') data[3] = 0;
+                    else if (data[3] == 'f') data[3] = 3;
+                    else data[3] = 2;
 
-                    answer =    ((uint32_t)(data[1] & 2) << 19) + ((data[1] & 1) << 8) +
-                                ((data[3] & 2) << 15) + ((data[3] & 1) << 4) +
-                                ((data[2] & 2) << 11) + ((data[2] & 1));
+                    if (data[1] & 2) answer += (1UL << 20);
+                    if (data[1] & 1) answer += (1 << 8);
+                    if (data[3] & 2) answer += (1UL << 16);
+                    if (data[3] & 1) answer += (1 << 4);
+                    if (data[2] & 2) answer += (1 << 12);
+                    if (data[2] & 1) answer += 1;
                     answer <<= (3 - whoami);            
 
                     SetResponse(elements++, A_YOURPART, L_YOURPART, TEASER);
@@ -825,13 +834,11 @@ uint8_t ProcessInput(uint8_t *data){
                 PopulateObject(route[currDepth+1], &actObj1);
                 SetResponse(elements++, actObj1.addrStr[ACTION_MSG], actObj1.lenStr[ACTION_MSG], GAME);
                 UpdateState(actObj1.byteField[ACTION_STATE]);
-                specialInput[0] = 0;
             } else {
                 PopulateObject(route[currDepth+1], &actObj1);
                 SetResponse(elements++, A_INCORRECT, L_INCORRECT, TEASER);
-                specialInput[0] = 0;
             }
-
+            specialInput[0] = 0;
 
         //Faulty input
         } else {
@@ -845,7 +852,7 @@ uint8_t ProcessInput(uint8_t *data){
         serRxDone = 0;
         RXCNT = 0;
         if (specialInput[0]) responseList = elements; else responseList = SetStandardResponse(elements);
-        specialInput[0] = 0;
+
     }
     
     return 0;
