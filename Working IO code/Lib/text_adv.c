@@ -434,6 +434,24 @@ uint8_t CheckInput(uint8_t *data){
                 return 1;
             }
 
+            //Change status bit
+            if (data[0] == '#'){
+                uint8_t bitNr = 0;
+                for (uint8_t x=1; x<4; ++x) {
+                    data[x] -= '0';
+                    bitNr *= 10;
+                    if (data[x] < 10) {
+                        bitNr += data[x];
+                        continue;
+                    }
+                    bitNr = 0;
+                    break;
+                }
+                if (bitNr) UpdateState(bitNr);
+                responseList = SetStandardResponse(0);
+                return 1;
+            }
+
             //Cheat = reset badge!
             if (StartsWith(&data[0], "iddqd")){
             
@@ -767,8 +785,10 @@ uint8_t ProcessInput(uint8_t *data){
             //Priest offerings
             if (specialPassed >= 2) {
                 if (data[1] > 0) {
-                    uint8_t dig = 0;
-                    uint32_t num = 0;
+
+                    uint8_t  digit[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+                    uint32_t answer = 0;
+                    uint8_t  n = 0;
 
                     /* CALCULATION                    
                         data[x]: x=1->offering x=2->kneelings x=3->element whoami->person
@@ -779,10 +799,23 @@ uint8_t ProcessInput(uint8_t *data){
                         answer = answer << (3-person)
                     */
 
+                    answer =    ((uint32_t)(data[1] & 2) << 19) + ((data[1] & 1) << 8) +
+                                ((data[3] & 2) << 15) + ((data[3] & 1) << 4) +
+                                ((data[2] & 2) << 11) + ((data[2] & 1));
+                    answer <<= (3 - whoami);            
+
                     SetResponse(elements++, A_YOURPART, L_YOURPART, TEASER);
                     
-                    //Send out number
-                    SetResponse(elements++, A_DIGITS+dig, 1, TEASER);
+                    //Set up sending out number
+                    for (n=9; n>=0; --n) {
+                        digit[n] = answer % 10;
+                        answer /= 10;
+                        if (answer == 0) break;
+                    }
+                    for (; n<10; ++n) {
+                        SetResponse(elements++, A_DIGITS+digit[n], 1, TEASER);
+                    }
+
                 } else {
                     SetResponse(elements++, A_BADOFFERING, L_BADOFFERING, TEASER);
                 }
@@ -812,6 +845,7 @@ uint8_t ProcessInput(uint8_t *data){
         serRxDone = 0;
         RXCNT = 0;
         if (specialInput[0]) responseList = elements; else responseList = SetStandardResponse(elements);
+        specialInput[0] = 0;
     }
     
     return 0;
