@@ -85,11 +85,6 @@ int main(void)
             if (adcPhot < 10) WriteStatusBit(116, 1);
             if (adcPhot > 100) WriteStatusBit(116, 0);
 
-            for (int i=0; i<4; i++) {
-                iLED[WING[L][i]] = ((buttonState>>i)&1) ? 128 : 0;
-                iLED[WING[R][i]] = ((buttonState>>(i+4))&1) ? 128 : 0;
-            }
-
             //Check temperature 
       }
 
