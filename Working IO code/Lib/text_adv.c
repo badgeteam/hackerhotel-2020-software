@@ -860,7 +860,7 @@ uint8_t ProcessInput(uint8_t *data){
                         answer = answer << (3-person)
                     */
                     data[1]-='0';
-                    data[2]-='0';
+                    data[2]-='1';
                     if (data[3] == 'a') data[3] = 1;
                     else if (data[3] == 'e') data[3] = 0;
                     else if (data[3] == 'f') data[3] = 3;
@@ -872,7 +872,7 @@ uint8_t ProcessInput(uint8_t *data){
                     if (data[3] & 1) answer += (1 << 4);
                     if (data[2] & 2) answer += (1 << 12);
                     if (data[2] & 1) answer += 1;
-                    answer <<= (3 - whoami);            
+                    answer <<= (4 - whoami);            
 
                     SetResponse(elements++, A_YOURPART, L_YOURPART, TEASER);
                     
