@@ -513,11 +513,12 @@ uint8_t CheckInput(uint8_t *data){
                     }
 
                     for (n=0; n<3; ++n) {
-                        SetResponse(x*4+n, A_DIGITS+digit[0], 1, TEASER);
+                        SetResponse(x*4+n, A_DIGITS+digit[n], 1, TEASER);
                     }                
                     SetResponse(x*4+3, A_COMMA, L_COMMA, TEASER);
                 }
                 SetResponse(31, A_LF, 4, TEASER);
+                responseList = 32;
                 return 1;
             }
         } 

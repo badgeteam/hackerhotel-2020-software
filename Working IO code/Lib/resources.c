@@ -351,9 +351,6 @@ uint8_t CheckButtons(uint8_t previousValue){
     uint8_t bNibble = 0x0F;     //MSB to LSB: Bottom left, top left, top right, bottom right, 0F is error
     
     switch(bADC){
-        case 28 ... 32:         //30: All buttons pressed
-        bNibble = 0b1111;
-        break;
 
         case 35 ... 39:          //37: Both left
         bNibble = 0b1100;
