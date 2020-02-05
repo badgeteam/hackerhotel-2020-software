@@ -298,6 +298,9 @@ while True:
                 elif cmd == 'u' and (obj_action_mask & A_USE == 0):
                     print(s(eeprom,'CANTUSE'))
                     continue
+                elif cmd == 'g' and (obj_action_mask & A_USE == 0):
+                    print(s(eeprom,'CANTGIVE'))
+                    continue
                 elif cmd == 'r' and (obj_action_mask & A_READ == 0):
                     print(s(eeprom,'CANTREAD'))
                     continue
