@@ -3,33 +3,33 @@ ISR_IO.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000090  00803800  00002e0e  00002ec2  2**0
+  0 .data         00000090  00803800  00002dd9  00002e8d  2**0
                   CONTENTS, ALLOC, LOAD, DATA
   1 .text         00002d5e  00000000  00000000  000000b4  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .rodata       000000b0  0000ad5e  00002d5e  00002e12  2**0
+  2 .rodata       0000007b  0000ad5e  00002d5e  00002e12  2**0
                   CONTENTS, ALLOC, LOAD, READONLY, DATA
-  3 .bss          000002ce  00803890  00803890  00002f52  2**0
+  3 .bss          000002ce  00803890  00803890  00002f1d  2**0
                   ALLOC
-  4 .comment      00000030  00000000  00000000  00002f52  2**0
+  4 .comment      00000030  00000000  00000000  00002f1d  2**0
                   CONTENTS, READONLY
-  5 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  00002f84  2**2
+  5 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  00002f50  2**2
                   CONTENTS, READONLY
-  6 .debug_aranges 00000268  00000000  00000000  00002fc4  2**0
+  6 .debug_aranges 00000268  00000000  00000000  00002f90  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_info   00005a70  00000000  00000000  0000322c  2**0
+  7 .debug_info   00005a70  00000000  00000000  000031f8  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_abbrev 0000238d  00000000  00000000  00008c9c  2**0
+  8 .debug_abbrev 0000238d  00000000  00000000  00008c68  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_line   00002a47  00000000  00000000  0000b029  2**0
+  9 .debug_line   00002a47  00000000  00000000  0000aff5  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_frame  000007d8  00000000  00000000  0000da70  2**2
+ 10 .debug_frame  000007d8  00000000  00000000  0000da3c  2**2
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_str    00001791  00000000  00000000  0000e248  2**0
+ 11 .debug_str    00001791  00000000  00000000  0000e214  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_loc    00003eb4  00000000  00000000  0000f9d9  2**0
+ 12 .debug_loc    00003eb4  00000000  00000000  0000f9a5  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_ranges 00000308  00000000  00000000  0001388d  2**0
+ 13 .debug_ranges 00000308  00000000  00000000  00013859  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -110,8 +110,8 @@ Disassembly of section .text:
       88:	18 e3       	ldi	r17, 0x38	; 56
       8a:	a0 e0       	ldi	r26, 0x00	; 0
       8c:	b8 e3       	ldi	r27, 0x38	; 56
-      8e:	ee e0       	ldi	r30, 0x0E	; 14
-      90:	fe e2       	ldi	r31, 0x2E	; 46
+      8e:	e9 ed       	ldi	r30, 0xD9	; 217
+      90:	fd e2       	ldi	r31, 0x2D	; 45
       92:	02 c0       	rjmp	.+4      	; 0x98 <__do_copy_data+0x10>
       94:	05 90       	lpm	r0, Z+
       96:	0d 92       	st	X+, r0
@@ -2283,7 +2283,7 @@ void SetResponse(uint8_t number, uint16_t address, uint16_t length, uint8_t type
      f2e:	48 9f       	mul	r20, r24
      f30:	a0 01       	movw	r20, r0
      f32:	11 24       	eor	r1, r1
-     f34:	42 50       	subi	r20, 0x02	; 2
+     f34:	47 53       	subi	r20, 0x37	; 55
      f36:	52 45       	sbci	r21, 0x52	; 82
      f38:	66 23       	and	r22, r22
      f3a:	69 f0       	breq	.+26     	; 0xf56 <DecryptData+0x32>
@@ -4107,7 +4107,7 @@ void SetResponse(uint8_t number, uint16_t address, uint16_t length, uint8_t type
                 uint8_t cheat[] = "Cheater! Contact badge team... ";
     198e:	26 d9       	rcall	.-3508   	; 0xbdc <SaveGameState>
     1990:	80 e2       	ldi	r24, 0x20	; 32
-    1992:	ef ec       	ldi	r30, 0xCF	; 207
+    1992:	ea e9       	ldi	r30, 0x9A	; 154
     1994:	fd ea       	ldi	r31, 0xAD	; 173
     1996:	de 01       	movw	r26, r28
     1998:	11 96       	adiw	r26, 0x01	; 1
@@ -4130,7 +4130,7 @@ void SetResponse(uint8_t number, uint16_t address, uint16_t length, uint8_t type
             }
             
             //Cheat reset (Quote from: Donald E. Westlake)
-            if (StartsWith(&data[0], "the trouble with real life is, there's no reset button")){
+            if (StartsWith(&data[0], "#")){
     19b4:	f8 cf       	rjmp	.-16     	; 0x19a6 <CheckInput+0x43e>
     19b6:	62 e9       	ldi	r22, 0x92	; 146
     19b8:	7d ea       	ldi	r23, 0xAD	; 173
@@ -4154,7 +4154,7 @@ void SetResponse(uint8_t number, uint16_t address, uint16_t length, uint8_t type
     19d2:	81 2f       	mov	r24, r17
     19d4:	0e 94 d2 04 	call	0x9a4	; 0x9a4 <EEWrite>
             //Cheat reset (Quote from: Donald E. Westlake)
-            if (StartsWith(&data[0], "the trouble with real life is, there's no reset button")){
+            if (StartsWith(&data[0], "#")){
                 
                 //Reset cheat data by resetting the EEPROM bytes
                 uint8_t empty=0xff;
@@ -4188,7 +4188,7 @@ void SetResponse(uint8_t number, uint16_t address, uint16_t length, uint8_t type
                 uint8_t cheat[] = "Reset please! ";
     19ec:	f7 d8       	rcall	.-3602   	; 0xbdc <SaveGameState>
     19ee:	8f e0       	ldi	r24, 0x0F	; 15
-    19f0:	ef ee       	ldi	r30, 0xEF	; 239
+    19f0:	ea eb       	ldi	r30, 0xBA	; 186
     19f2:	fd ea       	ldi	r31, 0xAD	; 173
     19f4:	de 01       	movw	r26, r28
     19f6:	11 96       	adiw	r26, 0x01	; 1
@@ -4211,7 +4211,7 @@ void SetResponse(uint8_t number, uint16_t address, uint16_t length, uint8_t type
             }
             if (StartsWith(&data[0], "cheat")){
     1a14:	f7 cf       	rjmp	.-18     	; 0x1a04 <CheckInput+0x49c>
-    1a16:	69 ec       	ldi	r22, 0xC9	; 201
+    1a16:	64 e9       	ldi	r22, 0x94	; 148
     1a18:	7d ea       	ldi	r23, 0xAD	; 173
     1a1a:	c8 01       	movw	r24, r16
     1a1c:	e6 da       	rcall	.-2612   	; 0xfea <StartsWith>
