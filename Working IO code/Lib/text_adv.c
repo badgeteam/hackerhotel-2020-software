@@ -27,13 +27,13 @@ uint8_t txBuffer[TXLEN];                    //Buffer for string data
 static object_model_t currObj;                      //Object data for current posistion in game
 static uint8_t currDepth = 0xff;                    //Depth of position in game, 0xff indicates game data is not loaded from eeprom yet.
 static uint16_t route[MAX_OBJ_DEPTH] = {0};         //
-static uint16_t reactStr[3][32] = {{0},{0},{0}};    //
+static uint16_t reactStr[3][MAX_REACT] = {{0},{0},{0}};    //
 static uint8_t responseList = 0;                    //
 static char specialInput[INP_LENGTH] = {0};         //Sometimes a special input is requested by the game. When this is set, input is compared to this string first.
 static uint8_t specialPassed = 0;                   //If user input matches specialInput, this is set.
 
 uint8_t Cheat(uint8_t bit, uint16_t checksum){
-    const uint16_t chk[MAXCHEATS] = {0x7D2D, 0x5739, 0x795C, 0x4251, 0x6134, 0x597D, 0x653B, 0x445B}; // }-, W9, y\, BQ, a4, Y~, e;, D[
+    const uint16_t chk[MAX_CHEATS] = {0x7D2D, 0x5739, 0x795C, 0x4251, 0x6134, 0x597D, 0x653B, 0x445B}; // }-, W9, y\, BQ, a4, Y~, e;, D[
     uint8_t pos = 255;
     uint8_t val;
 
@@ -43,7 +43,7 @@ uint8_t Cheat(uint8_t bit, uint16_t checksum){
     }
 
     //Check if cheat position is empty
-    if (pos<MAXCHEATS){
+    if (pos<MAX_CHEATS){
         EERead(CHEATS+pos, &val, 1);
         if (val == 255) {
             EEWrite(CHEATS+pos, &bit, 1);
@@ -483,7 +483,7 @@ uint8_t CheckInput(uint8_t *data){
                 
                 //Reset cheat data by resetting the EEPROM bytes
                 uint8_t empty=0xff;
-                for (uint8_t x=0; x<MAXCHEATS; ++x){
+                for (uint8_t x=0; x<MAX_CHEATS; ++x){
                     EEWrite(CHEATS+x, &empty, 1);
                 }
                 //Reset game data by wiping the UUID bits
@@ -503,7 +503,7 @@ uint8_t CheckInput(uint8_t *data){
                 int8_t n;
                 uint8_t bit, digit[3];
 
-                for (uint8_t x=0; x<MAXCHEATS; ++x){
+                for (uint8_t x=0; x<MAX_CHEATS; ++x){
                     
                     //Set up sending out number
                     EERead(CHEATS+x, &bit, 1);
@@ -517,7 +517,7 @@ uint8_t CheckInput(uint8_t *data){
                     }                
                     SetResponse(x*4+3, A_COMMA, L_COMMA, TEASER);
                 }
-                SetResponse(31, A_LF, 4, TEASER);
+                SetResponse((4*MAX_CHEATS)-1, A_LF, 4, TEASER);
                 responseList = 32;
                 return 1;
             }

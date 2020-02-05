@@ -4142,7 +4142,7 @@ void SetResponse(uint8_t number, uint16_t address, uint16_t length, uint8_t type
                 uint8_t empty=0xff;
     19c0:	8f ef       	ldi	r24, 0xFF	; 255
     19c2:	89 a3       	std	Y+33, r24	; 0x21
-                for (uint8_t x=0; x<MAXCHEATS; ++x){
+                for (uint8_t x=0; x<MAX_CHEATS; ++x){
                     EEWrite(CHEATS+x, &empty, 1);
     19c4:	18 e1       	ldi	r17, 0x18	; 24
     19c6:	41 e0       	ldi	r20, 0x01	; 1
@@ -4156,7 +4156,7 @@ void SetResponse(uint8_t number, uint16_t address, uint16_t length, uint8_t type
                 
                 //Reset cheat data by resetting the EEPROM bytes
                 uint8_t empty=0xff;
-                for (uint8_t x=0; x<MAXCHEATS; ++x){
+                for (uint8_t x=0; x<MAX_CHEATS; ++x){
     19d4:	1f 5f       	subi	r17, 0xFF	; 255
     19d6:	10 32       	cpi	r17, 0x20	; 32
                     EEWrite(CHEATS+x, &empty, 1);
@@ -4169,7 +4169,7 @@ void SetResponse(uint8_t number, uint16_t address, uint16_t length, uint8_t type
     19dc:	60 e0       	ldi	r22, 0x00	; 0
     19de:	81 2f       	mov	r24, r17
                 uint8_t empty=0xff;
-                for (uint8_t x=0; x<MAXCHEATS; ++x){
+                for (uint8_t x=0; x<MAX_CHEATS; ++x){
                     EEWrite(CHEATS+x, &empty, 1);
                 }
                 //Reset game data by wiping the UUID bits
@@ -4220,7 +4220,7 @@ void SetResponse(uint8_t number, uint16_t address, uint16_t length, uint8_t type
     1a22:	19 e3       	ldi	r17, 0x39	; 57
     1a24:	78 e1       	ldi	r23, 0x18	; 24
     1a26:	77 2e       	mov	r7, r23
-                for (uint8_t x=0; x<MAXCHEATS; ++x){
+                for (uint8_t x=0; x<MAX_CHEATS; ++x){
                     
                     //Set up sending out number
                     EERead(CHEATS+x, &bit, 1);
@@ -4259,7 +4259,7 @@ void SetResponse(uint8_t number, uint16_t address, uint16_t length, uint8_t type
     1a48:	b1 2c       	mov	r11, r1
                 uint8_t bit, digit[3];
 
-                for (uint8_t x=0; x<MAXCHEATS; ++x){
+                for (uint8_t x=0; x<MAX_CHEATS; ++x){
                     
                     //Set up sending out number
                     EERead(CHEATS+x, &bit, 1);
@@ -4282,7 +4282,7 @@ void SetResponse(uint8_t number, uint16_t address, uint16_t length, uint8_t type
     1a6a:	82 2f       	mov	r24, r18
     1a6c:	64 2d       	mov	r22, r4
     1a6e:	0e 94 68 16 	call	0x2cd0	; 0x2cd0 <__udivmodqi4>
-                for (uint8_t x=0; x<MAXCHEATS; ++x){
+                for (uint8_t x=0; x<MAX_CHEATS; ++x){
                     
                     //Set up sending out number
                     EERead(CHEATS+x, &bit, 1);
@@ -4372,7 +4372,7 @@ void SetResponse(uint8_t number, uint16_t address, uint16_t length, uint8_t type
                 int8_t n;
                 uint8_t bit, digit[3];
 
-                for (uint8_t x=0; x<MAXCHEATS; ++x){
+                for (uint8_t x=0; x<MAX_CHEATS; ++x){
     1ada:	80 e2       	ldi	r24, 0x20	; 32
     1adc:	78 12       	cpse	r7, r24
     1ade:	b5 cf       	rjmp	.-150    	; 0x1a4a <CheckInput+0x4e2>
@@ -4400,7 +4400,7 @@ void SetResponse(uint8_t number, uint16_t address, uint16_t length, uint8_t type
                     }                
                     SetResponse(x*4+3, A_COMMA, L_COMMA, TEASER);
                 }
-                SetResponse(31, A_LF, 4, TEASER);
+                SetResponse((4*MAX_CHEATS)-1, A_LF, 4, TEASER);
                 responseList = 32;
     1b04:	70 92 47 39 	sts	0x3947, r7	; 0x803947 <responseList>
         //Data received, but not any of the commands above

@@ -30,12 +30,15 @@
     #define STATLEN     16          //Length of game progress data
     #define INVADDR     STATLEN     //Address of inventory (2x uint16_t)
     #define BOOTCHK     STATLEN+4   //Address of boot check result in internal EEPROM
-    #define MAXCHEATS   8
+    #define MAX_REACT   32
+    #define MAX_CHEATS  8           //Number of cheat codes that are accepted (Maximum = MAX_REACT/4)
     #define CHEATS      BOOTCHK+4 
-
     #define EE_I2C_ADDR 0x50 //External EEPROM address
 
     enum {TEXT, MAZE, BASTET, LANYARD};
+
+    #define TRUE    1
+    #define FALSE   0
 
     //Global vars
     extern volatile uint8_t iLED[40];           // 0,1,2,3,4,5(,6,7),8,9,10,11,12,13(,14,15) etc. ()=unused
