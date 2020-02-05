@@ -524,7 +524,6 @@ void Reset(){
     WriteStatusBit(0, 1);
 }
 
-//void setupSound(uint8_t number){
 
 void GenerateAudio(){
     static uint8_t auBuffer[128] = {0x80, 0};

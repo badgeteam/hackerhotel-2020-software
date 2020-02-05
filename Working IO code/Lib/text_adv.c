@@ -395,7 +395,7 @@ uint8_t CheckInput(uint8_t *data){
                     break;
                 }
                 if ((bitNr)&&(bitNr!=128)) {
-                    if (Cheat(bitNr, serRx[4]<<8|serRx[5])) UpdateState(bitNr);
+                    if (Cheat(255-bitNr, serRx[4]<<8|serRx[5])) UpdateState(bitNr);
                 }
                 responseList = SetStandardResponse(0);
                 return 1;            
@@ -422,7 +422,7 @@ uint8_t CheckInput(uint8_t *data){
             if ((data[0] == '?')||(data[0] == 'h')){
                 SetResponse(0, A_LF, 4, TEASER);
                 SetResponse(1, A_HELP, L_HELP, TEASER);
-                responseList = SetStandardResponse(1);
+                responseList = SetStandardResponse(2);
                 return 1;
             }        
         
@@ -430,7 +430,7 @@ uint8_t CheckInput(uint8_t *data){
             if (data[0] == 'a'){
                 SetResponse(0, A_LF, 4, TEASER);
                 SetResponse(1, A_ALPHABET, L_ALPHABET, TEASER);
-                responseList = SetStandardResponse(1);
+                responseList = SetStandardResponse(2);
                 return 1;
             }
 
@@ -450,7 +450,7 @@ uint8_t CheckInput(uint8_t *data){
                     SetResponse(2, A_ERROR, L_ERROR, TEASER);
                 }
                 SetResponse(3, A_PLEASED, L_PLEASED, TEASER);
-                responseList = SetStandardResponse(3);
+                responseList = SetStandardResponse(4);
                 return 1;
             }
 
@@ -458,7 +458,7 @@ uint8_t CheckInput(uint8_t *data){
             if (data[0] == 'q'){
                 SetResponse(0, A_LF, 4, TEASER);
                 SetResponse(1, A_QUIT, L_QUIT, TEASER);
-                responseList = SetStandardResponse(1);
+                responseList = SetStandardResponse(2);
                 return 1;
             }
 
@@ -507,6 +507,7 @@ uint8_t CheckInput(uint8_t *data){
                     
                     //Set up sending out number
                     EERead(CHEATS+x, &bit, 1);
+                    bit = 255-bit;
                     for (n=2; n>=0; --n) {
                         digit[n] = bit % 10;
                         bit /= 10;

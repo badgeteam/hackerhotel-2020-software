@@ -66,6 +66,7 @@ int main(void)
     while (1)
     {
         GenerateAudio();
+        //GenerateBlinks();
 
         if (buttonMark){
             buttonState = CheckButtons(buttonState);
