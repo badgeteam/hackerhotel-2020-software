@@ -29,6 +29,7 @@
 #include <text_adv.h>           //Text adventure stuff
 #include <simon.h>              //Bastet Dictates (Simon clone)
 #include <maze.h>               //MagnetMaze game
+#include <lanyard.h>            //Lanyard Puzzle
 #include <stdio.h>
 
 
@@ -78,7 +79,7 @@ int main(void)
             //Other games & user interaction checks
             MagnetMaze();
             BastetDictates();
-            //LanyardCode();
+            LanyardCode();
             //MakeFriends();
              
             //Check light sensor status (added hysteresis to preserve writing cycles to internal EEPROM)
