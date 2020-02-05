@@ -16,7 +16,6 @@ c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/..
 Allocating common symbols
 Common symbol       size              file
 
-buttonState         0x1               Lib/main_def.o
 timeout_I2C         0x1               Lib/main_def.o
 gameState           0x14              Lib/main_def.o
 serRx               0x41              Lib/main_def.o
@@ -298,7 +297,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000     0x2fd8
+.text           0x00000000     0x3042
  *(.vectors)
  .vectors       0x00000000       0x7c C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATtiny_DFP/1.3.229/gcc/dev/attiny1617/avrxmega3/crtattiny1617.o
                 0x00000000                __vector_default
@@ -536,22 +535,22 @@ END GROUP
                 0x00002e0c       0x3a Lib/text_adv.o
                 0x00002e0c                TextAdventure
  .text.startup.main
-                0x00002e46      0x10a main.o
+                0x00002e46      0x174 main.o
                 0x00002e46                main
  .text.libgcc.div
-                0x00002f50       0x18 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avrxmega3\libgcc.a(_udivmodqi4.o)
-                0x00002f50                __udivmodqi4
+                0x00002fba       0x18 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avrxmega3\libgcc.a(_udivmodqi4.o)
+                0x00002fba                __udivmodqi4
  .text.libgcc.div
-                0x00002f68       0x28 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avrxmega3\libgcc.a(_udivmodhi4.o)
-                0x00002f68                __udivmodhi4
+                0x00002fd2       0x28 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avrxmega3\libgcc.a(_udivmodhi4.o)
+                0x00002fd2                __udivmodhi4
  .text.libgcc.div
-                0x00002f90       0x44 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avrxmega3\libgcc.a(_udivmodsi4.o)
-                0x00002f90                __udivmodsi4
-                0x00002fd4                . = ALIGN (0x2)
+                0x00002ffa       0x44 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avrxmega3\libgcc.a(_udivmodsi4.o)
+                0x00002ffa                __udivmodsi4
+                0x0000303e                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x00002fd4        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avrxmega3\libgcc.a(_exit.o)
-                0x00002fd4                _exit
-                0x00002fd4                exit
+ .fini9         0x0000303e        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avrxmega3\libgcc.a(_exit.o)
+                0x0000303e                _exit
+                0x0000303e                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -570,37 +569,37 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x00002fd4        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avrxmega3\libgcc.a(_exit.o)
+ .fini0         0x0000303e        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avrxmega3\libgcc.a(_exit.o)
  *(.fini0)
-                0x00002fd8                _etext = .
+                0x00003042                _etext = .
 
-.rodata         0x0000afd8       0xc2 load address 0x00002fd8
+.rodata         0x0000b042       0xc2 load address 0x00003042
  *(.rodata)
- .rodata        0x0000afd8       0x10 Lib/text_adv.o
+ .rodata        0x0000b042       0x10 Lib/text_adv.o
  *(.rodata*)
- .rodata.CAT    0x0000afe8        0x1 Lib/main_def.o
-                0x0000afe8                CAT
- .rodata.RAT    0x0000afe9        0x1 Lib/main_def.o
-                0x0000afe9                RAT
- .rodata.GEM    0x0000afea        0x2 Lib/main_def.o
-                0x0000afea                GEM
- .rodata.WING   0x0000afec        0xa Lib/main_def.o
-                0x0000afec                WING
- .rodata.EYE    0x0000aff6        0x4 Lib/main_def.o
-                0x0000aff6                EYE
- .rodata.HCKR   0x0000affa        0xc Lib/main_def.o
-                0x0000affa                HCKR
+ .rodata.CAT    0x0000b052        0x1 Lib/main_def.o
+                0x0000b052                CAT
+ .rodata.RAT    0x0000b053        0x1 Lib/main_def.o
+                0x0000b053                RAT
+ .rodata.GEM    0x0000b054        0x2 Lib/main_def.o
+                0x0000b054                GEM
+ .rodata.WING   0x0000b056        0xa Lib/main_def.o
+                0x0000b056                WING
+ .rodata.EYE    0x0000b060        0x4 Lib/main_def.o
+                0x0000b060                EYE
+ .rodata.HCKR   0x0000b064        0xc Lib/main_def.o
+                0x0000b064                HCKR
  .rodata.mazeCode
-                0x0000b006       0x12 Lib/maze.o
-                0x0000b006                mazeCode
+                0x0000b070       0x12 Lib/maze.o
+                0x0000b070                mazeCode
  .rodata.str1.1
-                0x0000b018       0x72 Lib/text_adv.o
+                0x0000b082       0x72 Lib/text_adv.o
  .rodata.xor_key
-                0x0000b08a       0x10 Lib/text_adv.o
-                0x0000b08a                xor_key
+                0x0000b0f4       0x10 Lib/text_adv.o
+                0x0000b0f4                xor_key
  *(.gnu.linkonce.r*)
 
-.data           0x00803800       0x92 load address 0x0000309a
+.data           0x00803800       0x92 load address 0x00003104
                 0x00803800                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
@@ -610,27 +609,29 @@ END GROUP
  .data.auSmpAddr
                 0x00803802        0x2 Lib/main_def.o
                 0x00803802                auSmpAddr
- .data.serTxDone
+ .data.buttonState
                 0x00803804        0x1 Lib/main_def.o
-                0x00803804                serTxDone
+                0x00803804                buttonState
+ .data.serTxDone
+                0x00803805        0x1 Lib/main_def.o
+                0x00803805                serTxDone
  .data.mazeState
-                0x00803805        0x1 Lib/maze.o
-                0x00803805                mazeState
+                0x00803806        0x1 Lib/maze.o
+                0x00803806                mazeState
  .data.auBuffer.3926
-                0x00803806       0x80 Lib/resources.o
+                0x00803807       0x80 Lib/resources.o
  .data.state.3874
-                0x00803886        0x2 Lib/resources.o
- .data.mask     0x00803888        0x8 Lib/resources.o
-                0x00803888                mask
+                0x00803887        0x2 Lib/resources.o
+ .data.mask     0x00803889        0x8 Lib/resources.o
+                0x00803889                mask
  .data.currDepth
-                0x00803890        0x1 Lib/text_adv.o
+                0x00803891        0x1 Lib/text_adv.o
  *(.gnu.linkonce.d*)
                 0x00803892                . = ALIGN (0x2)
- *fill*         0x00803891        0x1 
                 0x00803892                _edata = .
                 0x00803892                PROVIDE (__data_end, .)
 
-.bss            0x00803892      0x2d4
+.bss            0x00803892      0x2d3
                 0x00803892                PROVIDE (__bss_start, .)
  *(.bss)
  *(.bss*)
@@ -701,36 +702,35 @@ END GROUP
                 0x00803a85       0x10 Lib/text_adv.o
                 0x00803a85                txAddrList
  *(COMMON)
- COMMON         0x00803a95       0xae Lib/main_def.o
-                0x00803a95                buttonState
-                0x00803a96                timeout_I2C
-                0x00803a97                gameState
-                0x00803aab                serRx
-                0x00803aec                auVolume
-                0x00803aed                adcBtns
-                0x00803aef                serTxAddr
-                0x00803af1                adcHall
-                0x00803af3                adcPhot
-                0x00803af5                detHdPh
-                0x00803af6                calTemp
-                0x00803af7                auIn
-                0x00803b17                iLED
-                0x00803b3f                auPlayDone
-                0x00803b40                calHall
-                0x00803b42                adcTemp
- COMMON         0x00803b43        0x2 Lib/resources.o
-                0x00803b43                tmp16bit
- COMMON         0x00803b45       0x21 Lib/text_adv.o
-                0x00803b45                txBuffer
-                0x00803b66                PROVIDE (__bss_end, .)
-                0x0000309a                __data_load_start = LOADADDR (.data)
-                0x0000312c                __data_load_end = (__data_load_start + SIZEOF (.data))
+ COMMON         0x00803a95       0xad Lib/main_def.o
+                0x00803a95                timeout_I2C
+                0x00803a96                gameState
+                0x00803aaa                serRx
+                0x00803aeb                auVolume
+                0x00803aec                adcBtns
+                0x00803aee                serTxAddr
+                0x00803af0                adcHall
+                0x00803af2                adcPhot
+                0x00803af4                detHdPh
+                0x00803af5                calTemp
+                0x00803af6                auIn
+                0x00803b16                iLED
+                0x00803b3e                auPlayDone
+                0x00803b3f                calHall
+                0x00803b41                adcTemp
+ COMMON         0x00803b42        0x2 Lib/resources.o
+                0x00803b42                tmp16bit
+ COMMON         0x00803b44       0x21 Lib/text_adv.o
+                0x00803b44                txBuffer
+                0x00803b65                PROVIDE (__bss_end, .)
+                0x00003104                __data_load_start = LOADADDR (.data)
+                0x00003196                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x00803b66        0x0
+.noinit         0x00803b65        0x0
                 [!provide]                PROVIDE (__noinit_start, .)
  *(.noinit*)
                 [!provide]                PROVIDE (__noinit_end, .)
-                0x00803b66                _end = .
+                0x00803b65                _end = .
                 [!provide]                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
@@ -821,7 +821,7 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0x5d47
+.debug_info     0x00000000     0x5d62
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000     0x19ed C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATtiny_DFP/1.3.229/gcc/dev/attiny1617/avrxmega3/crtattiny1617.o
  .debug_info    0x000019ed      0x6c3 Lib/I2C.o
@@ -830,7 +830,7 @@ END GROUP
  .debug_info    0x0000278b      0xbd3 Lib/resources.o
  .debug_info    0x0000335e       0x8d Lib/simon.o
  .debug_info    0x000033eb     0x2698 Lib/text_adv.o
- .debug_info    0x00005a83      0x2c4 main.o
+ .debug_info    0x00005a83      0x2df main.o
 
 .debug_abbrev   0x00000000     0x24aa
  *(.debug_abbrev)
@@ -843,7 +843,7 @@ END GROUP
  .debug_abbrev  0x00002046      0x362 Lib/text_adv.o
  .debug_abbrev  0x000023a8      0x102 main.o
 
-.debug_line     0x00000000     0x2d24
+.debug_line     0x00000000     0x2d6f
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x151 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATtiny_DFP/1.3.229/gcc/dev/attiny1617/avrxmega3/crtattiny1617.o
  .debug_line    0x00000151      0x526 Lib/I2C.o
@@ -852,7 +852,7 @@ END GROUP
  .debug_line    0x00000a56      0xb00 Lib/resources.o
  .debug_line    0x00001556       0xa7 Lib/simon.o
  .debug_line    0x000015fd     0x1513 Lib/text_adv.o
- .debug_line    0x00002b10      0x214 main.o
+ .debug_line    0x00002b10      0x25f main.o
 
 .debug_frame    0x00000000      0x808
  *(.debug_frame)
@@ -881,13 +881,13 @@ END GROUP
  .debug_str     0x000017ea       0x11 main.o
                                 0x24b (size before relaxing)
 
-.debug_loc      0x00000000     0x3f43
+.debug_loc      0x00000000     0x3f67
  *(.debug_loc)
  .debug_loc     0x00000000      0x4ed Lib/I2C.o
  .debug_loc     0x000004ed       0x8f Lib/maze.o
  .debug_loc     0x0000057c      0xcfb Lib/resources.o
  .debug_loc     0x00001277     0x2cb8 Lib/text_adv.o
- .debug_loc     0x00003f2f       0x14 main.o
+ .debug_loc     0x00003f2f       0x38 main.o
 
 .debug_macinfo
  *(.debug_macinfo)
