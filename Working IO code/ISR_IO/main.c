@@ -28,6 +28,7 @@
 #include <I2C.h>                //Fixed a semi-crappy lib found on internet, replace with interrupt driven one? If so, check hardware errata pdf!
 #include <text_adv.h>           //Text adventure stuff
 #include <simon.h>              //Bastet Dictates (Simon clone)
+#include <maze.h>               //MagnetMaze game
 #include <stdio.h>
 
 
@@ -75,7 +76,7 @@ int main(void)
             TextAdventure();
           
             //Other games & user interaction checks
-            //MagnetMaze();
+            MagnetMaze();
             BastetDictates();
             //LanyardCode();
             //MakeFriends();

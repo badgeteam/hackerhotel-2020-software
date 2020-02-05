@@ -13,7 +13,7 @@
 uint8_t         curHallState = 0;
 uint8_t         newHallState = 0;
 
-const uint8_t   mazeCode[] = {1,1,2,1,2,2,1,2,2,1,2,2,2,2,2,1,1,2};
+const uint8_t   mazeCode[] = {1,1,2, 1,2,2, 1,2,2, 1,2,2, 2,2,2, 1,1,2};
 uint8_t         mazePos = 0;
 uint8_t         mazeCnt = 0;
 uint8_t         mazeState = TRUE;
@@ -27,7 +27,7 @@ uint8_t MagnetMaze(){
     if (CheckState(MAZE_COMPLETED))
         return 0;
 
-    if ( gameNow != TEXT && gameNow != MAZE )
+    if ( (gameNow != TEXT) && (gameNow != MAZE) )
         return 0;
 
     if (calHall == 0)
@@ -70,17 +70,7 @@ uint8_t MagnetMaze(){
     }
 
     /* activate led for hallstate */
-    switch (newHallState) {
-        case 0: {
-            iLED[GEM[G]]    = 0;
-            break;
-        }
-
-        default: {
-            iLED[GEM[G]]    = 255;
-            break;
-        }
-    }
+    iLED[GEM[G]] = (newHallState ? 255 : 0);
 
 
     /* Make the maze work regardless of badge orientation */
@@ -93,38 +83,55 @@ uint8_t MagnetMaze(){
         if (curHallState != 0) {
             gameNow = MAZE;
             if ( (inverted ? curHallState^3 : curHallState) == mazeCode[mazePos]) {
+                mazeState &= TRUE;
                 iLED[EYE[R][L]] = 0;
                 iLED[EYE[R][R]] = 0;
-                mazePos++;
-                mazeCnt++;            
-                /* play tone GOOD */
-                if (mazeCnt >= 3) {
-                    /* setHackerScore((mazePos)/3); */
-                    mazeCnt = 0;
-                }
             } else {
                 mazeState = FALSE;
                 /* play tone BAD */
+            }
+            mazePos++;
+            mazeCnt++;            
+            if (mazeCnt >= 3) {
+                mazeCnt = 0;
+                if (mazeState == TRUE) {
+                    /* play tone GOOD */
+                    iLED[HCKR[G][(mazePos/3)-1]] = 255;
+                    if (mazePos == sizeof(mazeCode)) {
+                        UpdateState(MAZE_COMPLETED);
+                        iLED[GEM[G]]    = 0;
+                        iLED[EYE[R][L]] = 0;
+                        iLED[EYE[R][R]] = 0;
+                        iLED[EYE[G][L]] = 255;
+                        iLED[EYE[G][R]] = 255;
+                        /*state = STATE_MUSIC;*/
+                    }
+                } else {
+                    gameNow   = TEXT;
+                    mazePos   = 0;
+                    mazeState = TRUE;
+                    iLED[GEM[G]]    = 0;
+                    iLED[EYE[G][L]] = 0;
+                    iLED[EYE[G][R]] = 0;
+                    iLED[EYE[R][L]] = 255;
+                    iLED[EYE[R][R]] = 255;
+                    for (int i=0; i<6; i++ )
+                        iLED[HCKR[G][i]] = 0;
+                }
+            }
+        } else {
+            if (mazePos == sizeof(mazeCode)) {
                 gameNow   = TEXT;
                 mazePos   = 0;
+                mazeState = TRUE;
                 iLED[GEM[G]]    = 0;
                 iLED[EYE[G][L]] = 0;
                 iLED[EYE[G][R]] = 0;
-                iLED[EYE[R][L]] = 255;
-                iLED[EYE[R][R]] = 255;
-                /*
-                setHackerScore(0);
-                */
+                iLED[EYE[R][L]] = 0;
+                iLED[EYE[R][R]] = 0;
+                for (int i=0; i<6; i++ )
+                    iLED[HCKR[G][i]] = 0;
             }
-        } 
-        if (mazePos == sizeof(mazeCode)) {
-            UpdateState(MAZE_COMPLETED);
-            iLED[GEM[G]]    = 0;
-            iLED[EYE[R][L]] = 0;
-            iLED[EYE[R][R]] = 0;
-            iLED[EYE[G][L]] = 255;
-            iLED[EYE[G][R]] = 255;
-            /*state = STATE_MUSIC;*/
         }
     }
     return 0;
