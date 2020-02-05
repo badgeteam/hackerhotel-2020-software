@@ -50,7 +50,7 @@
                 "open_acl" : 2,
                 "open_acl_msg" : "The door is locked, please use your keycard to unlock the door",
                 "action_mask" : 17,
-                "desc" : "This is room 101, your hotel room during Hacker Hotel 2020. You travelled a whole day \r\nto get to the event. You decide to chill out for a while.",
+                "desc" : "This is room 101, your hotel room during Hacker Hotel 2020.\r\nYou travelled a whole day to get to the event.\r\nYou decide to chill out for a while.",
                 "action_item" : 1,
                 "action_state" : 2,
                 "action_msg" : "You unlocked room 101",
@@ -61,7 +61,7 @@
                     "action_mask" : 20,
                     "action_acl" : 131,
                     "action_acl_msg" : "The minibar is empty !?!",
-                    "action_msg" : "You drank two beers from the minibar.\nYou feel like getting another beer.",
+                    "action_msg" : "You drank two beers from the minibar.\r\nYou feel like getting another beer.",
                     "action_state" : 3,
                     "state_desc" : "drank from the minibar, still thirsty"
                   },
