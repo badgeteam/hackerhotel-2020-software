@@ -38,10 +38,6 @@ int main(void)
 {
     Setup();
 
-    //SerSpeed(1);
-    //unsigned char strTest[]="\aHäckerHotel2020 badge pest!\b\b\b\b\bt\n";
-    //SerSend(&strTest[0]);
-
     SerSpeed(255);
     ////Turn on LEDs on low setting to check for interrupt glitches
 
@@ -66,7 +62,6 @@ int main(void)
     iLED[GEM[G]] = 1;
     iLED[RAT] = 1;
     iLED[CAT] = 1;
-    //uint8_t txBuffer[TXLEN];                    //Buffer for string data
 
     while (1)
     {
@@ -76,14 +71,6 @@ int main(void)
             buttonState = CheckButtons(buttonState);
             buttonMark = 0;
             
-            //GenerateLEDshow();        
-    
-/*                txBuffer[1]=0;
-                    if (serTxDone){
-                        txBuffer[0] = buttonState;
-                        SerSend(&txBuffer[0]);
-                    }
-*/
             TextAdventure();
           
             //Other games & user interaction checks
@@ -97,33 +84,6 @@ int main(void)
             if (adcPhot > 100) WriteStatusBit(116, 0);
 
             //Check temperature 
-            
-    /*                    uint8_t test[30];
-                        SerSpeed(60);
-                        while(1){
-                            test[0]='P';
-                            test[1]=':';
-                            test[2]='0'+(adcPhot%32);
-                            test[3]='\n';
-                            test[4]='B';
-                            test[5]=':';
-                            test[6]='0'+(adcBtns%32);
-                            test[7]='\n';
-                            test[8]='H';
-                            test[9]=':';
-                            test[10]='0'+(adcHall%32);
-                            test[11]='\n';
-                            test[12]='T';
-                            test[13]=':';
-                            test[14]='0'+(adcTemp%32);
-                            test[15]='\n';
-                            test[16]='\n';
-                            test[17]='\n';
-                            test[18]='\n';
-                            test[19]='\0';
-                            if (serTxDone) SerSend(&test[0]);
-                        }
-      */  
       }
 
         /* 

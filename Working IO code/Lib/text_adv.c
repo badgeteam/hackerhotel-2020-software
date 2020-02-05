@@ -129,6 +129,7 @@ uint8_t SetStandardResponse(uint8_t custStrEnd){
 //Get all the relevant data and string addresses of an object
 void PopulateObject(uint16_t offset, object_model_t *object){
     uint16_t parStr;
+    uint8_t effAdded;
     offset += L_BOILER;
 
     //Fill things with fixed distance to offset
@@ -143,18 +144,21 @@ void PopulateObject(uint16_t offset, object_model_t *object){
     //Find out where all of the strings begin and how long they are
     offset += OFF_STRINGFLDS;
     for(uint8_t x=0; x<STRING_FIELDS_LEN; ++x){
+        
         //Determine length
         ExtEERead(offset, 3, GAME, &data[0]);
         parStr = (data[0]<<8|data[1]);
+        offset += 2;
         if (x >= OPEN_ACL_MSG){
             object->lenStr[x]= parStr-1;
+            object->addrStr[x]=offset+1;
             object->effect[x-OPEN_ACL_MSG] = data[2];
         } else {
             object->lenStr[x]= parStr;
+            object->addrStr[x]=offset;
         }
-        //Determine string start location and add length to offset for next field
-        offset += 2;
-        object->addrStr[x]=offset;
+        
+        //Determine string start location for next field
         offset += parStr;
     }    
 }
@@ -479,7 +483,7 @@ uint8_t CheckInput(uint8_t *data){
 //The game logic!
 uint8_t ProcessInput(uint8_t *data){
     static object_model_t actObj1, actObj2;
-    uint8_t elements = 0;
+    uint8_t elements = 1;
 
     CleanInput(&data[0]);
     uint8_t inputLen = CleanInput(&data[0]);
@@ -610,19 +614,20 @@ uint8_t ProcessInput(uint8_t *data){
                         route[currDepth+1] = 0;
                     } else {
                         //Put item in the inventory if possible
-                        PopulateObject(route[currDepth+1], &actObj1);                      
-                        if (actObj1.byteField[ITEM_NR]) {
-                            if (inventory[0]) {
-                                inventory[1] = route[currDepth+1];
+                        PopulateObject(route[currDepth+1], &actObj1);  
+                        if (CheckState(actObj1.byteField[ACTION_ACL])) {
+                            if (actObj1.byteField[ITEM_NR]) {
+                                if (inventory[0]) {
+                                    inventory[1] = route[currDepth+1];
+                                } else {
+                                    inventory[0] = route[currDepth+1];
+                                }
+                                SetResponse(elements++, A_NOWCARRING, L_NOWCARRING, TEASER);
+                                SetResponse(elements++, actObj1.addrStr[NAME], actObj1.lenStr[NAME], GAME);
                             } else {
-                                inventory[0] = route[currDepth+1];
+                                SetResponse(elements++, A_NOTPOSSIBLE, L_NOTPOSSIBLE, TEASER);
                             }
-                            SetResponse(elements++, A_NOWCARRING, L_NOWCARRING, TEASER);
-                            //SetResponse(elements++, A_SPACE, L_SPACE, TEASER);
-                            SetResponse(elements++, actObj1.addrStr[NAME], actObj1.lenStr[NAME], GAME);
-                        } else {
-                            SetResponse(elements++, A_NOTPOSSIBLE, L_NOTPOSSIBLE, TEASER);
-                        }
+                        } else SetResponse(elements++, actObj1.addrStr[ACTION_ACL_MSG], actObj1.lenStr[ACTION_ACL_MSG], GAME);
                     }
                 } else SetResponse(elements++, A_NOSUCHOBJECT, L_NOSUCHOBJECT, TEASER);
             }
@@ -734,13 +739,15 @@ uint8_t ProcessInput(uint8_t *data){
                     //Talk to person, read or use object (without item)                          
                     } else {
                         PopulateObject(route[currDepth+1], &actObj1);
-                        if ((data[0] == 't')&&((255 - actObj1.byteField[ACTION_MASK]) & TALK)) {
+                        if ((data[0] == 't')&&((actObj1.byteField[ACTION_MASK]&TALK) == 0)) {
                             SetResponse(elements++, A_WHYTALK, L_WHYTALK, TEASER);
                             SetResponse(elements++, actObj1.addrStr[NAME], actObj1.lenStr[NAME], GAME);
-                        } else if ((data[0] == 'u')&&((255-actObj1.byteField[ACTION_MASK]) & USE)) {
+                        } else if ((data[0] == 'u')&&((actObj1.byteField[ACTION_MASK]&USE) == 0)) {
                             SetResponse(elements++, A_CANTUSE, L_CANTUSE, TEASER);
-                        } else if ((data[0] == 'r')&&((255-actObj1.byteField[ACTION_MASK]) & READ)) {
+                        } else if ((data[0] == 'r')&&((actObj1.byteField[ACTION_MASK]&READ) == 0)) {
                             SetResponse(elements++, A_CANTREAD, L_CANTREAD, TEASER);
+                        } else if (data[0] == 'g'){ 
+                            SetResponse(elements++, A_CANTGIVE, L_CANTGIVE, TEASER);  
                         } else {
 
                             //Special game, not enough characters
@@ -851,6 +858,7 @@ uint8_t ProcessInput(uint8_t *data){
         data[0] = 0;
         serRxDone = 0;
         RXCNT = 0;
+        SetResponse(0, A_LF, 2, TEASER);
         if (specialInput[0]) responseList = elements; else responseList = SetStandardResponse(elements);
 
     }

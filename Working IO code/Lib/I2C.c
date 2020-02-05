@@ -58,7 +58,7 @@ void I2C_init(void)
     PORTB_PIN1CTRL = 0;
 
 	
-	TWI0.MBAUD = (uint8_t) TWI0_BAUD(100000, 0);					// set MBAUD register, TWI0_BAUD macro calculates parameter for 100 kHz
+	TWI0.MBAUD = (uint8_t) TWI0_BAUD(400000, 0);					// set MBAUD register, TWI0_BAUD macro calculates parameter for 400 kHz
 	TWI0.MCTRLB = TWI_FLUSH_bm;										// clear the internal state of the master
 	TWI0.MCTRLA =	  1 << TWI_ENABLE_bp							// Enable TWI Master: enabled
 					| 0 << TWI_QCEN_bp								// Quick Command Enable: disabled
