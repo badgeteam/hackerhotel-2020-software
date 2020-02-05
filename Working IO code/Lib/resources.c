@@ -270,7 +270,7 @@ ISR(RTC_CNT_vect) {
         RTC_CMP = tmp16bit;                 // Button timing: next interrupt set
         RTC_INTFLAGS = RTC_CMP_bm;		    // clear interrupt flag
     } else {
-        if (minuteMark<255) minuteMark++;   // For very slow timing purposes
+        minuteMark++;                       // For very slow timing purposes, overflows to 0
         RTC_INTFLAGS = RTC_OVF_bm;		    // clear interrupt flag
     }
 }
