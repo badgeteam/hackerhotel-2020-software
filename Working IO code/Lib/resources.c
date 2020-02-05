@@ -215,7 +215,10 @@ ISR(USART0_RXC_vect){
         if ((serRx[RXCNT] == 0x0A)||(serRx[RXCNT] == 0x0D)){
             serRx[RXCNT] = 0;
             serRxDone = 1;
-        } else if (RXCNT < (RXLEN-1)) RXCNT++;
+        } else if (((serRx[RXCNT] == 0x08)||(serRx[RXCNT] == 0x7F))&&(RXCNT > 0)) {
+            serRx[RXCNT] = 0;
+            --RXCNT;
+        } else if (RXCNT < (RXLEN-1)) ++RXCNT;
     }
     USART0_STATUS = USART_RXCIF_bm;
 };
@@ -465,6 +468,28 @@ void WriteStatusBit(uint8_t number, uint8_t state){
     else gameState[number>>3] &= ~(1<<(number&7));
 }
 
+//Update game state: num -> vBBBBbbb v=value(0 is set!), BBBB=Byte number, bbb=bit number
+void UpdateState(uint8_t num){
+    uint8_t clearBit = num & 0x80;
+    num &= 0x7f;
+    if (clearBit) {
+        WriteStatusBit(num, 0);
+    } else {
+        WriteStatusBit(num, 1);
+    }
+}
+
+//Checks if state of bit BBBBbbb matches with v (inverted) bit
+uint8_t CheckState(uint8_t num){
+    uint8_t bitSet = 0;
+    if (ReadStatusBit(num & 0x7f)){
+        bitSet = 1;
+    }
+    if (((num & 0x80)>0)^(bitSet>0)){
+        return 1;
+    }
+    return 0;
+}
 uint8_t getID(){
     //Give out a number 0..3, calculated using serial number fields
     uint8_t id = 0;

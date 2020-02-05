@@ -15,8 +15,10 @@ volatile uint8_t buttonMark = 0;     // Increments when a guaranteed new button 
 
 volatile uint16_t adcPhot;           // Photo transistor ADC value (0...4096)
 volatile uint16_t adcHall;           // Hall sensor value
+volatile uint16_t calHall;           // Hall sensor calibration (center)
 volatile uint16_t adcBtns;           // Raw button value
 volatile uint8_t  adcTemp;           // Raw temperature related value
+volatile uint8_t  calTemp;           // Raw temperature calibration (sort of)
 volatile uint8_t  detHdPh;           // Headphone detected (TODO)
 
 
@@ -24,6 +26,7 @@ uint8_t buttonState;
 uint8_t gameState[BOOTCHK];          // Game state plus inventory
 uint16_t inventory[2] = {0,0};
 uint8_t whoami = 0;
+uint8_t gameNow = TEXT;
 
 volatile uint16_t effect = 0;
 

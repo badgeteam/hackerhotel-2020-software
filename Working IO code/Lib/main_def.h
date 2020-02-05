@@ -30,9 +30,12 @@
     #define STATLEN     16          //Length of game progress data
     #define INVADDR     STATLEN     //Address of inventory (2x uint16_t)
     #define BOOTCHK     STATLEN+4   //Address of boot check result in internal EEPROM
-
+    #define MAXCHEATS   8
+    #define CHEATS      BOOTCHK+4 
 
     #define EE_I2C_ADDR 0x50 //External EEPROM address
+
+    enum {TEXT, MAZE, BASTET, LANYARD};
 
     //Global vars
     extern volatile uint8_t iLED[40];           // 0,1,2,3,4,5(,6,7),8,9,10,11,12,13(,14,15) etc. ()=unused
@@ -49,8 +52,10 @@
 
     extern volatile uint16_t adcPhot;
     extern volatile uint16_t adcHall;
+    extern volatile uint16_t calHall;
     extern volatile uint16_t adcBtns;
     extern volatile uint8_t  adcTemp;
+    extern volatile uint8_t  calTemp;
     extern volatile uint8_t  detHdPh;
 
     // Global challenge data
@@ -58,6 +63,7 @@
     extern uint8_t gameState[BOOTCHK];
     extern uint16_t inventory[2];               //     
     extern uint8_t whoami;
+    extern uint8_t gameNow;
 
     //Things for audio and LEDs
     extern volatile uint16_t effect;

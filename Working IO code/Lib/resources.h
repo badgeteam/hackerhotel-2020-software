@@ -45,6 +45,8 @@
     uint8_t SaveGameState();
     uint8_t ReadStatusBit(uint8_t number);
     void WriteStatusBit(uint8_t number, uint8_t state);
+    void UpdateState(uint8_t num);
+    uint8_t CheckState(uint8_t num);
     
     uint8_t getID();
     void Reset();

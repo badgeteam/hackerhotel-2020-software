@@ -32,6 +32,27 @@ static uint8_t responseList = 0;                    //
 static char specialInput[INP_LENGTH] = {0};         //Sometimes a special input is requested by the game. When this is set, input is compared to this string first.
 static uint8_t specialPassed = 0;                   //If user input matches specialInput, this is set.
 
+uint8_t Cheat(uint8_t bit, uint16_t checksum){
+    const uint16_t chk[MAXCHEATS] = {0x7D2D, 0x5739, 0x795C, 0x4251, 0x6134, 0x597D, 0x653B, 0x445B}; // }-, W9, y\, BQ, a4, Y~, e;, D[
+    uint8_t pos = 255;
+    uint8_t val;
+
+    //Checksum ok?
+    for (uint8_t x=0; x<8; ++x){
+        if (checksum == chk[x]) pos = x;
+    }
+
+    //Check if cheat position is empty
+    if (pos<MAXCHEATS){
+        EERead(CHEATS+pos, &val, 1);
+        if (val == 255) {
+            EEWrite(CHEATS+pos, &bit, 1);
+            return 1;
+        }
+    }
+    return 0;
+}
+
 //Decrypts data read from I2C EEPROM, max 255 bytes at a time
 void DecryptData(uint16_t offset, uint8_t length, uint8_t type, uint8_t *data){
     //offset += L_BOILER;
@@ -129,7 +150,6 @@ uint8_t SetStandardResponse(uint8_t custStrEnd){
 //Get all the relevant data and string addresses of an object
 void PopulateObject(uint16_t offset, object_model_t *object){
     uint16_t parStr;
-    uint8_t effAdded;
     offset += L_BOILER;
 
     //Fill things with fixed distance to offset
@@ -161,29 +181,6 @@ void PopulateObject(uint16_t offset, object_model_t *object){
         //Determine string start location for next field
         offset += parStr;
     }    
-}
-
-//Update game state: num -> vBBBBbbb v=value(0 is set!), BBBB=Byte number, bbb=bit number
-void UpdateState(uint8_t num){
-    uint8_t clearBit = num & 0x80;
-    num &= 0x7f;
-    if (clearBit) {
-        WriteStatusBit(num, 0);
-    } else {
-        WriteStatusBit(num, 1);
-    }
-}
-
-//Checks if state of bit BBBBbbb matches with v (inverted) bit
-uint8_t CheckState(uint8_t num){
-    uint8_t bitSet = 0;
-    if (ReadStatusBit(num & 0x7f)){
-        bitSet = 1;
-    }
-    if (((num & 0x80)>0)^(bitSet>0)){
-        return 1;
-    }
-    return 0;
 }
 
 //Check if the entered letter corresponds with a name
@@ -381,6 +378,29 @@ uint8_t CheckInput(uint8_t *data){
         
         //Normal input
         } else {
+
+            //Change status bit
+            if ((serRx[0] == '#')&&(RXCNT == 6)){
+                uint8_t bitNr = 0;
+
+                for (uint8_t x=1; x<4; ++x) {
+                    serRx[x] -= '0';
+                    bitNr *= 10;
+                    if (serRx[1] > 2) break;
+                    if (serRx[x] < 10) {
+                        bitNr += serRx[x];
+                        continue;
+                    }
+                    bitNr = 0;
+                    break;
+                }
+                if ((bitNr)&&(bitNr!=128)) {
+                    if (Cheat(bitNr, serRx[4]<<8|serRx[5])) UpdateState(bitNr);
+                }
+                responseList = SetStandardResponse(0);
+                return 1;            
+            }
+            
             //Read up to the \0 character and convert to lower case.
             for (uint8_t x=0; x<RXLEN; ++x){
                 if ((serRx[x]<'A')||(serRx[x]>'Z')) data[x]=serRx[x]; else data[x]=serRx[x]|0x20;
@@ -400,63 +420,49 @@ uint8_t CheckInput(uint8_t *data){
 
             //Help text
             if ((data[0] == '?')||(data[0] == 'h')){
-                SetResponse(0, A_HELP, L_HELP, TEASER);
+                SetResponse(0, A_LF, 4, TEASER);
+                SetResponse(1, A_HELP, L_HELP, TEASER);
                 responseList = SetStandardResponse(1);
                 return 1;
             }        
         
             //Alphabet text
             if (data[0] == 'a'){
-                SetResponse(0, A_ALPHABET, L_ALPHABET, TEASER);
+                SetResponse(0, A_LF, 4, TEASER);
+                SetResponse(1, A_ALPHABET, L_ALPHABET, TEASER);
                 responseList = SetStandardResponse(1);
                 return 1;
             }
 
             //Whoami text
             if (data[0] == 'w'){
-                SetResponse(0, A_HELLO, L_HELLO, TEASER);
+                SetResponse(0, A_LF, 4, TEASER);
+                SetResponse(1, A_HELLO, L_HELLO, TEASER);
                 if (whoami == 1) {
-                    SetResponse(1, A_ANUBIS, L_ANUBIS, TEASER);
+                    SetResponse(2, A_ANUBIS, L_ANUBIS, TEASER);
                 } else if (whoami == 2) {
-                    SetResponse(1, A_BES, L_BES, TEASER);
+                    SetResponse(2, A_BES, L_BES, TEASER);
                 } else if (whoami == 3) {
-                    SetResponse(1, A_KHONSU, L_KHONSU, TEASER);
+                    SetResponse(2, A_KHONSU, L_KHONSU, TEASER);
                 } else if (whoami == 4) {
-                    SetResponse(1, A_THOTH, L_THOTH, TEASER);
+                    SetResponse(2, A_THOTH, L_THOTH, TEASER);
                 } else {
-                    SetResponse(1, A_ERROR, L_ERROR, TEASER);
+                    SetResponse(2, A_ERROR, L_ERROR, TEASER);
                 }
-                SetResponse(2, A_PLEASED, L_PLEASED, TEASER);
+                SetResponse(3, A_PLEASED, L_PLEASED, TEASER);
                 responseList = SetStandardResponse(3);
                 return 1;
             }
 
             //Quit text
             if (data[0] == 'q'){
-                SetResponse(0, A_QUIT, L_QUIT, TEASER);
+                SetResponse(0, A_LF, 4, TEASER);
+                SetResponse(1, A_QUIT, L_QUIT, TEASER);
                 responseList = SetStandardResponse(1);
                 return 1;
             }
 
-            //Change status bit
-            if (data[0] == '#'){
-                uint8_t bitNr = 0;
-                for (uint8_t x=1; x<4; ++x) {
-                    data[x] -= '0';
-                    bitNr *= 10;
-                    if (data[x] < 10) {
-                        bitNr += data[x];
-                        continue;
-                    }
-                    bitNr = 0;
-                    break;
-                }
-                if (bitNr) UpdateState(bitNr);
-                responseList = SetStandardResponse(0);
-                return 1;
-            }
-
-            //Cheat = reset badge!
+            //Fake cheat = reset badge!
             if (StartsWith(&data[0], "iddqd")){
             
                 //Reset game data by wiping the UUID bits
@@ -465,11 +471,54 @@ uint8_t CheckInput(uint8_t *data){
                 }
                 SaveGameState();
 
-                uint8_t cheat[] = "Cheater! ";
+                uint8_t cheat[] = "Cheater! Contact badge team... ";
                 SerSpeed(60);
                 while(1){
                     if (serTxDone) SerSend(&cheat[0]);
                 }
+            }
+            
+            //Cheat reset (Quote from: Donald E. Westlake)
+            if (StartsWith(&data[0], "the trouble with real life is, there's no reset button")){
+                
+                //Reset cheat data by resetting the EEPROM bytes
+                uint8_t empty=0xff;
+                for (uint8_t x=0; x<MAXCHEATS; ++x){
+                    EEWrite(CHEATS+x, &empty, 1);
+                }
+                //Reset game data by wiping the UUID bits
+                for (uint8_t x=0; x<4; ++x){
+                    WriteStatusBit(110+x, 0);
+                }
+                
+                SaveGameState();
+
+                uint8_t cheat[] = "Reset please! ";
+                SerSpeed(60);
+                while(1){
+                    if (serTxDone) SerSend(&cheat[0]);
+                }
+            }
+            if (StartsWith(&data[0], "cheat")){
+                int8_t n;
+                uint8_t bit, digit[3];
+
+                for (uint8_t x=0; x<MAXCHEATS; ++x){
+                    
+                    //Set up sending out number
+                    EERead(CHEATS+x, &bit, 1);
+                    for (n=2; n>=0; --n) {
+                        digit[n] = bit % 10;
+                        bit /= 10;
+                    }
+
+                    for (n=0; n<3; ++n) {
+                        SetResponse(x*4+n, A_DIGITS+digit[0], 1, TEASER);
+                    }                
+                    SetResponse(x*4+3, A_COMMA, L_COMMA, TEASER);
+                }
+                SetResponse(31, A_LF, 4, TEASER);
+                return 1;
             }
         } 
         //Data received, but not any of the commands above
@@ -542,6 +591,8 @@ uint8_t ProcessInput(uint8_t *data){
                         //Yes! Check if we must move forward or backwards.
                         if (route[currDepth+1]) ++currDepth; else --currDepth;
                         PopulateObject(route[currDepth], &currObj);
+                        SetResponse(elements++, currObj.addrStr[DESC], currObj.lenStr[DESC],GAME);
+                        SetResponse(elements++, A_LF, 2, TEASER);
                                                   
                     //Not granted!
                     } else {
@@ -563,7 +614,6 @@ uint8_t ProcessInput(uint8_t *data){
                 SetResponse(elements++, currObj.addrStr[DESC], currObj.lenStr[DESC],GAME);
                 SetResponse(elements++, A_LF, 2, TEASER);
                 SetResponse(elements++, A_LOOK, L_LOOK, TEASER);
-                //SetResponse(elements++, A_SPACE, L_SPACE, TEASER);
 
                 //Check the visible children first
                 route[currDepth+1] = 0;
@@ -574,7 +624,6 @@ uint8_t ProcessInput(uint8_t *data){
                             PopulateObject(route[currDepth+1], &actObj1);
                             SetResponse(elements++, actObj1.addrStr[NAME], actObj1.lenStr[NAME],GAME);
                             SetResponse(elements++, A_COMMA, L_COMMA, TEASER);
-                            //SetResponse(elements++, A_SPACE, L_SPACE, TEASER);
                         }
                     }
                 }while (route[currDepth+1]);
@@ -589,6 +638,7 @@ uint8_t ProcessInput(uint8_t *data){
                 route[currDepth+1] = FindChild(route[currDepth], data[1], 0);
                 if (route[currDepth+1]) {
                     PopulateObject(route[currDepth+1], &actObj1);
+//TODO: CHECKSTATE -> A_CANTLOOK item
                     SetResponse(elements++, actObj1.addrStr[DESC], actObj1.lenStr[DESC],GAME);   
                 } else if (currDepth) {
                     if (CheckLetter(route[currDepth-1], data[1])) {
@@ -607,7 +657,7 @@ uint8_t ProcessInput(uint8_t *data){
             } else if (inputLen != 2) {
                 SetResponse(elements++, A_NOTPOSSIBLE, L_NOTPOSSIBLE, TEASER);
             } else {
-                route[currDepth+1] = FindChild(route[currDepth], data[1], route[currDepth+1]);
+                route[currDepth+1] = FindChild(route[currDepth], data[1], 0);
                 if (route[currDepth+1]) {
                     if ((route[currDepth+1] == inventory[0])||(route[currDepth+1] == inventory[1])) {
                         SetResponse(elements++, A_ALREADYCARRYING, L_ALREADYCARRYING, TEASER);
@@ -719,6 +769,8 @@ uint8_t ProcessInput(uint8_t *data){
                                         specialInput[1] = item;
                                         specialInput[2] = 0;
                                     }
+
+                                //There should not be another special
                                 } else {
                                     SetResponse(elements++, A_ERROR, L_ERROR, TEASER);
                                 }
@@ -747,7 +799,7 @@ uint8_t ProcessInput(uint8_t *data){
                         } else if ((data[0] == 'r')&&((actObj1.byteField[ACTION_MASK]&READ) == 0)) {
                             SetResponse(elements++, A_CANTREAD, L_CANTREAD, TEASER);
                         } else if (data[0] == 'g'){ 
-                            SetResponse(elements++, A_CANTGIVE, L_CANTGIVE, TEASER);  
+                            SetResponse(elements++, A_NOTPOSSIBLE, L_NOTPOSSIBLE, TEASER);  
                         } else {
 
                             //Special game, not enough characters
@@ -764,7 +816,7 @@ uint8_t ProcessInput(uint8_t *data){
                                 SetResponse(elements++, A_RESPONSE, L_RESPONSE, TEASER);
                                 if (actObj1.lenStr[ACTION_STR2]>(INP_LENGTH-1)) actObj1.lenStr[ACTION_STR2] = (INP_LENGTH-1);
                                 ExtEERead(actObj1.addrStr[ACTION_STR2], actObj1.lenStr[ACTION_STR2], GAME, (uint8_t *)&specialInput[0]);
-                                UnflipData(actObj1.lenStr[ACTION_STR2], &specialInput[0]);
+                                UnflipData(actObj1.lenStr[ACTION_STR2], (uint8_t *)&specialInput[0]);
                                 specialInput[actObj1.lenStr[ACTION_STR2]] = 0;
                                 //specialPassed = 0;
                             } else if (CheckState(actObj1.byteField[ACTION_ACL])){
@@ -849,9 +901,7 @@ uint8_t ProcessInput(uint8_t *data){
 
         //Faulty input
         } else {
-        
-            ;//No clue, no valid input...
-                
+               
         }
             
         //Input handled
@@ -861,6 +911,12 @@ uint8_t ProcessInput(uint8_t *data){
         SetResponse(0, A_LF, 2, TEASER);
         if (specialInput[0]) responseList = elements; else responseList = SetStandardResponse(elements);
 
+    } else {
+        data[0] = 0;
+        serRxDone = 0;
+        RXCNT = 0;
+        SetResponse(0, A_LF, 2, TEASER);
+        responseList = SetStandardResponse(1);
     }
     
     return 0;
