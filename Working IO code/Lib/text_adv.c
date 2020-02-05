@@ -479,7 +479,7 @@ uint8_t CheckInput(uint8_t *data){
             }
             
             //Cheat reset (Quote from: Donald E. Westlake)
-            if (StartsWith(&data[0], "#")){
+            if (StartsWith(&data[0], "the trouble with real life is, there's no reset button")){
                 
                 //Reset cheat data by resetting the EEPROM bytes
                 uint8_t empty=0xff;

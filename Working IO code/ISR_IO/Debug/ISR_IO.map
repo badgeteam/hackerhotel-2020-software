@@ -568,7 +568,7 @@ END GROUP
  *(.fini0)
                 0x00002d5e                _etext = .
 
-.rodata         0x0000ad5e       0x7b load address 0x00002d5e
+.rodata         0x0000ad5e       0xb0 load address 0x00002d5e
  *(.rodata)
  .rodata        0x0000ad5e       0x10 Lib/text_adv.o
  *(.rodata*)
@@ -585,13 +585,13 @@ END GROUP
  .rodata.HCKR   0x0000ad80        0xc Lib/main_def.o
                 0x0000ad80                HCKR
  .rodata.str1.1
-                0x0000ad8c       0x3d Lib/text_adv.o
+                0x0000ad8c       0x72 Lib/text_adv.o
  .rodata.xor_key
-                0x0000adc9       0x10 Lib/text_adv.o
-                0x0000adc9                xor_key
+                0x0000adfe       0x10 Lib/text_adv.o
+                0x0000adfe                xor_key
  *(.gnu.linkonce.r*)
 
-.data           0x00803800       0x90 load address 0x00002dd9
+.data           0x00803800       0x90 load address 0x00002e0e
                 0x00803800                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
@@ -696,8 +696,8 @@ END GROUP
  COMMON         0x00803b3d       0x21 Lib/text_adv.o
                 0x00803b3d                txBuffer
                 0x00803b5e                PROVIDE (__bss_end, .)
-                0x00002dd9                __data_load_start = LOADADDR (.data)
-                0x00002e69                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x00002e0e                __data_load_start = LOADADDR (.data)
+                0x00002e9e                __data_load_end = (__data_load_start + SIZEOF (.data))
 
 .noinit         0x00803b5e        0x0
                 [!provide]                PROVIDE (__noinit_start, .)
