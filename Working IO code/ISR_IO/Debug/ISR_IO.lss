@@ -6631,9 +6631,9 @@ void SetResponse(uint8_t number, uint16_t address, uint16_t length, uint8_t type
     282a:	20 53       	subi	r18, 0x30	; 48
     282c:	f8 01       	movw	r30, r16
     282e:	21 83       	std	Z+1, r18	; 0x01
-                    data[2]-='0';
+                    data[2]-='1';
     2830:	32 81       	ldd	r19, Z+2	; 0x02
-    2832:	30 53       	subi	r19, 0x30	; 48
+    2832:	31 53       	subi	r19, 0x31	; 49
     2834:	32 83       	std	Z+2, r19	; 0x02
                     if (data[3] == 'a') data[3] = 1;
     2836:	83 81       	ldd	r24, Z+3	; 0x03
@@ -6709,9 +6709,9 @@ void SetResponse(uint8_t number, uint16_t address, uint16_t length, uint8_t type
     2896:	01 96       	adiw	r24, 0x01	; 1
     2898:	a1 1d       	adc	r26, r1
     289a:	b1 1d       	adc	r27, r1
-                    answer <<= (3 - whoami);            
+                    answer <<= (4 - whoami);            
     289c:	40 91 95 38 	lds	r20, 0x3895	; 0x803895 <whoami>
-    28a0:	23 e0       	ldi	r18, 0x03	; 3
+    28a0:	24 e0       	ldi	r18, 0x04	; 4
     28a2:	30 e0       	ldi	r19, 0x00	; 0
     28a4:	24 1b       	sub	r18, r20
     28a6:	31 09       	sbc	r19, r1
@@ -6744,7 +6744,7 @@ void SetResponse(uint8_t number, uint16_t address, uint16_t length, uint8_t type
     28d4:	30 e0       	ldi	r19, 0x00	; 0
     28d6:	20 93 ca 39 	sts	0x39CA, r18	; 0x8039ca <reactStr+0x82>
     28da:	30 93 cb 39 	sts	0x39CB, r19	; 0x8039cb <reactStr+0x83>
-                    answer <<= (3 - whoami);            
+                    answer <<= (4 - whoami);            
 
                     SetResponse(elements++, A_YOURPART, L_YOURPART, TEASER);
                     
@@ -6788,7 +6788,7 @@ void SetResponse(uint8_t number, uint16_t address, uint16_t length, uint8_t type
     2912:	21 e0       	ldi	r18, 0x01	; 1
     2914:	30 e0       	ldi	r19, 0x00	; 0
     2916:	02 c0       	rjmp	.+4      	; 0x291c <ProcessInput+0xde0>
-                    answer <<= (3 - whoami);            
+                    answer <<= (4 - whoami);            
 
                     SetResponse(elements++, A_YOURPART, L_YOURPART, TEASER);
                     
