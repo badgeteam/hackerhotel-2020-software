@@ -426,7 +426,7 @@ uint8_t floatAround(uint8_t sample, uint8_t bits, uint8_t min, uint8_t max){
 }
 
 //Load game status
-uint8_t LoadGameState(){
+void LoadGameState(){
     EERead(0, &gameState[0], BOOTCHK);   //Load game status bits from EEPROM
 
     uint8_t idSet = 0;
