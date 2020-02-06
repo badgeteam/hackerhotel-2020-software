@@ -56,5 +56,5 @@
 
     uint8_t HotSummer();
 
-    void GenerateAudio();
+    uint8_t GenerateAudio();
 #endif /* RESOURCES_H_ */

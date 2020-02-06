@@ -60,19 +60,21 @@ int main(void)
     iLED[BADGER] = 1;
     iLED[CAT] = 1;
 
+    effect = 32;
+
     while (1)
     {
-        GenerateAudio();
+        
 
 
-        if (buttonMark){
+        if (GenerateAudio()){
             buttonState = CheckButtons(buttonState);
             buttonMark = 0;
             
             //GenerateBlinks();           
             
             //Main game, to complete: Finish sub-game MagnetMaze and MakeFriends too.
-            TextAdventure();
+            //TextAdventure();
           
             //Other games & user interaction checks
             MagnetMaze();

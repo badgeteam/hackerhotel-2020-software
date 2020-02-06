@@ -531,20 +531,30 @@ void Reset(){
 uint8_t HotSummer(){
     static uint8_t cooledDown = 0;
 
-    if (CheckState(SUMMERS_COMPLETED)) return 0;
+    if (CheckState(SUMMERS_COMPLETED)){
+        iLED[SCARAB[G]] = 0;
+        iLED[SCARAB[R]] = dimValue;
+        return 1;
+    }
+
     if (CheckState(FIRST_SUMMER)) {
-            
+        iLED[SCARAB[G]] = dimValue;
+        if ((cooledDown) && (adcTemp >= (calTemp + 8))) {
+            UpdateState(SUMMERS_COMPLETED);
+            return 0;
+        }
+        if (adcTemp <= (calTemp + 2)) cooledDown = 1;
+                   
     } else {
         if (calTemp == 0) calTemp = adcTemp;
         if (adcTemp >= (calTemp + 8)) {
             UpdateState(FIRST_SUMMER);
-            iLED[SCARAB[G]] = dimValue;
         }
     }
     return 0;
 }
 
-void GenerateAudio(){
+uint8_t GenerateAudio(){
 
     //auRepAddr = &auBuffer[0];
 
@@ -559,15 +569,25 @@ void GenerateAudio(){
         //Bad (buzzer)
         if ((effect&0xE0)==32){
             static uint8_t auBuffer[17] = {1, 255, 128, 128, 192, 255, 192, 255, 192, 128, 64, 1, 64, 1, 64, 128, 0}; 
-            static uint8_t loudness = 0xff;
-            auRepAddr = &auBuffer[0];
+            static uint8_t loudness, duration, start;
+
             if (buttonMark) {
+                if (start == 0) {
+                    duration = 8;
+                    loudness = 0xff;
+                    TCB1_CCMP = 0x2000;
+                    auRepAddr = &auBuffer[0];
+                    start = 1;
+                }
+
                 if (loudness) {
                     auVolume = loudness;
-                    --loudness;
+                    if (duration) duration--; else loudness <<= 1;
                 } else {
                     auRepAddr = &zero;
                     effect &= 0x10;
+                    auVolume = 255;
+                    start = 0;
                 }
             }
         }
@@ -618,4 +638,6 @@ void GenerateAudio(){
         else {
         }
     }
+
+    return buttonMark;
 }
