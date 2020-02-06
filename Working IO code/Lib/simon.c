@@ -77,8 +77,8 @@ uint8_t BastetDictates() {
 
     if (BASTET_GAME_START == simonGameState) {
         // TODO start animu
-        simonGameState = BASTET_GAME_INPUT;
-        simonGameStateNext = BASTET_GAME_SHOW_PATTERN;
+        simonGameState = BASTET_GAME_SHOW_PATTERN;
+        simonGameStateNext = BASTET_GAME_INPUT;
         simonTimer = 0;
     }
 
@@ -111,9 +111,11 @@ uint8_t BastetDictates() {
                 break;
         }
         if (choice > 0) {
-            simonTimer = 0;
             simonLed(choice);
-            // TODO something timer something 
+            // Show for x-time
+            simonTimer = 0;
+            simonGameState = BASTET_GAME_WAIT_LEDS;
+            simonGameStateNext = BASTET_GAME_INPUT;
             if (simonState[simonInputPos]+1 == choice) {
                 // TODO correct sound
                 simonInputPos++;
@@ -131,6 +133,15 @@ uint8_t BastetDictates() {
             }
         }
     }
+
+    if (BASTET_GAME_WAIT_LEDS == simonGameState) {
+        if (simonTimer / 15 >= 1) {
+            // on to next state after 1 second
+            simonLed(0);  // LEDs off
+            simonGameState = simonGameStateNext;
+        }
+    }
+
     ++simonTimer;
     return 0;
 }
