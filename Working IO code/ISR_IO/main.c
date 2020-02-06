@@ -75,7 +75,7 @@ int main(void)
             //GenerateBlinks();           
             
             //Main game, to complete: Finish sub-game MagnetMaze and MakeFriends too.
-            //TextAdventure();
+            TextAdventure();
           
             //Other games & user interaction checks
             MagnetMaze();

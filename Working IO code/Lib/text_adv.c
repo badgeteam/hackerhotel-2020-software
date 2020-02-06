@@ -311,9 +311,6 @@ uint8_t CheckInput(uint8_t *data){
     
     //Load game data after reboot
     if (currDepth == 0xff) {
-        //Load things from EEPROM
-        SaveGameState();
-
         //Start at first location
         PopulateObject(route[0], &currObj);
         currDepth = 0;
@@ -541,7 +538,8 @@ uint8_t ProcessInput(uint8_t *data){
             
             //No way out, print denied message of location
             } else {
-                SetResponse(elements++, currObj.addrStr[OPEN_ACL_MSG], currObj.lenStr[OPEN_ACL_MSG], GAME);               
+                SetResponse(elements++, currObj.addrStr[OPEN_ACL_MSG], currObj.lenStr[OPEN_ACL_MSG], GAME);
+                effect = currObj.effect[0];               
             }   
         
         //Enter locations or Open objects    
@@ -585,7 +583,8 @@ uint8_t ProcessInput(uint8_t *data){
                     //Not granted!
                     } else {
                         route[currDepth+1] = 0;
-                        SetResponse(elements++, actObj1.addrStr[OPEN_ACL_MSG], actObj1.lenStr[OPEN_ACL_MSG], GAME);                
+                        SetResponse(elements++, actObj1.addrStr[OPEN_ACL_MSG], actObj1.lenStr[OPEN_ACL_MSG], GAME);
+                        effect = actObj1.effect[0];              
                     }
 
                 //No candidate
