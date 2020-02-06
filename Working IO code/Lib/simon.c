@@ -83,6 +83,7 @@ uint8_t BastetDictates() {
         uint8_t pos = simonTimer / 15;
         if (pos > simonPos) {
             simonGameState = BASTET_GAME_INPUT;
+            simonLed(0);
             return 0;
         }
         simonLed(simonState[pos]+1);
@@ -106,8 +107,9 @@ uint8_t BastetDictates() {
         }
         if (choice > 0) {
             simonLed(choice);
+            // TODO something timer something 
             if (simonState[simonInputPos]+1 == choice) {
-                // TODO win sound
+                // TODO correct sound
                 simonInputPos++;
             } else {
                 // TODO fail sound
