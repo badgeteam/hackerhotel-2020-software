@@ -21,6 +21,7 @@
     #define BASTET_BOOT                 0
     #define BASTET_GAME_START           1
     #define BASTET_GAME_SHOW_PATTERN    3
+    #define BASTET_GAME_WAIT_LEDS       4
     #define BASTET_GAME_INPUT           5
 
     #define BASTET_BOTTOM_LEFT          1
@@ -30,7 +31,6 @@
 
     uint8_t BastetDictates();
 
-    void setupSimon();
     void simonTone(uint8_t val);
     void simonLed(uint8_t val);
 

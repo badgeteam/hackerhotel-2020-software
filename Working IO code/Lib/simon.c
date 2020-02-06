@@ -25,7 +25,6 @@ uint8_t simonState[BASTET_LENGTH] = {0};
 uint8_t simonPos = 1;
 uint8_t simonInputPos = 0;
 uint8_t simonGameState = BASTET_BOOT;
-uint8_t simonGameStateNext = BASTET_GAME_START;   // for stuff like LEDs / audio loops etc ??
 uint8_t simonTimer = 0;
 uint8_t simonProcessed = 0;
 
@@ -77,13 +76,15 @@ uint8_t BastetDictates() {
         return 0;
 
     if (BASTET_BOOT == simonGameState) {
-        setupSimon();
+        for (uint8_t i = 0; i < BASTET_LENGTH; i++) {
+            simonState[i] = 1+(lfsr() % 4);
+        }
+        simonGameState = BASTET_GAME_START;
     }
 
     if (BASTET_GAME_START == simonGameState) {
         // TODO start animu
-        simonGameState = BASTET_GAME_INPUT;
-        simonGameStateNext = BASTET_GAME_SHOW_PATTERN;
+        simonGameState = BASTET_GAME_SHOW_PATTERN;
         simonTimer = 0;
     }
 
@@ -92,11 +93,10 @@ uint8_t BastetDictates() {
         uint8_t pos = simonTimer / (15 - (simonPos>>1));
         if (pos > simonPos) {
             simonGameState = BASTET_GAME_INPUT;
-            simonGameStateNext = BASTET_GAME_INPUT;
             simonLed(0);
             return 0;
         }
-        simonLed(simonState[pos]+1);
+        simonLed(simonState[pos]);
     }
 
     if (BASTET_GAME_INPUT == simonGameState) {
@@ -152,6 +152,15 @@ uint8_t BastetDictates() {
             simonProcessed = 0;
         }
     }
+
+    if (BASTET_GAME_WAIT_LEDS == simonGameState) {
+        if (simonTimer >= 7) {
+            // on to next state after ±.5 second
+            simonLed(0);  // LEDs off
+            simonGameState = BASTET_GAME_INPUT;
+        }
+    }
+
     ++simonTimer;
     return 0;
 }
