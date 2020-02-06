@@ -17,6 +17,7 @@
     #include <literals.h>
 
     #define BASTET_COMPLETED      122
+    #define SIMON_LENGTH          16
 
     uint8_t BastetDictates();
 

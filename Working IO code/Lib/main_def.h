@@ -30,12 +30,16 @@
     #define STATLEN     16          //Length of game progress data
     #define INVADDR     STATLEN     //Address of inventory (2x uint16_t)
     #define BOOTCHK     STATLEN+4   //Address of boot check result in internal EEPROM
-    #define MAX_REACT   32
-    #define MAX_CHEATS  8           //Number of cheat codes that are accepted (Maximum = MAX_REACT/4)
-    #define CHEATS      BOOTCHK+4 
-    #define EE_I2C_ADDR 0x50 //External EEPROM address
+    #define CHEATS      BOOTCHK+4
 
-    enum {TEXT, MAZE, BASTET, LANYARD};
+    #define MAX_CHEATS  8           //Number of cheat codes that are accepted (Maximum = MAX_REACT/4)
+    #define MAX_REACT   MAX_CHEATS*4
+
+    //External EEPROM address
+    #define EE_I2C_ADDR 0x50 
+
+    //Which game is running
+    enum {TEXT, MAZE, BASTET, LANYARD, FRIENDS};
 
     #define TRUE    1
     #define FALSE   0
@@ -57,8 +61,8 @@
     extern volatile uint16_t adcHall;
     extern volatile uint16_t calHall;
     extern volatile uint16_t adcBtns;
-    extern volatile uint8_t  adcTemp;
-    extern volatile uint8_t  calTemp;
+    extern volatile uint16_t adcTemp;
+    extern volatile uint16_t calTemp;
     extern volatile uint8_t  detHdPh;
 
     // Global challenge data
@@ -80,14 +84,16 @@
 
     extern volatile uint8_t auIn[AULEN];
     extern volatile uint8_t adc0Chg;
+
+    volatile uint8_t dimValue;
     extern const    uint8_t QSINE[32];
 
     //LED translation matrices (usage iLED[name_of_const_array[][]] = value;)
     extern const uint8_t HCKR[2][6];
     extern const uint8_t EYE[2][2];
     extern const uint8_t WING[2][5];
-    extern const uint8_t GEM[2];        //Gem on top of cat head (red, green)
-    extern const uint8_t RAT;           //Rat gem LED location inside iLED
+    extern const uint8_t SCARAB[2];        //Gem on top of cat head (red, green)
+    extern const uint8_t BADGER;           //Rat gem LED location inside iLED
     extern const uint8_t CAT;           //Cat lower gem LED location inside iLED
 
 #endif  //MAIN_DEF_H_

@@ -264,7 +264,7 @@ ISR(ADC1_RESRDY_vect){
 // RTC compare interrupt, triggers at 512/BTN_TMR rate, also RTC overflow interrupt, triggers once a minute
 ISR(RTC_CNT_vect) {
     if (RTC_INTFLAGS & RTC_CMP_bm){
-        if (buttonMark<255) buttonMark++;   // For button timing purposes
+        if (buttonMark<0xff) buttonMark++;   // For button timing purposes
         tmp16bit = (RTC_CNT + BTN_TMR)%RTC_PER;
         while(RTC_STATUS & RTC_CMPBUSY_bm);
         RTC_CMP = tmp16bit;                 // Button timing: next interrupt set
@@ -425,6 +425,24 @@ uint8_t floatAround(uint8_t sample, uint8_t bits, uint8_t min, uint8_t max){
     return sample;
 }
 
+//Load game status
+uint8_t LoadGameState(){
+    EERead(0, &gameState[0], BOOTCHK);   //Load game status bits from EEPROM
+
+    uint8_t idSet = 0;
+    for (uint8_t x=0; x<4; ++x){
+        idSet += ReadStatusBit(110+x);
+    }
+
+    //Check if badge is reset(0 = cheated!) or new(3) or error(2)
+    if (idSet != 1) {
+        Reset();
+    } else getID();
+
+    inventory[0] = (gameState[INVADDR]<<8|gameState[INVADDR+1]);
+    inventory[1] = (gameState[INVADDR+2]<<8|gameState[INVADDR+3]);
+}
+
 //Save changed data to EEPROM
 uint8_t SaveGameState(){
     uint8_t gameCheck[BOOTCHK];
@@ -469,10 +487,12 @@ void WriteStatusBit(uint8_t number, uint8_t state){
 void UpdateState(uint8_t num){
     uint8_t clearBit = num & 0x80;
     num &= 0x7f;
-    if (clearBit) {
-        WriteStatusBit(num, 0);
-    } else {
-        WriteStatusBit(num, 1);
+    if (num) {
+        if (clearBit) {
+            WriteStatusBit(num, 0);
+        } else {
+            WriteStatusBit(num, 1);
+        }
     }
 }
 
@@ -487,8 +507,9 @@ uint8_t CheckState(uint8_t num){
     }
     return 0;
 }
+
+//Give out a number 0..3, calculated using serial number fields
 uint8_t getID(){
-    //Give out a number 0..3, calculated using serial number fields
     uint8_t id = 0;
     uint8_t *serNum;
     serNum = (uint8_t*)&SIGROW_SERNUM0;
@@ -524,8 +545,34 @@ void Reset(){
     WriteStatusBit(0, 1);
 }
 
+//Sets specific game bits after the badge is heated for one and two times.
+uint8_t HotSummer(){
+    static uint8_t cooledDown = 0;
 
-void GenerateAudio(){
+    if (CheckState(SUMMERS_COMPLETED)){
+        iLED[SCARAB[G]] = 0;
+        iLED[SCARAB[R]] = dimValue;
+        return 1;
+    }
+
+    if (CheckState(FIRST_SUMMER)) {
+        iLED[SCARAB[G]] = dimValue;
+        if ((cooledDown) && (adcTemp >= (calTemp + 8))) {
+            UpdateState(SUMMERS_COMPLETED);
+            return 0;
+        }
+        if (adcTemp <= (calTemp + 2)) cooledDown = 1;
+                   
+    } else {
+        if (calTemp == 0) calTemp = adcTemp;
+        if (adcTemp >= (calTemp + 8)) {
+            UpdateState(FIRST_SUMMER);
+        }
+    }
+    return 0;
+}
+
+uint8_t GenerateAudio(){
 
     //auRepAddr = &auBuffer[0];
 
@@ -540,15 +587,25 @@ void GenerateAudio(){
         //Bad (buzzer)
         if ((effect&0xE0)==32){
             static uint8_t auBuffer[17] = {1, 255, 128, 128, 192, 255, 192, 255, 192, 128, 64, 1, 64, 1, 64, 128, 0}; 
-            static uint8_t loudness = 255;
-            auRepAddr = &auBuffer[0];
+            static uint8_t loudness, duration, start;
+
             if (buttonMark) {
+                if (start == 0) {
+                    duration = 8;
+                    loudness = 0xff;
+                    TCB1_CCMP = 0x2000;
+                    auRepAddr = &auBuffer[0];
+                    start = 1;
+                }
+
                 if (loudness) {
                     auVolume = loudness;
-                    --loudness;
+                    if (duration) duration--; else loudness <<= 1;
                 } else {
                     auRepAddr = &zero;
                     effect &= 0x10;
+                    auVolume = 255;
+                    start = 0;
                 }
             }
         }
@@ -599,4 +656,6 @@ void GenerateAudio(){
         else {
         }
     }
+
+    return buttonMark;
 }

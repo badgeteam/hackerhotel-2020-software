@@ -17,8 +17,8 @@ volatile uint16_t adcPhot;           // Photo transistor ADC value (0...4096)
 volatile uint16_t adcHall;           // Hall sensor value
 volatile uint16_t calHall;           // Hall sensor calibration (center)
 volatile uint16_t adcBtns;           // Raw button value
-volatile uint8_t  adcTemp;           // Raw temperature related value
-volatile uint8_t  calTemp;           // Raw temperature calibration (sort of)
+volatile uint16_t adcTemp;           // Raw temperature related value
+volatile uint16_t calTemp;           // Raw temperature calibration (sort of)
 volatile uint8_t  detHdPh;           // Headphone detected (TODO)
 
 
@@ -39,6 +39,9 @@ volatile uint8_t zero = 0;              // Point to this to stop playing audio
 
 volatile uint8_t auIn[AULEN];           // Audio input buffer
 volatile uint8_t adc0Chg = 0;           // Changed adc0 channel and reference
+
+volatile uint8_t dimValue = 0xff;        // Global dimming maximum LED value.
+
 //Quarter sine table, can be used for audio or other things (invert for nice LED dimming curve from bright to off)
 const uint8_t QSINE[32] = {0x01,0x0d,0x19,0x26,0x32,0x3e,0x4a,0x56,0x62,0x6f,0x78,0x83,0x8e,0x98,0xa2,0xab,0xb4,0xbf,0xc5,0xcf,0xd4,0xdb,0xe1,0xe7,0xec,0xf0,0xf4,0xf7,0xfa,0xfc,0xfe,0xff};
 
@@ -58,7 +61,7 @@ const uint8_t WING[2][5] = {
     {2,  1,  5,  0,  3},        //Right wing LED locations inside iLED, bottom to top
     {4,  36, 34, 33, 35}        //Left wing LED locations inside iLED, bottom to top
 };
-const uint8_t GEM[2] = {12, 10};//Gem on top of cat head (red, green)
-const uint8_t RAT = 11;         //Rat gem LED location inside iLED
+const uint8_t SCARAB[2] = {12, 10};//Gem on top of cat head (red, green)
+const uint8_t BADGER = 11;         //Rat gem LED location inside iLED
 const uint8_t CAT = 13;         //Cat lower gem LED location inside iLED
 

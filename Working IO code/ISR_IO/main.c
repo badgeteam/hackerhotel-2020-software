@@ -5,20 +5,14 @@
  * Author : Badge.team
  */
 
-     /*
-        TODO:
-            - Check if external Flash is empty. true? -> make I2C bus tristate until next power on (for external programming during sweatshop)
-            - Enable audio output if headphone is detected, else enable badge handshake mode.
-            - Use internal serial number for some things
-            - Simple handshake between badges for detecting badge group (4 types) already modeled
-            - Games / challenges
-            - Audio generation during games (nice to have)
-            - Encryption for external EEPROM (with fake empty data trolling thing)
-            - Cheat all challenges detection (simple flash content check, sends checksum over serial after special serial command is sent)
-            - Backdoor codes to unlock unsolvable challenges (errors in code and/or broken things at the event)
-            - LED effects and dimming
-            - More
-    */
+/*
+   TODO:
+       - Enable audio output if headphone is detected, else enable badge handshake mode.
+       - Simple handshake between badges for detecting badge group (4 types) already modeled
+       - Audio generation during games (nice to have)
+       - LED effects and dimming
+       - More
+*/
 
 #include <main_def.h>           //Global variables, constants etc.
 #include <avr/io.h>
@@ -30,6 +24,7 @@
 #include <simon.h>              //Bastet Dictates (Simon clone)
 #include <maze.h>               //MagnetMaze game
 #include <lanyard.h>            //Lanyard Puzzle
+#include <friends.h>
 #include <stdio.h>
 
 
@@ -40,7 +35,7 @@ int main(void)
 {
     Setup();
 
-    SerSpeed(255);
+    SerSpeed(0xff);
     ////Turn on LEDs on low setting to check for interrupt glitches
 
     //"Hacker"
@@ -60,34 +55,43 @@ int main(void)
     iLED[EYE[G][L]] = 1;
     iLED[EYE[R][R]] = 1;
     iLED[EYE[R][L]] = 1;
-    iLED[GEM[R]] = 1;
-    iLED[GEM[G]] = 1;
-    iLED[RAT] = 1;
+    iLED[SCARAB[R]] = 1;
+    iLED[SCARAB[G]] = 1;
+    iLED[BADGER] = 1;
     iLED[CAT] = 1;
+
+    effect = 32;
+    LoadGameState();
 
     while (1)
     {
-        GenerateAudio();
-        //GenerateBlinks();
 
-        if (buttonMark){
+
+
+        if (GenerateAudio()){
             buttonState = CheckButtons(buttonState);
             buttonMark = 0;
 
-            TextAdventure();
+            //GenerateBlinks();
+
+            //Main game, to complete: Finish sub-game MagnetMaze and MakeFriends too.
+            //TextAdventure();
 
             //Other games & user interaction checks
             MagnetMaze();
             BastetDictates();
             LanyardCode();
-            //MakeFriends();
+            MakeFriends();
+            SaveGameState();
 
             //Check light sensor status (added hysteresis to preserve writing cycles to internal EEPROM)
             if (adcPhot < 10) WriteStatusBit(116, 1);
             if (adcPhot > 100) WriteStatusBit(116, 0);
 
             //Check temperature
-      }
+            HotSummer();
+
+        }
 
         /*
             Audio and light effect control explained:
@@ -104,7 +108,7 @@ int main(void)
 
             LEDs:
                 -Usage: iLED[n] = value; NOTE: n must be < 40 and (n%8)>5 is not used.
-                -The HCKR[2][6] EYE[2][2] WING[2][5] GEM[2] RAT CAT values can be used to substitute n for easy LED addressing, for 2 dimensional arrays, the first dimension is the LED color.
+                -The HCKR[2][6] EYE[2][2] WING[2][5] SCARAB[2] BADGER CAT values can be used to substitute n for easy LED addressing, for 2 dimensional arrays, the first dimension is the LED color.
         */
     }
 }

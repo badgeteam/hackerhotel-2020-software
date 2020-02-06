@@ -161,6 +161,14 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\Lib\friends.c">
+      <SubType>compile</SubType>
+      <Link>Lib\friends.c</Link>
+    </Compile>
+    <Compile Include="..\Lib\friends.h">
+      <SubType>compile</SubType>
+      <Link>Lib\friends.h</Link>
+    </Compile>
     <Compile Include="..\Lib\I2C.c">
       <SubType>compile</SubType>
       <Link>Lib\I2C.c</Link>
