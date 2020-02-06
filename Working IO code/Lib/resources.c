@@ -409,7 +409,7 @@ void floatSpeed(uint8_t bits, uint16_t min, uint16_t max){
     bits = mask[(bits-1)&0x07];
     val += (lfsr()&bits);
     val -= (lfsr()&bits);
-    if (val > max) val = max;    //0x038B is normal rate, for wind we need to be a bit slower
+    if (val > max) val = max;    
     if (val < min) val = min;  
     TCB1_CCMP = val;
 }
@@ -422,6 +422,8 @@ uint8_t floatAround(uint8_t sample, uint8_t bits, uint8_t min, uint8_t max){
         if (sample > max) sample = max;
         if (sample < min) sample = min;
     }
+    if (min & (sample < min)) sample = min;
+
     return sample;
 }
 
@@ -583,6 +585,7 @@ void GenerateBlinks(){
     }
 }
 
+
 uint8_t GenerateAudio(){
 
     //auRepAddr = &auBuffer[0];
@@ -600,6 +603,7 @@ uint8_t GenerateAudio(){
             static uint8_t auBuffer[17] = {1, 255, 128, 128, 192, 255, 64, 255, 192, 128, 64, 1, 192, 1, 64, 128, 0}; 
             static uint8_t loudness, duration, start;
             floatSpeed(1, 0x2000, 0x2200);
+            auBuffer[2] = floatAround(0x80, 5, 0x01, 0x00);
 
             if (buttonMark) {
                 if (start == 0) {
@@ -616,9 +620,10 @@ uint8_t GenerateAudio(){
                 } 
 
                 if (loudness == 0) {
-                    auRepAddr = &zero;
                     effect &= 0x10;
-                    auVolume = 255;
+                    auRepAddr = &zero;
+                    auSmpAddr = &zero;
+                    auVolume = 0xff;
                     start = 0;
                 }
             }
@@ -656,17 +661,17 @@ uint8_t GenerateAudio(){
 
         }
 
-        //Knocking
+        //
         if ((effect&0xE0)==160){
 
         }
 
-        //Scream
+        //
         if ((effect&0xE0)==192){
 
         }
 
-        //Rain storm with whistling wind
+        //
         else {
         }
     }

@@ -22,10 +22,11 @@
 
 uint16_t simonScore = 0;
 uint8_t simonState[BASTET_LENGTH] = {0};
-uint8_t simonPos = 0;
+uint8_t simonPos = 1;
 uint8_t simonInputPos = 0;
-uint8_t simonLen = 1;
 uint8_t simonGameState = BASTET_BOOT;
+uint8_t simonGameStateNext = BASTET_BOOT;   // for stuff like LEDs / audio loops etc ??
+uint8_t simonTimer = 0;
 
 void setupSimon() {
     for (uint8_t i = 0; i < BASTET_LENGTH; i++) {
@@ -35,21 +36,10 @@ void setupSimon() {
 }
 
 void simonTone(uint8_t val) {
-    // if (val == 1) {
-    //   tone(PIN_AUDIO, 200);
-    // } else if (val == 2) {
-    //   tone(PIN_AUDIO, 400);
-    // } else if (val == 3) {
-    //   tone(PIN_AUDIO, 600);
-    // } else if (val == 4) {
-    //   tone(PIN_AUDIO, 800);
-    // } else {
-    //   noTone(PIN_AUDIO);
-    // }
+    // TODO some way to set teh audio stuff
 }
 
 void simonLed(uint8_t val) {
-    simonTone(val);
     for (uint8_t n = 0; n < 5; n++) {
         iLED[WING[L][n]] = 0;
         iLED[WING[R][n]] = 0;
@@ -67,6 +57,7 @@ void simonLed(uint8_t val) {
         iLED[WING[R][3]] = dimValue;
         iLED[WING[R][4]] = dimValue;
     }
+    simonTone(val);
 }
 
 // Main game loop
@@ -82,10 +73,51 @@ uint8_t BastetDictates() {
     }
 
     if (BASTET_GAME_START == simonGameState) {
-        // TODO Animu
+        // TODO start animu
         simonGameState = BASTET_GAME_SHOW_PATTERN;
-    } else if (BASTET_GAME_SHOW_PATTERN == simonGameState) {
+        simonTimer = 0;
+    }
 
+    if (BASTET_GAME_SHOW_PATTERN == simonGameState) {
+        // assuming 15Hz
+        uint8_t pos = simonTimer / 15;
+        if (pos > simonPos) {
+            simonGameState = BASTET_GAME_INPUT;
+            return 0;
+        }
+        simonLed(simonState[pos]+1);
+    }
+
+    if (BASTET_GAME_INPUT == simonGameState) {
+        uint8_t choice = 0;
+        switch (buttonState) {
+            case 0b1000: // bottom left
+                choice = 1;
+                break;
+            case 0b0100: // top left
+                choice = 2;
+                break;
+            case 0b0010: // top right
+                choice = 3;
+                break;
+            case 0b0001; // bottom right
+                choice = 4;
+                break;
+        }
+        if (choice > 0) {
+            simonLed(choice);
+            if (simonState[pos]+1 == choice) {
+                // TODO win sound
+                simonInputPos++;
+            } else {
+                // TODO fail sound
+                simonInputPos = 0;
+            }
+            if (simonInputPos == BASTET_LENGTH) {
+                // TODO win animu
+                UpdateState(BASTET_COMPLETED);
+            }
+        }
     }
 
     return 0;

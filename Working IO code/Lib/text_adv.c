@@ -535,6 +535,7 @@ uint8_t ProcessInput(uint8_t *data){
             } else if (CheckState(currObj.byteField[OPEN_ACL])){
                 --currDepth;
                 PopulateObject(route[currDepth], &currObj);
+                effect = currObj.byteField[EFFECTS];
             
             //No way out, print denied message of location
             } else {
@@ -579,6 +580,7 @@ uint8_t ProcessInput(uint8_t *data){
                         PopulateObject(route[currDepth], &currObj);
                         SetResponse(elements++, currObj.addrStr[DESC], currObj.lenStr[DESC],GAME);
                         SetResponse(elements++, A_LF, 2, TEASER);
+                        effect = currObj.byteField[EFFECTS];
                                                   
                     //Not granted!
                     } else {
@@ -908,20 +910,17 @@ uint8_t ProcessInput(uint8_t *data){
         }
             
         //Input handled
-        data[0] = 0;
-        serRxDone = 0;
-        RXCNT = 0;
         SetResponse(0, A_LF, 2, TEASER);
         if (specialInput[0]) responseList = elements; else responseList = SetStandardResponse(elements);
 
     } else {
-        data[0] = 0;
-        serRxDone = 0;
-        RXCNT = 0;
         SetResponse(0, A_LF, 2, TEASER);
         responseList = SetStandardResponse(1);
     }
-    
+
+    data[0] = 0;
+    serRxDone = 0;
+    RXCNT = 0;    
     return 0;
 }
 

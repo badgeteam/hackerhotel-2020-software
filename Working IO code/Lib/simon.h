@@ -20,12 +20,8 @@
     #define BASTET_LENGTH                16
     #define BASTET_BOOT                  0
     #define BASTET_GAME_START            1
-    #define BASTET_GAME_WAIT_LED_ON      2
-    #define BASTET_GAME_WAIT_LED_OFF     3
-    #define BASTET_GAME_WAIT_FOR_INPUT   4
-    #define BASTET_GAME_WAIT_AFTER_INPUT 5
-    #define BASTET_GAME_SHOW_PATTERN     6
-    #define BASTET_GAME_INPUT            7
+    #define BASTET_GAME_SHOW_PATTERN     3
+    #define BASTET_GAME_INPUT            5
 
     uint8_t BastetDictates();
 
