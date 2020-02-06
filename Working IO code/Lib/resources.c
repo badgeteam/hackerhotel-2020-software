@@ -264,7 +264,7 @@ ISR(ADC1_RESRDY_vect){
 // RTC compare interrupt, triggers at 512/BTN_TMR rate, also RTC overflow interrupt, triggers once a minute
 ISR(RTC_CNT_vect) {
     if (RTC_INTFLAGS & RTC_CMP_bm){
-        if (buttonMark<255) buttonMark++;   // For button timing purposes
+        if (buttonMark<0xff) buttonMark++;   // For button timing purposes
         tmp16bit = (RTC_CNT + BTN_TMR)%RTC_PER;
         while(RTC_STATUS & RTC_CMPBUSY_bm);
         RTC_CMP = tmp16bit;                 // Button timing: next interrupt set
@@ -469,10 +469,12 @@ void WriteStatusBit(uint8_t number, uint8_t state){
 void UpdateState(uint8_t num){
     uint8_t clearBit = num & 0x80;
     num &= 0x7f;
-    if (clearBit) {
-        WriteStatusBit(num, 0);
-    } else {
-        WriteStatusBit(num, 1);
+    if (num) {
+        if (clearBit) {
+            WriteStatusBit(num, 0);
+        } else {
+            WriteStatusBit(num, 1);
+        }
     }
 }
 
@@ -487,8 +489,9 @@ uint8_t CheckState(uint8_t num){
     }
     return 0;
 }
+
+//Give out a number 0..3, calculated using serial number fields
 uint8_t getID(){
-    //Give out a number 0..3, calculated using serial number fields
     uint8_t id = 0;
     uint8_t *serNum;
     serNum = (uint8_t*)&SIGROW_SERNUM0;
@@ -556,7 +559,7 @@ void GenerateAudio(){
         //Bad (buzzer)
         if ((effect&0xE0)==32){
             static uint8_t auBuffer[17] = {1, 255, 128, 128, 192, 255, 192, 255, 192, 128, 64, 1, 64, 1, 64, 128, 0}; 
-            static uint8_t loudness = 255;
+            static uint8_t loudness = 0xff;
             auRepAddr = &auBuffer[0];
             if (buttonMark) {
                 if (loudness) {

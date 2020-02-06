@@ -40,7 +40,7 @@ volatile uint8_t zero = 0;              // Point to this to stop playing audio
 volatile uint8_t auIn[AULEN];           // Audio input buffer
 volatile uint8_t adc0Chg = 0;           // Changed adc0 channel and reference
 
-volatile uint8_t dimValue = 255;        // Global dimming maximum LED value.
+volatile uint8_t dimValue = 0xff;        // Global dimming maximum LED value.
 
 //Quarter sine table, can be used for audio or other things (invert for nice LED dimming curve from bright to off)
 const uint8_t QSINE[32] = {0x01,0x0d,0x19,0x26,0x32,0x3e,0x4a,0x56,0x62,0x6f,0x78,0x83,0x8e,0x98,0xa2,0xab,0xb4,0xbf,0xc5,0xcf,0xd4,0xdb,0xe1,0xe7,0xec,0xf0,0xf4,0xf7,0xfa,0xfc,0xfe,0xff};

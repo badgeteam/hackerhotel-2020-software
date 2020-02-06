@@ -35,7 +35,7 @@ int main(void)
 {
     Setup();
 
-    SerSpeed(255);
+    SerSpeed(0xff);
     ////Turn on LEDs on low setting to check for interrupt glitches
 
     //"Hacker"
@@ -78,7 +78,7 @@ int main(void)
             MagnetMaze();
             BastetDictates();
             LanyardCode();
-            //MakeFriends();
+            MakeFriends();
              
             //Check light sensor status (added hysteresis to preserve writing cycles to internal EEPROM)
             if (adcPhot < 10) WriteStatusBit(116, 1);

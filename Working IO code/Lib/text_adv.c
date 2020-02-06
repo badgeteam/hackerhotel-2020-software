@@ -34,7 +34,7 @@ static uint8_t specialPassed = 0;                   //If user input matches spec
 
 uint8_t Cheat(uint8_t bit, uint16_t checksum){
     const uint16_t chk[MAX_CHEATS] = {0x7D2D, 0x5739, 0x795C, 0x4251, 0x6134, 0x597D, 0x653B, 0x445B}; // }-, W9, y\, BQ, a4, Y~, e;, D[
-    uint8_t pos = 255;
+    uint8_t pos = 0xff;
     uint8_t val;
 
     //Checksum ok?
@@ -45,7 +45,7 @@ uint8_t Cheat(uint8_t bit, uint16_t checksum){
     //Check if cheat position is empty
     if (pos<MAX_CHEATS){
         EERead(CHEATS+pos, &val, 1);
-        if (val == 255) {
+        if (val == 0xff) {
             EEWrite(CHEATS+pos, &bit, 1);
             return 1;
         }
@@ -103,17 +103,17 @@ uint8_t PrepareSending(uint16_t address, uint16_t length, uint8_t type){
     uint8_t x=0;
     if (length){
         
-        while (length>255) {
+        while (length>0xff) {
             txAddrList[x] = address;
-            txStrLen[x] = 255;
-            address += 255;
-            length -= 255;
+            txStrLen[x] = 0xff;
+            address += 0xff;
+            length -= 0xff;
             ++x;
             if (x==(TXLISTLEN-1)) return 1;
         }
         txAddrList[x]=address;
-        txStrLen[x]=length%255;
-        if (length>255) return 1; 
+        txStrLen[x]=length%0xff;
+        if (length>0xff) return 1; 
         txTypeNow = type;
     } else {
         txAddrList[0] = 0;
@@ -395,7 +395,7 @@ uint8_t CheckInput(uint8_t *data){
                     break;
                 }
                 if ((bitNr)&&(bitNr!=128)) {
-                    if (Cheat(255-bitNr, serRx[4]<<8|serRx[5])) UpdateState(bitNr);
+                    if (Cheat(0xff-bitNr, serRx[4]<<8|serRx[5])) UpdateState(bitNr);
                 }
                 responseList = SetStandardResponse(0);
                 return 1;            
@@ -507,7 +507,7 @@ uint8_t CheckInput(uint8_t *data){
                     
                     //Set up sending out number
                     EERead(CHEATS+x, &bit, 1);
-                    bit = 255-bit;
+                    bit = 0xff-bit;
                     for (n=2; n>=0; --n) {
                         digit[n] = bit % 10;
                         bit /= 10;

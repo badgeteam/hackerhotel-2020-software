@@ -70,7 +70,7 @@ uint8_t MagnetMaze(){
     }
 
     /* activate led for hallstate */
-    iLED[SCARAB[G]] = (newHallState ? 255 : 0);
+    iLED[SCARAB[G]] = (newHallState ? dimValue : 0);
 
 
     /* Make the maze work regardless of badge orientation */
@@ -96,14 +96,14 @@ uint8_t MagnetMaze(){
                 mazeCnt = 0;
                 if (mazeState == TRUE) {
                     /* play tone GOOD */
-                    iLED[HCKR[G][(mazePos/3)-1]] = 255;
+                    iLED[HCKR[G][(mazePos/3)-1]] = dimValue;
                     if (mazePos == sizeof(mazeCode)) {
                         UpdateState(MAZE_COMPLETED);
                         iLED[SCARAB[G]]    = 0;
                         iLED[EYE[R][L]] = 0;
                         iLED[EYE[R][R]] = 0;
-                        iLED[EYE[G][L]] = 255;
-                        iLED[EYE[G][R]] = 255;
+                        iLED[EYE[G][L]] = dimValue;
+                        iLED[EYE[G][R]] = dimValue;
                         /*state = STATE_MUSIC;*/
                     }
                 } else {
@@ -113,8 +113,8 @@ uint8_t MagnetMaze(){
                     iLED[SCARAB[G]]    = 0;
                     iLED[EYE[G][L]] = 0;
                     iLED[EYE[G][R]] = 0;
-                    iLED[EYE[R][L]] = 255;
-                    iLED[EYE[R][R]] = 255;
+                    iLED[EYE[R][L]] = dimValue;
+                    iLED[EYE[R][R]] = dimValue;
                     for (int i=0; i<6; i++ )
                         iLED[HCKR[G][i]] = 0;
                 }
