@@ -72,22 +72,24 @@ void simonTone(uint8_t val) {
 
 void simonLed(uint8_t val) {
   simonTone(val);
-  if (val == 1) {
-    leds[1] |= (1UL << 3);
-  } else if (val == 2) {
-    leds[2] |= (1UL << 1);
-  } else if (val == 3) {
-    leds[1] |= (1UL << 0);
-  } else if (val == 4) {
-    leds[2] |= (1UL << 4);
-  } else {
     for (uint8_t n=0; n<5; n++){
-      iLED[WING[L][n]] = 0;
-      iLED[WING[R][n]] = 0;
+        iLED[WING[L][n]] = 0;
+        iLED[WING[R][n]] = 0;
     }
+  if (val == 1) {
+      iLED[WING[L][0]] = dimValue;
+      iLED[WING[L][1]] = dimValue;
+  } else if (val == 2) {
+      iLED[WING[L][3]] = dimValue;
+      iLED[WING[L][4]] = dimValue;
+  } else if (val == 3) {
+      iLED[WING[R][0]] = dimValue;
+      iLED[WING[R][1]] = dimValue;
+  } else if (val == 4) {
+      iLED[WING[R][3]] = dimValue;
+      iLED[WING[R][4]] = dimValue;
   }
 }
-
 
 // Main game loop
 uint8_t BastetDictates(){
