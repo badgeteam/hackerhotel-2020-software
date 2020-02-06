@@ -16,6 +16,8 @@
     #include <stdlib.h>
     #include <literals.h>
 
+    #define BASTET_COMPLETED      122
+
     uint8_t BastetDictates();
 
 #endif /* SIMON_H_ */
