@@ -15,6 +15,9 @@
     #include <avr/interrupt.h>
     #include <stdlib.h>
 
+    #define FIRST_SUMMER        117
+    #define SUMMERS_COMPLETED   118
+
     void Setup();
     /*
     ISR(TCA0_LUNF_vect);                                                // LED matrix interrupt routine
@@ -50,6 +53,8 @@
     
     uint8_t getID();
     void Reset();
+
+    uint8_t HotSummer();
 
     void GenerateAudio();
 #endif /* RESOURCES_H_ */

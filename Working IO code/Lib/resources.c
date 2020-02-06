@@ -524,6 +524,22 @@ void Reset(){
     WriteStatusBit(0, 1);
 }
 
+//Sets specific game bits after the badge is heated for one and two times.
+uint8_t HotSummer(){
+    static uint8_t cooledDown = 0;
+
+    if (CheckState(SUMMERS_COMPLETED)) return 0;
+    if (CheckState(FIRST_SUMMER)) {
+            
+    } else {
+        if (calTemp == 0) calTemp = adcTemp;
+        if (adcTemp >= (calTemp + 8)) {
+            UpdateState(FIRST_SUMMER);
+            iLED[SCARAB[G]] = dimValue;
+        }
+    }
+    return 0;
+}
 
 void GenerateAudio(){
 

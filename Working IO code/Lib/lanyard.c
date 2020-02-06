@@ -25,7 +25,7 @@ uint8_t LanyardCode(){
             gameNow   = TEXT;
             lanyardPos   = 0;
             lanyardState = TRUE;
-            iLED[GEM[G]]    = 0;
+            iLED[SCARAB[G]]    = 0;
             iLED[EYE[G][L]] = 0;
             iLED[EYE[G][R]] = 0;
             iLED[EYE[R][L]] = 0;
@@ -41,7 +41,7 @@ uint8_t LanyardCode(){
         return 0;
 
     /* activate led for buttonstate */
-    iLED[GEM[G]] = (buttonState==0xff ? 0 : 255);
+    iLED[SCARAB[G]] = (buttonState==0xff ? 0 : 255);
 
     if ( (buttonState & 0xf0) == 0)
         return 0;
@@ -105,7 +105,7 @@ uint8_t LanyardCode(){
                 iLED[HCKR[G][(lanyardPos/4)-1]] = 255;
                 if (lanyardPos == sizeof(lanyardCode)) {
                     UpdateState(LANYARD_COMPLETED);
-                    iLED[GEM[G]]    = 0;
+                    iLED[SCARAB[G]]    = 0;
                     iLED[EYE[R][L]] = 0;
                     iLED[EYE[R][R]] = 0;
                     iLED[EYE[G][L]] = 255;
@@ -117,7 +117,7 @@ uint8_t LanyardCode(){
                 lanyardPos      = 0;
                 lanyardState    = TRUE;
                 lastButtonState = 0xff;
-                iLED[GEM[G]]    = 0;
+                iLED[SCARAB[G]]    = 0;
                 iLED[EYE[G][L]] = 0;
                 iLED[EYE[G][R]] = 0;
                 iLED[EYE[R][L]] = 255;
