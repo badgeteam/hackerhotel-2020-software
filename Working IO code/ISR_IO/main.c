@@ -72,7 +72,7 @@ int main(void)
             buttonState = CheckButtons(buttonState);
             buttonMark = 0;
             
-            //GenerateBlinks();           
+            GenerateBlinks();           
             
             //Main game, to complete: Finish sub-game MagnetMaze and MakeFriends too.
             TextAdventure();

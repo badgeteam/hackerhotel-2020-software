@@ -261,6 +261,12 @@ uint8_t CheckSend(){
     static uint8_t txPart;
     uint8_t EEreadLength=0;
 
+    //Play effects if available and not already playing
+    if (effect == 0){
+        effect = currObj.byteField[EFFECTS];
+        auStart = ((effect&0xE0)>0);
+    }
+
     //Check if more string(part)s have to be sent to the serial output if previous send operation is completed
     if ((txAddrNow < TXLISTLEN) && serTxDone){
         if (txStrLen[txAddrNow] == 0){
@@ -314,12 +320,6 @@ uint8_t CheckInput(uint8_t *data){
         //Start at first location
         PopulateObject(route[0], &currObj);
         currDepth = 0;
-    }
-
-    //Play effects if available and not already playing
-    if (effect == 0){
-        effect = currObj.byteField[EFFECTS];
-        auStart = ((effect&0xE0)>0);
     }
 
     if (serRxDone){
