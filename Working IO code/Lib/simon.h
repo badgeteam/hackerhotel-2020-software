@@ -31,8 +31,6 @@
 
     void setupSimon();
     void simonTone(uint8_t val);
-    uint8_t getSimonValue(uint8_t pos);
-    void setSimonValue(uint8_t pos, uint8_t val);
     void simonLed(uint8_t val);
 
 #endif /* SIMON_H_ */

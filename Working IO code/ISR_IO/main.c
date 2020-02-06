@@ -73,7 +73,8 @@ int main(void)
             buttonMark = 0;
 
             //GenerateBlinks();
-
+            GenerateBlinks();
+            
             //Main game, to complete: Finish sub-game MagnetMaze and MakeFriends too.
             TextAdventure();
 

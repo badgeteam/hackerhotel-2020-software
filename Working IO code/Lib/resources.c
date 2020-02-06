@@ -572,6 +572,17 @@ uint8_t HotSummer(){
     return 0;
 }
 
+void GenerateBlinks(){
+    static uint8_t test = 0;
+    iLED[WING[L][test%5]] = 0;
+    iLED[WING[L][(test+1)%5]] = dimValue;
+    ++test;
+
+    for (uint8_t x=0; x<5; ++x){
+        iLED[WING[R][x]] = iLED[WING[L][4-x]];
+    }
+}
+
 uint8_t GenerateAudio(){
 
     //auRepAddr = &auBuffer[0];
@@ -586,12 +597,13 @@ uint8_t GenerateAudio(){
 
         //Bad (buzzer)
         if ((effect&0xE0)==32){
-            static uint8_t auBuffer[17] = {1, 255, 128, 128, 192, 255, 192, 255, 192, 128, 64, 1, 64, 1, 64, 128, 0}; 
+            static uint8_t auBuffer[17] = {1, 255, 128, 128, 192, 255, 64, 255, 192, 128, 64, 1, 192, 1, 64, 128, 0}; 
             static uint8_t loudness, duration, start;
+            floatSpeed(1, 0x2000, 0x2200);
 
             if (buttonMark) {
                 if (start == 0) {
-                    duration = 8;
+                    duration = 4;
                     loudness = 0xff;
                     TCB1_CCMP = 0x2000;
                     auRepAddr = &auBuffer[0];
@@ -600,8 +612,10 @@ uint8_t GenerateAudio(){
 
                 if (loudness) {
                     auVolume = loudness;
-                    if (duration) duration--; else loudness <<= 1;
-                } else {
+                    if (duration) duration--; else loudness >>= 1;
+                } 
+
+                if (loudness == 0) {
                     auRepAddr = &zero;
                     effect &= 0x10;
                     auVolume = 255;

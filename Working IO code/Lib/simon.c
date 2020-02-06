@@ -27,32 +27,9 @@ uint8_t simonInputPos = 0;
 uint8_t simonLen = 1;
 uint8_t simonGameState = BASTET_BOOT;
 
-uint8_t getSimonValue(uint8_t pos) {
-    uint8_t b = simonState[pos >> 2];
-    uint8_t a1 = b & 3;
-    uint8_t a2 = (b >> 2) & 3;
-    uint8_t a3 = (b >> 4) & 3;
-    uint8_t a4 = (b >> 6) & 3;
-    return (pos & 1) ? ((pos & 2) ? (a4) : (a3)) : ((pos & 2) ? (a2) : (a1));
-}
-
-void setSimonValue(uint8_t pos, uint8_t val) {
-    uint8_t b = simonState[pos >> 2];
-    uint8_t a1 = b & 3;
-    uint8_t a2 = (b >> 2) & 3;
-    uint8_t a3 = (b >> 4) & 3;
-    uint8_t a4 = (b >> 6) & 3;
-    if ((pos & 3) == 0) a1 = val;
-    if ((pos & 3) == 1) a2 = val;
-    if ((pos & 3) == 2) a3 = val;
-    if ((pos & 3) == 3) a4 = val;
-    simonState[pos >> 2] = (a4 << 6) | (a3 << 4) | (a2 << 2) | a1;
-}
-
 void setupSimon() {
-    for (uint8_t i = 0; i < BASTET_LENGTH * 4; i++) {
-        uint8_t val = (lfsr() % 4);
-        setSimonValue(i, val);
+    for (uint8_t i = 0; i < BASTET_LENGTH; i++) {
+        simonState[i] = (lfsr() % 4);
     }
     simonGameState = BASTET_GAME_START;
 }
@@ -102,7 +79,12 @@ uint8_t BastetDictates() {
 
     if (BASTET_BOOT == simonGameState) {
         setupSimon();
-    } else if (BASTET_GAME_START == simonGameState) {
+    }
+
+    if (BASTET_GAME_START == simonGameState) {
+        // TODO Animu
+        simonGameState = BASTET_GAME_SHOW_PATTERN;
+    } else if (BASTET_GAME_SHOW_PATTERN == simonGameState) {
 
     }
 
