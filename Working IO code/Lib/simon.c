@@ -100,7 +100,11 @@ uint8_t BastetDictates() {
             return 0;
         }
 
-        switch (buttonState) {
+        if ((buttonState & 0xf0) == 0)
+            return 0;
+        }
+
+        switch (buttonState & 0xf0) {
             case 0b1000: // bottom left
                 choice = BASTET_BOTTOM_LEFT;
                 break;
