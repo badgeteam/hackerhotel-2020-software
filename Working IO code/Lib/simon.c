@@ -108,6 +108,7 @@ uint8_t BastetDictates() {
                 break;
         }
         if (choice > 0) {
+            simonTimer = 0;
             simonLed(choice);
             // TODO something timer something 
             if (simonState[simonInputPos]+1 == choice) {
@@ -116,6 +117,10 @@ uint8_t BastetDictates() {
             } else {
                 // TODO fail sound
                 simonInputPos = 0;
+            }
+            if (simonInputPos == simonPos) {
+                simonInputPos = 0;
+                simonGameState = BASTET_GAME_SHOW_PATTERN;
             }
             if (simonInputPos == BASTET_LENGTH) {
                 // TODO win animu
