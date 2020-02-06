@@ -61,6 +61,7 @@ int main(void)
     iLED[CAT] = 1;
 
     effect = 32;
+    LoadGameState();
 
     while (1)
     {
@@ -81,13 +82,15 @@ int main(void)
             BastetDictates();
             LanyardCode();
             MakeFriends();
-             
+            SaveGameState(); 
+            
             //Check light sensor status (added hysteresis to preserve writing cycles to internal EEPROM)
             if (adcPhot < 10) WriteStatusBit(116, 1);
             if (adcPhot > 100) WriteStatusBit(116, 0);
 
             //Check temperature 
             HotSummer();
+
       }
 
         /* 

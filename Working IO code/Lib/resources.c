@@ -425,6 +425,24 @@ uint8_t floatAround(uint8_t sample, uint8_t bits, uint8_t min, uint8_t max){
     return sample;
 }
 
+//Load game status
+uint8_t LoadGameState(){
+    EERead(0, &gameState[0], BOOTCHK);   //Load game status bits from EEPROM
+
+    uint8_t idSet = 0;
+    for (uint8_t x=0; x<4; ++x){
+        idSet += ReadStatusBit(110+x);
+    }
+
+    //Check if badge is reset(0 = cheated!) or new(3) or error(2)
+    if (idSet != 1) {
+        Reset();
+    } else getID();
+
+    inventory[0] = (gameState[INVADDR]<<8|gameState[INVADDR+1]);
+    inventory[1] = (gameState[INVADDR+2]<<8|gameState[INVADDR+3]);
+}
+
 //Save changed data to EEPROM
 uint8_t SaveGameState(){
     uint8_t gameCheck[BOOTCHK];

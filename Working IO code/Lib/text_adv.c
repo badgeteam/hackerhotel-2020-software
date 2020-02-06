@@ -312,20 +312,6 @@ uint8_t CheckInput(uint8_t *data){
     //Load game data after reboot
     if (currDepth == 0xff) {
         //Load things from EEPROM
-        EERead(0, &gameState[0], BOOTCHK);   //Load game status bits from EEPROM
-
-        uint8_t idSet = 0;
-        for (uint8_t x=0; x<4; ++x){
-            idSet += ReadStatusBit(110+x);
-        }
-
-        //Check if badge is reset(0 = cheated!) or new(3) or error(2)
-        if (idSet != 1) {
-            Reset();
-        } else getID();
-
-        inventory[0] = (gameState[INVADDR]<<8|gameState[INVADDR+1]);
-        inventory[1] = (gameState[INVADDR+2]<<8|gameState[INVADDR+3]);
         SaveGameState();
 
         //Start at first location
@@ -946,7 +932,6 @@ uint8_t TextAdventure(){
 
     //Input found, process and save (changes only)
     ProcessInput(&serInput[0]);
-    SaveGameState();
 
     return 0;
 }

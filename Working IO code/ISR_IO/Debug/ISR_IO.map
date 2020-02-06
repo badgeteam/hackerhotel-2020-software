@@ -71,26 +71,17 @@ Discarded input sections
  .bss           0x00000000        0x0 Lib/main_def.o
  .rodata.QSINE  0x00000000       0x20 Lib/main_def.o
  .bss.auStart   0x00000000        0x1 Lib/main_def.o
- .bss.whoami    0x00000000        0x1 Lib/main_def.o
- .bss.inventory
-                0x00000000        0x4 Lib/main_def.o
  .text          0x00000000        0x0 Lib/maze.o
  .data          0x00000000        0x0 Lib/maze.o
  .bss           0x00000000        0x0 Lib/maze.o
  .text          0x00000000        0x0 Lib/resources.o
  .data          0x00000000        0x0 Lib/resources.o
  .bss           0x00000000        0x0 Lib/resources.o
- .text.EERead   0x00000000       0x20 Lib/resources.o
- .text.EEWrite  0x00000000       0x50 Lib/resources.o
  .text.SerSend  0x00000000       0x22 Lib/resources.o
  .text.SelectTSens
                 0x00000000       0x1e Lib/resources.o
  .text.SelectAuIn
                 0x00000000       0x1e Lib/resources.o
- .text.SaveGameState
-                0x00000000       0xee Lib/resources.o
- .text.getID    0x00000000       0x1c Lib/resources.o
- .text.Reset    0x00000000       0x54 Lib/resources.o
  .text          0x00000000        0x0 Lib/simon.o
  .data          0x00000000        0x0 Lib/simon.o
  .bss           0x00000000        0x0 Lib/simon.o
@@ -132,20 +123,20 @@ Discarded input sections
  .rodata.str1.1
                 0x00000000       0x72 Lib/text_adv.o
  .text.CheckInput
-                0x00000000      0x5fe Lib/text_adv.o
+                0x00000000      0x59e Lib/text_adv.o
  .text.ProcessInput
                 0x00000000     0x10c6 Lib/text_adv.o
  .text.TextAdventure
-                0x00000000       0x3a Lib/text_adv.o
- .bss.serInput.4022
+                0x00000000       0x36 Lib/text_adv.o
+ .bss.serInput.4018
                 0x00000000       0x41 Lib/text_adv.o
- .bss.actObj2.3993
+ .bss.actObj2.3989
                 0x00000000       0x2b Lib/text_adv.o
- .bss.actObj1.3992
+ .bss.actObj1.3988
                 0x00000000       0x2b Lib/text_adv.o
- .bss.number.3939
+ .bss.number.3940
                 0x00000000        0x1 Lib/text_adv.o
- .bss.txPart.3935
+ .bss.txPart.3936
                 0x00000000        0x1 Lib/text_adv.o
  .bss.specialPassed
                 0x00000000        0x1 Lib/text_adv.o
@@ -169,14 +160,14 @@ Discarded input sections
                 0x00000000       0x10 Lib/text_adv.o
  .rodata.xor_key
                 0x00000000       0x10 Lib/text_adv.o
- .debug_info    0x00000000     0x26f9 Lib/text_adv.o
+ .debug_info    0x00000000     0x2638 Lib/text_adv.o
  .debug_abbrev  0x00000000      0x353 Lib/text_adv.o
- .debug_loc     0x00000000     0x2d27 Lib/text_adv.o
+ .debug_loc     0x00000000     0x2cca Lib/text_adv.o
  .debug_aranges
                 0x00000000       0xb0 Lib/text_adv.o
  .debug_ranges  0x00000000      0x190 Lib/text_adv.o
- .debug_line    0x00000000     0x1537 Lib/text_adv.o
- .debug_str     0x00000000      0x620 Lib/text_adv.o
+ .debug_line    0x00000000     0x14f3 Lib/text_adv.o
+ .debug_str     0x00000000      0x5f6 Lib/text_adv.o
  .comment       0x00000000       0x31 Lib/text_adv.o
  .debug_frame   0x00000000      0x318 Lib/text_adv.o
  COMMON         0x00000000       0x21 Lib/text_adv.o
@@ -412,7 +403,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000     0x11ae
+.text           0x00000000     0x13d4
  *(.vectors)
  .vectors       0x00000000       0x7c C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATtiny_DFP/1.3.229/gcc/dev/attiny1617/avrxmega3/crtattiny1617.o
                 0x00000000                __vector_default
@@ -467,124 +458,138 @@ END GROUP
  *(.init8)
  *(.init8)
  *(.init9)
- .init9         0x000000ae        0x6 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATtiny_DFP/1.3.229/gcc/dev/attiny1617/avrxmega3/crtattiny1617.o
+ .init9         0x000000ae        0x8 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATtiny_DFP/1.3.229/gcc/dev/attiny1617/avrxmega3/crtattiny1617.o
  *(.init9)
  *(.text)
- .text          0x000000b4        0x2 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATtiny_DFP/1.3.229/gcc/dev/attiny1617/avrxmega3/crtattiny1617.o
-                0x000000b4                __vector_1
-                0x000000b4                __vector_24
-                0x000000b4                __vector_12
-                0x000000b4                __bad_interrupt
-                0x000000b4                __vector_3
-                0x000000b4                __vector_23
-                0x000000b4                __vector_30
-                0x000000b4                __vector_25
-                0x000000b4                __vector_11
-                0x000000b4                __vector_17
-                0x000000b4                __vector_19
-                0x000000b4                __vector_5
-                0x000000b4                __vector_4
-                0x000000b4                __vector_9
-                0x000000b4                __vector_2
-                0x000000b4                __vector_21
-                0x000000b4                __vector_15
-                0x000000b4                __vector_29
-                0x000000b4                __vector_26
-                0x000000b4                __vector_10
-                0x000000b4                __vector_16
-                0x000000b4                __vector_18
-                0x000000b6                . = ALIGN (0x2)
+ .text          0x000000b6        0x2 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATtiny_DFP/1.3.229/gcc/dev/attiny1617/avrxmega3/crtattiny1617.o
+                0x000000b6                __vector_1
+                0x000000b6                __vector_24
+                0x000000b6                __vector_12
+                0x000000b6                __bad_interrupt
+                0x000000b6                __vector_3
+                0x000000b6                __vector_23
+                0x000000b6                __vector_30
+                0x000000b6                __vector_25
+                0x000000b6                __vector_11
+                0x000000b6                __vector_17
+                0x000000b6                __vector_19
+                0x000000b6                __vector_5
+                0x000000b6                __vector_4
+                0x000000b6                __vector_9
+                0x000000b6                __vector_2
+                0x000000b6                __vector_21
+                0x000000b6                __vector_15
+                0x000000b6                __vector_29
+                0x000000b6                __vector_26
+                0x000000b6                __vector_10
+                0x000000b6                __vector_16
+                0x000000b6                __vector_18
+                0x000000b8                . = ALIGN (0x2)
  *(.text.*)
  .text.MakeFriends
-                0x000000b6        0x4 Lib/friends.o
-                0x000000b6                MakeFriends
+                0x000000b8        0x4 Lib/friends.o
+                0x000000b8                MakeFriends
  .text.I2C_init
-                0x000000ba       0x3c Lib/I2C.o
-                0x000000ba                I2C_init
+                0x000000bc       0x3c Lib/I2C.o
+                0x000000bc                I2C_init
  .text.LanyardCode
-                0x000000f6      0x1f0 Lib/lanyard.o
-                0x000000f6                LanyardCode
+                0x000000f8      0x1f0 Lib/lanyard.o
+                0x000000f8                LanyardCode
  .text.MagnetMaze
-                0x000002e6      0x290 Lib/maze.o
-                0x000002e6                MagnetMaze
- .text.Setup    0x00000576      0x1fe Lib/resources.o
-                0x00000576                Setup
+                0x000002e8      0x290 Lib/maze.o
+                0x000002e8                MagnetMaze
+ .text.Setup    0x00000578      0x1fe Lib/resources.o
+                0x00000578                Setup
  .text.__vector_8
-                0x00000774       0xa2 Lib/resources.o
-                0x00000774                __vector_8
+                0x00000776       0xa2 Lib/resources.o
+                0x00000776                __vector_8
  .text.__vector_13
-                0x00000816       0x66 Lib/resources.o
-                0x00000816                __vector_13
+                0x00000818       0x66 Lib/resources.o
+                0x00000818                __vector_13
  .text.__vector_14
-                0x0000087c       0xa6 Lib/resources.o
-                0x0000087c                __vector_14
+                0x0000087e       0xa6 Lib/resources.o
+                0x0000087e                __vector_14
  .text.__vector_27
-                0x00000922       0xb6 Lib/resources.o
-                0x00000922                __vector_27
+                0x00000924       0xb6 Lib/resources.o
+                0x00000924                __vector_27
  .text.__vector_28
-                0x000009d8       0x38 Lib/resources.o
-                0x000009d8                __vector_28
+                0x000009da       0x38 Lib/resources.o
+                0x000009da                __vector_28
  .text.__vector_20
-                0x00000a10       0x66 Lib/resources.o
-                0x00000a10                __vector_20
+                0x00000a12       0x66 Lib/resources.o
+                0x00000a12                __vector_20
  .text.__vector_22
-                0x00000a76       0x90 Lib/resources.o
-                0x00000a76                __vector_22
+                0x00000a78       0x90 Lib/resources.o
+                0x00000a78                __vector_22
  .text.__vector_6
-                0x00000b06       0x92 Lib/resources.o
-                0x00000b06                __vector_6
+                0x00000b08       0x92 Lib/resources.o
+                0x00000b08                __vector_6
  .text.__vector_7
-                0x00000b98       0x22 Lib/resources.o
-                0x00000b98                __vector_7
+                0x00000b9a       0x22 Lib/resources.o
+                0x00000b9a                __vector_7
+ .text.EERead   0x00000bbc       0x20 Lib/resources.o
+                0x00000bbc                EERead
+ .text.EEWrite  0x00000bdc       0x50 Lib/resources.o
+                0x00000bdc                EEWrite
  .text.SerSpeed
-                0x00000bba       0x22 Lib/resources.o
-                0x00000bba                SerSpeed
+                0x00000c2c       0x22 Lib/resources.o
+                0x00000c2c                SerSpeed
  .text.CheckButtons
-                0x00000bdc       0xb8 Lib/resources.o
-                0x00000bdc                CheckButtons
- .text.lfsr     0x00000c94       0x3e Lib/resources.o
-                0x00000c94                lfsr
+                0x00000c4e       0xb8 Lib/resources.o
+                0x00000c4e                CheckButtons
+ .text.lfsr     0x00000d06       0x3e Lib/resources.o
+                0x00000d06                lfsr
  .text.floatSpeed
-                0x00000cd2       0x64 Lib/resources.o
-                0x00000cd2                floatSpeed
+                0x00000d44       0x64 Lib/resources.o
+                0x00000d44                floatSpeed
  .text.floatAround
-                0x00000d36       0x4a Lib/resources.o
-                0x00000d36                floatAround
+                0x00000da8       0x4a Lib/resources.o
+                0x00000da8                floatAround
+ .text.SaveGameState
+                0x00000df2       0xe6 Lib/resources.o
+                0x00000df2                SaveGameState
  .text.ReadStatusBit
-                0x00000d80       0x28 Lib/resources.o
-                0x00000d80                ReadStatusBit
+                0x00000ed8       0x28 Lib/resources.o
+                0x00000ed8                ReadStatusBit
  .text.WriteStatusBit
-                0x00000da8       0x34 Lib/resources.o
-                0x00000da8                WriteStatusBit
+                0x00000f00       0x34 Lib/resources.o
+                0x00000f00                WriteStatusBit
  .text.UpdateState
-                0x00000ddc       0x14 Lib/resources.o
-                0x00000ddc                UpdateState
+                0x00000f34       0x14 Lib/resources.o
+                0x00000f34                UpdateState
  .text.CheckState
-                0x00000df0       0x20 Lib/resources.o
-                0x00000df0                CheckState
+                0x00000f48       0x20 Lib/resources.o
+                0x00000f48                CheckState
+ .text.getID    0x00000f68       0x1c Lib/resources.o
+                0x00000f68                getID
+ .text.Reset    0x00000f84       0x52 Lib/resources.o
+                0x00000f84                Reset
+ .text.LoadGameState
+                0x00000fd6       0x5a Lib/resources.o
+                0x00000fd6                LoadGameState
  .text.HotSummer
-                0x00000e10       0xca Lib/resources.o
-                0x00000e10                HotSummer
+                0x00001030       0xca Lib/resources.o
+                0x00001030                HotSummer
  .text.GenerateAudio
-                0x00000eda      0x182 Lib/resources.o
-                0x00000eda                GenerateAudio
+                0x000010fa      0x182 Lib/resources.o
+                0x000010fa                GenerateAudio
  .text.BastetDictates
-                0x0000105c        0x4 Lib/simon.o
-                0x0000105c                BastetDictates
+                0x0000127c        0x4 Lib/simon.o
+                0x0000127c                BastetDictates
  .text.startup.main
-                0x00001060      0x10a main.o
-                0x00001060                main
+                0x00001280      0x110 main.o
+                0x00001280                main
  .text.libgcc.div
-                0x0000116a       0x18 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avrxmega3\libgcc.a(_udivmodqi4.o)
-                0x0000116a                __udivmodqi4
+                0x00001390       0x18 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avrxmega3\libgcc.a(_udivmodqi4.o)
+                0x00001390                __udivmodqi4
  .text.libgcc.div
-                0x00001182       0x28 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avrxmega3\libgcc.a(_udivmodhi4.o)
-                0x00001182                __udivmodhi4
-                0x000011aa                . = ALIGN (0x2)
+                0x000013a8       0x28 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avrxmega3\libgcc.a(_udivmodhi4.o)
+                0x000013a8                __udivmodhi4
+                0x000013d0                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x000011aa        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avrxmega3\libgcc.a(_exit.o)
-                0x000011aa                _exit
-                0x000011aa                exit
+ .fini9         0x000013d0        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avrxmega3\libgcc.a(_exit.o)
+                0x000013d0                _exit
+                0x000013d0                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -603,36 +608,36 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x000011aa        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avrxmega3\libgcc.a(_exit.o)
+ .fini0         0x000013d0        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avrxmega3\libgcc.a(_exit.o)
  *(.fini0)
-                0x000011ae                _etext = .
+                0x000013d4                _etext = .
 
-.rodata         0x000091ae       0x48 load address 0x000011ae
+.rodata         0x000093d4       0x48 load address 0x000013d4
  *(.rodata)
  *(.rodata*)
  .rodata.lanyardCode
-                0x000091ae       0x18 Lib/lanyard.o
-                0x000091ae                lanyardCode
- .rodata.CAT    0x000091c6        0x1 Lib/main_def.o
-                0x000091c6                CAT
+                0x000093d4       0x18 Lib/lanyard.o
+                0x000093d4                lanyardCode
+ .rodata.CAT    0x000093ec        0x1 Lib/main_def.o
+                0x000093ec                CAT
  .rodata.BADGER
-                0x000091c7        0x1 Lib/main_def.o
-                0x000091c7                BADGER
+                0x000093ed        0x1 Lib/main_def.o
+                0x000093ed                BADGER
  .rodata.SCARAB
-                0x000091c8        0x2 Lib/main_def.o
-                0x000091c8                SCARAB
- .rodata.WING   0x000091ca        0xa Lib/main_def.o
-                0x000091ca                WING
- .rodata.EYE    0x000091d4        0x4 Lib/main_def.o
-                0x000091d4                EYE
- .rodata.HCKR   0x000091d8        0xc Lib/main_def.o
-                0x000091d8                HCKR
+                0x000093ee        0x2 Lib/main_def.o
+                0x000093ee                SCARAB
+ .rodata.WING   0x000093f0        0xa Lib/main_def.o
+                0x000093f0                WING
+ .rodata.EYE    0x000093fa        0x4 Lib/main_def.o
+                0x000093fa                EYE
+ .rodata.HCKR   0x000093fe        0xc Lib/main_def.o
+                0x000093fe                HCKR
  .rodata.mazeCode
-                0x000091e4       0x12 Lib/maze.o
-                0x000091e4                mazeCode
+                0x0000940a       0x12 Lib/maze.o
+                0x0000940a                mazeCode
  *(.gnu.linkonce.r*)
 
-.data           0x00803800       0x26 load address 0x000011f6
+.data           0x00803800       0x26 load address 0x0000141c
                 0x00803800                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
@@ -662,9 +667,9 @@ END GROUP
  .data.mazeState
                 0x0080380a        0x1 Lib/maze.o
                 0x0080380a                mazeState
- .data.auBuffer.3932
+ .data.auBuffer.3940
                 0x0080380b       0x11 Lib/resources.o
- .data.state.3877
+ .data.state.3878
                 0x0080381c        0x2 Lib/resources.o
  .data.mask     0x0080381e        0x8 Lib/resources.o
                 0x0080381e                mask
@@ -673,7 +678,7 @@ END GROUP
                 0x00803826                _edata = .
                 0x00803826                PROVIDE (__data_end, .)
 
-.bss            0x00803826       0xcb
+.bss            0x00803826       0xd0
                 0x00803826                PROVIDE (__bss_start, .)
  *(.bss)
  *(.bss*)
@@ -691,65 +696,70 @@ END GROUP
                 0x0080382a                effect
  .bss.gameNow   0x0080382c        0x1 Lib/main_def.o
                 0x0080382c                gameNow
+ .bss.whoami    0x0080382d        0x1 Lib/main_def.o
+                0x0080382d                whoami
+ .bss.inventory
+                0x0080382e        0x4 Lib/main_def.o
+                0x0080382e                inventory
  .bss.buttonMark
-                0x0080382d        0x1 Lib/main_def.o
-                0x0080382d                buttonMark
+                0x00803832        0x1 Lib/main_def.o
+                0x00803832                buttonMark
  .bss.minuteMark
-                0x0080382e        0x1 Lib/main_def.o
-                0x0080382e                minuteMark
+                0x00803833        0x1 Lib/main_def.o
+                0x00803833                minuteMark
  .bss.serRxDone
-                0x0080382f        0x1 Lib/main_def.o
-                0x0080382f                serRxDone
- .bss.inverted  0x00803830        0x1 Lib/maze.o
-                0x00803830                inverted
- .bss.mazeCnt   0x00803831        0x1 Lib/maze.o
-                0x00803831                mazeCnt
- .bss.mazePos   0x00803832        0x1 Lib/maze.o
-                0x00803832                mazePos
+                0x00803834        0x1 Lib/main_def.o
+                0x00803834                serRxDone
+ .bss.inverted  0x00803835        0x1 Lib/maze.o
+                0x00803835                inverted
+ .bss.mazeCnt   0x00803836        0x1 Lib/maze.o
+                0x00803836                mazeCnt
+ .bss.mazePos   0x00803837        0x1 Lib/maze.o
+                0x00803837                mazePos
  .bss.newHallState
-                0x00803833        0x1 Lib/maze.o
-                0x00803833                newHallState
+                0x00803838        0x1 Lib/maze.o
+                0x00803838                newHallState
  .bss.curHallState
-                0x00803834        0x1 Lib/maze.o
-                0x00803834                curHallState
- .bss.auBuffer.3936
-                0x00803835        0x7 Lib/resources.o
- .bss.loudness.3933
-                0x0080383c        0x1 Lib/resources.o
- .bss.duration.3934
-                0x0080383d        0x1 Lib/resources.o
- .bss.start.3935
-                0x0080383e        0x1 Lib/resources.o
- .bss.cooledDown.3929
-                0x0080383f        0x1 Lib/resources.o
+                0x00803839        0x1 Lib/maze.o
+                0x00803839                curHallState
+ .bss.auBuffer.3944
+                0x0080383a        0x7 Lib/resources.o
+ .bss.loudness.3941
+                0x00803841        0x1 Lib/resources.o
+ .bss.duration.3942
+                0x00803842        0x1 Lib/resources.o
+ .bss.start.3943
+                0x00803843        0x1 Lib/resources.o
+ .bss.cooledDown.3937
+                0x00803844        0x1 Lib/resources.o
  *(COMMON)
- COMMON         0x00803840       0xaf Lib/main_def.o
-                0x00803840                timeout_I2C
-                0x00803841                gameState
-                0x00803855                serRx
-                0x00803896                auVolume
-                0x00803897                adcBtns
-                0x00803899                serTxAddr
-                0x0080389b                adcHall
-                0x0080389d                adcPhot
-                0x0080389f                detHdPh
-                0x008038a0                calTemp
-                0x008038a2                auIn
-                0x008038c2                iLED
-                0x008038ea                auPlayDone
-                0x008038eb                calHall
-                0x008038ed                adcTemp
- COMMON         0x008038ef        0x2 Lib/resources.o
-                0x008038ef                tmp16bit
-                0x008038f1                PROVIDE (__bss_end, .)
-                0x000011f6                __data_load_start = LOADADDR (.data)
-                0x0000121c                __data_load_end = (__data_load_start + SIZEOF (.data))
+ COMMON         0x00803845       0xaf Lib/main_def.o
+                0x00803845                timeout_I2C
+                0x00803846                gameState
+                0x0080385a                serRx
+                0x0080389b                auVolume
+                0x0080389c                adcBtns
+                0x0080389e                serTxAddr
+                0x008038a0                adcHall
+                0x008038a2                adcPhot
+                0x008038a4                detHdPh
+                0x008038a5                calTemp
+                0x008038a7                auIn
+                0x008038c7                iLED
+                0x008038ef                auPlayDone
+                0x008038f0                calHall
+                0x008038f2                adcTemp
+ COMMON         0x008038f4        0x2 Lib/resources.o
+                0x008038f4                tmp16bit
+                0x008038f6                PROVIDE (__bss_end, .)
+                0x0000141c                __data_load_start = LOADADDR (.data)
+                0x00001442                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x008038f1        0x0
+.noinit         0x008038f6        0x0
                 [!provide]                PROVIDE (__noinit_start, .)
  *(.noinit*)
                 [!provide]                PROVIDE (__noinit_end, .)
-                0x008038f1                _end = .
+                0x008038f6                _end = .
                 [!provide]                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
@@ -821,7 +831,7 @@ END GROUP
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x00000000      0x220
+.debug_aranges  0x00000000      0x228
  *(.debug_aranges)
  .debug_aranges
                 0x00000000       0x20 Lib/friends.o
@@ -834,16 +844,16 @@ END GROUP
  .debug_aranges
                 0x000000c0       0x20 Lib/maze.o
  .debug_aranges
-                0x000000e0      0x100 Lib/resources.o
+                0x000000e0      0x108 Lib/resources.o
  .debug_aranges
-                0x000001e0       0x20 Lib/simon.o
+                0x000001e8       0x20 Lib/simon.o
  .debug_aranges
-                0x00000200       0x20 main.o
+                0x00000208       0x20 main.o
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0x3ba0
+.debug_info     0x00000000     0x3c51
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000     0x19ed C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATtiny_DFP/1.3.229/gcc/dev/attiny1617/avrxmega3/crtattiny1617.o
  .debug_info    0x000019ed       0xa4 Lib/friends.o
@@ -851,9 +861,9 @@ END GROUP
  .debug_info    0x00002166      0x26e Lib/lanyard.o
  .debug_info    0x000023d4      0x432 Lib/main_def.o
  .debug_info    0x00002806      0x2d9 Lib/maze.o
- .debug_info    0x00002adf      0xd0a Lib/resources.o
- .debug_info    0x000037e9       0xa4 Lib/simon.o
- .debug_info    0x0000388d      0x313 main.o
+ .debug_info    0x00002adf      0xd8f Lib/resources.o
+ .debug_info    0x0000386e       0xa4 Lib/simon.o
+ .debug_info    0x00003912      0x33f main.o
 
 .debug_abbrev   0x00000000     0x22dd
  *(.debug_abbrev)
@@ -867,7 +877,7 @@ END GROUP
  .debug_abbrev  0x0000216c       0x69 Lib/simon.o
  .debug_abbrev  0x000021d5      0x108 main.o
 
-.debug_line     0x00000000     0x1dea
+.debug_line     0x00000000     0x1e4b
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x151 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATtiny_DFP/1.3.229/gcc/dev/attiny1617/avrxmega3/crtattiny1617.o
  .debug_line    0x00000151      0x11b Lib/friends.o
@@ -875,21 +885,21 @@ END GROUP
  .debug_line    0x00000804      0x29c Lib/lanyard.o
  .debug_line    0x00000aa0      0x106 Lib/main_def.o
  .debug_line    0x00000ba6      0x2f9 Lib/maze.o
- .debug_line    0x00000e9f      0xc05 Lib/resources.o
- .debug_line    0x00001aa4      0x119 Lib/simon.o
- .debug_line    0x00001bbd      0x22d main.o
+ .debug_line    0x00000e9f      0xc5a Lib/resources.o
+ .debug_line    0x00001af9      0x119 Lib/simon.o
+ .debug_line    0x00001c12      0x239 main.o
 
-.debug_frame    0x00000000      0x55c
+.debug_frame    0x00000000      0x578
  *(.debug_frame)
  .debug_frame   0x00000000       0x24 Lib/friends.o
  .debug_frame   0x00000024       0xf8 Lib/I2C.o
  .debug_frame   0x0000011c       0x2c Lib/lanyard.o
  .debug_frame   0x00000148       0x30 Lib/maze.o
- .debug_frame   0x00000178      0x39c Lib/resources.o
- .debug_frame   0x00000514       0x24 Lib/simon.o
- .debug_frame   0x00000538       0x24 main.o
+ .debug_frame   0x00000178      0x3b8 Lib/resources.o
+ .debug_frame   0x00000530       0x24 Lib/simon.o
+ .debug_frame   0x00000554       0x24 main.o
 
-.debug_str      0x00000000     0x154f
+.debug_str      0x00000000     0x1563
  *(.debug_str)
  .debug_str     0x00000000      0xacf C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATtiny_DFP/1.3.229/gcc/dev/attiny1617/avrxmega3/crtattiny1617.o
  .debug_str     0x00000acf      0x192 Lib/friends.o
@@ -902,20 +912,20 @@ END GROUP
                                 0x2fe (size before relaxing)
  .debug_str     0x0000114f       0x6a Lib/maze.o
                                 0x282 (size before relaxing)
- .debug_str     0x000011b9      0x364 Lib/resources.o
-                                0x656 (size before relaxing)
- .debug_str     0x0000151d       0x21 Lib/simon.o
+ .debug_str     0x000011b9      0x378 Lib/resources.o
+                                0x66a (size before relaxing)
+ .debug_str     0x00001531       0x21 Lib/simon.o
                                 0x1c7 (size before relaxing)
- .debug_str     0x0000153e       0x11 main.o
-                                0x27d (size before relaxing)
+ .debug_str     0x00001552       0x11 main.o
+                                0x299 (size before relaxing)
 
-.debug_loc      0x00000000     0x130b
+.debug_loc      0x00000000     0x1397
  *(.debug_loc)
  .debug_loc     0x00000000      0x4ed Lib/I2C.o
  .debug_loc     0x000004ed       0x36 Lib/lanyard.o
  .debug_loc     0x00000523       0x8f Lib/maze.o
- .debug_loc     0x000005b2      0xd45 Lib/resources.o
- .debug_loc     0x000012f7       0x14 main.o
+ .debug_loc     0x000005b2      0xdd1 Lib/resources.o
+ .debug_loc     0x00001383       0x14 main.o
 
 .debug_macinfo
  *(.debug_macinfo)
@@ -935,15 +945,15 @@ END GROUP
 .debug_pubtypes
  *(.debug_pubtypes)
 
-.debug_ranges   0x00000000      0x1b0
+.debug_ranges   0x00000000      0x1b8
  *(.debug_ranges)
  .debug_ranges  0x00000000       0x10 Lib/friends.o
  .debug_ranges  0x00000010       0x58 Lib/I2C.o
  .debug_ranges  0x00000068       0x10 Lib/lanyard.o
  .debug_ranges  0x00000078       0x10 Lib/maze.o
- .debug_ranges  0x00000088      0x108 Lib/resources.o
- .debug_ranges  0x00000190       0x10 Lib/simon.o
- .debug_ranges  0x000001a0       0x10 main.o
+ .debug_ranges  0x00000088      0x110 Lib/resources.o
+ .debug_ranges  0x00000198       0x10 Lib/simon.o
+ .debug_ranges  0x000001a8       0x10 main.o
 
 .debug_macro
  *(.debug_macro)
