@@ -3,16 +3,16 @@
  *
  * Created: 27/11/2019 18:15:46
  * Author : Badge.team
- */ 
+ */
 
-     /*
-        TODO: 
-            - Enable audio output if headphone is detected, else enable badge handshake mode.
-            - Simple handshake between badges for detecting badge group (4 types) already modeled
-            - Audio generation during games (nice to have)
-            - LED effects and dimming
-            - More
-    */
+/*
+   TODO:
+       - Enable audio output if headphone is detected, else enable badge handshake mode.
+       - Simple handshake between badges for detecting badge group (4 types) already modeled
+       - Audio generation during games (nice to have)
+       - LED effects and dimming
+       - More
+*/
 
 #include <main_def.h>           //Global variables, constants etc.
 #include <avr/io.h>
@@ -48,7 +48,7 @@ int main(void)
     for (uint8_t n=0; n<5; n++){
         iLED[WING[L][n]] = 1;
         iLED[WING[R][n]] = 1;
-    }    
+    }
 
     //"Others"
     iLED[EYE[G][R]] = 1;
@@ -69,11 +69,11 @@ int main(void)
 
             if (VREF_CTRLA == 0x12) SelectAuIn(); else SelectTSens();
 
-            GenerateBlinks();           
-            
+            GenerateBlinks();
+
             //Main game, to complete: Finish sub-game MagnetMaze and MakeFriends too.
             TextAdventure();
-          
+
             //Other games & user interaction checks
             MagnetMaze();
             BastetDictates();
@@ -81,27 +81,27 @@ int main(void)
             //MakeFriends();
 
             //Save progress
-            SaveGameState(); 
-            
+            SaveGameState();
+
             //Check light sensor status (added hysteresis to preserve writing cycles to internal EEPROM)
             if (adcPhot < 10) WriteStatusBit(116, 1);
             if (adcPhot > 100) WriteStatusBit(116, 0);
 
-            //Check temperature 
+            //Check temperature
             HotSummer();
 
 
 
-      }
+        }
 
-        /* 
+        /*
             Audio and light effect control explained:
-            
+
             Audio:
                 -IMPORTANT: Only play samples (when not communicating with other badges AND) when a headphone is detected
                 -Samples are stored in flash, uncompressed raw unsigned 8-bit audio, no value 0 allowed except for last value, this MUST be 0!
                 -To play a sample, point auRepAddr to zero, point auSmpAddr to the first byte of the sample.
-                -To repeat a sample, point auRepAddr to the byte of the sample that you want to repeat from, the end of the repeating section is always the end of the sample. 
+                -To repeat a sample, point auRepAddr to the byte of the sample that you want to repeat from, the end of the repeating section is always the end of the sample.
                 -To stop repeating and let the sample finish playing to the end, point auRepAddr to zero.
                 -To stop immediately, also point auSmpAddr to zero immediately after auRepAddr.
                 -auVolume sets the volume, 0 is silent, 255 is loudest.
