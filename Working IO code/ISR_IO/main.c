@@ -62,7 +62,7 @@ int main(void)
     iLED[EYE[R][L]] = 1;
     iLED[GEM[R]] = 1;
     iLED[GEM[G]] = 1;
-    iLED[RAT] = 1;
+    iLED[BADGER] = 1;
     iLED[CAT] = 1;
 
     while (1)
@@ -104,7 +104,7 @@ int main(void)
 
             LEDs:
                 -Usage: iLED[n] = value; NOTE: n must be < 40 and (n%8)>5 is not used.
-                -The HCKR[2][6] EYE[2][2] WING[2][5] GEM[2] RAT CAT values can be used to substitute n for easy LED addressing, for 2 dimensional arrays, the first dimension is the LED color.
+                -The HCKR[2][6] EYE[2][2] WING[2][5] GEM[2] BADGER CAT values can be used to substitute n for easy LED addressing, for 2 dimensional arrays, the first dimension is the LED color.
         */
     }
 }

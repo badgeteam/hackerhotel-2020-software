@@ -589,8 +589,9 @@ END GROUP
                 0x0000b26a                lanyardCode
  .rodata.CAT    0x0000b282        0x1 Lib/main_def.o
                 0x0000b282                CAT
- .rodata.RAT    0x0000b283        0x1 Lib/main_def.o
-                0x0000b283                RAT
+ .rodata.BADGER
+                0x0000b283        0x1 Lib/main_def.o
+                0x0000b283                BADGER
  .rodata.GEM    0x0000b284        0x2 Lib/main_def.o
                 0x0000b284                GEM
  .rodata.WING   0x0000b286        0xa Lib/main_def.o
@@ -899,25 +900,25 @@ END GROUP
  .debug_frame   0x000004fc      0x318 Lib/text_adv.o
  .debug_frame   0x00000814       0x24 main.o
 
-.debug_str      0x00000000     0x1863
+.debug_str      0x00000000     0x186a
  *(.debug_str)
  .debug_str     0x00000000      0xacf C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATtiny_DFP/1.3.229/gcc/dev/attiny1617/avrxmega3/crtattiny1617.o
  .debug_str     0x00000acf      0x48f Lib/I2C.o
                                 0x4c9 (size before relaxing)
  .debug_str     0x00000f5e       0xb3 Lib/lanyard.o
                                 0x250 (size before relaxing)
- .debug_str     0x00001011       0xff Lib/main_def.o
-                                0x2df (size before relaxing)
- .debug_str     0x00001110       0x6a Lib/maze.o
+ .debug_str     0x00001011      0x106 Lib/main_def.o
+                                0x2e6 (size before relaxing)
+ .debug_str     0x00001117       0x6a Lib/maze.o
                                 0x26a (size before relaxing)
- .debug_str     0x0000117a      0x33f Lib/resources.o
+ .debug_str     0x00001181      0x33f Lib/resources.o
                                 0x61a (size before relaxing)
- .debug_str     0x000014b9       0x21 Lib/simon.o
+ .debug_str     0x000014c0       0x21 Lib/simon.o
                                 0x1be (size before relaxing)
- .debug_str     0x000014da      0x378 Lib/text_adv.o
+ .debug_str     0x000014e1      0x378 Lib/text_adv.o
                                 0x617 (size before relaxing)
- .debug_str     0x00001852       0x11 main.o
-                                0x257 (size before relaxing)
+ .debug_str     0x00001859       0x11 main.o
+                                0x25e (size before relaxing)
 
 .debug_loc      0x00000000     0x3ff5
  *(.debug_loc)

@@ -87,7 +87,7 @@
     extern const uint8_t EYE[2][2];
     extern const uint8_t WING[2][5];
     extern const uint8_t GEM[2];        //Gem on top of cat head (red, green)
-    extern const uint8_t RAT;           //Rat gem LED location inside iLED
+    extern const uint8_t BADGER;           //Rat gem LED location inside iLED
     extern const uint8_t CAT;           //Cat lower gem LED location inside iLED
 
 #endif  //MAIN_DEF_H_

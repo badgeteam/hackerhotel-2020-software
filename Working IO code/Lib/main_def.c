@@ -59,6 +59,6 @@ const uint8_t WING[2][5] = {
     {4,  36, 34, 33, 35}        //Left wing LED locations inside iLED, bottom to top
 };
 const uint8_t GEM[2] = {12, 10};//Gem on top of cat head (red, green)
-const uint8_t RAT = 11;         //Rat gem LED location inside iLED
+const uint8_t BADGER = 11;         //Rat gem LED location inside iLED
 const uint8_t CAT = 13;         //Cat lower gem LED location inside iLED
 
