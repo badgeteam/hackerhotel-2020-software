@@ -66,7 +66,8 @@ int main(void)
         if (GenerateAudio()) {
             buttonState = CheckButtons(buttonState);
             buttonMark = 0;
-            SelectTSens();
+
+            if (VREF_CTRLA == 0x12) SelectAuIn(); else SelectTSens();
 
             GenerateBlinks();           
             
@@ -89,7 +90,7 @@ int main(void)
             //Check temperature 
             HotSummer();
 
-            SelectAuIn();
+
 
       }
 

@@ -232,11 +232,11 @@ ISR(USART0_DRE_vect){
 
 // ADC used for audio input and temperature sensor.
 ISR(ADC0_RESRDY_vect){
-    //If just switched reference, discard first sample
+    //If just switched reference, discard first few samples
     if (adc0Chg == 0){
         AUPOS = (AUPOS+1)&(AULEN-1);
         if (ADC0_MUXPOS == 0x1E) adcTemp = ADC0_RESL; else auIn[AUPOS]=ADC0_RESL;
-    } else adc0Chg = 0;
+    } else --adc0Chg;
     ADC0_INTFLAGS = ADC_RESRDY_bm;
 }
 
@@ -334,7 +334,7 @@ void SelectTSens(){
      VREF_CTRLA   = 0x12;    //0x22 for audio in/out (2.5V), 0x12 for temperature in, audio out (1.1V/2.5V)
      ADC0_CTRLA   |= ADC_RESSEL_bm;
      ADC0_MUXPOS  = 0x1E;    //Audio in: AIN7 at (0x07), Temperature: Internal sensor at (0x1E)
-     adc0Chg = 1;
+     adc0Chg = 3;
 };
 
 // Select "audio" input (0-2.5V)
@@ -342,7 +342,7 @@ void SelectAuIn(){
      VREF_CTRLA   = 0x22;    //0x22 for audio in/out (2.5V), 0x12 for temperature in, audio out (1.1V/2.5V)
      ADC0_CTRLA   &= ~(ADC_RESSEL_bm);
      ADC0_MUXPOS  = 0x07;    //Audio in: AIN7 at (0x07), Temperature: Internal sensor at (0x1E)
-     adc0Chg = 1;
+     adc0Chg = 3;
 };
 
 // Returns button combination (4LSB) and number of consecutive times this combination is detected. First read should always be ignored! 
@@ -588,93 +588,97 @@ void GenerateBlinks(){
 
 uint8_t GenerateAudio(){
 
-    //auRepAddr = &auBuffer[0];
+    if (auIn[AULEN>>1] < HPLVL) {
 
-    //Audio for text adventure
-    if ((effect&0xff00)==0) {
+        detHdPh = 1;
 
-        //Silence
-        if ((effect&0xE0)==0){
-            auRepAddr = &zero;
-        }
+        //Audio for text adventure
+        if ((effect&0xff00)==0) {
 
-        //Bad (buzzer)
-        if ((effect&0xE0)==32){
-            static uint8_t auBuffer[17] = {1, 255, 128, 128, 192, 255, 64, 255, 192, 128, 64, 1, 192, 1, 64, 128, 0}; 
-            static uint8_t loudness, duration, start;
-            floatSpeed(1, 0x2000, 0x2200);
-            auBuffer[2] = floatAround(0x80, 5, 0x01, 0x00);
-
-            if (buttonMark) {
-                if (start == 0) {
-                    duration = 4;
-                    loudness = 0xff;
-                    TCB1_CCMP = 0x2000;
-                    auRepAddr = &auBuffer[0];
-                    start = 1;
-                }
-
-                if (loudness) {
-                    auVolume = loudness;
-                    if (duration) duration--; else loudness >>= 1;
-                } 
-
-                if (loudness == 0) {
-                    effect &= 0x10;
-                    auRepAddr = &zero;
-                    auSmpAddr = &zero;
-                    auVolume = 0xff;
-                    start = 0;
-                }
-            }
-        }
-
-        //Good (bell)
-        if ((effect&0xE0)==64){
-            //auBuffer = 
-        }
-
-        //Rain storm with whistling wind
-        if ((effect&0xE0)==96){
-            static uint8_t auBuffer[7];
-            auBuffer[6]= 0;        
-            auRepAddr = &auBuffer[0];
-
-            //Noise is to be generated fast, outside of buttonMark loop
-            for (uint8_t x=1; x<6; ++x){
-                if (x%3) auBuffer[x] = floatAround(0x80, 5, 0x01, 0x00);
+            //Silence
+            if ((effect&0xE0)==0){
+                auRepAddr = &zero;
             }
 
-            if (buttonMark){
-                //"Floating" speed for howl (and noise, but that's hardly audible)
-                floatSpeed(5, 0x0280, 0x0400);
+            //Bad (buzzer)
+            if ((effect&0xE0)==32){
+                static uint8_t auBuffer[17] = {1, 255, 128, 128, 192, 255, 64, 255, 192, 128, 64, 1, 192, 1, 64, 128, 0}; 
+                static uint8_t loudness, duration, start;
+                floatSpeed(1, 0x2000, 0x2200);
+                auBuffer[2] = floatAround(0x80, 5, 0x01, 0x00);
+
+                if (buttonMark) {
+                    if (start == 0) {
+                        duration = 4;
+                        loudness = 0xff;
+                        TCB1_CCMP = 0x2000;
+                        auRepAddr = &auBuffer[0];
+                        start = 1;
+                    }
+
+                    if (loudness) {
+                        auVolume = loudness;
+                        if (duration) duration--; else loudness >>= 1;
+                    } 
+
+                    if (loudness == 0) {
+                        effect &= 0x10;
+                        auRepAddr = &zero;
+                        auSmpAddr = &zero;
+                        auVolume = 0xff;
+                        start = 0;
+                    }
+                }
+            }
+
+            //Good (bell)
+            if ((effect&0xE0)==64){
+                //auBuffer = 
+            }
+
+            //Rain storm with whistling wind
+            if ((effect&0xE0)==96){
+                static uint8_t auBuffer[7];
+                auBuffer[6]= 0;        
+                auRepAddr = &auBuffer[0];
+
+                //Noise is to be generated fast, outside of buttonMark loop
+                for (uint8_t x=1; x<6; ++x){
+                    if (x%3) auBuffer[x] = floatAround(0x80, 5, 0x01, 0x00);
+                }
+
+                if (buttonMark){
+                    //"Floating" speed for howl (and noise, but that's hardly audible)
+                    floatSpeed(5, 0x0280, 0x0400);
             
-                //"Floating" volume and wind howl during 8 bit rainstorm needs some randomness
-                auVolume = floatAround(auVolume, 2, 0x10, 0xA0);
-                auBuffer[0] = floatAround(auBuffer[0], 2, 0x70, 0x90);
-                auBuffer[3] = 0xFF-auBuffer[0];  //Inverse value of wind[0] produces a whistle
+                    //"Floating" volume and wind howl during 8 bit rainstorm needs some randomness
+                    auVolume = floatAround(auVolume, 2, 0x10, 0xA0);
+                    auBuffer[0] = floatAround(auBuffer[0], 2, 0x70, 0x90);
+                    auBuffer[3] = 0xFF-auBuffer[0];  //Inverse value of wind[0] produces a whistle
+                }
+            }
+
+            //Footsteps
+            if ((effect&0xE0)==128){
+
+            }
+
+            //
+            if ((effect&0xE0)==160){
+
+            }
+
+            //
+            if ((effect&0xE0)==192){
+
+            }
+
+            //
+            else {
             }
         }
-
-        //Footsteps
-        if ((effect&0xE0)==128){
-
-        }
-
-        //
-        if ((effect&0xE0)==160){
-
-        }
-
-        //
-        if ((effect&0xE0)==192){
-
-        }
-
-        //
-        else {
-        }
+    } else {
+        detHdPh = 0;
     }
-
     return buttonMark;
 }

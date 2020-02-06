@@ -19,7 +19,7 @@ volatile uint16_t calHall;           // Hall sensor calibration (center)
 volatile uint16_t adcBtns;           // Raw button value
 volatile uint16_t adcTemp;           // Raw temperature related value
 volatile uint16_t calTemp;           // Raw temperature calibration (sort of)
-volatile uint8_t  detHdPh;           // Headphone detected (TODO)
+volatile uint8_t  detHdPh;           // Headphone detected
 
 
 uint8_t buttonState = 0xff;
