@@ -28,18 +28,6 @@ uint8_t simonGameState = BASTET_BOOT;
 uint8_t simonTimer = 0;
 uint8_t simonProcessed = 0;
 
-void setupSimon() {
-    simonPos = ((adcPhot+adcTemp)&0x3f);
-    for(uint8_t x=0; x<simonPos; ++x) lfsr();
-
-    for (uint8_t i = 0; i < BASTET_LENGTH; i++) {
-        simonState[i] = (lfsr() % 4);
-    }
-    simonPos = 1;
-    simonGameState = simonGameStateNext;
-    simonGameStateNext = BASTET_GAME_SHOW_PATTERN;
-}
-
 void simonTone(uint8_t val) {
     // TODO some way to set teh audio stuff
 }
@@ -76,9 +64,13 @@ uint8_t BastetDictates() {
         return 0;
 
     if (BASTET_BOOT == simonGameState) {
+        simonPos = ((adcPhot+adcTemp)&0x3f);
+        for(uint8_t x=0; x<simonPos; ++x) lfsr();
+
         for (uint8_t i = 0; i < BASTET_LENGTH; i++) {
-            simonState[i] = 1+(lfsr() % 4);
+            simonState[i] = (lfsr() % 4);
         }
+        simonPos = 1;
         simonGameState = BASTET_GAME_START;
     }
 
