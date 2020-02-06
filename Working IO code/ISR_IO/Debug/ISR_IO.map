@@ -306,7 +306,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000     0x33fa
+.text           0x00000000     0x3446
  *(.vectors)
  .vectors       0x00000000       0x7c C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATtiny_DFP/1.3.229/gcc/dev/attiny1617/avrxmega3/crtattiny1617.o
                 0x00000000                __vector_default
@@ -547,31 +547,31 @@ END GROUP
                 0x00001b22       0x8e Lib/text_adv.o
                 0x00001b22                CheckResponse
  .text.CheckInput
-                0x00001bb0      0x580 Lib/text_adv.o
+                0x00001bb0      0x56e Lib/text_adv.o
                 0x00001bb0                CheckInput
  .text.ProcessInput
-                0x00002130     0x10e6 Lib/text_adv.o
-                0x00002130                ProcessInput
+                0x0000211e     0x1144 Lib/text_adv.o
+                0x0000211e                ProcessInput
  .text.TextAdventure
-                0x00003216       0x36 Lib/text_adv.o
-                0x00003216                TextAdventure
+                0x00003262       0x36 Lib/text_adv.o
+                0x00003262                TextAdventure
  .text.startup.main
-                0x0000324c      0x126 main.o
-                0x0000324c                main
+                0x00003298      0x126 main.o
+                0x00003298                main
  .text.libgcc.div
-                0x00003372       0x18 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avrxmega3\libgcc.a(_udivmodqi4.o)
-                0x00003372                __udivmodqi4
+                0x000033be       0x18 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avrxmega3\libgcc.a(_udivmodqi4.o)
+                0x000033be                __udivmodqi4
  .text.libgcc.div
-                0x0000338a       0x28 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avrxmega3\libgcc.a(_udivmodhi4.o)
-                0x0000338a                __udivmodhi4
+                0x000033d6       0x28 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avrxmega3\libgcc.a(_udivmodhi4.o)
+                0x000033d6                __udivmodhi4
  .text.libgcc.div
-                0x000033b2       0x44 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avrxmega3\libgcc.a(_udivmodsi4.o)
-                0x000033b2                __udivmodsi4
-                0x000033f6                . = ALIGN (0x2)
+                0x000033fe       0x44 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avrxmega3\libgcc.a(_udivmodsi4.o)
+                0x000033fe                __udivmodsi4
+                0x00003442                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x000033f6        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avrxmega3\libgcc.a(_exit.o)
-                0x000033f6                _exit
-                0x000033f6                exit
+ .fini9         0x00003442        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avrxmega3\libgcc.a(_exit.o)
+                0x00003442                _exit
+                0x00003442                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -590,42 +590,42 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x000033f6        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avrxmega3\libgcc.a(_exit.o)
+ .fini0         0x00003442        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avrxmega3\libgcc.a(_exit.o)
  *(.fini0)
-                0x000033fa                _etext = .
+                0x00003446                _etext = .
 
-.rodata         0x0000b3fa       0xda load address 0x000033fa
+.rodata         0x0000b446       0xda load address 0x00003446
  *(.rodata)
- .rodata        0x0000b3fa       0x10 Lib/text_adv.o
+ .rodata        0x0000b446       0x10 Lib/text_adv.o
  *(.rodata*)
  .rodata.lanyardCode
-                0x0000b40a       0x18 Lib/lanyard.o
-                0x0000b40a                lanyardCode
- .rodata.CAT    0x0000b422        0x1 Lib/main_def.o
-                0x0000b422                CAT
+                0x0000b456       0x18 Lib/lanyard.o
+                0x0000b456                lanyardCode
+ .rodata.CAT    0x0000b46e        0x1 Lib/main_def.o
+                0x0000b46e                CAT
  .rodata.BADGER
-                0x0000b423        0x1 Lib/main_def.o
-                0x0000b423                BADGER
+                0x0000b46f        0x1 Lib/main_def.o
+                0x0000b46f                BADGER
  .rodata.SCARAB
-                0x0000b424        0x2 Lib/main_def.o
-                0x0000b424                SCARAB
- .rodata.WING   0x0000b426        0xa Lib/main_def.o
-                0x0000b426                WING
- .rodata.EYE    0x0000b430        0x4 Lib/main_def.o
-                0x0000b430                EYE
- .rodata.HCKR   0x0000b434        0xc Lib/main_def.o
-                0x0000b434                HCKR
+                0x0000b470        0x2 Lib/main_def.o
+                0x0000b470                SCARAB
+ .rodata.WING   0x0000b472        0xa Lib/main_def.o
+                0x0000b472                WING
+ .rodata.EYE    0x0000b47c        0x4 Lib/main_def.o
+                0x0000b47c                EYE
+ .rodata.HCKR   0x0000b480        0xc Lib/main_def.o
+                0x0000b480                HCKR
  .rodata.mazeCode
-                0x0000b440       0x12 Lib/maze.o
-                0x0000b440                mazeCode
+                0x0000b48c       0x12 Lib/maze.o
+                0x0000b48c                mazeCode
  .rodata.str1.1
-                0x0000b452       0x72 Lib/text_adv.o
+                0x0000b49e       0x72 Lib/text_adv.o
  .rodata.xor_key
-                0x0000b4c4       0x10 Lib/text_adv.o
-                0x0000b4c4                xor_key
+                0x0000b510       0x10 Lib/text_adv.o
+                0x0000b510                xor_key
  *(.gnu.linkonce.r*)
 
-.data           0x00803800       0x28 load address 0x000034d4
+.data           0x00803800       0x28 load address 0x00003520
                 0x00803800                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
@@ -777,8 +777,8 @@ END GROUP
  COMMON         0x00803ae9       0x21 Lib/text_adv.o
                 0x00803ae9                txBuffer
                 0x00803b0a                PROVIDE (__bss_end, .)
-                0x000034d4                __data_load_start = LOADADDR (.data)
-                0x000034fc                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x00003520                __data_load_start = LOADADDR (.data)
+                0x00003548                __data_load_end = (__data_load_start + SIZEOF (.data))
 
 .noinit         0x00803b0a        0x0
                 [!provide]                PROVIDE (__noinit_start, .)
@@ -881,7 +881,7 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0x6292
+.debug_info     0x00000000     0x628e
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000     0x19ed C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATtiny_DFP/1.3.229/gcc/dev/attiny1617/avrxmega3/crtattiny1617.o
  .debug_info    0x000019ed       0xa4 Lib/friends.o
@@ -891,8 +891,8 @@ END GROUP
  .debug_info    0x00002806      0x2d9 Lib/maze.o
  .debug_info    0x00002adf      0xd8b Lib/resources.o
  .debug_info    0x0000386a       0xa4 Lib/simon.o
- .debug_info    0x0000390e     0x262f Lib/text_adv.o
- .debug_info    0x00005f3d      0x355 main.o
+ .debug_info    0x0000390e     0x262b Lib/text_adv.o
+ .debug_info    0x00005f39      0x355 main.o
 
 .debug_abbrev   0x00000000     0x2648
  *(.debug_abbrev)
@@ -907,7 +907,7 @@ END GROUP
  .debug_abbrev  0x000021ed      0x353 Lib/text_adv.o
  .debug_abbrev  0x00002540      0x108 main.o
 
-.debug_line     0x00000000     0x3370
+.debug_line     0x00000000     0x3394
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x151 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATtiny_DFP/1.3.229/gcc/dev/attiny1617/avrxmega3/crtattiny1617.o
  .debug_line    0x00000151      0x11b Lib/friends.o
@@ -917,8 +917,8 @@ END GROUP
  .debug_line    0x00000ba6      0x2f9 Lib/maze.o
  .debug_line    0x00000e9f      0xc5a Lib/resources.o
  .debug_line    0x00001af9      0x119 Lib/simon.o
- .debug_line    0x00001c12     0x1511 Lib/text_adv.o
- .debug_line    0x00003123      0x24d main.o
+ .debug_line    0x00001c12     0x1535 Lib/text_adv.o
+ .debug_line    0x00003147      0x24d main.o
 
 .debug_frame    0x00000000      0x890
  *(.debug_frame)
@@ -953,14 +953,14 @@ END GROUP
  .debug_str     0x000018bd       0x11 main.o
                                 0x2a7 (size before relaxing)
 
-.debug_loc      0x00000000     0x4061
+.debug_loc      0x00000000     0x4055
  *(.debug_loc)
  .debug_loc     0x00000000      0x4ed Lib/I2C.o
  .debug_loc     0x000004ed       0x36 Lib/lanyard.o
  .debug_loc     0x00000523       0x8f Lib/maze.o
  .debug_loc     0x000005b2      0xdd1 Lib/resources.o
- .debug_loc     0x00001383     0x2cca Lib/text_adv.o
- .debug_loc     0x0000404d       0x14 main.o
+ .debug_loc     0x00001383     0x2cbe Lib/text_adv.o
+ .debug_loc     0x00004041       0x14 main.o
 
 .debug_macinfo
  *(.debug_macinfo)

@@ -314,12 +314,12 @@ uint8_t CheckInput(uint8_t *data){
         //Start at first location
         PopulateObject(route[0], &currObj);
         currDepth = 0;
+    }
 
-        //Play an effect if configured
-        if ((effect < 0x0100) && (effect ^ currObj.byteField[EFFECTS])){
-            effect = currObj.byteField[EFFECTS];
-            auStart = ((effect&0xE0)>0);
-        }
+    //Play effects if available and not already playing
+    if (effect == 0){
+        effect = currObj.byteField[EFFECTS];
+        auStart = ((effect&0xE0)>0);
     }
 
     if (serRxDone){
@@ -664,7 +664,10 @@ uint8_t ProcessInput(uint8_t *data){
                             } else {
                                 SetResponse(elements++, A_NOTPOSSIBLE, L_NOTPOSSIBLE, TEASER);
                             }
-                        } else SetResponse(elements++, actObj1.addrStr[ACTION_ACL_MSG], actObj1.lenStr[ACTION_ACL_MSG], GAME);
+                        } else {
+                            SetResponse(elements++, actObj1.addrStr[ACTION_ACL_MSG], actObj1.lenStr[ACTION_ACL_MSG], GAME);
+                            effect = actObj1.effect[1];
+                        }
                     }
                 } else SetResponse(elements++, A_NOSUCHOBJECT, L_NOSUCHOBJECT, TEASER);
             }
@@ -764,8 +767,10 @@ uint8_t ProcessInput(uint8_t *data){
 
                             //Normal "use ... on ..." or "give ... to ..." action
                             } else if (actObj1.byteField[ACTION_ITEM] == actObj2.byteField[ITEM_NR]) {
-                                UpdateState(actObj1.byteField[ACTION_STATE]);
                                 SetResponse(elements++, actObj1.addrStr[ACTION_MSG], actObj1.lenStr[ACTION_MSG], GAME);
+                                effect = actObj1.effect[2];
+                                UpdateState(actObj1.byteField[ACTION_STATE]);
+                                
                             } else {
                                 if (data[0] == 'u') {
                                     SetResponse(elements++, A_CANTUSE, L_CANTUSE, TEASER);
@@ -805,12 +810,15 @@ uint8_t ProcessInput(uint8_t *data){
                                 ExtEERead(actObj1.addrStr[ACTION_STR2], actObj1.lenStr[ACTION_STR2], GAME, (uint8_t *)&specialInput[0]);
                                 UnflipData(actObj1.lenStr[ACTION_STR2], (uint8_t *)&specialInput[0]);
                                 specialInput[actObj1.lenStr[ACTION_STR2]] = 0;
-                                //specialPassed = 0;
+                            
+                            //Normal action    
                             } else if (CheckState(actObj1.byteField[ACTION_ACL])){
                                 SetResponse(elements++, actObj1.addrStr[ACTION_MSG], actObj1.lenStr[ACTION_MSG], GAME);
+                                effect = actObj1.effect[2];
                                 UpdateState(actObj1.byteField[ACTION_STATE]);
                             } else {
                                 SetResponse(elements++, actObj1.addrStr[ACTION_ACL_MSG], actObj1.lenStr[ACTION_ACL_MSG], GAME);
+                                effect = actObj1.effect[1];
                             }
                         }
                     }
@@ -881,9 +889,11 @@ uint8_t ProcessInput(uint8_t *data){
                 PopulateObject(route[currDepth+1], &actObj1);
                 if (CheckState(actObj1.byteField[ACTION_ACL])){
                     SetResponse(elements++, actObj1.addrStr[ACTION_MSG], actObj1.lenStr[ACTION_MSG], GAME);
+                    effect = actObj1.effect[2];
                     UpdateState(actObj1.byteField[ACTION_STATE]);
                 } else {
                     SetResponse(elements++, actObj1.addrStr[ACTION_ACL_MSG], actObj1.lenStr[ACTION_ACL_MSG], GAME);
+                    effect = actObj1.effect[1];
                 }
 
             } else {
