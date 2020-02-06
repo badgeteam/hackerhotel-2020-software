@@ -359,7 +359,7 @@ uint8_t CheckInput(uint8_t *data){
                 data[1] = 0;
 
                 if (inputLen >= 2) {
-                    if ((serRx[0] == '0')||(serRx[0] == '1')||(serRx[0] == '2')||(serRx[0] == '3')) {
+                    if ((serRx[0] == '1')||(serRx[0] == '2')||(serRx[0] == '3')||(serRx[0] == '4')) {
                         serRx[1] |= 0x20;
                         if ((serRx[1] == 'a')||(serRx[1] == 'e')||(serRx[1] == 'f')||(serRx[1] == 'w')) {
                             data[1] = specialInput[1]+0x11;
@@ -859,7 +859,7 @@ uint8_t ProcessInput(uint8_t *data){
                         ((kneelings & 2) << 11) + ((kneelings & 1))
                         answer = answer << (3-person)
                     */
-                    data[1]-='0';
+                    data[1]-='1';
                     data[2]-='1';
                     if (data[3] == 'a') data[3] = 1;
                     else if (data[3] == 'e') data[3] = 0;
@@ -884,6 +884,7 @@ uint8_t ProcessInput(uint8_t *data){
                     }
                     for (; n<10; ++n) {
                         SetResponse(elements++, A_DIGITS+digit[n], 1, TEASER);
+                        UpdateState(actObj1.byteField[ACTION_STATE]);
                     }
 
                 } else {
@@ -893,8 +894,13 @@ uint8_t ProcessInput(uint8_t *data){
             //Other questions    
             } else if (specialPassed == 1) {
                 PopulateObject(route[currDepth+1], &actObj1);
-                SetResponse(elements++, actObj1.addrStr[ACTION_MSG], actObj1.lenStr[ACTION_MSG], GAME);
-                UpdateState(actObj1.byteField[ACTION_STATE]);
+                if (CheckState(actObj1.byteField[ACTION_ACL])){
+                    SetResponse(elements++, actObj1.addrStr[ACTION_MSG], actObj1.lenStr[ACTION_MSG], GAME);
+                    UpdateState(actObj1.byteField[ACTION_STATE]);
+                } else {
+                    SetResponse(elements++, actObj1.addrStr[ACTION_ACL_MSG], actObj1.lenStr[ACTION_ACL_MSG], GAME);
+                }
+
             } else {
                 PopulateObject(route[currDepth+1], &actObj1);
                 SetResponse(elements++, A_INCORRECT, L_INCORRECT, TEASER);

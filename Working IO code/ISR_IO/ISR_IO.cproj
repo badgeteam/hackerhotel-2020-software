@@ -169,6 +169,14 @@
       <SubType>compile</SubType>
       <Link>Lib\I2C.h</Link>
     </Compile>
+    <Compile Include="..\Lib\lanyard.c">
+      <SubType>compile</SubType>
+      <Link>Lib\lanyard.c</Link>
+    </Compile>
+    <Compile Include="..\Lib\lanyard.h">
+      <SubType>compile</SubType>
+      <Link>Lib\lanyard.h</Link>
+    </Compile>
     <Compile Include="..\Lib\literals.h">
       <SubType>compile</SubType>
       <Link>Lib\literals.h</Link>

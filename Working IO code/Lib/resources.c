@@ -526,7 +526,7 @@ void Reset(){
 
 
 void GenerateAudio(){
-    static uint8_t auBuffer[128] = {0x80, 0};
+
     //auRepAddr = &auBuffer[0];
 
     //Audio for text adventure
@@ -539,7 +539,18 @@ void GenerateAudio(){
 
         //Bad (buzzer)
         if ((effect&0xE0)==32){
-
+            static uint8_t auBuffer[17] = {1, 255, 128, 128, 192, 255, 192, 255, 192, 128, 64, 1, 64, 1, 64, 128, 0}; 
+            static uint8_t loudness = 255;
+            auRepAddr = &auBuffer[0];
+            if (buttonMark) {
+                if (loudness) {
+                    auVolume = loudness;
+                    --loudness;
+                } else {
+                    auRepAddr = &zero;
+                    effect &= 0x10;
+                }
+            }
         }
 
         //Good (bell)
@@ -549,6 +560,7 @@ void GenerateAudio(){
 
         //Rain storm with whistling wind
         if ((effect&0xE0)==96){
+            static uint8_t auBuffer[7];
             auBuffer[6]= 0;        
             auRepAddr = &auBuffer[0];
 
