@@ -45,7 +45,7 @@
     void floatSpeed(uint8_t bits, uint16_t min, uint16_t max);
     uint8_t floatAround(uint8_t sample, uint8_t bits, uint8_t min, uint8_t max);
 
-    uint8_t LoadGameState();
+    void LoadGameState();
     uint8_t SaveGameState();
     uint8_t ReadStatusBit(uint8_t number);
     void WriteStatusBit(uint8_t number, uint8_t state);

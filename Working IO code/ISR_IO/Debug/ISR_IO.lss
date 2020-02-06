@@ -17,19 +17,19 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
   6 .debug_aranges 00000228  00000000  00000000  00001568  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_info   00003c51  00000000  00000000  00001790  2**0
+  7 .debug_info   00003c4d  00000000  00000000  00001790  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_abbrev 000022dd  00000000  00000000  000053e1  2**0
+  8 .debug_abbrev 000022f5  00000000  00000000  000053dd  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_line   00001e4b  00000000  00000000  000076be  2**0
+  9 .debug_line   00001e4b  00000000  00000000  000076d2  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_frame  00000578  00000000  00000000  0000950c  2**2
+ 10 .debug_frame  00000578  00000000  00000000  00009520  2**2
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_str    00001563  00000000  00000000  00009a84  2**0
+ 11 .debug_str    00001563  00000000  00000000  00009a98  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_loc    00001397  00000000  00000000  0000afe7  2**0
+ 12 .debug_loc    00001397  00000000  00000000  0000affb  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_ranges 000001b8  00000000  00000000  0000c37e  2**0
+ 13 .debug_ranges 000001b8  00000000  00000000  0000c392  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -2435,7 +2435,7 @@ void WriteStatusBit(uint8_t number, uint8_t state){
 }
 
 //Load game status
-uint8_t LoadGameState(){
+void LoadGameState(){
      fd6:	cf 93       	push	r28
      fd8:	df 93       	push	r29
     EERead(0, &gameState[0], BOOTCHK);   //Load game status bits from EEPROM
@@ -2455,7 +2455,7 @@ uint8_t LoadGameState(){
      fec:	d8 0f       	add	r29, r24
      fee:	cf 5f       	subi	r28, 0xFF	; 255
 //Load game status
-uint8_t LoadGameState(){
+void LoadGameState(){
     EERead(0, &gameState[0], BOOTCHK);   //Load game status bits from EEPROM
 
     uint8_t idSet = 0;
