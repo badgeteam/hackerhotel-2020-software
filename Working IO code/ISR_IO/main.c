@@ -60,15 +60,10 @@ int main(void)
     iLED[BADGER] = 1;
     iLED[CAT] = 1;
 
-    effect = 32;
     LoadGameState();
 
-    while (1)
-    {
-        
-
-
-        if (GenerateAudio()){
+    while (TRUE) {
+        if (GenerateAudio()) {
             buttonState = CheckButtons(buttonState);
             buttonMark = 0;
             
@@ -82,6 +77,8 @@ int main(void)
             BastetDictates();
             LanyardCode();
             MakeFriends();
+
+            //Save progress
             SaveGameState(); 
             
             //Check light sensor status (added hysteresis to preserve writing cycles to internal EEPROM)
