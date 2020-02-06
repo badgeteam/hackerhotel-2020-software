@@ -66,7 +66,8 @@ int main(void)
         if (GenerateAudio()) {
             buttonState = CheckButtons(buttonState);
             buttonMark = 0;
-            
+            SelectTSens();
+
             GenerateBlinks();           
             
             //Main game, to complete: Finish sub-game MagnetMaze and MakeFriends too.
@@ -76,7 +77,7 @@ int main(void)
             MagnetMaze();
             BastetDictates();
             LanyardCode();
-            MakeFriends();
+            //MakeFriends();
 
             //Save progress
             SaveGameState(); 
@@ -87,6 +88,8 @@ int main(void)
 
             //Check temperature 
             HotSummer();
+
+            SelectAuIn();
 
       }
 
