@@ -119,6 +119,6 @@ uint8_t BastetDictates() {
             }
         }
     }
-
+    ++simonTimer;
     return 0;
 }
