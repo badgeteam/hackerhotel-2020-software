@@ -66,9 +66,10 @@ int main(void)
         if (GenerateAudio()) {
             buttonState = CheckButtons(buttonState);
             buttonMark = 0;
-            SelectTSens();
 
-            GenerateBlinks();
+            if (VREF_CTRLA == 0x12) SelectAuIn(); else SelectTSens();
+
+            //GenerateBlinks();
 
             //Main game, to complete: Finish sub-game MagnetMaze and MakeFriends too.
             TextAdventure();
@@ -89,7 +90,7 @@ int main(void)
             //Check temperature
             HotSummer();
 
-            SelectAuIn();
+
 
         }
 

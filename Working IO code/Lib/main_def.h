@@ -15,7 +15,8 @@
     
     #define RXLEN   65      //Length of serial Rx buffer (yes, it one longer than a power of two)
     #define TXLEN   33      //Length of serial Tx buffer (yes, it one longer than a power of two)
-    #define AULEN   32      //Audio input buffer length: MUST be a power of 2
+    #define AULEN   8       //Audio input buffer length: MUST be a power of 2
+    #define HPLVL   25      //Headphone detection threshold (load is ~200 Ohm or less)
 
     #define USART0_BAUD_RATE(BAUD_RATE) ((float)(F_CPU * 64 / (16 * (float)BAUD_RATE)) + 0.5)
     
