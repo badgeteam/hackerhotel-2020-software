@@ -47,12 +47,14 @@ void simonLed(uint8_t val) {
     if (val == 1) {
         iLED[WING[L][0]] = dimValue;
         iLED[WING[L][1]] = dimValue;
+        iLED[WING[L][2]] = dimValue;
     } else if (val == 2) {
         iLED[WING[L][3]] = dimValue;
         iLED[WING[L][4]] = dimValue;
     } else if (val == 3) {
         iLED[WING[R][0]] = dimValue;
         iLED[WING[R][1]] = dimValue;
+        iLED[WING[R][2]] = dimValue;
     } else if (val == 4) {
         iLED[WING[R][3]] = dimValue;
         iLED[WING[R][4]] = dimValue;
@@ -93,16 +95,16 @@ uint8_t BastetDictates() {
         uint8_t choice = 0;
         switch (buttonState) {
             case 0b1000: // bottom left
-                choice = 1;
+                choice = BASTET_BOTTOM_LEFT;
                 break;
             case 0b0100: // top left
-                choice = 2;
+                choice = BASTET_TOP_LEFT;
                 break;
             case 0b0010: // top right
-                choice = 3;
+                choice = BASTET_TOP_RIGHT;
                 break;
             case 0b0001: // bottom right
-                choice = 4;
+                choice = BASTET_BOTTOM_RIGHT;
                 break;
         }
         if (choice > 0) {
