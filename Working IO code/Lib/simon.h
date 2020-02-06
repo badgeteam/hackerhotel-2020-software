@@ -31,7 +31,6 @@
 
     uint8_t BastetDictates();
 
-    void setupSimon();
     void simonTone(uint8_t val);
     void simonLed(uint8_t val);
 
