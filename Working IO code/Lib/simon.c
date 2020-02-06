@@ -35,9 +35,9 @@ void setupSimon() {
     for (uint8_t i = 0; i < BASTET_LENGTH; i++) {
         simonState[i] = (lfsr() % 4);
     }
+    if (simonState[0] == 1) simonState[0]=2;
     simonPos = 1;
-    simonGameState = simonGameStateNext;
-    simonGameStateNext = BASTET_GAME_SHOW_PATTERN;
+    simonGameState = BASTET_GAME_SHOW_PATTERN;
 }
 
 void simonTone(uint8_t val) {
