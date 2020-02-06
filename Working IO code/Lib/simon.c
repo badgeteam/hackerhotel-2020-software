@@ -100,13 +100,13 @@ uint8_t BastetDictates() {
             case 0b0010: // top right
                 choice = 3;
                 break;
-            case 0b0001; // bottom right
+            case 0b0001: // bottom right
                 choice = 4;
                 break;
         }
         if (choice > 0) {
             simonLed(choice);
-            if (simonState[pos]+1 == choice) {
+            if (simonState[simonInputPos]+1 == choice) {
                 // TODO win sound
                 simonInputPos++;
             } else {
