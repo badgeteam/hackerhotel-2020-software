@@ -40,6 +40,9 @@ void showFieldStrength(int16_t val) {
 
     tmp = abs(val);
 
+    if ( tmp*2 > HALL_LOW )
+        gameNow = MAZE;
+
     if ( tmp*2 < HALL_LOW )
         count = 0;
     else if ( tmp   < HALL_LOW )
@@ -53,13 +56,15 @@ void showFieldStrength(int16_t val) {
     else
         count = 5;
 
-    for (uint8_t i=0; i<5; i++) {
-        if (i<count) {
-            iLED[WING[L][i]] = dimValue;
-            iLED[WING[R][i]] = dimValue;
-        } else {
-            iLED[WING[L][i]] = 0;
-            iLED[WING[R][i]] = 0;
+    if (gameNow == MAZE) {
+        for (uint8_t i=0; i<5; i++) {
+            if (i<count) {
+                iLED[WING[L][i]] = dimValue;
+                iLED[WING[R][i]] = dimValue;
+            } else {
+                iLED[WING[L][i]] = 0;
+                iLED[WING[R][i]] = 0;
+            }
         }
     }
 }

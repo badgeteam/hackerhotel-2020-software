@@ -31,6 +31,7 @@ static uint16_t reactStr[3][MAX_REACT] = {{0},{0},{0}};    //
 static uint8_t responseList = 0;                    //
 static char specialInput[INP_LENGTH] = {0};         //Sometimes a special input is requested by the game. When this is set, input is compared to this string first.
 static uint8_t specialPassed = 0;                   //If user input matches specialInput, this is set.
+static uint16_t PunishmentTime = 0;
 
 uint8_t Cheat(uint8_t bit, uint16_t checksum){
     const uint16_t chk[MAX_CHEATS] = {0x7D2D, 0x5739, 0x795C, 0x4251, 0x6134, 0x597D, 0x653B, 0x445B}; // }-, W9, y\, BQ, a4, Y~, e;, D[
@@ -901,6 +902,7 @@ uint8_t ProcessInput(uint8_t *data){
             } else {
                 PopulateObject(route[currDepth+1], &actObj1);
                 SetResponse(elements++, A_INCORRECT, L_INCORRECT, TEASER);
+                PunishmentTime = getClock();
             }
             specialInput[0] = 0;
 
@@ -928,18 +930,46 @@ uint8_t ProcessInput(uint8_t *data){
 //MAIN GAME STRUCTURE
 uint8_t TextAdventure(){
     static uint8_t serInput[RXLEN];
+    uint16_t PunishmentCount;
     
+    /* Count down PunishmentTime on WING LEDs */
+    if (PunishmentTime != 0) {
+        PunishmentCount = getClock();
+        if (PunishmentCount < PunishmentTime)
+            PunishmentCount += 256 * 60;
+        PunishmentCount -= PunishmentTime;
+        if (PunishmentCount > 10) {
+            PunishmentTime = 0;
+            PunishmentCount = 10;
+        }
+        if (gameNow == TEXT ) {
+            for (uint8_t i=0; i<5; i++) {
+                if (PunishmentCount + i + 5 < 10)
+                    iLED[WING[R][i]] = dimValue;
+                else
+                    iLED[WING[R][i]] = 0;
+
+                if (PunishmentCount + i < 10)
+                    iLED[WING[L][i]] = dimValue;
+                else
+                    iLED[WING[L][i]] = 0;
+            }
+        }
+    }
+
     //Still sending data to serial?
     if (CheckSend()) return 1;
 
     //Not sending? Process next response part to send, if any.
     if (CheckResponse()) return 1;        
 
-    //No responses to send, check if there is user input.
-    if (CheckInput(&serInput[0])) return 2; 
+    if (PunishmentTime == 0) {
+        //No responses to send, check if there is user input.
+        if (CheckInput(&serInput[0])) return 2; 
 
-    //Input found, process and save (changes only)
-    ProcessInput(&serInput[0]);
+        //Input found, process and save (changes only)
+        ProcessInput(&serInput[0]);
+    }
 
     return 0;
 }
