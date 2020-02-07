@@ -57,6 +57,9 @@ uint8_t BastetDictates() {
         simonInputPos = 0;
         simonTimer = 0;
         simonCounter = 0;
+        for (uint8_t n=0; n<6; n++){
+            iLED[HCKR[G][n]] = 1;
+        }
     }
 
     if (BASTET_GAME_INTRO == simonGameState) {
@@ -66,9 +69,6 @@ uint8_t BastetDictates() {
         }
         if (simonCounter > 6) {
             simonGameState = BASTET_GAME_SHOW_PATTERN;
-//            for (uint8_t n=0; n<6; n++){
-//                iLED[HCKR[R][n]] = 1;
-//            }
             simonTimer = 0;
             simonCounter = 0;
             return 0;
@@ -77,7 +77,7 @@ uint8_t BastetDictates() {
     }
 
     if (BASTET_GAME_SHOW_PATTERN == simonGameState) {
-        if (simonTimer > 15) {   // ± ! second
+        if (simonTimer > 7) {   // ±.5 second
             simonCounter++;
             simonTimer = 0;
         }
@@ -100,15 +100,15 @@ uint8_t BastetDictates() {
                 simonGameState = BASTET_GAME_WAIT_LEDS;
                 simonNextGameState = BASTET_GAME_INPUT;
 
-                // is the below check correct .. do I have off by one ?
                 if (simonState[simonInputPos] == buttonState) {
                     simonInputPos++;
-                    if (simonInputPos >= simonPos) {
+                    if (simonInputPos > simonPos) {
                         effect = 0x42;
                         simonPos++;
                         simonInputPos = 0;
                         simonTimer = 0;
                         simonCounter = 0;
+                        iLED[HCKR[G][simonPos/2]] = dimValue;  // BASTET_LENGTH = 12
                         simonNextGameState = BASTET_GAME_SHOW_PATTERN;
                     }
                 } else {
