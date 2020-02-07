@@ -38,6 +38,7 @@ uint8_t LanyardCode(){
         /* clean up maze game and go back to text game */
         initLanyard();
         gameNow = TEXT;
+        effect = 0;
         return 0;
     }
 
@@ -47,11 +48,11 @@ uint8_t LanyardCode(){
     if ( gameNow != TEXT && gameNow != LANYARD )
         return 0;
 
-    /* activate led for buttonstate */
-    iLED[CAT] = (buttonState==0xff ? 0 : dimValue);
-
     if ( (buttonState & 0xf0) == 0)
         return 0;
+
+    /* activate led for buttonstate */
+    iLED[CAT] = (buttonState==0xff ? 0 : dimValue);
 
     if ((buttonState&0x0f) == (lastButtonState&0x0f))
         return 0;
@@ -61,18 +62,22 @@ uint8_t LanyardCode(){
     if (lastButtonState == 0xff){
         switch (buttonState & 0x0f) {
             case 0b0001:
+                effect = 0x19f;
                 digit = 0;
                 break;
 
             case 0b0010:
+                effect = 0x17f;
                 digit = 1;
                 break;
 
             case 0b0100:
+                effect = 0x13f;
                 digit = 3;
                 break;
 
             case 0b1000:
+                effect = 0x15f;
                 digit = 2;
                 break;
 
@@ -103,20 +108,19 @@ uint8_t LanyardCode(){
         if (lanyardCnt >= 4) {
             lanyardCnt = 0;
             if (lanyardState == TRUE) {
-                iLED[HCKR[G][(lanyardPos/4)-1]] = dimValue;
+                if ((lanyardPos % 4) == 0) {
+                    iLED[HCKR[G][(lanyardPos>>2)-1]] = dimValue;
+                    effect = 0x5f;
+                }
                 if (lanyardPos == sizeof(lanyardCode)) {
                     UpdateState(LANYARD_COMPLETED);
                     iLED[CAT]       = 0;
-                    iLED[EYE[R][L]] = 0;
-                    iLED[EYE[R][R]] = 0;
-                    iLED[EYE[G][L]] = dimValue;
-                    iLED[EYE[G][R]] = dimValue;
+                    effect = 0x42;
                     /*TODO state = STATE_MUSIC;*/
                 }
             } else {
                 initLanyard();
-                iLED[EYE[R][L]] = dimValue;
-                iLED[EYE[R][R]] = dimValue;
+                effect = 0x21;
             }
         }
     }

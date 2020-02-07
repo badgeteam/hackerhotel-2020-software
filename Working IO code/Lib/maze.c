@@ -15,12 +15,14 @@ uint8_t         newHallState = 0;
 
 const uint8_t   mazeCode[] = {1,1,2, 1,2,2, 1,2,2, 1,2,2, 2,2,2, 1,1,2};
 uint8_t         mazePos = 0;
+uint8_t         mazeHckrPos = 0;
 uint8_t         mazeCnt = 0;
 uint8_t         mazeState = TRUE;
 uint8_t         inverted  = FALSE;
 uint16_t        mazeLastActive = 0;
 
 void initMaze() {
+    mazeHckrPos = 0;
     mazePos = 0;
     mazeCnt = 0;
     mazeState = TRUE;
@@ -143,7 +145,8 @@ uint8_t MagnetMaze(){
                 mazeCnt = 0;
                 if (mazeState == TRUE) {
                     /* TODO play tone GOOD */
-                    iLED[HCKR[G][(mazePos/3)-1]] = dimValue;
+                    iLED[HCKR[G][mazeHckrPos]] = dimValue;
+                    mazeHckrPos++;
                     if (mazePos == sizeof(mazeCode)) {
                         UpdateState(MAZE_COMPLETED);
                         iLED[CAT]       = 0;
