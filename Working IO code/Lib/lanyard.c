@@ -19,9 +19,10 @@
  *                      '   '
  *                      '. .'
  *                        !    lc
- */ 
+ */
 
 #include <lanyard.h>
+#include <simon.h>
 #include <main_def.h>
 #include <resources.h>
 #include <I2C.h>
@@ -48,8 +49,12 @@ uint8_t LanyardCode(){
         return 0;
     }
 
-    if (CheckState(LANYARD_COMPLETED))
+    if (CheckState(LANYARD_COMPLETED)) {
+        if (!CheckState(BASTET_COMPLETED)) {
+            gameNow = BASTET;
+        }
         return 0;
+    }
 
     if ( gameNow != TEXT && gameNow != LANYARD )
         return 0;
