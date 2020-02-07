@@ -791,8 +791,25 @@ uint8_t idleTimeout(uint16_t lastActive, uint16_t maxIdle) {
 }
 
 uint8_t SelfTest(){
+    uint8_t dacVal[2] = {0x80, 0};
+    //All LEDs on 25%
+    for (uint8_t x=0; x<40; ++x) {
+        iLED[x]=0x40;
+    }
+
+    //Red HCKR all on 100%
+    for (uint8_t x=0; x<6; ++x) {
+        iLED[HCKR[R][x]] = 0xff;
+    }
+
     //Audio in/out
-    //Light
+    SelectAuIn();
+    while ((auIn[0] < 0x7A)||(auIn[0] > 0x85)) ;
+    iLED[HCKR[R][0]] = 0x00;
+    iLED[HCKR[G][0]] = 0xff;
+
+    //Light sensor
+
     //Magnet
     //Temperature
     //Ext EEPROM
