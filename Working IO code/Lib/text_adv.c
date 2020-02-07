@@ -486,7 +486,7 @@ uint8_t CheckInput(uint8_t *data){
             }
             if (StartsWith(&data[0], "cheat")){
                 //int8_t n;
-                uint8_t bit, digit[3];
+                uint8_t bit, digit[3] = {0,0,0};
 
                 for (uint8_t x=0; x<MAX_CHEATS; ++x){
                     

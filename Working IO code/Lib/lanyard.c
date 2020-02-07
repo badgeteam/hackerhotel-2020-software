@@ -45,11 +45,11 @@ uint8_t LanyardCode(){
     if ( gameNow != TEXT && gameNow != LANYARD )
         return 0;
 
-    if (buttonState == 0xff)
-        return 0;
-
     /* activate led for buttonstate */
     iLED[CAT] = (buttonState==0xff ? 0 : dimValue);
+
+    if (buttonState == 0xff)
+        return 0;
 
     if (buttonState == lastButtonState)
         return 0;
@@ -57,23 +57,7 @@ uint8_t LanyardCode(){
     lanyardLastActive = getClock();
 
     if (lastButtonState == 0xff){
-        switch (buttonState) {
-            case 0:
-                effect = 0x19f;
-                break;
-
-            case 1:
-                effect = 0x17f;
-                break;
-
-            case 3:
-                effect = 0x13f;
-                break;
-
-            case 2:
-                effect = 0x15f;
-                break;
-        }
+        effect = 0x13f + (buttonState << 5);
         gameNow = LANYARD;
 
         if (buttonState == lanyardCode[lanyardPos]) {
