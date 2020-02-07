@@ -85,5 +85,6 @@ Z = 𓊃 ',
 'YOURPART':'Your part of the access code is ',
 'IDLE':'Press ? for game help!',
 'SALT':'HäckérHøtèl2020',
-'DIGITS':'0123456789',
+'HEXPREFIX':'0x',
+'DIGITS':'0123456789ABCDEF',
 }

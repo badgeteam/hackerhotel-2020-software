@@ -10,7 +10,8 @@
 
 volatile uint16_t tmp16bit;    
 volatile uint8_t mask[8] = {0x01, 0x03, 0x07, 0x0f, 0x1f, 0x3f, 0x7f, 0xff};
-uint8_t heart = 0;
+uint8_t HeartCount = 0;
+uint8_t LedCount = 0;
 
 void Setup(){
     cli();
@@ -588,6 +589,13 @@ void WingBar(int8_t l, int8_t r) {
     }
 }
 
+void SetBothEyes(uint8_t r, uint8_t g) {
+    for (uint8_t i=0; i<2; i++) {
+        iLED[EYE[R][i]] = r;
+        iLED[EYE[G][i]] = g;
+    }
+}
+
 void GenerateBlinks(){
     /*
     HCKR + BADGER are used for game progress and should not be
@@ -596,36 +604,63 @@ void GenerateBlinks(){
     */
 
     //Activate HCKR & BADGER leds based on the state-bits
-    for (uint8_t i=0;i<6;i++) {
-        if(CheckState(HACKER_STATES + i)) {
-            iLED[HCKR[G][i]] = dimValue;
-            iLED[HCKR[R][i]] = 0;
-        } else {
-            iLED[HCKR[G][i]] = 0;
-            iLED[HCKR[R][i]] = dimValue;
+    if (gameNow == TEXT) {
+        for (uint8_t i=0;i<6;i++) {
+            if(CheckState(HACKER_STATES + i)) {
+                iLED[HCKR[G][i]] = dimValue;
+                iLED[HCKR[R][i]] = 0;
+            } else {
+                iLED[HCKR[G][i]] = 0;
+                iLED[HCKR[R][i]] = dimValue;
+            }
         }
     }
+
     if (CheckState(GEM_STATE)) {
-        if ( heart == 1 || heart == 3 || heart == 5 )
+        if ( HeartCount == 1 || HeartCount == 3 || HeartCount == 5 )
             iLED[BADGER] = dimValue / 2;
-        else if ( heart == 2 || heart == 4 )
+        else if ( HeartCount == 2 || HeartCount == 4 )
             iLED[BADGER] = dimValue;
-        else if ( heart == 0 || heart == 6 )
+        else if ( HeartCount == 0 || HeartCount == 6 )
             iLED[BADGER] = dimValue / 4;
         else
             iLED[BADGER] = 0;
-        if (heart<32)
-            heart++;
+        if (HeartCount<32)
+            HeartCount++;
         else
-            heart = 0;
+            HeartCount = 0;
     }
 
-    //LEDs for text adventure
-    if ((effect&0xff00)==0) {
-        //Off
-        if ((effect&0x1f)==0){
+    //LEDs effects for all games
+    // Keep a counter for dynamic effects
+    LedCount++;
+
+    switch (effect&0x1f) {
+        // All LEDs off
+        case 0:
             WingBar(0,0);
-        }
+            for (uint8_t i=0; i<2; i++) {
+                iLED[EYE[R][i]] = 0;
+                iLED[EYE[G][i]] = 0;
+                iLED[SCARAB[i]] = 0;
+            }
+            iLED[CAT] = 0;
+            break;
+
+        //'flashing red eyes',       # 1 can be used when a bad answer is given
+        case 1:
+            SetBothEyes((LedCount & 1 ? dimValue : 0),0);
+            break;
+
+        //'flashing green eyes',     # 2 can be used when a good answer is given
+        case 2:
+            SetBothEyes(0, 0x1f + (((LedCount & 0x08) ? ((LedCount&0x07)^0x07) : (LedCount&0x07))<<5));
+            break;
+
+        // No LED action, game will do it's own LED magic
+        case 31:
+        default:
+            break;
     }
 }
 

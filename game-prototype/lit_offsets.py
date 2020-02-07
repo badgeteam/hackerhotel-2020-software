@@ -44,5 +44,6 @@ lit_offsets = {
     'YOURPART': [29957,32], # 'b'Your part of the access code is ''
     'IDLE': [29935,22], # 'b'Press ? for game help!''
     'SALT': [29916,19], # 'b'H\xc3\xa4ck\xc3\xa9rH\xc3\xb8t\xc3\xa8'
-    'DIGITS': [29906,10], # 'b'0123456789''
+    'HEXPREFIX': [29914,2], # 'b'0x''
+    'DIGITS': [29898,16], # 'b'0123456789ABCDEF''
 }
