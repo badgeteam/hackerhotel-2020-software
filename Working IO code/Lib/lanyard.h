@@ -1,11 +1,11 @@
 /*
- * maze.h
+ * lanyard.h
  *
  * Created: 02/02/2020 0:55
  * Author: Badge.team
  */
 
-// Magnetic Maze
+// Lanyard puzzle
 
 #ifndef LANYARD_H_
 #define LANYARD_H_
@@ -16,6 +16,8 @@
     #include <literals.h>
 
     #define LANYARD_COMPLETED   123
+    #define LANYARD_MAX_IDLE    10
+
 
     uint8_t LanyardCode();
 
