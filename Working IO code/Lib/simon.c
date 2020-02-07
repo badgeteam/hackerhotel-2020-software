@@ -79,7 +79,6 @@ uint8_t BastetDictates() {
     }
 
     if (BASTET_GAME_SHOW_PATTERN == simonGameState) {
-
         if (simonTimer > 7) {   // ±.5 second
             simonCounter++;
             simonTimer = 0;
@@ -140,6 +139,13 @@ uint8_t BastetDictates() {
         //Button released, next or reset!
         } else {
             simonWait = 0;
+        }
+
+        if (simonTimer == 200) {    // did you forget about Bastet?
+            simonGameState = BASTET_GAME_SHOW_PATTERN;
+            simonCounter = 0;
+            simonTimer = 0;
+            return 0;
         }
     }
 
