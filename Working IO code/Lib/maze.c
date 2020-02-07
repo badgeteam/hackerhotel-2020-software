@@ -66,6 +66,13 @@ void showFieldStrength(int16_t val) {
 
 // Main game loop
 uint8_t MagnetMaze(){
+    if (gameNow == MAZE && idleTimeout(mazeLastActive,MAZE_MAX_IDLE)) {
+        /* clean up maze game and go back to text game */
+        initMaze();
+        gameNow = TEXT;
+        return 0;
+    }
+        
     /*
     if (CheckState(MAZE_INACTIVE))
         return 0;
@@ -77,13 +84,6 @@ uint8_t MagnetMaze(){
     if ( (gameNow != TEXT) && (gameNow != MAZE) )
         return 0;
 
-    if (gameNow == MAZE && idleTimeout(mazeLastActive,MAZE_MAX_IDLE)) {
-        /* clean up maze game and go back to text game */
-        initMaze();
-        gameNow = TEXT;
-        return 0;
-    }
-        
     if (calHall == 0)
         calHall = adcHall;
 
