@@ -581,12 +581,10 @@ void WingBar(int8_t l, int8_t r) {
             iLED[WING[L][i]] = dimValue;
         else
             iLED[WING[L][i]] = 0;
-        }
         if (i<r)
             iLED[WING[R][i]] = dimValue;
         else
             iLED[WING[R][i]] = 0;
-        }
     }
 }
 

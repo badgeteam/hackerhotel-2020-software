@@ -35,7 +35,6 @@ void initMaze() {
 }
 
 void showFieldStrength(int16_t val) {
-    uint8_t count;
     int16_t tmp;
 
     tmp = abs(val);
