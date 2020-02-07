@@ -426,10 +426,21 @@
                             "desc" : "This a beautiful gem!",
                             "visible_acl" : 63,
                             "action_mask" : 20,
-                            "item_nr" : 61,
+                            "action_acl" : 192,
+                            "action_acl_msg" : "You already have the beautiful gem",
+                            "action_msg" : "Thank you for this wonderful gift, it warms my heart.",
                             "action_state" : 64,
                             "state_desc" : "Picked up the gem",
-                            "action_msg" : "Thank you for this wonderful gift, it warms my heart."
+                            "item_nr" : 61
+                          },
+                          "[P]roxmark III" : {
+                            "desc" : "The Proxmark is an RFID swiss-army tool, allowing for both high and low level\r\ninteractions with the vast majority of RFID tags and systems world-wide.\r\nYou can use the Proxmark III to copy keycards.",
+                            "action_mask" : 20,
+                            "action_acl" : 4,
+                            "action_acl_msg" : "You need some money to buy the Proxmark III",
+                            "action_state" : 132,
+                            "action_msg" : "You bought the Proxmark III",
+                            "item_nr" : 3
                           }
                         }
                       }
