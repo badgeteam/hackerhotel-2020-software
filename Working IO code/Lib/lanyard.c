@@ -51,37 +51,32 @@ uint8_t LanyardCode(){
 
     if (lastButtonState == 0xff){
         switch (buttonState & 0x0f) {
-            case 0b0001: {
+            case 0b0001:
                 digit = 0;
                 break;
-            }
 
-            case 0b0010: {
+            case 0b0010:
                 digit = 1;
                 break;
-            }
 
-            case 0b0100: {
+            case 0b0100:
                 digit = 3;
                 break;
-            }
 
-            case 0b1000: {
+            case 0b1000:
                 digit = 2;
                 break;
-            }
 
-            default: {
+            default:
                 digit = 0xff;
                 break;
-            }
         }
         gameNow = LANYARD;
         /* play tone for button */
 
         if (digit == lanyardCode[lanyardPos]) {
             lanyardState &= TRUE;
-            iLED[CAT]       = 128;
+            iLED[CAT]       = dimValue;
             iLED[EYE[R][L]] = 0;
             iLED[EYE[R][R]] = 0;
         } else {

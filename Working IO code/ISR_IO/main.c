@@ -76,8 +76,8 @@ int main(void)
 
             //Other games & user interaction checks
             MagnetMaze();
-            BastetDictates();
             LanyardCode();
+            BastetDictates();
             //MakeFriends();
 
             //Save progress

@@ -59,4 +59,8 @@
 
     void GenerateBlinks();
     uint8_t GenerateAudio();
+
+    uint16_t getClock();                                                // get actual time in seconds to use for idle timeouts
+    uint8_t idleTimeout(uint16_t lastActive, uint16_t maxIdle);         // check if idle for too long
+
 #endif /* RESOURCES_H_ */
