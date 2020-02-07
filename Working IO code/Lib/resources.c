@@ -575,6 +575,21 @@ uint8_t HotSummer(){
     return 0;
 }
 
+void WingBar(int8_t l, int8_t r) {
+    for (int8_t i=0; i<5; i++) {
+        if (i<l)
+            iLED[WING[L][i]] = dimValue;
+        else
+            iLED[WING[L][i]] = 0;
+        }
+        if (i<r)
+            iLED[WING[R][i]] = dimValue;
+        else
+            iLED[WING[R][i]] = 0;
+        }
+    }
+}
+
 void GenerateBlinks(){
     /*
     HCKR + BADGER are used for game progress and should not be
@@ -593,14 +608,26 @@ void GenerateBlinks(){
         }
     }
     if (CheckState(GEM_STATE)) {
-        if ( heart == 0 || heart == 2 )
+        if ( heart == 1 || heart == 3 || heart == 5 )
+            iLED[BADGER] = dimValue / 2;
+        else if ( heart == 2 || heart == 4 )
             iLED[BADGER] = dimValue;
+        else if ( heart == 0 || heart == 6 )
+            iLED[BADGER] = dimValue / 4;
         else
             iLED[BADGER] = 0;
-        if (heart<16)
+        if (heart<32)
             heart++;
         else
             heart = 0;
+    }
+
+    //LEDs for text adventure
+    if ((effect&0xff00)==0) {
+        //Off
+        if ((effect&0x1f)==0){
+            WingBar(0,0);
+        }
     }
 }
 

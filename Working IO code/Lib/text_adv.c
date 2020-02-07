@@ -943,17 +943,7 @@ uint8_t TextAdventure(){
             PunishmentCount = 10;
         }
         if (gameNow == TEXT ) {
-            for (uint8_t i=0; i<5; i++) {
-                if (PunishmentCount + i + 5 < 10)
-                    iLED[WING[R][i]] = dimValue;
-                else
-                    iLED[WING[R][i]] = 0;
-
-                if (PunishmentCount + i < 10)
-                    iLED[WING[L][i]] = dimValue;
-                else
-                    iLED[WING[L][i]] = 0;
-            }
+            WingBar(10-PunishmentCount,5-PunishmentCount);
         }
     }
 
