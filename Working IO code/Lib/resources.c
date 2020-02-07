@@ -791,7 +791,12 @@ uint8_t idleTimeout(uint16_t lastActive, uint16_t maxIdle) {
 }
 
 uint8_t SelfTest(){
+    uint8_t dacVal[2] = {0x80, 0};
+
     //Audio in/out
+    SelectAuIn();
+    while (auIn[0] < 0x80)    ;
+
     //Light
     //Magnet
     //Temperature

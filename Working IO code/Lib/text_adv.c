@@ -671,6 +671,7 @@ uint8_t ProcessInput(uint8_t *data){
                                 } else {
                                     inventory[0] = route[currDepth+1];
                                 }
+                                UpdateState(actObj1.byteField[ACTION_STATE]);
                                 SetResponse(elements++, A_NOWCARRING, L_NOWCARRING, TEASER);
                                 SetResponse(elements++, actObj1.addrStr[NAME], actObj1.lenStr[NAME], GAME);
                             } else {
