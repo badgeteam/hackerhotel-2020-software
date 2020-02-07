@@ -34,12 +34,12 @@
                     "state_desc" : "drank from the minibar, still thirsty"
                   },
                   "[R]obe" : {
-                    "desc" : "A nice soft bathrobe of ancient egyptian cotton hangs over a chair.",
+                    "desc" : "A nice soft bathrobe of ancient Egyptian cotton hangs over a chair.",
                     "item_nr" : 32,
                     "action_mask" : 20
                   },
                   "[T]V" : {
-                    "desc" : "Wow, this hotel has a 65\" TV, let's see what on...",
+                    "desc" : "Wow, this hotel has a 65\" TV, let's see what's on...",
                     "action_mask" : 20,
                     "action_acl" : 133,
                     "action_acl_msg" : "Oh no, you can't turn off the TV, this really is room 101!",
@@ -126,12 +126,12 @@
                         "state_desc" : "You entered the correct code for the safe!",
                         "o" : {
                           "[B]ook" : {
-                            "desc" : "This lookes like a very ancient mysterious book full of spells.",
+                            "desc" : "This looks like a very ancient mysterious book full of spells.",
                             "action_mask" : 36,
                             "action_str1" : "Are you sure you want to read this ancient spell out loud?",
                             "action_str2" : "yes",
                             "action_state" : 21,
-                            "action_msg" : "There is a post-it on one of the pages. You turn to that\r\npage and starting reading the spell out loud. You have\r\nbarely finished reading it when the room light starts to \r\nflicker and a person seems to materialize in the room.\r\n\r\nIt has not fully materialized in full yet while it rushes out\r\nthe door mumbling: \"no no no... this can not be, who has\r\nkept me locked in the twilight zone for so long. I need to\r\nget to the Pyramid to set things straight.\r\n\r\nYou try to catch your breath and in the meantime you\r\nsee the figure rush out. You look and you see it go to \r\nthe reception area.",
+                            "action_msg" : "There is a post-it on one of the pages. You turn to that\r\npage and starting reading the spell out loud. You have\r\nbarely finished reading it when the room light starts to \r\nflicker and a person seems to materialize in the room.\r\n\r\nIt has not fully materialized yet while it rushes out\r\nthe door mumbling: \"no no no... this can not be, who has\r\nkept me locked in the twilight zone for so long. I need to\r\nget to the Pyramid to set things straight.\r\n\r\nYou try to catch your breath and in the meantime you\r\nsee the figure rush out. You look and you see it go to \r\nthe reception area.",
                             "state_desc" : "read the book out loud",
                             "item_nr" : 0,
                             "o" : {}
@@ -195,7 +195,7 @@
             "visible_acl" : 3,
             "action_mask" : 20,
             "action_item" : 3,
-            "action_msg" : "You succesfully copied the VIPs keycard",
+            "action_msg" : "You successfully copied the VIPs keycard",
             "action_msg_effects" : 66,
             "action_state" : 10,
             "state_desc" : "Copied the VIPs keycard"
@@ -370,12 +370,12 @@
                         "action_item" : 0,
                         "action_str1" : "\r\n𓉔 \t𓈖\t𓂧\t𓅓\t\tI\t\r\n\r\n𓎼\t𓆓\t𓂋\t𓂾\t\tII\t\r\n\r\n𓂾\t𓂾\t𓂋\t𓂋\t\tII\tI\r\n\r\n𓈖\t𓂋\t𓂋\t𓂧\t\t\tII",
                         "action_str2" : "brbd",
-                        "action_msg" : "That is correct, the stone door slided away and the master\r\nchamber is now visible!",
+                        "action_msg" : "That is correct, the stone door slides away and the master\r\nchamber is now visible!",
                         "action_state" : 62,
                         "state_desc" : "Opened the stone door"
                       },
                       "[M]aster Chamber" : {
-                        "desc" : "You reached the deepest most secret part\r\nof the Pyramid. The master chamber!",
+                        "desc" : "You reached the deepest, most secret part\r\nof the Pyramid. The master chamber!",
                         "visible_acl" : 62,
                         "effects" : 0,
                         "action_mask" : 1,
@@ -446,7 +446,7 @@
         "effects" : 96,
         "action_mask" : 13,
         "action_item" : 61,
-        "action_msg" : "Thank you sir, for staying with us and\r\nrescuing Bastet from the Pyramid. You \r\nare allways welcome back at our hotel.\r\nYou came as a guest and are now leaving \r\nas a friend!",
+        "action_msg" : "Thank you sir, for staying with us and\r\nrescuing Bastet from the Pyramid. You \r\nare always welcome back at our hotel.\r\nYou came as a guest and are now leaving \r\nas a friend!",
         "o" : {
           "The [S]treet" : {
             "desc" : "Despite the rainstorm, the outside of the hotel looks so \r\nclose and peaceful, yet you are not able to go out!",
@@ -469,7 +469,7 @@
         "visible_acl" : 64,
         "action_mask" : 20,
         "action_item" : 61,
-        "action_msg" : "Thank you sir, for staying with us and\r\nrescuing Bastet from the Pyramid. You \r\nare allways welcome back at our hotel.\r\nYou came as a guest and are now leaving \r\nas a friend!",
+        "action_msg" : "Thank you sir, for staying with us and\r\nrescuing Bastet from the Pyramid. You \r\nare always welcome back at our hotel.\r\nYou came as a guest and are now leaving \r\nas a friend!",
         "action_state" : 127,
         "state_desc" : "The doorman opened the exit door.",
         "o" : {}
