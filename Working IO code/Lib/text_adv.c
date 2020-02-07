@@ -484,7 +484,7 @@ uint8_t CheckInput(uint8_t *data){
                 }
             }
             if (StartsWith(&data[0], "cheat")){
-                int8_t n;
+                //int8_t n;
                 uint8_t bit, digit[3];
 
                 for (uint8_t x=0; x<MAX_CHEATS; ++x){
@@ -492,6 +492,7 @@ uint8_t CheckInput(uint8_t *data){
                     //Set up sending out number
                     EERead(CHEATS+x, &bit, 1);
                     bit = 0xff-bit;
+                    /*
                     for (n=2; n>=0; --n) {
                         digit[n] = bit % 10;
                         bit /= 10;
@@ -499,7 +500,11 @@ uint8_t CheckInput(uint8_t *data){
 
                     for (n=0; n<3; ++n) {
                         SetResponse(x*4+n, A_DIGITS+digit[n], 1, TEASER);
-                    }                
+                    } 
+                    */
+                    SetResponse(x*4, A_HEXPREFIX, L_HEXPREFIX, TEASER);
+                    SetResponse(x*4+1, A_DIGITS+digit[bit>>4], 1, TEASER);               
+                    SetResponse(x*4+2, A_DIGITS+digit[bit%16], 1, TEASER);
                     SetResponse(x*4+3, A_COMMA, L_COMMA, TEASER);
                 }
                 SetResponse((4*MAX_CHEATS)-1, A_LF, 4, TEASER);
@@ -843,7 +848,8 @@ uint8_t ProcessInput(uint8_t *data){
             if (specialPassed >= 2) {
                 if (data[1] > 0) {
 
-                    uint8_t  digit[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+                    //uint8_t  digit[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+                    uint8_t  digit[8] = {0, 0, 0, 0, 0, 0, 0, 0};
                     uint32_t answer = 0;
                     uint8_t  n = 0;
 
@@ -871,14 +877,16 @@ uint8_t ProcessInput(uint8_t *data){
                     answer <<= (4 - whoami);            
 
                     SetResponse(elements++, A_YOURPART, L_YOURPART, TEASER);
+                    SetResponse(elements++, A_HEXPREFIX, L_HEXPREFIX, TEASER);
                     
                     //Set up sending out number
-                    for (n=9; n>=0; --n) {
-                        digit[n] = answer % 10;
-                        answer /= 10;
+                    for (n=7; n>=0; --n) {
+                        digit[n] = answer % 16;
+                        answer /= 16;
                         if (answer == 0) break;
                     }
-                    for (; n<10; ++n) {
+
+                    for (; n<8; ++n) {
                         SetResponse(elements++, A_DIGITS+digit[n], 1, TEASER);
                         UpdateState(actObj1.byteField[ACTION_STATE]);
                     }

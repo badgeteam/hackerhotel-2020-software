@@ -723,7 +723,7 @@ uint8_t GenerateAudio(){
 
                 //Noise is to be generated fast, outside of buttonMark loop
                 for (uint8_t x=1; x<6; ++x){
-                    if (x%3) auBuffer[x] = floatAround(0x80, 5, 0x01, 0x00);
+                    if ((x>0) && (x!=3)) auBuffer[x] = floatAround(0x80, 5, 0x01, 0x00);
                 }
 
                 if (buttonMark){
@@ -766,7 +766,7 @@ uint8_t GenerateAudio(){
 
                 if (buttonMark) {
                     if (start == 0) {
-                        duration = 4;
+                        duration = 3;
                         auRepAddr = &auBuffer[0];
                         auVolume = 255;
                         start = 1;
