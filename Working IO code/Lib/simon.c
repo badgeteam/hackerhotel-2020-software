@@ -88,39 +88,21 @@ uint8_t BastetDictates() {
             simonTimer = 0;
             return 0;
         }
-        simonLed(simonState[simonCounter]);
+        simonLed(simonState[simonCounter]+1);
     }
 
     if (BASTET_GAME_INPUT == simonGameState) {
-        uint8_t choice = 0;
-        if ((buttonState & 0xf0)&&(buttonState < 0xff)) {
-            switch (buttonState&0x0f) {
-                case 0b1000:
-                    choice = BASTET_BOTTOM_LEFT;
-                    break;
-                case 0b0100:
-                    choice = BASTET_TOP_LEFT;
-                    break;
-                case 0b0010:
-                    choice = BASTET_TOP_RIGHT;
-                    break;
-                case 0b0001:
-                    choice = BASTET_BOTTOM_RIGHT;
-                    break;
-            }
-        }
-
         //Button pressed
-        if (choice > 0) {
+        if ((buttonState+1) > 0) {
             if (simonWait == 0) {
                 simonWait = 1;
                 simonTimer = 0;
-                simonLed(choice);
+                simonLed(buttonState+1);
                 simonGameState = BASTET_GAME_WAIT_LEDS;
                 simonNextGameState = BASTET_GAME_INPUT;
 
                 // is the below check correct .. do I have off by one ?
-                if (simonState[simonInputPos] == choice) {
+                if (simonState[simonInputPos] == (buttonState+1)) {
                     simonInputPos++;
                     if (simonInputPos >= simonPos) {
                         effect = 0x42;
@@ -207,21 +189,21 @@ void simonLed(uint8_t val) {
         iLED[WING[L][n]] = 0;
         iLED[WING[R][n]] = 0;
     }
-    if (val == 1) {
+    if (val == 3) {         // II
         iLED[WING[L][0]] = dimValue;
         iLED[WING[L][1]] = dimValue;
         iLED[WING[L][2]] = dimValue;
         effect = 0x013f;
-    } else if (val == 2) {
+    } else if (val == 1) {  //
         iLED[WING[L][3]] = dimValue;
         iLED[WING[L][4]] = dimValue;
         effect = 0x015f;
-    } else if (val == 3) {
+    } else if (val == 4) {  // III
         iLED[WING[R][0]] = dimValue;
         iLED[WING[R][1]] = dimValue;
         iLED[WING[R][2]] = dimValue;
         effect = 0x017f;
-    } else if (val == 4) {
+    } else if (val == 2) {  // I
         iLED[WING[R][3]] = dimValue;
         iLED[WING[R][4]] = dimValue;
         effect = 0x019f;

@@ -27,11 +27,6 @@
     #define BASTET_GAME_OUTRO           6
     #define BASTET_GAME_OVER            7
 
-    #define BASTET_BOTTOM_LEFT          1
-    #define BASTET_BOTTOM_RIGHT         2
-    #define BASTET_TOP_LEFT             3
-    #define BASTET_TOP_RIGHT            4
-
     void simonLed(uint8_t val);
     uint8_t BastetDictates();
 
