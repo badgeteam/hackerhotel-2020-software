@@ -496,28 +496,19 @@ uint8_t CheckInput(uint8_t *data){
                     if (serTxDone) SerSend(&cheat[0]);
                 }
             }
-            if (StartsWith(&data[0], "cheat")){
-                //int8_t n;
-                uint8_t bit, digit[3] = {0,0,0};
 
+            //Show used cheat codes
+            if (StartsWith(&data[0], "cheat")){
+                uint8_t bit;
                 for (uint8_t x=0; x<MAX_CHEATS; ++x){
                     
                     //Set up sending out number
                     EERead(CHEATS+x, &bit, 1);
                     bit = 0xff-bit;
-                    /*
-                    for (n=2; n>=0; --n) {
-                        digit[n] = bit % 10;
-                        bit /= 10;
-                    }
 
-                    for (n=0; n<3; ++n) {
-                        SetResponse(x*4+n, A_DIGITS+digit[n], 1, TEASER);
-                    } 
-                    */
                     SetResponse(x*4, A_HEXPREFIX, L_HEXPREFIX, TEASER);
-                    SetResponse(x*4+1, A_DIGITS+digit[bit>>4], 1, TEASER);               
-                    SetResponse(x*4+2, A_DIGITS+digit[bit%16], 1, TEASER);
+                    SetResponse(x*4+1, A_DIGITS+(bit>>4), 1, TEASER);               
+                    SetResponse(x*4+2, A_DIGITS+(bit%16), 1, TEASER);
                     SetResponse(x*4+3, A_COMMA, L_COMMA, TEASER);
                 }
                 SetResponse((4*MAX_CHEATS)-1, A_LF, 4, TEASER);
