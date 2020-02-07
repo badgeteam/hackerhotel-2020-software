@@ -17,7 +17,7 @@
     #include <literals.h>
 
     #define BASTET_COMPLETED            122
-    #define BASTET_LENGTH               16
+    #define BASTET_LENGTH               12
     #define BASTET_BOOT                 0
     #define BASTET_GAME_START           1
     #define BASTET_GAME_INTRO           2

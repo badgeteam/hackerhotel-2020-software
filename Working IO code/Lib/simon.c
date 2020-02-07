@@ -28,7 +28,10 @@ uint8_t simonPos = 0,
         simonWait = 0;
 uint8_t simonGameState = BASTET_BOOT;
 
-// Main game loop
+/**
+ * Main game loop
+ * @return 0
+ */
 uint8_t BastetDictates() {
     if (CheckState(BASTET_COMPLETED))
         return 0;
@@ -59,27 +62,18 @@ uint8_t BastetDictates() {
         uint8_t pos = simonTimer / (3 - (simonPos>>1));
         if (pos > 6) {
             simonGameState = BASTET_GAME_SHOW_PATTERN;
-            for (uint8_t n=0; n<6; n++){
-                iLED[HCKR[R][n]] = 1;
-            }
+//            for (uint8_t n=0; n<6; n++){
+//                iLED[HCKR[R][n]] = 1;
+//            }
             simonTimer = 0;
             return 0;
         }
         iLED[HCKR[R][pos]] = dimValue;
     }
 
-    if (BASTET_GAME_OUTRO == simonGameState) {
-        uint8_t pos = simonTimer / (3 - (simonPos>>1));
-        if (pos > 6) {
-            simonGameState = BASTET_GAME_OVER;
-            return 0;
-        }
-        iLED[HCKR[R][5-pos]] = 1;
-    }
-
     if (BASTET_GAME_SHOW_PATTERN == simonGameState) {
         // assuming 15Hz
-        uint8_t pos = simonTimer / (15 - (simonPos>>1));
+        uint8_t pos = simonTimer / (15 - (simonPos>>1));    // is that even fair?
         if (pos > simonPos) {
             simonGameState = BASTET_GAME_INPUT;
             simonLed(0);
@@ -92,16 +86,16 @@ uint8_t BastetDictates() {
         uint8_t choice = 0;
         if ((buttonState & 0xf0)&&(buttonState < 0xff)) {
             switch (buttonState&0x0f) {
-                case 0b1000: // bottom left
+                case 0b1000:
                     choice = BASTET_BOTTOM_LEFT;
                     break;
-                case 0b0100: // top left
+                case 0b0100:
                     choice = BASTET_TOP_LEFT;
                     break;
-                case 0b0010: // top right
+                case 0b0010:
                     choice = BASTET_TOP_RIGHT;
                     break;
-                case 0b0001: // bottom right
+                case 0b0001:
                     choice = BASTET_BOTTOM_RIGHT;
                     break;
             }
@@ -115,21 +109,26 @@ uint8_t BastetDictates() {
                 simonLed(choice);
                 simonGameState = BASTET_GAME_WAIT_LEDS;
 
-                if (simonState[simonInputPos] == choice) {
+                // is the below check correct .. do I have off by one ?
+                if (simonState[simonInputPos+1] == choice) {
                     // TODO correct, next sound (textadv?)
                     simonInputPos++;
+                    if (simonInputPos == simonPos) {
+                        simonPos++;
+                    }
                 } else {
-                    // TODO fail sound (textadv?)
-                    simonInputPos = 0;
+                    effect = 0x0105;    // TODO fail sound
                     simonTimer = 0;
+                    // perhaps again some nextState magic to show incorrect selection
                     for (uint8_t n=0; n<6; n++){
                         iLED[HCKR[R][n]] = dimValue;
                     }
                     simonGameState = BASTET_GAME_OUTRO;
                 }
 
-                if (simonInputPos == BASTET_LENGTH) {
-                    // TODO win animu + sound ?
+                if (simonInputPos == BASTET_LENGTH || simonPos > BASTET_LENGTH) { // beetje dubbel
+                    // TODO win animu !!
+                    effect = 0x0106;    // TODO win sound
                     UpdateState(BASTET_COMPLETED);
                     simonGameState = BASTET_GAME_OVER;
                 }
@@ -150,7 +149,17 @@ uint8_t BastetDictates() {
         }
     }
 
+    if (BASTET_GAME_OUTRO == simonGameState) {
+        uint8_t pos = simonTimer / (3 - (simonPos>>1));
+        if (pos > 6) {
+            simonGameState = BASTET_GAME_OVER;
+            return 0;
+        }
+        iLED[HCKR[R][5-pos]] = 1;
+    }
+
     if (BASTET_GAME_OVER == simonGameState) {
+        simonGameState = BASTET_GAME_START; // BASTET_BOOT for fresh "field" ??
         gameNow = TEXT;
         for (uint8_t n=0; n<5; n++){
             iLED[WING[L][n]] = 1;
@@ -162,6 +171,10 @@ uint8_t BastetDictates() {
     return 0;
 }
 
+/**
+ * Set the wing LED blocks to selected option
+ * @param val
+ */
 void simonLed(uint8_t val) {
     for (uint8_t n = 0; n < 5; n++) {
         iLED[WING[L][n]] = 0;

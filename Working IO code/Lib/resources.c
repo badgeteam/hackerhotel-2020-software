@@ -84,7 +84,7 @@ void Setup(){
     VREF_CTRLB   = 0x01;    //DAC0 ref forced enabled
 
     //Init ADC0 (audio in, also controls DAC output rate, internal temperature?)
-    ADC0_CTRLA   = 0x06;    //8 bit resolution, free running
+    ADC0_CTRLA   = 0x02;    //10 bit resolution, free running
     ADC0_CTRLC   = 0x44;    //Reduced sample capacitor, internal reference, clock/32 => 24038sps
     ADC0_MUXPOS  = 0x1E;    //Audio in: AIN7 at (0x07), Temperature: Internal sensor at (0x1E)
     ADC0_INTCTRL = 0x01;    //Result ready interrupt enabled
@@ -235,7 +235,7 @@ ISR(ADC0_RESRDY_vect){
     //If just switched reference, discard first few samples
     if (adc0Chg == 0){
         AUPOS = (AUPOS+1)&(AULEN-1);
-        if (ADC0_MUXPOS == 0x1E) adcTemp = ADC0_RESL; else auIn[AUPOS]=ADC0_RESL;
+        if (ADC0_MUXPOS == 0x1E) adcTemp = ADC0_RES; else auIn[AUPOS]=ADC0_RESL;
     } else --adc0Chg;
     ADC0_INTFLAGS = ADC_RESRDY_bm;
 }
@@ -332,7 +332,7 @@ void SerSpeed(uint8_t serSpd){
 // Select temperature sensor
 void SelectTSens(){
      VREF_CTRLA   = 0x12;    //0x22 for audio in/out (2.5V), 0x12 for temperature in, audio out (1.1V/2.5V)
-     ADC0_CTRLA   |= ADC_RESSEL_bm;
+     ADC0_CTRLA   &= ~(ADC_RESSEL_bm);
      ADC0_MUXPOS  = 0x1E;    //Audio in: AIN7 at (0x07), Temperature: Internal sensor at (0x1E)
      adc0Chg = 3;
 };
@@ -340,7 +340,7 @@ void SelectTSens(){
 // Select "audio" input (0-2.5V)
 void SelectAuIn(){
      VREF_CTRLA   = 0x22;    //0x22 for audio in/out (2.5V), 0x12 for temperature in, audio out (1.1V/2.5V)
-     ADC0_CTRLA   &= ~(ADC_RESSEL_bm);
+     ADC0_CTRLA   |= ADC_RESSEL_bm;
      ADC0_MUXPOS  = 0x07;    //Audio in: AIN7 at (0x07), Temperature: Internal sensor at (0x1E)
      adc0Chg = 3;
 };
@@ -559,15 +559,15 @@ uint8_t HotSummer(){
 
     if (CheckState(FIRST_SUMMER)) {
         iLED[SCARAB[G]] = dimValue;
-        if ((cooledDown) && (adcTemp >= (calTemp + 8))) {
+        if ((cooledDown) && (adcTemp >= (calTemp + 32))) {
             UpdateState(SUMMERS_COMPLETED);
             return 0;
         }
-        if (adcTemp <= (calTemp + 2)) cooledDown = 1;
+        if (adcTemp <= (calTemp + 8)) cooledDown = 1;
                    
     } else {
         if (calTemp == 0) calTemp = adcTemp;
-        if (adcTemp >= (calTemp + 8)) {
+        if (adcTemp >= (calTemp + 32)) {
             UpdateState(FIRST_SUMMER);
         }
     }

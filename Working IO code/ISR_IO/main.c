@@ -78,7 +78,7 @@ int main(void)
             MagnetMaze();
             LanyardCode();
             BastetDictates();
-            //MakeFriends();
+            MakeFriends();
 
             //Save progress
             SaveGameState();
