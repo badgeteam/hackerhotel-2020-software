@@ -91,10 +91,7 @@ uint8_t LanyardCode(){
             lanyardState = FALSE;
             if (lanyardPos < 4 ) {
                 initLanyard();
-                /* TODO disable bastet for now  until is working 
                 gameNow         = BASTET;
-                */
-                gameNow         = TEXT;
                 return 0;
             }
         }
