@@ -39,7 +39,7 @@ int main(void)
 
     while (TRUE) {
         if (GenerateAudio()) {
-            buttonState = CheckButtons(buttonState);
+            buttonState = CheckButtons();
             buttonMark = 0;
 
             if (VREF_CTRLA == 0x12) SelectAuIn(); else SelectTSens();
