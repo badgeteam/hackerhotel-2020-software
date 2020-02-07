@@ -95,7 +95,8 @@
     extern volatile uint8_t auIn[AULEN];
     extern volatile uint8_t adc0Chg;
 
-    volatile uint8_t dimValue;
+    volatile uint8_t  dimValue;
+    volatile uint16_t dimValueSum;
     extern const    uint8_t QSINE[32];
 
     //LED translation matrices (usage iLED[name_of_const_array[][]] = value;)

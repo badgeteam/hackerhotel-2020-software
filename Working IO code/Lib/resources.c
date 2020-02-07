@@ -544,13 +544,13 @@ uint8_t HotSummer(){
     static uint8_t cooledDown = 0;
 
     if (CheckState(SUMMERS_COMPLETED)){
-        iLED[SCARAB[G]] = 0;
-        iLED[SCARAB[R]] = dimValue;
+        iLED[SCARAB[R]] = 0;
+        iLED[SCARAB[G]] = dimValue;
         return 1;
     }
 
     if (CheckState(FIRST_SUMMER)) {
-        iLED[SCARAB[G]] = dimValue;
+        iLED[SCARAB[R]] = dimValue;
         if ((cooledDown) && (adcTemp >= (calTemp + 32))) {
             UpdateState(SUMMERS_COMPLETED);
             return 0;

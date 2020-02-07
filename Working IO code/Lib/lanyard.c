@@ -36,13 +36,7 @@ void initLanyard() {
     lanyardPos      = 0;
     lanyardCnt      = 0;
     lanyardState    = TRUE;
-    iLED[CAT]       = 0;
-    iLED[EYE[G][L]] = 0;
-    iLED[EYE[G][R]] = 0;
-    iLED[EYE[R][L]] = 0;
-    iLED[EYE[R][R]] = 0;
-    for (int i=0; i<6; i++ )
-        iLED[HCKR[G][i]] = 0;
+    effect = 0;
 }
 
 // Main game loop
@@ -51,7 +45,6 @@ uint8_t LanyardCode(){
         /* clean up maze game and go back to text game */
         initLanyard();
         gameNow = TEXT;
-        effect = 0;
         return 0;
     }
 
@@ -74,6 +67,9 @@ uint8_t LanyardCode(){
 
     if (lastButtonState == 0xff){
         effect = 0x13f + (buttonState << 5);
+
+        if (gameNow != LANYARD)
+            initLanyard();
         gameNow = LANYARD;
 
         if (buttonState == lanyardCode[lanyardPos]) {

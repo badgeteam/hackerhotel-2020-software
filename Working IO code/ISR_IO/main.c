@@ -75,7 +75,11 @@ int main(void)
             //Check light sensor status (added hysteresis to preserve writing cycles to internal EEPROM)
             if (adcPhot < 10) WriteStatusBit(116, 1);
             if (adcPhot > 100) WriteStatusBit(116, 0);
-            dimValue = 0 - QSINE[31-(adcPhot>>7)];
+
+            dimValueSum -= (dimValueSum>>8);
+            dimValueSum += 256;
+            dimValueSum -= QSINE[31-(adcPhot>>7)];
+            dimValue     = dimValueSum>>8;
 
             //Check temperature
             HotSummer();
