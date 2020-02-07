@@ -14,13 +14,13 @@
 uint8_t chkVolt250(){
     static uint8_t avgVolt = 0;
         
-    for (uint8_t x=25; x<250; x+=25) {
+    for (uint8_t x=25; x<226; x+=25) {
         if ((auIn[0] > (x-DELTA)) && (auIn[0] < (x+DELTA))) {
-            avgVolt = x;
             break;
         }
+        ++avgVolt;
     }
-    return avgVolt/25;
+    return avgVolt;
 }
 
 // Main game loop
