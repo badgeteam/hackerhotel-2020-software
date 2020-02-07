@@ -159,19 +159,20 @@ uint8_t BastetDictates() {
             simonCounter++;
             simonTimer = 0;
         }
-        if (simonCounter > 6) {
+        if (simonCounter > 5) {
             simonTimer = 0;
             simonCounter = 0;
             simonGameState = BASTET_GAME_OVER;
             return 0;
         }
         iLED[HCKR[R][5-simonCounter]] = 1;
+        iLED[HCKR[G][5-simonCounter]] = 1;
     }
 
     if (BASTET_GAME_OVER == simonGameState) {
         simonInputPos = 0;
         simonPos = 0;
-        simonGameState = BASTET_GAME_START; // BASTET_BOOT for fresh "field" ??
+        simonGameState = BASTET_BOOT; // BASTET_GAME_START for stale "field" ツs
         gameNow = TEXT;
         for (uint8_t n=0; n<5; n++){
             iLED[WING[L][n]] = 1;

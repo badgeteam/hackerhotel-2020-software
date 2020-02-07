@@ -426,10 +426,12 @@
                             "desc" : "This a beautiful gem!",
                             "visible_acl" : 63,
                             "action_mask" : 20,
-                            "item_nr" : 61,
+                            "action_acl" : 192,
+                            "action_acl_msg" : "You already have the beautiful gem",
+                            "action_msg" : "Thank you for this wonderful gift, it warms my heart.",
                             "action_state" : 64,
                             "state_desc" : "Picked up the gem",
-                            "action_msg" : "Thank you for this wonderful gift, it warms my heart."
+                            "item_nr" : 61
                           }
                         }
                       }
