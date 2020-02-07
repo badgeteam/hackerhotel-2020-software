@@ -17,21 +17,22 @@
     #include <literals.h>
 
     #define BASTET_COMPLETED            122
-    #define BASTET_LENGTH               16
+    #define BASTET_LENGTH               12
     #define BASTET_BOOT                 0
     #define BASTET_GAME_START           1
+    #define BASTET_GAME_INTRO           2
     #define BASTET_GAME_SHOW_PATTERN    3
     #define BASTET_GAME_WAIT_LEDS       4
     #define BASTET_GAME_INPUT           5
+    #define BASTET_GAME_OUTRO           6
+    #define BASTET_GAME_OVER            7
 
     #define BASTET_BOTTOM_LEFT          1
     #define BASTET_BOTTOM_RIGHT         2
     #define BASTET_TOP_LEFT             3
     #define BASTET_TOP_RIGHT            4
 
-    uint8_t BastetDictates();
-
-    void simonTone(uint8_t val);
     void simonLed(uint8_t val);
+    uint8_t BastetDictates();
 
 #endif /* SIMON_H_ */
