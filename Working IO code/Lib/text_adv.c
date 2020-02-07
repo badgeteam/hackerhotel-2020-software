@@ -874,7 +874,7 @@ uint8_t ProcessInput(uint8_t *data){
                         ((kneelings & 2) << 11) + ((kneelings & 1))
                         answer = answer << (3-person)
                     */
-                    //data[1]+=1; // item 31 needs to become something that results in 0 when doing %4
+                    data[1]-='0'; // item 31 needs to become something that results in 0 when doing %4
                     data[2]-='1';
                     if (data[3] == 'a') data[3] = 1;
                     else if (data[3] == 'e') data[3] = 0;
