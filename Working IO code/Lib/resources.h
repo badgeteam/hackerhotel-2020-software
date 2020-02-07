@@ -38,7 +38,7 @@
     void SelectTSens();                                                 // Select the temperature sensor for ADC0 (discard the first two samples after switching)
     void SelectAuIn();                                                  // Select the "audio input" for ADC0 (discard the first two samples after switching)
 
-    uint8_t CheckButtons(uint8_t previousValue);                        // Readout of the button state, with duration. Run periodically, but not faster than (PIT interrupt sps / 3) times per second.
+    uint8_t CheckButtons();                        // Readout of the button state, with duration. Run periodically, but not faster than (PIT interrupt sps / 3) times per second.
 
     void EERead(uint8_t eeAddr, uint8_t *eeValues, uint8_t size);       // Read from internal EEPROM, wraps around if eeAddr+size>255
     uint8_t EEWrite(uint8_t eeAddr, uint8_t *eeValues, uint8_t size);   // Write to internal EEPROM, wraps around if eeAddr+size>255

@@ -35,33 +35,7 @@ int main(void)
 {
     Setup();
 
-    SerSpeed(0xff);
-    ////Turn on LEDs on low setting to check for interrupt glitches
-
-    //"Hacker"
-    for (uint8_t n=0; n<6; n++){
-        iLED[HCKR[R][n]] = 1;
-        iLED[HCKR[G][n]] = 1;
-    }
-
-    //"Wings"
-    for (uint8_t n=0; n<5; n++){
-        iLED[WING[L][n]] = 1;
-        iLED[WING[R][n]] = 1;
-    }
-
-    //"Others"
-    iLED[EYE[G][R]] = 1;
-    iLED[EYE[G][L]] = 1;
-    iLED[EYE[R][R]] = 1;
-    iLED[EYE[R][L]] = 1;
-    iLED[SCARAB[R]] = 1;
-    iLED[SCARAB[G]] = 1;
-    iLED[BADGER] = 1;
-    iLED[CAT] = 1;
-
     LoadGameState();
-    effect = 0x013f;
 
     while (TRUE) {
         if (GenerateAudio()) {

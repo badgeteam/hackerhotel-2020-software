@@ -351,54 +351,35 @@ void SelectAuIn(){
 };
 
 // Returns button combination (4LSB) and number of consecutive times this combination is detected. First read should always be ignored! 
-uint8_t CheckButtons(uint8_t previousValue){
+uint8_t CheckButtons(){
+    static uint8_t previousValue = 0xFF;
     uint8_t bADC = (uint8_t)(adcBtns>>4);
-    uint8_t bNibble = 0x0F;     //MSB to LSB: Bottom left, top left, top right, bottom right, 0F is error
-    
-    switch(bADC){
+    uint8_t button = 0xFF;     //FF = released or error
 
-        case 35 ... 39:          //37: Both left
-        bNibble = 0b1100;
-        break;
+        switch(bADC){
 
-        case 45 ... 49:          //47: Both bottom
-        bNibble = 0b1001;
-        break;
+            case 48 ... 56:          //52: Bottom left (+/-4)
+            button = 2;
+            break;
 
-        case 50 ... 54:          //52: Bottom left
-        bNibble = 0b1000;
-        break;
+            case 79 ... 95:          //87: Top left (+/-8)
+            button = 3;
+            break;
 
-        case 62 ... 68:          //65: Both top
-        bNibble = 0b0110;
-        break;
+            case 117 ... 141:        //129: Top right (+/- 12)
+            button = 1;
+            break;
 
-        case 83 ... 91:          //87: Top left
-        bNibble = 0b0100;
-        break;
+            case 158 ... 190:        //174: Bottom right (+/- 16)
+            button = 0;
+            break;
+        }
 
-        case 99 ... 109:         //104: Both right
-        bNibble = 0b0011;
-        break;
+        if (((previousValue+1)== 0) || (button != previousValue)) {
+            previousValue = button;
+            return 0xFF;
+        } else return button;
 
-        case 121 ... 137:        //129: Top right
-        bNibble = 0b0010;
-        break;
-
-        case 162 ... 186:        //174: Bottom right
-        bNibble = 0b0001;
-        break;
-
-        case 240 ... 255:        //255: No button pressed
-        bNibble = 0b0000;
-        break;
-    }
-
-    if ((previousValue&0x0F)==bNibble){
-        if ((previousValue&0xF0) < 0xF0) previousValue += 0x10; //Same value? Increase time nibble
-        return previousValue;       
-    } else if (bNibble == 0) return 0xFF; //Buttons released, 0xFF triggers readout, previousValue holds last button value.
-              else return bNibble;  //New value  
 }
 
 uint8_t lfsr(){
