@@ -1,3 +1,10 @@
+/*
+ * main_def.h
+ *
+ * Created: 17/12/2019
+ * Author: Badge.team
+ */
+
 #ifndef MAIN_DEF_H_
 #define MAIN_DEF_H_
 

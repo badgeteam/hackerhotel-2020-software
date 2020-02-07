@@ -1,4 +1,16 @@
 #!/usr/bin/env bash
+#    _____          __           _____.__.__
+#   /     \ _____  |  | __ _____/ ____\__|  |   ____   ______
+#  /  \ /  \\__  \ |  |/ // __ \   __\|  |  | _/ __ \ /  ___/
+# /    Y    \/ __ \|    <\  ___/|  |  |  |  |_\  ___/ \___ \
+# \____|__  (____  /__|_ \\___  >__|  |__|____/\___  >____  >
+#         \/     \/     \/    \/                   \/     \/
+#    _____                  .____
+#   /  _  \_______   ____   |    |   _____    _____   ____
+#  /  /_\  \_  __ \_/ __ \  |    |   \__  \  /     \_/ __ \
+# /    |    \  | \/\  ___/  |    |___ / __ \|  Y Y  \  ___/
+# \____|__  /__|    \___  > |_______ (____  /__|_|  /\___  >
+#         \/            \/          \/    \/      \/     \/
 
 TARGETS="Lib/I2C Lib/main_def Lib/resources Lib/text_adv Lib/simon Lib/maze Lib/lanyard Lib/friends ISR_IO/main"
 OBJECTS=""
@@ -36,6 +48,7 @@ else
 
   avr-size "ISR_IO.elf"
   if [ "$1" == "flits" ]; then
-	python3 ~/Projects/pyupdi/pyupdi.py -d tiny1617 -c /dev/tty.SLAB_USBtoUART -f ISR_IO.hex
+    echo Flashing
+	  python3 ~/Projects/pyupdi/pyupdi.py -d tiny1617 -c /dev/tty.SLAB_USBtoUART -f ISR_IO.hex
   fi
 fi

@@ -57,9 +57,6 @@ uint8_t BastetDictates() {
         simonInputPos = 0;
         simonTimer = 0;
         simonCounter = 0;
-        for (uint8_t n=0; n<6; n++){
-            iLED[HCKR[G][n]] = 1;
-        }
     }
 
     if (BASTET_GAME_INTRO == simonGameState) {
@@ -67,10 +64,13 @@ uint8_t BastetDictates() {
             simonCounter++;
             simonTimer = 0;
         }
-        if (simonCounter > 6) {
+        if (simonCounter > 5) {
             simonGameState = BASTET_GAME_SHOW_PATTERN;
             simonTimer = 0;
             simonCounter = 0;
+            for (uint8_t n=0; n<6; n++){
+                iLED[HCKR[G][n]] = 1;
+            }
             return 0;
         }
         iLED[HCKR[R][simonCounter]] = dimValue;
@@ -108,7 +108,9 @@ uint8_t BastetDictates() {
                         simonInputPos = 0;
                         simonTimer = 0;
                         simonCounter = 0;
-                        iLED[HCKR[G][simonPos/2]] = dimValue;  // BASTET_LENGTH = 12
+                        if (simonPos > 1) { // BASTET_LENGTH = 12
+                            iLED[HCKR[G][(simonPos / 2) - 1]] = dimValue;
+                        }
                         simonNextGameState = BASTET_GAME_SHOW_PATTERN;
                     }
                 } else {
@@ -124,7 +126,7 @@ uint8_t BastetDictates() {
                 }
 
                 if (simonInputPos >= BASTET_LENGTH || simonPos >= BASTET_LENGTH) { // beetje dubbel
-                    // TODO win animu !!
+                    // TODO win animu ?!
                     effect = 0x0106;    // TODO win sound ?!
                     UpdateState(BASTET_COMPLETED);
                     simonTimer = 0;

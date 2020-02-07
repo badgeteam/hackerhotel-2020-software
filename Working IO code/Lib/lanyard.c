@@ -1,8 +1,24 @@
 /*
- * maze.c
+ * lanyard.c
  *
  * Created: 02/02/2020 0:56
  * Author: Badge.team
+ *
+ *                 o--o--=g=--o--o
+ *                /      .'       \
+ *                o      '.       o
+ *                 \             /
+ *                  o           o
+ *                   \         /
+ *                    o       o
+ *                     \     /
+ *                      o   o
+ *                       \_/
+ *                        =
+ *                       .^.
+ *                      '   '
+ *                      '. .'
+ *                        !    lc
  */ 
 
 #include <lanyard.h>
@@ -45,11 +61,11 @@ uint8_t LanyardCode(){
     if ( gameNow != TEXT && gameNow != LANYARD )
         return 0;
 
-    if (buttonState == 0xff)
-        return 0;
-
     /* activate led for buttonstate */
     iLED[CAT] = (buttonState==0xff ? 0 : dimValue);
+
+    if (buttonState == 0xff)
+        return 0;
 
     if (buttonState == lastButtonState)
         return 0;
@@ -57,23 +73,7 @@ uint8_t LanyardCode(){
     lanyardLastActive = getClock();
 
     if (lastButtonState == 0xff){
-        switch (buttonState) {
-            case 0:
-                effect = 0x19f;
-                break;
-
-            case 1:
-                effect = 0x17f;
-                break;
-
-            case 3:
-                effect = 0x13f;
-                break;
-
-            case 2:
-                effect = 0x15f;
-                break;
-        }
+        effect = 0x13f + (buttonState << 5);
         gameNow = LANYARD;
 
         if (buttonState == lanyardCode[lanyardPos]) {

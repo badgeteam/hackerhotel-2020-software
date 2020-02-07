@@ -3,6 +3,18 @@
  *
  * Created: 06/01/2020 18:26:44
  *  Author: Badge.team
+ *                  ___,,___
+ *             _,-='=- =-  -`"--.__,,.._
+ *          ,-;// /  - -       -   -= - "=.
+ *        ,'///    -     -   -   =  - ==-=\`.
+ *       |/// /  =    `. - =   == - =.=_,,._ `=/|
+ *      ///    -   -    \  - - = ,ndDMHHMM/\b  \\
+ *    ,' - / /        / /\ =  - /MM(,,._`YQMML  `|
+ *   <_,=^Kkm / / / / ///H|wnWWdMKKK#""-;. `"0\  |
+ *          `""QkmmmmmnWMMM\""WHMKKMM\   `--. \> \
+ *   hjm          `""'  `->>>    ``WHMb,.    `-_<@)
+ *                                  `"QMM`.
+ *                                     `>>>
  */ 
 
 #include <text_adv.h>           //Text adventure stuff
@@ -486,7 +498,7 @@ uint8_t CheckInput(uint8_t *data){
             }
             if (StartsWith(&data[0], "cheat")){
                 //int8_t n;
-                uint8_t bit, digit[3];
+                uint8_t bit, digit[3] = {0,0,0};
 
                 for (uint8_t x=0; x<MAX_CHEATS; ++x){
                     

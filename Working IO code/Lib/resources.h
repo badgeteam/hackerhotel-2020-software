@@ -7,7 +7,6 @@
  *  Author: Badge.team
  */ 
 
-
 #ifndef RESOURCES_H_
 #define RESOURCES_H_
     #include <main_def.h>
