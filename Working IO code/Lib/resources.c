@@ -766,7 +766,7 @@ uint8_t GenerateAudio(){
 
                 if (buttonMark) {
                     if (start == 0) {
-                        duration = 4;
+                        duration = 3;
                         auRepAddr = &auBuffer[0];
                         auVolume = 255;
                         start = 1;
