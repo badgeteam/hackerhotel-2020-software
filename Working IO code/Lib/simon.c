@@ -77,11 +77,13 @@ uint8_t BastetDictates() {
     }
 
     if (BASTET_GAME_SHOW_PATTERN == simonGameState) {
+
         if (simonTimer > 7) {   // ±.5 second
             simonCounter++;
             simonTimer = 0;
         }
         if (simonCounter > simonPos) {
+            simonInputPos = 0;
             simonGameState = BASTET_GAME_INPUT;
             simonLed(0);
             simonTimer = 0;
@@ -105,7 +107,6 @@ uint8_t BastetDictates() {
                     if (simonInputPos > simonPos) {
                         effect = 0x42;
                         simonPos++;
-                        simonInputPos = 0;
                         simonTimer = 0;
                         simonCounter = 0;
                         if (simonPos > 1) { // BASTET_LENGTH = 12
