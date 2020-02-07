@@ -59,6 +59,7 @@
 
     uint8_t HotSummer();
 
+    void WingBar(int8_t l, int8_t r);
     void GenerateBlinks();
     uint8_t GenerateAudio();
 
