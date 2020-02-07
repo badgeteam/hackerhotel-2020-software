@@ -1,3 +1,10 @@
+/*
+ * main_def.c
+ *
+ * Created: 17/12/2019
+ * Author: Badge.team
+ */
+
 #include <main_def.h>
 
 // Global vars

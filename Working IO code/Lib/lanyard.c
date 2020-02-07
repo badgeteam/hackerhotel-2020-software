@@ -1,8 +1,24 @@
 /*
- * maze.c
+ * lanyard.c
  *
  * Created: 02/02/2020 0:56
  * Author: Badge.team
+ *
+ *                 o--o--=g=--o--o
+ *                /      .'       \
+ *                o      '.       o
+ *                 \             /
+ *                  o           o
+ *                   \         /
+ *                    o       o
+ *                     \     /
+ *                      o   o
+ *                       \_/
+ *                        =
+ *                       .^.
+ *                      '   '
+ *                      '. .'
+ *                        !    lc
  */ 
 
 #include <lanyard.h>

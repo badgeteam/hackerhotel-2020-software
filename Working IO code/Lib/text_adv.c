@@ -3,6 +3,18 @@
  *
  * Created: 06/01/2020 18:26:44
  *  Author: Badge.team
+ *                  ___,,___
+ *             _,-='=- =-  -`"--.__,,.._
+ *          ,-;// /  - -       -   -= - "=.
+ *        ,'///    -     -   -   =  - ==-=\`.
+ *       |/// /  =    `. - =   == - =.=_,,._ `=/|
+ *      ///    -   -    \  - - = ,ndDMHHMM/\b  \\
+ *    ,' - / /        / /\ =  - /MM(,,._`YQMML  `|
+ *   <_,=^Kkm / / / / ///H|wnWWdMKKK#""-;. `"0\  |
+ *          `""QkmmmmmnWMMM\""WHMKKMM\   `--. \> \
+ *   hjm          `""'  `->>>    ``WHMb,.    `-_<@)
+ *                                  `"QMM`.
+ *                                     `>>>
  */ 
 
 #include <text_adv.h>           //Text adventure stuff
