@@ -97,7 +97,6 @@ uint8_t LanyardCode(){
             if (lanyardState == TRUE) {
                 if ((lanyardPos % 4) == 0) {
                     iLED[HCKR[G][(lanyardPos>>2)-1]] = dimValue;
-                    effect = 0x5f;
                 }
                 if (lanyardPos == sizeof(lanyardCode)) {
                     UpdateState(LANYARD_COMPLETED);

@@ -40,7 +40,7 @@ P = 𓊪   Q = 𓈎   R = 𓂋   S = 𓋴   T = 𓏏\r\n\
 U = 𓅱   V = 𓆑   W = 𓅱   X = 𓋴   Y = 𓆄𓆄\r\n\
 \r\n\
 Z = 𓊃 ',
-'LOCATION':'Location: ',
+'LOCATION':'\r\nLocation: ',
 'SPACE':' ',
 'LF':'\r\n\r\n\r\n\r\n',
 'COMMA':', ',
@@ -60,7 +60,7 @@ Z = 𓊃 ',
 'CANTREAD':'You can\'t read this object.',
 'CANTUSEITEM':'You can\'t use this item on this object.',
 'RESPONSE':'(your response) ? ',
-'INCORRECT':'That is incorrect!',
+'INCORRECT':'Your answer is incorrect.\r\nYou need 10 to seconds to recover from this shock.',
 'CARRYTWO':'You can only carry 2 objects, please drop another object\r\nif you really need this object.',
 'ALREADYCARRYING':'You are already carrying that object.',
 'NOWCARRING':'You are now carrying: ',

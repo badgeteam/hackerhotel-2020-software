@@ -66,6 +66,7 @@ uint8_t MagnetMaze(){
         /* clean up maze game and go back to text game */
         initMaze();
         gameNow = TEXT;
+        effect = 0;
         return 0;
     }
         
@@ -118,6 +119,7 @@ uint8_t MagnetMaze(){
 
     /* Indicate that the magnet was read succesfully */
     iLED[CAT] = (newHallState ? dimValue : 0);
+    effect = 0x19f;
 
     if (newHallState != curHallState) {
         /* keep track of time to enable an idle timeout to exit the game */
@@ -137,30 +139,24 @@ uint8_t MagnetMaze(){
                 iLED[EYE[R][R]] = 0;
             } else {
                 mazeState = FALSE;
-                /* TODO play tone BAD */
             }
             mazePos++;
             mazeCnt++;            
             if (mazeCnt >= 3) {
                 mazeCnt = 0;
                 if (mazeState == TRUE) {
-                    /* TODO play tone GOOD */
                     iLED[HCKR[G][mazeHckrPos]] = dimValue;
                     mazeHckrPos++;
                     if (mazePos == sizeof(mazeCode)) {
                         UpdateState(MAZE_COMPLETED);
                         iLED[CAT]       = 0;
-                        iLED[EYE[R][L]] = 0;
-                        iLED[EYE[R][R]] = 0;
-                        iLED[EYE[G][L]] = dimValue;
-                        iLED[EYE[G][R]] = dimValue;
-                        /*state = STATE_MUSIC;*/
+                        effect = 0x42;
+                        /*TODO state = STATE_MUSIC;*/
                     }
                 } else {
                     initMaze();
                     gameNow   = TEXT;
-                    iLED[EYE[R][L]] = dimValue;
-                    iLED[EYE[R][R]] = dimValue;
+                    effect = 0x21;
                 }
             }
         }
