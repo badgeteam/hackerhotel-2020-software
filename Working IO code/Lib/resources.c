@@ -682,3 +682,17 @@ uint8_t GenerateAudio(){
     }
     return buttonMark;
 }
+
+uint16_t getClock() {
+    return 60 * minuteMark + (RTC_CNT>>9);
+}
+
+uint8_t idleTimeout(uint16_t lastActive, uint16_t maxIdle) {
+    uint16_t curClock;
+
+    curClock = getClock();
+    if (curClock < lastActive)
+        curClock += 256 * 60;
+
+    return (curClock > (lastActive + maxIdle));
+}

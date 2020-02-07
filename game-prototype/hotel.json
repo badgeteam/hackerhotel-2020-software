@@ -32,13 +32,7 @@
       },
       "The [E]levator" : {
         "desc" : "The elevator will take you to any floor you like",
-        "action_mask" : 21,
-        "action_acl" : 10,
-        "action_acl_msg" : "You don't have a VIP keycard, access denied",
-        "action_item" : 4,
-        "action_state" : 11,
-        "state_desc" : "VIP access to second floor granted.",
-        "action_msg" : "VIP access to second floor granted.",
+        "action_mask" : 5,
         "o" : {
           "The [1]st Floor" : {
             "desc" : "This is the hallway on the First Floor",
@@ -190,6 +184,18 @@
                 "open_acl_msg" : "<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0//EN\">\r\n<html><head>\r\n<title>404 Not Found</title>\r\n</head><body>\r\n<h1>Not Found</h1>\r\n<p>The requested ROOM was not found on this floor.</p>\r\n</body></html>"
               }
             }
+          },
+          "[V]IP keycard reader" : {
+            "desc" : "VIP guests can scan their keycard here to gain access to the 2nd floor",
+            "effects" : 0,
+            "action_mask" : 20,
+            "action_acl" : 10,
+            "action_acl_msg" : "You don't have a VIP keycard, access denied",
+            "action_item" : 4,
+            "action_msg" : "VIP access to second floor granted.",
+            "action_msg_effects" : 0,
+            "action_state" : 11,
+            "state_desc" : "VIP access to second floor granted."
           }
         }
       },
@@ -225,7 +231,7 @@
         "action_mask" : 5,
         "o" : {
           "[P]roxmark III" : {
-            "desc" : "The Proxmark is an RFID swiss-army tool, allowing for both high and low level\ninteractions with the vast majority of RFID tags and systems world-wide.\nYou can use the Proxmark III to copy keycards.",
+            "desc" : "The Proxmark is an RFID swiss-army tool, allowing for both high and low level\r\ninteractions with the vast majority of RFID tags and systems world-wide.\r\nYou can use the Proxmark III to copy keycards.",
             "action_mask" : 20,
             "action_acl" : 4,
             "action_acl_msg" : "You need some money to buy the Proxmark III",
@@ -352,7 +358,7 @@
                       "[G]host of Ra" : {
                         "desc" : "This is the ghost whom you released in room 203. \r\nHis name is Ra, the sun-god. Unfortunately he is \r\nunder a spell and is not much of a help to you now.",
                         "visible_acl" : 246,
-                        "action_mask" : 4,
+                        "action_mask" : 12,
                         "action_acl" : 117,
                         "action_acl_msg" : "You can't talk to a ghost, break the spell first!",
                         "action_msg" : "The spell is partly broken, one more hot summer to\r\nrevive Ra!"

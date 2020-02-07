@@ -8,5 +8,5 @@ ISR_IO.hex
 ISR_IO.eep
 ISR_IO.lss
 ISR_IO.srec
-ISR_IO/Debug
+ISR_IO/Debug/**
 
