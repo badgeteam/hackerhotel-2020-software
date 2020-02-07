@@ -492,6 +492,7 @@ uint8_t CheckInput(uint8_t *data){
                     //Set up sending out number
                     EERead(CHEATS+x, &bit, 1);
                     bit = 0xff-bit;
+                    /*
                     for (n=2; n>=0; --n) {
                         digit[n] = bit % 10;
                         bit /= 10;
@@ -499,7 +500,11 @@ uint8_t CheckInput(uint8_t *data){
 
                     for (n=0; n<3; ++n) {
                         SetResponse(x*4+n, A_DIGITS+digit[n], 1, TEASER);
-                    }                
+                    } 
+                    */
+                    SetResponse(x*4, A_HEXPREFIX, L_HEXPREFIX, TEASER);
+                    SetResponse(x*4+1, A_DIGITS+digit[bit>>4], 1, TEASER);               
+                    SetResponse(x*4+2, A_DIGITS+digit[bit%16], 1, TEASER);
                     SetResponse(x*4+3, A_COMMA, L_COMMA, TEASER);
                 }
                 SetResponse((4*MAX_CHEATS)-1, A_LF, 4, TEASER);
