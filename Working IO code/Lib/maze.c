@@ -49,13 +49,7 @@ void initMaze() {
     mazeCnt = 0;
     mazeState = TRUE;
     inverted  = FALSE;
-    iLED[CAT]       = 0;
-    iLED[EYE[G][L]] = 0;
-    iLED[EYE[G][R]] = 0;
-    iLED[EYE[R][L]] = 0;
-    iLED[EYE[R][R]] = 0;
-    for (int i=0; i<6; i++ )
-        iLED[HCKR[G][i]] = 0;
+    effect = 0;
 }
 
 void showFieldStrength(int16_t val) {
@@ -88,7 +82,6 @@ uint8_t MagnetMaze(){
         /* clean up maze game and go back to text game */
         initMaze();
         gameNow = TEXT;
-        effect = 0;
         return 0;
     }
         
@@ -154,7 +147,10 @@ uint8_t MagnetMaze(){
         curHallState = newHallState;
         
         if (curHallState != 0) {
+            if (gameNow == TEXT)
+                initMaze();
             gameNow = MAZE;
+
             if ( (inverted ? curHallState^3 : curHallState) == mazeCode[mazePos]) {
                 mazeState &= TRUE;
                 iLED[EYE[R][L]] = 0;
