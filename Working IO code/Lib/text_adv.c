@@ -113,7 +113,8 @@ uint8_t PrepareSending(uint16_t address, uint16_t length, uint8_t type){
             if (x==(TXLISTLEN-1)) return 1;
         }
         txAddrList[x]=address;
-        txStrLen[x]=length%0xff;
+        if (length == 255) length = 254;
+        txStrLen[x]=length;
         if (length>0xff) return 1; 
         txTypeNow = type;
     } else {

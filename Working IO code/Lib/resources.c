@@ -114,7 +114,8 @@ void Setup(){
     RTC_CLKSEL         = 0;                                //Clock source: internal 32768Hz clock
     while(RTC_STATUS & RTC_PERBUSY_bm);
     RTC_PER            = 512*60;                           //60 second period (for clocking how long the device has been running?)
-    tmp16bit = (RTC_CNT + BTN_TMR)%RTC_PER;
+    tmp16bit = (RTC_CNT + BTN_TMR);
+    if (tmp16bit > RTC_PER) tmp16bit -= RTC_PER;
     while(RTC_STATUS & RTC_CMPBUSY_bm);
     RTC_CMP            = tmp16bit;                         //Button timing
     RTC_INTCTRL        = 0x03;                             //RTC overflow interrupt enabled
@@ -267,7 +268,9 @@ ISR(ADC1_RESRDY_vect){
 ISR(RTC_CNT_vect) {
     if (RTC_INTFLAGS & RTC_CMP_bm){
         if (buttonMark<0xff) buttonMark++;   // For button timing purposes
-        tmp16bit = (RTC_CNT + BTN_TMR)%RTC_PER;
+        //tmp16bit = (RTC_CNT + BTN_TMR)%RTC_PER;
+        tmp16bit = (RTC_CNT + BTN_TMR);
+        if (tmp16bit > RTC_PER) tmp16bit -= RTC_PER;
         while(RTC_STATUS & RTC_CMPBUSY_bm);
         RTC_CMP = tmp16bit;                 // Button timing: next interrupt set
         RTC_INTFLAGS = RTC_CMP_bm;		    // clear interrupt flag
@@ -760,9 +763,9 @@ uint8_t GenerateAudio(){
                 
                 static uint8_t auBuffer[3] = {255, 1, 0};
                 static uint8_t duration, start;
-                uint16_t freq = ((effect&0xE0)+1)<<4;
+                uint16_t freq = ((effect&0xE0)+1)<<6;
                 floatSpeed(1, freq+0x0200, freq+0x0300);
-                auBuffer[2] = floatAround(0x80, 5, 0x01, 0x00);
+                //auBuffer[] = floatAround(0x80, 5, 0x01, 0x00);
 
                 if (buttonMark) {
                     if (start == 0) {
