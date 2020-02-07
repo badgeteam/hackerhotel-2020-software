@@ -649,11 +649,12 @@ void GenerateBlinks(){
 
         //'flash both wings'
         case 5:
-            if (LedCount & 3 = 0)
+            if ((LedCount & 3) == 0) {
                 if (LedCount & 4)
                     WingBar(5,5);
                 else
                     WingBar(0,0);
+            }
             break;
 
         //'circle the wing leds'
@@ -677,8 +678,8 @@ void GenerateBlinks(){
         //'falling rain'
         case 8:
             for (uint8_t x=0; x<4; ++x){
-                iLED[WING[L][x]] = iLED[WING[L][x+1]]
-                iLED[WING[R][x]] = iLED[WING[R][x+1]]
+                iLED[WING[L][x]] = iLED[WING[L][x+1]];
+                iLED[WING[R][x]] = iLED[WING[R][x+1]];
             }
             iLED[WING[L][4]] = (lfsr() > 192)?dimValue:0;
             iLED[WING[R][4]] = (lfsr() > 192)?dimValue:0;
