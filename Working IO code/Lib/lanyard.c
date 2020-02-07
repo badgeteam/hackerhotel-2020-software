@@ -15,7 +15,6 @@ uint8_t         lanyardPos = 0;
 uint8_t         lanyardCnt = 0;
 uint8_t         lanyardState = TRUE;
 uint8_t         lastButtonState = 0xff;
-uint8_t         digit = 0xff;
 uint16_t        lanyardLastActive = 0;
 
 void initLanyard() {
@@ -48,47 +47,38 @@ uint8_t LanyardCode(){
     if ( gameNow != TEXT && gameNow != LANYARD )
         return 0;
 
-    if ( (buttonState & 0xf0) == 0)
+    if (buttonState == 0xff)
         return 0;
 
     /* activate led for buttonstate */
     iLED[CAT] = (buttonState==0xff ? 0 : dimValue);
 
-    if ((buttonState&0x0f) == (lastButtonState&0x0f))
+    if (buttonState == lastButtonState)
         return 0;
 
     lanyardLastActive = getClock();
 
-    if (lastButtonState == 0xff){
-        switch (buttonState & 0x0f) {
-            case 0b0001:
+    if (lastButtonState != 0xff){
+        switch (buttonState) {
+            case 0:
                 effect = 0x19f;
-                digit = 0;
                 break;
 
-            case 0b0010:
+            case 1:
                 effect = 0x17f;
-                digit = 1;
                 break;
 
-            case 0b0100:
+            case 3:
                 effect = 0x13f;
-                digit = 3;
                 break;
 
-            case 0b1000:
+            case 2:
                 effect = 0x15f;
-                digit = 2;
-                break;
-
-            default:
-                digit = 0xff;
                 break;
         }
         gameNow = LANYARD;
-        /* TODO play tone for button */
 
-        if (digit == lanyardCode[lanyardPos]) {
+        if (buttonState == lanyardCode[lanyardPos]) {
             lanyardState &= TRUE;
             iLED[EYE[R][L]] = 0;
             iLED[EYE[R][R]] = 0;

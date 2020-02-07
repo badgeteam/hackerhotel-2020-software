@@ -52,7 +52,6 @@ uint8_t BastetDictates() {
     }
 
     if (BASTET_GAME_START == simonGameState && BASTET == gameNow) {
-        gameNow = BASTET;
         simonGameState = BASTET_GAME_INTRO;
         simonPos = 0;
         simonInputPos = 0;
