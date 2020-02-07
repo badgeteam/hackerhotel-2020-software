@@ -666,7 +666,7 @@ uint8_t GenerateAudio(){
                     } 
 
                     if (loudness == 0) {
-                        effect &= 0xff1f;
+                        effect &= 0x1f;
                         auRepAddr = &zero;
                         auSmpAddr = &zero;
                         auVolume = 0xff;
@@ -720,13 +720,13 @@ uint8_t GenerateAudio(){
             //
             else {
             }
-        } else if ((effect&0xff00)==1) {
+        } else if ((effect&0xff00)==0x0100) {
             if ((effect&0xE0) <= 0x90) {
                 
                 static uint8_t auBuffer[3] = {255, 1, 0};
                 static uint8_t duration, start;
-                uint16_t freq = ((effect&0xE0)+1)<<5;
-                floatSpeed(1, freq, freq+0x400);
+                uint16_t freq = ((effect&0xE0)+1)<<4;
+                floatSpeed(1, freq+0x0200, freq+0x0300);
                 auBuffer[2] = floatAround(0x80, 5, 0x01, 0x00);
 
                 if (buttonMark) {
@@ -736,7 +736,7 @@ uint8_t GenerateAudio(){
                         auVolume = 255;
                         start = 1;
                     }   if (duration == 0) {
-                        effect &= 0xff1f;
+                        effect &= 0x1f;
                         auRepAddr = &zero;
                         auSmpAddr = &zero;
                         auVolume = 0xff;

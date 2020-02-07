@@ -61,6 +61,7 @@ int main(void)
     iLED[CAT] = 1;
 
     LoadGameState();
+    effect = 0x013f;
 
     while (TRUE) {
         if (GenerateAudio()) {
