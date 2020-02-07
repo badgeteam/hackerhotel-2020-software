@@ -97,7 +97,7 @@ uint8_t BastetDictates() {
     if (BASTET_GAME_INPUT == simonGameState) {
         //Button pressed
         if (lastButtonState != buttonState && (buttonState+1) > 0) {
-            if (simonWait == 0) {
+            if (simonWait == 0 && buttonState < 4) {
                 simonWait = 1;
                 simonTimer = 0;
                 simonLed(buttonState+1);
