@@ -185,6 +185,10 @@
       <SubType>compile</SubType>
       <Link>Lib\lanyard.h</Link>
     </Compile>
+    <Compile Include="..\Lib\literals.h">
+      <SubType>compile</SubType>
+      <Link>Lib\literals.h</Link>
+    </Compile>
     <Compile Include="..\Lib\main_def.c">
       <SubType>compile</SubType>
       <Link>Lib\main_def.c</Link>

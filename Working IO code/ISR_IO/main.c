@@ -47,8 +47,8 @@
 int main(void)
 {
     Setup();
-
     LoadGameState();
+    SelfTest();
 
     while (TRUE) {
         if (GenerateAudio()) {

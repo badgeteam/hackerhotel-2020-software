@@ -65,6 +65,7 @@
 
     uint16_t getClock();                                                // get actual time in seconds to use for idle timeouts
     uint8_t idleTimeout(uint16_t lastActive, uint16_t maxIdle);         // check if idle for too long
-    uint32_t div10(uint32_t dividend);
+    
+    uint8_t SelfTest();
 
 #endif /* RESOURCES_H_ */

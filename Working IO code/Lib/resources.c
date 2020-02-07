@@ -544,13 +544,13 @@ uint8_t HotSummer(){
     static uint8_t cooledDown = 0;
 
     if (CheckState(SUMMERS_COMPLETED)){
-        iLED[SCARAB[R]] = 0;
-        iLED[SCARAB[G]] = dimValue;
+        iLED[SCARAB[G]] = 0;
+        iLED[SCARAB[R]] = dimValue;
         return 1;
     }
 
     if (CheckState(FIRST_SUMMER)) {
-        iLED[SCARAB[R]] = dimValue;
+        iLED[SCARAB[G]] = dimValue;
         if ((cooledDown) && (adcTemp >= (calTemp + 32))) {
             UpdateState(SUMMERS_COMPLETED);
             return 0;
@@ -631,7 +631,7 @@ void GenerateBlinks(){
             WingBar(0,0);
             for (uint8_t i=0; i<2; i++) {
                 iLED[EYE[R][i]] = 0;
-                iLED[EYE[G][i]] = 0;
+                iLED[EYE[G][i]] = 0; 
                 iLED[SCARAB[i]] = 0;
             }
             iLED[CAT] = 0;
@@ -788,4 +788,13 @@ uint8_t idleTimeout(uint16_t lastActive, uint16_t maxIdle) {
         curClock += 256 * 60;
 
     return (curClock > (lastActive + maxIdle));
+}
+
+uint8_t SelfTest(){
+    //Audio in/out
+    //Light
+    //Magnet
+    //Temperature
+    //Ext EEPROM
+    return 0;
 }
