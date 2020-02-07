@@ -10,6 +10,7 @@
 
 volatile uint16_t tmp16bit;    
 volatile uint8_t mask[8] = {0x01, 0x03, 0x07, 0x0f, 0x1f, 0x3f, 0x7f, 0xff};
+uint8_t heart = 0;
 
 void Setup(){
     cli();
@@ -575,13 +576,31 @@ uint8_t HotSummer(){
 }
 
 void GenerateBlinks(){
-    static uint8_t test = 0;
-    iLED[WING[L][test%5]] = 0;
-    iLED[WING[L][(test+1)%5]] = dimValue;
-    ++test;
+    /*
+    HCKR + BADGER are used for game progress and should not be
+    used by the games, the other LEDs can be used by setting 
+    effect (or be set directly)
+    */
 
-    for (uint8_t x=0; x<5; ++x){
-        iLED[WING[R][x]] = iLED[WING[L][4-x]];
+    //Activate HCKR & BADGER leds based on the state-bits
+    for (uint8_t i=0;i<6;i++) {
+        if(CheckState(HACKER_STATES + i)) {
+            iLED[HCKR[G][i]] = dimValue;
+            iLED[HCKR[R][i]] = 0;
+        } else {
+            iLED[HCKR[G][i]] = 0;
+            iLED[HCKR[R][i]] = dimValue;
+        }
+    }
+    if (CheckState(GEM_STATE)) {
+        if ( heart == 0 || heart == 2 )
+            iLED[BADGER] = dimValue;
+        else
+            iLED[BADGER] = 0;
+        if (heart<16)
+            heart++;
+        else
+            heart = 0;
     }
 }
 

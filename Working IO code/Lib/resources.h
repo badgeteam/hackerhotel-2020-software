@@ -17,6 +17,8 @@
 
     #define FIRST_SUMMER        117
     #define SUMMERS_COMPLETED   118
+    #define HACKER_STATES       122
+    #define GEM_STATE           64
 
     void Setup();
     /*
