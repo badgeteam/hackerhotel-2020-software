@@ -641,7 +641,7 @@ uint8_t GenerateAudio(){
                     } 
 
                     if (loudness == 0) {
-                        effect &= 0x10;
+                        effect &= 0xff1f;
                         auRepAddr = &zero;
                         auSmpAddr = &zero;
                         auVolume = 0xff;
@@ -694,6 +694,30 @@ uint8_t GenerateAudio(){
 
             //
             else {
+            }
+        } else if ((effect&0xff00)==1) {
+            if ((effect&0xE0) <= 0x90) {
+                
+                static uint8_t auBuffer[3] = {255, 1, 0};
+                static uint8_t duration, start;
+                uint16_t freq = ((effect&0xE0)+1)<<5;
+                floatSpeed(1, freq, freq+0x400);
+                auBuffer[2] = floatAround(0x80, 5, 0x01, 0x00);
+
+                if (buttonMark) {
+                    if (start == 0) {
+                        duration = 4;
+                        auRepAddr = &auBuffer[0];
+                        auVolume = 255;
+                        start = 1;
+                    }   if (duration == 0) {
+                        effect &= 0xff1f;
+                        auRepAddr = &zero;
+                        auSmpAddr = &zero;
+                        auVolume = 0xff;
+                        start = 0;
+                    } else duration--;
+                }
             }
         }
     } else {
