@@ -125,6 +125,7 @@ uint8_t BastetDictates() {
                     if (simonInputPos >= simonPos) {
                         effect = 0x42;
                         simonPos++;
+                        simonInputPos = 0;
                         simonTimer = 0;
                         simonCounter = 0;
                         simonNextGameState = BASTET_GAME_SHOW_PATTERN;
@@ -134,6 +135,8 @@ uint8_t BastetDictates() {
                     for (uint8_t n=0; n<6; n++){
                         iLED[HCKR[R][n]] = dimValue;
                     }
+                    simonInputPos = 0;
+                    simonPos = 0;
                     simonTimer = 0;
                     simonCounter = 0;
                     simonNextGameState = BASTET_GAME_OUTRO;
@@ -181,6 +184,8 @@ uint8_t BastetDictates() {
     }
 
     if (BASTET_GAME_OVER == simonGameState) {
+        simonInputPos = 0;
+        simonPos = 0;
         simonGameState = BASTET_GAME_START; // BASTET_BOOT for fresh "field" ??
         gameNow = TEXT;
         for (uint8_t n=0; n<5; n++){
