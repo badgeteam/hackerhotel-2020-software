@@ -43,29 +43,19 @@ void showFieldStrength(int16_t val) {
     if ( tmp*2 > HALL_LOW )
         gameNow = MAZE;
 
-    if ( tmp*2 < HALL_LOW )
-        count = 0;
-    else if ( tmp   < HALL_LOW )
-        count = 1;
-    else if ( tmp*2 < HALL_HIGH )
-        count = 2;
-    else if ( tmp*3 < HALL_HIGH*2 )
-        count = 3;
-    else if ( tmp   < HALL_HIGH )
-        count = 4;
-    else
-        count = 5;
-
     if (gameNow == MAZE) {
-        for (uint8_t i=0; i<5; i++) {
-            if (i<count) {
-                iLED[WING[L][i]] = dimValue;
-                iLED[WING[R][i]] = dimValue;
-            } else {
-                iLED[WING[L][i]] = 0;
-                iLED[WING[R][i]] = 0;
-            }
-        }
+        if ( tmp*2 < HALL_LOW )
+            WingBar(0,0);
+        else if ( tmp   < HALL_LOW )
+            WingBar(1,1);
+        else if ( tmp*2 < HALL_HIGH )
+            WingBar(2,2);
+        else if ( tmp*3 < HALL_HIGH*2 )
+            WingBar(3,3);
+        else if ( tmp   < HALL_HIGH )
+            WingBar(4,4);
+        else
+            WingBar(5,5);
     }
 }
 
@@ -78,14 +68,12 @@ uint8_t MagnetMaze(){
         return 0;
     }
         
-    /*
     if (CheckState(MAZE_INACTIVE))
         return 0;
 
     if (CheckState(MAZE_COMPLETED))
         return 0;
 
-    */
     if ( (gameNow != TEXT) && (gameNow != MAZE) )
         return 0;
 
@@ -127,7 +115,7 @@ uint8_t MagnetMaze(){
             break;
     }
 
-    /* activate led for hallstate */
+    /* Indicate that the magnet was read succesfully */
     iLED[CAT] = (newHallState ? dimValue : 0);
 
     if (newHallState != curHallState) {
@@ -148,14 +136,14 @@ uint8_t MagnetMaze(){
                 iLED[EYE[R][R]] = 0;
             } else {
                 mazeState = FALSE;
-                /* play tone BAD */
+                /* TODO play tone BAD */
             }
             mazePos++;
             mazeCnt++;            
             if (mazeCnt >= 3) {
                 mazeCnt = 0;
                 if (mazeState == TRUE) {
-                    /* play tone GOOD */
+                    /* TODO play tone GOOD */
                     iLED[HCKR[G][(mazePos/3)-1]] = dimValue;
                     if (mazePos == sizeof(mazeCode)) {
                         UpdateState(MAZE_COMPLETED);
