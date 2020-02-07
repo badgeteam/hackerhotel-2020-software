@@ -29,9 +29,7 @@
     #define BASTET_TOP_LEFT             3
     #define BASTET_TOP_RIGHT            4
 
-    uint8_t BastetDictates();
-
-    void simonTone(uint8_t val);
     void simonLed(uint8_t val);
+    uint8_t BastetDictates();
 
 #endif /* SIMON_H_ */

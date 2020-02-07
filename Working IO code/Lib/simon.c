@@ -28,10 +28,6 @@ uint8_t simonGameState = BASTET_BOOT;
 uint8_t simonTimer = 0;
 uint8_t simonProcessed = 0;
 
-void simonTone(uint8_t val) {
-    // TODO some way to set teh audio stuff
-}
-
 void simonLed(uint8_t val) {
     for (uint8_t n = 0; n < 5; n++) {
         iLED[WING[L][n]] = 0;
@@ -41,18 +37,21 @@ void simonLed(uint8_t val) {
         iLED[WING[L][0]] = dimValue;
         iLED[WING[L][1]] = dimValue;
         iLED[WING[L][2]] = dimValue;
+        effect = 0x0101;
     } else if (val == 2) {
         iLED[WING[L][3]] = dimValue;
         iLED[WING[L][4]] = dimValue;
+        effect = 0x0102;
     } else if (val == 3) {
         iLED[WING[R][0]] = dimValue;
         iLED[WING[R][1]] = dimValue;
         iLED[WING[R][2]] = dimValue;
+        effect = 0x0103;
     } else if (val == 4) {
         iLED[WING[R][3]] = dimValue;
         iLED[WING[R][4]] = dimValue;
+        effect = 0x0104;
     }
-    simonTone(val);
 }
 
 // Main game loop
@@ -75,7 +74,7 @@ uint8_t BastetDictates() {
     }
 
     if (BASTET_GAME_START == simonGameState) {
-        // TODO start animu
+        // TODO start animu + sound ?
         simonGameState = BASTET_GAME_SHOW_PATTERN;
         simonTimer = 0;
     }
@@ -116,19 +115,20 @@ uint8_t BastetDictates() {
             if (simonProcessed == 0) {
                 simonTimer = 0;
                 simonLed(choice);
-                // TODO something timer something 
+                simonGameState = BASTET_GAME_WAIT_LEDS;
+
                 if (simonState[simonInputPos]+1 == choice) {
-                    // TODO correct sound
+                    // TODO correct, next sound (textadv?)
                     simonInputPos++;
                 } else {
-                    // TODO fail sound
+                    // TODO fail sound (textadv?)
                     simonInputPos = 0;
                     gameNow = TEXT;
                     simonLed(0);
                 }
 
                 if (simonInputPos == BASTET_LENGTH) {
-                    // TODO win animu
+                    // TODO win animu + sound ?
                     UpdateState(BASTET_COMPLETED);
                     gameNow = TEXT;
                 }
