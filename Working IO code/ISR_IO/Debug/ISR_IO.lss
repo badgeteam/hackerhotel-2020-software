@@ -4860,12 +4860,13 @@ uint8_t BastetDictates() {
     1cee:	e6 53       	subi	r30, 0x36	; 54
     1cf0:	f5 4c       	sbci	r31, 0xC5	; 197
     1cf2:	80 83       	st	Z, r24
-    1cf4:	21 c0       	rjmp	.+66     	; 0x1d38 <BastetDictates+0x12a>
+    1cf4:	23 c0       	rjmp	.+70     	; 0x1d3c <BastetDictates+0x12e>
     }
 
     if (BASTET_GAME_SHOW_PATTERN == simonGameState) {
     1cf6:	83 30       	cpi	r24, 0x03	; 3
-    1cf8:	f9 f4       	brne	.+62     	; 0x1d38 <BastetDictates+0x12a>
+    1cf8:	09 f5       	brne	.+66     	; 0x1d3c <BastetDictates+0x12e>
+
         if (simonTimer > 7) {   // ±.5 second
     1cfa:	80 91 5f 38 	lds	r24, 0x385F	; 0x80385f <simonTimer>
     1cfe:	88 30       	cpi	r24, 0x08	; 8
@@ -4881,84 +4882,84 @@ uint8_t BastetDictates() {
     1d10:	e0 91 5d 38 	lds	r30, 0x385D	; 0x80385d <simonCounter>
     1d14:	80 91 61 38 	lds	r24, 0x3861	; 0x803861 <simonPos>
     1d18:	8e 17       	cp	r24, r30
-    1d1a:	40 f4       	brcc	.+16     	; 0x1d2c <BastetDictates+0x11e>
+    1d1a:	50 f4       	brcc	.+20     	; 0x1d30 <BastetDictates+0x122>
+            simonInputPos = 0;
+    1d1c:	10 92 60 38 	sts	0x3860, r1	; 0x803860 <simonInputPos>
             simonGameState = BASTET_GAME_INPUT;
-    1d1c:	85 e0       	ldi	r24, 0x05	; 5
-    1d1e:	80 93 5c 38 	sts	0x385C, r24	; 0x80385c <simonGameState>
+    1d20:	85 e0       	ldi	r24, 0x05	; 5
+    1d22:	80 93 5c 38 	sts	0x385C, r24	; 0x80385c <simonGameState>
             simonLed(0);
-    1d22:	80 e0       	ldi	r24, 0x00	; 0
-    1d24:	f6 de       	rcall	.-532    	; 0x1b12 <simonLed>
+    1d26:	80 e0       	ldi	r24, 0x00	; 0
+    1d28:	f4 de       	rcall	.-536    	; 0x1b12 <simonLed>
             simonTimer = 0;
-    1d26:	10 92 5f 38 	sts	0x385F, r1	; 0x80385f <simonTimer>
+    1d2a:	10 92 5f 38 	sts	0x385F, r1	; 0x80385f <simonTimer>
             return 0;
-    1d2a:	ea c0       	rjmp	.+468    	; 0x1f00 <BastetDictates+0x2f2>
+    1d2e:	e8 c0       	rjmp	.+464    	; 0x1f00 <BastetDictates+0x2f2>
         }
         simonLed(simonState[simonCounter]+1);
-    1d2c:	f0 e0       	ldi	r31, 0x00	; 0
-    1d2e:	ee 59       	subi	r30, 0x9E	; 158
-    1d30:	f7 4c       	sbci	r31, 0xC7	; 199
-    1d32:	80 81       	ld	r24, Z
-    1d34:	8f 5f       	subi	r24, 0xFF	; 255
-    1d36:	ed de       	rcall	.-550    	; 0x1b12 <simonLed>
+    1d30:	f0 e0       	ldi	r31, 0x00	; 0
+    1d32:	ee 59       	subi	r30, 0x9E	; 158
+    1d34:	f7 4c       	sbci	r31, 0xC7	; 199
+    1d36:	80 81       	ld	r24, Z
+    1d38:	8f 5f       	subi	r24, 0xFF	; 255
+    1d3a:	eb de       	rcall	.-554    	; 0x1b12 <simonLed>
     }
 
     if (BASTET_GAME_INPUT == simonGameState) {
-    1d38:	c0 91 5c 38 	lds	r28, 0x385C	; 0x80385c <simonGameState>
-    1d3c:	c5 30       	cpi	r28, 0x05	; 5
-    1d3e:	09 f0       	breq	.+2      	; 0x1d42 <BastetDictates+0x134>
-    1d40:	80 c0       	rjmp	.+256    	; 0x1e42 <BastetDictates+0x234>
+    1d3c:	c0 91 5c 38 	lds	r28, 0x385C	; 0x80385c <simonGameState>
+    1d40:	c5 30       	cpi	r28, 0x05	; 5
+    1d42:	09 f0       	breq	.+2      	; 0x1d46 <BastetDictates+0x138>
+    1d44:	7e c0       	rjmp	.+252    	; 0x1e42 <BastetDictates+0x234>
         //Button pressed
         if (lastButtonState != buttonState && (buttonState+1) > 0) {
-    1d42:	80 91 08 38 	lds	r24, 0x3808	; 0x803808 <buttonState>
-    1d46:	90 91 07 38 	lds	r25, 0x3807	; 0x803807 <lastButtonState>
-    1d4a:	98 17       	cp	r25, r24
-    1d4c:	09 f4       	brne	.+2      	; 0x1d50 <BastetDictates+0x142>
-    1d4e:	77 c0       	rjmp	.+238    	; 0x1e3e <BastetDictates+0x230>
+    1d46:	80 91 08 38 	lds	r24, 0x3808	; 0x803808 <buttonState>
+    1d4a:	90 91 07 38 	lds	r25, 0x3807	; 0x803807 <lastButtonState>
+    1d4e:	98 17       	cp	r25, r24
+    1d50:	09 f4       	brne	.+2      	; 0x1d54 <BastetDictates+0x146>
+    1d52:	75 c0       	rjmp	.+234    	; 0x1e3e <BastetDictates+0x230>
             if (simonWait == 0) {
-    1d50:	90 91 5e 38 	lds	r25, 0x385E	; 0x80385e <simonWait>
-    1d54:	91 11       	cpse	r25, r1
-    1d56:	89 c0       	rjmp	.+274    	; 0x1e6a <BastetDictates+0x25c>
+    1d54:	90 91 5e 38 	lds	r25, 0x385E	; 0x80385e <simonWait>
+    1d58:	91 11       	cpse	r25, r1
+    1d5a:	87 c0       	rjmp	.+270    	; 0x1e6a <BastetDictates+0x25c>
                 simonWait = 1;
-    1d58:	91 e0       	ldi	r25, 0x01	; 1
-    1d5a:	90 93 5e 38 	sts	0x385E, r25	; 0x80385e <simonWait>
+    1d5c:	91 e0       	ldi	r25, 0x01	; 1
+    1d5e:	90 93 5e 38 	sts	0x385E, r25	; 0x80385e <simonWait>
                 simonTimer = 0;
-    1d5e:	10 92 5f 38 	sts	0x385F, r1	; 0x80385f <simonTimer>
+    1d62:	10 92 5f 38 	sts	0x385F, r1	; 0x80385f <simonTimer>
                 simonLed(buttonState+1);
-    1d62:	8f 5f       	subi	r24, 0xFF	; 255
-    1d64:	d6 de       	rcall	.-596    	; 0x1b12 <simonLed>
+    1d66:	8f 5f       	subi	r24, 0xFF	; 255
+    1d68:	d4 de       	rcall	.-600    	; 0x1b12 <simonLed>
                 simonGameState = BASTET_GAME_WAIT_LEDS;
-    1d66:	84 e0       	ldi	r24, 0x04	; 4
-    1d68:	80 93 5c 38 	sts	0x385C, r24	; 0x80385c <simonGameState>
+    1d6a:	84 e0       	ldi	r24, 0x04	; 4
+    1d6c:	80 93 5c 38 	sts	0x385C, r24	; 0x80385c <simonGameState>
                 simonNextGameState = BASTET_GAME_INPUT;
-    1d6c:	c0 93 2b 38 	sts	0x382B, r28	; 0x80382b <simonNextGameState>
+    1d70:	c0 93 2b 38 	sts	0x382B, r28	; 0x80382b <simonNextGameState>
 
                 if (simonState[simonInputPos] == buttonState) {
-    1d70:	80 91 60 38 	lds	r24, 0x3860	; 0x803860 <simonInputPos>
-    1d74:	e8 2f       	mov	r30, r24
-    1d76:	f0 e0       	ldi	r31, 0x00	; 0
-    1d78:	ee 59       	subi	r30, 0x9E	; 158
-    1d7a:	f7 4c       	sbci	r31, 0xC7	; 199
-    1d7c:	20 81       	ld	r18, Z
-    1d7e:	90 91 08 38 	lds	r25, 0x3808	; 0x803808 <buttonState>
-    1d82:	29 13       	cpse	r18, r25
-    1d84:	25 c0       	rjmp	.+74     	; 0x1dd0 <BastetDictates+0x1c2>
+    1d74:	80 91 60 38 	lds	r24, 0x3860	; 0x803860 <simonInputPos>
+    1d78:	e8 2f       	mov	r30, r24
+    1d7a:	f0 e0       	ldi	r31, 0x00	; 0
+    1d7c:	ee 59       	subi	r30, 0x9E	; 158
+    1d7e:	f7 4c       	sbci	r31, 0xC7	; 199
+    1d80:	20 81       	ld	r18, Z
+    1d82:	90 91 08 38 	lds	r25, 0x3808	; 0x803808 <buttonState>
+    1d86:	29 13       	cpse	r18, r25
+    1d88:	23 c0       	rjmp	.+70     	; 0x1dd0 <BastetDictates+0x1c2>
                     simonInputPos++;
-    1d86:	8f 5f       	subi	r24, 0xFF	; 255
-    1d88:	80 93 60 38 	sts	0x3860, r24	; 0x803860 <simonInputPos>
+    1d8a:	8f 5f       	subi	r24, 0xFF	; 255
+    1d8c:	80 93 60 38 	sts	0x3860, r24	; 0x803860 <simonInputPos>
                     if (simonInputPos > simonPos) {
-    1d8c:	e0 91 61 38 	lds	r30, 0x3861	; 0x803861 <simonPos>
-    1d90:	e8 17       	cp	r30, r24
-    1d92:	e8 f5       	brcc	.+122    	; 0x1e0e <BastetDictates+0x200>
+    1d90:	e0 91 61 38 	lds	r30, 0x3861	; 0x803861 <simonPos>
+    1d94:	e8 17       	cp	r30, r24
+    1d96:	d8 f5       	brcc	.+118    	; 0x1e0e <BastetDictates+0x200>
                         effect = 0x42;
-    1d94:	82 e4       	ldi	r24, 0x42	; 66
-    1d96:	90 e0       	ldi	r25, 0x00	; 0
-    1d98:	80 93 3a 38 	sts	0x383A, r24	; 0x80383a <effect>
-    1d9c:	90 93 3b 38 	sts	0x383B, r25	; 0x80383b <effect+0x1>
+    1d98:	82 e4       	ldi	r24, 0x42	; 66
+    1d9a:	90 e0       	ldi	r25, 0x00	; 0
+    1d9c:	80 93 3a 38 	sts	0x383A, r24	; 0x80383a <effect>
+    1da0:	90 93 3b 38 	sts	0x383B, r25	; 0x80383b <effect+0x1>
                         simonPos++;
-    1da0:	ef 5f       	subi	r30, 0xFF	; 255
-    1da2:	e0 93 61 38 	sts	0x3861, r30	; 0x803861 <simonPos>
-                        simonInputPos = 0;
-    1da6:	10 92 60 38 	sts	0x3860, r1	; 0x803860 <simonInputPos>
+    1da4:	ef 5f       	subi	r30, 0xFF	; 255
+    1da6:	e0 93 61 38 	sts	0x3861, r30	; 0x803861 <simonPos>
                         simonTimer = 0;
     1daa:	10 92 5f 38 	sts	0x385F, r1	; 0x80385f <simonTimer>
                         simonCounter = 0;
