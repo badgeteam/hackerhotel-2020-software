@@ -69,7 +69,7 @@ int main(void)
 
             if (VREF_CTRLA == 0x12) SelectAuIn(); else SelectTSens();
 
-            //GenerateBlinks();
+            GenerateBlinks();
 
             //Main game, to complete: Finish sub-game MagnetMaze and MakeFriends too.
             TextAdventure();
