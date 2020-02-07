@@ -88,5 +88,7 @@
 #define L_IDLE                      22
 #define A_SALT                   29916
 #define L_SALT                      19
-#define A_DIGITS                 29906
-#define L_DIGITS                    10
+#define A_HEXPREFIX              29914
+#define L_HEXPREFIX                  2
+#define A_DIGITS                 29898
+#define L_DIGITS                    16
