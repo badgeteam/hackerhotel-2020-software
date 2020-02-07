@@ -38,10 +38,10 @@ sound_effects = ['<none>',
                  'bad (buzzer)',            # 1 can be used when a bad answer is given
                  'good (bell)',             # 2 can be used when a good answer is given
                  'wind',                    # 3
-                 'footsteps',               # 4
+                 'ghost',                   # 4
                  'bleeps',                  # 5 ATM, laptop
-                 'movingstone',             # 6 
-                 'meow']                    # 7
+                 'footsteps',               # 6 
+                 'holy']                    # 7
 
 led_effects   = ['<none>',
                  'flashing red eyes',       # 1 can be used when a bad answer is given
@@ -49,9 +49,9 @@ led_effects   = ['<none>',
                  'left wing leds up',       # 3
                  'left wing leds down',     # 4
                  'flash both wings',        # 5
-                 '<free>',                  # 6
-                 '<free>',
-                 '<free>',
+                 'circle the wing leds',    # 6
+                 'random wing leds',        # 7
+                 'vallende regen',          # 8
                  '<free>',
                  '<free>',
                  '<free>',
