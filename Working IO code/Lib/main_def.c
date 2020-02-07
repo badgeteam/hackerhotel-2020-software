@@ -23,6 +23,8 @@ volatile uint8_t  detHdPh;           // Headphone detected
 
 
 uint8_t buttonState = 0xff;
+uint8_t lastButtonState = 0xff;
+
 uint8_t gameState[BOOTCHK];          // Game state plus inventory
 uint16_t inventory[2] = {0,0};
 uint8_t whoami = 0;

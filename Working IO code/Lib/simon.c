@@ -92,7 +92,7 @@ uint8_t BastetDictates() {
 
     if (BASTET_GAME_INPUT == simonGameState) {
         //Button pressed
-        if ((buttonState+1) > 0) {
+        if (lastButtonState != buttonState && (buttonState+1) > 0) {
             if (simonWait == 0) {
                 simonWait = 1;
                 simonTimer = 0;
@@ -101,7 +101,7 @@ uint8_t BastetDictates() {
                 simonNextGameState = BASTET_GAME_INPUT;
 
                 // is the below check correct .. do I have off by one ?
-                if (simonState[simonInputPos] == (buttonState+1)) {
+                if (simonState[simonInputPos] == buttonState) {
                     simonInputPos++;
                     if (simonInputPos >= simonPos) {
                         effect = 0x42;

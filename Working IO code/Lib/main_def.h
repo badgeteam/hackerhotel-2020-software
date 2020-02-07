@@ -68,6 +68,8 @@
 
     // Global challenge data
     extern uint8_t buttonState;
+    extern uint8_t lastButtonState;
+
     extern uint8_t gameState[BOOTCHK];
     extern uint16_t inventory[2];               //     
     extern uint8_t whoami;

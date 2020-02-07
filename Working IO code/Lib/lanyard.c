@@ -14,14 +14,12 @@ const uint8_t   lanyardCode[] = { 1,0,0,2, 1,2,0,1, 1,3,0,3, 1,3,1,0, 1,2,1,1, 1
 uint8_t         lanyardPos = 0;
 uint8_t         lanyardCnt = 0;
 uint8_t         lanyardState = TRUE;
-uint8_t         lastButtonState = 0xff;
 uint16_t        lanyardLastActive = 0;
 
 void initLanyard() {
     lanyardPos      = 0;
     lanyardCnt      = 0;
     lanyardState    = TRUE;
-    lastButtonState = 0xff;
     iLED[CAT]       = 0;
     iLED[EYE[G][L]] = 0;
     iLED[EYE[G][R]] = 0;
@@ -58,7 +56,7 @@ uint8_t LanyardCode(){
 
     lanyardLastActive = getClock();
 
-    if (lastButtonState != 0xff){
+    if (lastButtonState == 0xff){
         switch (buttonState) {
             case 0:
                 effect = 0x19f;
@@ -112,6 +110,5 @@ uint8_t LanyardCode(){
         }
     }
 
-    lastButtonState = buttonState;
     return 0;
 }

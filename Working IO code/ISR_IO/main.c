@@ -39,6 +39,7 @@ int main(void)
 
     while (TRUE) {
         if (GenerateAudio()) {
+            lastButtonState = buttonState;
             buttonState = CheckButtons();
             buttonMark = 0;
 
