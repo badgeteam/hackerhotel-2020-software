@@ -16,6 +16,14 @@
     #include <stdlib.h>
     #include <literals.h>
 
+    #define DELTA           5
+
+    #define NO_OTHER        0
+    #define FIRST_CONTACT   1
+    #define SECOND_LOVE     2
+    #define THIRD_KISS      3
+    #define FOURTH_BASE     4
+  
     uint8_t MakeFriends();
 
 #endif /* FRIENDS_H_ */
