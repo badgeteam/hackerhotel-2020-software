@@ -42,7 +42,7 @@ uint8_t MakeFriends(){
     }
 
     //Check for other badges
-    if ((auIn[0] < (setDAC[0] - 10)) || (auIn[0] > (setDAC[0] + 10))) {
+    if ((auIn[0] < (setDAC[0] - DELTA)) || (auIn[0] > (setDAC[0] + DELTA)) ||((progress > FIRST_CONTACT))) {
         if (progress == NO_OTHER) {
             ++chkTmr;
             if (chkTmr >= 8) {
@@ -81,11 +81,13 @@ uint8_t MakeFriends(){
                 iLED[WING[L][x]] = (lfsr() > 127)?dimValue:0;
                 iLED[WING[R][x]] = (lfsr() > 127)?dimValue:0;
             }
-
+            if (chkTmr >= 8) {
+                setDAC[0] = floatAround(0x80, 8, 100, 255); 
+            }
             //The badge with the lowest voltage will now go to 2.5V (impedance check, for people tricking the things with a power supply)
-            if (chkTmr >= 200){
+            if (chkTmr >= 250){
                 candidate = jackIn-whoami;
-                if (jackIn > (whoami<<1)) setDAC[0] = 250;
+                if (candidate > whoami) setDAC[0] = 250; else setDAC[0] = 0;
                 progress = THIRD_KISS;
                 chkTmr = 0;
             }
@@ -95,6 +97,12 @@ uint8_t MakeFriends(){
         else if (progress == THIRD_KISS) {
             chkTmr++;
             if (chkTmr >= 8) {
+                if (chkVolt250() == 5) {
+                    UpdateState(99+candidate);
+                    UpdateState(99+whoami);
+                } else {
+                    progress = NO_OTHER;
+                }
                 chkTmr = 0;
             }
         }
