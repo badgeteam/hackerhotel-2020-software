@@ -668,6 +668,45 @@ void GenerateBlinks(){
             SetBothEyes(0, 0x1f + (((LedCount & 0x08) ? ((LedCount&0x07)^0x07) : (LedCount&0x07))<<5));
             break;
 
+        //'flash both wings'
+        case 5:
+            if ((LedCount & 3) == 0) {
+                if (LedCount & 4)
+                    WingBar(5,5);
+                else
+                    WingBar(0,0);
+            }
+            break;
+
+        //'circle the wing leds'
+        case 6:
+            iLED[WING[L][LedCount%5]] = 0;
+            iLED[WING[L][(LedCount+1)%5]] = dimValue;
+
+            for (uint8_t x=0; x<5; ++x){
+                iLED[WING[R][x]] = iLED[WING[L][4-x]];
+            }
+            break;
+
+        //'random wing leds'
+        case 7:
+            for (uint8_t x=0; x<5; ++x){
+                iLED[WING[L][x]] = (lfsr() > 127)?dimValue:0;
+                iLED[WING[R][x]] = (lfsr() > 127)?dimValue:0;
+            }
+            break;
+
+        //'falling rain'
+        case 8:
+            for (uint8_t x=0; x<4; ++x){
+                iLED[WING[L][x]] = iLED[WING[L][x+1]];
+                iLED[WING[R][x]] = iLED[WING[R][x+1]];
+            }
+            iLED[WING[L][4]] = (lfsr() > 192)?dimValue:0;
+            iLED[WING[R][4]] = (lfsr() > 192)?dimValue:0;
+            break;
+
+
         // No LED action, game will do it's own LED magic
         case 31:
         default:

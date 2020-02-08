@@ -51,7 +51,7 @@ led_effects   = ['<none>',
                  'flash both wings',        # 5
                  'circle the wing leds',    # 6
                  'random wing leds',        # 7
-                 'vallende regen',          # 8
+                 'falling rain',            # 8
                  '<free>',
                  '<free>',
                  '<free>',

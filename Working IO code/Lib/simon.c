@@ -16,6 +16,7 @@
  */
 
 #include <simon.h>
+#include <lanyard.h>
 #include <main_def.h>
 #include <resources.h>
 #include <I2C.h>
@@ -35,11 +36,19 @@ uint8_t simonGameState = BASTET_BOOT,
  * @return 0
  */
 uint8_t BastetDictates() {
-    if (CheckState(BASTET_COMPLETED))
-        return 0;
-
     if ((TEXT != gameNow) && (BASTET != gameNow))
         return 0;
+
+    if (CheckState(BASTET_COMPLETED)) {
+        if (BASTET == gameNow) {
+            gameNow = TEXT;
+        }
+        return 0;
+    }
+
+    if (CheckState(LANYARD_COMPLETED))
+        if (buttonState!=0xff)
+            gameNow = BASTET;
 
     iLED[CAT] = (buttonState==0xff ? 0 : dimValue);
 
@@ -79,7 +88,6 @@ uint8_t BastetDictates() {
     }
 
     if (BASTET_GAME_SHOW_PATTERN == simonGameState) {
-
         if (simonTimer > 7) {   // ±.5 second
             simonCounter++;
             simonTimer = 0;
@@ -128,8 +136,7 @@ uint8_t BastetDictates() {
                 }
 
                 if (simonInputPos >= BASTET_LENGTH || simonPos >= BASTET_LENGTH) { // beetje dubbel
-                    // TODO win animu ?!
-//                    effect = 0x0106;    // TODO win sound ?!
+                    effect = 64|2;
                     UpdateState(BASTET_COMPLETED);
                     simonTimer = 0;
                     simonCounter = 0;
@@ -140,6 +147,13 @@ uint8_t BastetDictates() {
         //Button released, next or reset!
         } else {
             simonWait = 0;
+        }
+
+        if (simonTimer == 200) {    // did you forget about Bastet?
+            simonGameState = BASTET_GAME_SHOW_PATTERN;
+            simonCounter = 0;
+            simonTimer = 0;
+            return 0;
         }
     }
 

@@ -19,7 +19,7 @@
  *                      '   '
  *                      '. .'
  *                        !    lc
- */ 
+ */
 
 #include <lanyard.h>
 #include <main_def.h>
