@@ -14,6 +14,8 @@
     #include <avr/interrupt.h>
     #include <stdlib.h>
 
+//    #define PURIST_BADGE        1337
+
     #define FIRST_SUMMER        117
     #define SUMMERS_COMPLETED   118
     #define HACKER_STATES       122
@@ -42,7 +44,7 @@
     void EERead(uint8_t eeAddr, uint8_t *eeValues, uint8_t size);       // Read from internal EEPROM, wraps around if eeAddr+size>255
     uint8_t EEWrite(uint8_t eeAddr, uint8_t *eeValues, uint8_t size);   // Write to internal EEPROM, wraps around if eeAddr+size>255
     uint8_t ExtEERead(uint16_t offset, uint8_t length, uint8_t type, uint8_t *data);
-    
+
     uint8_t lfsr();
     void floatSpeed(uint8_t bits, uint16_t min, uint16_t max);
     uint8_t floatAround(uint8_t sample, uint8_t bits, uint8_t min, uint8_t max);
@@ -53,7 +55,7 @@
     void WriteStatusBit(uint8_t number, uint8_t state);
     void UpdateState(uint8_t num);
     uint8_t CheckState(uint8_t num);
-    
+
     uint8_t getID();
     void Reset();
 
@@ -67,7 +69,7 @@
 
     uint16_t getClock();                                                // get actual time in seconds to use for idle timeouts
     uint8_t idleTimeout(uint16_t lastActive, uint16_t maxIdle);         // check if idle for too long
-    
+
     uint8_t SelfTest();
 
 #endif /* RESOURCES_H_ */
