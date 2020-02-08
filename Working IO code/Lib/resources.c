@@ -607,6 +607,14 @@ void SetBothEyes(uint8_t r, uint8_t g) {
     }
 }
 
+void ClearHackerLeds() {
+    for (uint8_t i=0;i<6;i++) {
+        iLED[HCKR[G][i]] = 0;
+        iLED[HCKR[R][i]] = 0;
+    }
+}
+
+
 void GenerateBlinks(){
     /*
     HCKR + BADGER are used for game progress and should not be
