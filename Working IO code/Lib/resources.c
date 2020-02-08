@@ -737,10 +737,10 @@ uint8_t GenerateAudio(){
                 static uint8_t loudness, duration, start;
                 floatSpeed(1, 0x2000, 0x2200);
                 auBuffer[2] = floatAround(0x80, 5, 0x01, 0x00);
-
+                /*
                 if (buttonMark) {
                     if (start == 0) {
-                        duration = 4;
+
                         loudness = 0xff;
                         TCB1_CCMP = 0x2000;
                         auRepAddr = &auBuffer[0];
@@ -750,7 +750,7 @@ uint8_t GenerateAudio(){
                     if (loudness) {
                         auVolume = loudness;
                         if (duration) duration--; else loudness >>= 1;
-                    } 
+                    }
 
                     if (loudness == 0) {
                         effect &= 0x1f;
@@ -759,6 +759,25 @@ uint8_t GenerateAudio(){
                         auVolume = 0xff;
                         start = 0;
                     }
+                }*/
+
+                auRepAddr = &auBuffer[0];
+                if (buttonMark){
+                    if (start == 0) {
+                        duration = 4;
+                        auVolume = 255;
+                        TCB1_CCMP = 0x2000;
+                        start = 1;
+                    }
+                    
+                    TCB1_CCMP -= (0x080<<(effect>64)?2:0);
+                    if ((auVolume)&&(duration == 0)) auVolume -=32; else
+                    {
+                        start = 0;
+                        auRepAddr = &zero;
+                        effect = 0;
+                    } // else --duration;
+                    //F
                 }
             }
 

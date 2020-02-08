@@ -115,6 +115,8 @@ uint8_t MakeFriends(){
                 candidate = jackIn-whoami;
                 if (candidate > whoami) {
                     setDAC[0] = 249;
+                } else {
+                    setDAC[0] = whoami * 51;
                 }
                 progress |= NEXT;
             }
