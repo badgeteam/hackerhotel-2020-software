@@ -57,13 +57,13 @@ uint8_t MakeFriends(){
     }
     
     //Clear game state if not communicating properly or headphones detected
-    if (((progress == NO_OTHER) && (gameNow == FRIENDS)) || detHdPh){
+    if (((progress == NO_OTHER) || detHdPh) && (gameNow == FRIENDS)) {
         gameNow = TEXT; 
         effect = 0;
     }
 
     //Audio off, set voltage level (setDAC[0]*10mV)
-    if (progress == NO_OTHER) {
+    if ((progress == NO_OTHER) && (detHdPh == 0)) {
         setDAC[0] = whoami * 51;
         auRepAddr = &setDAC[0];
         auVolume = 255;
@@ -78,7 +78,7 @@ uint8_t MakeFriends(){
 
     //Check for other badges ()
     if ((auIn < (setDAC[0] - DELTA)) || (auIn > (setDAC[0] + DELTA)) || (progress > FIRST_CONTACT)) {
-        if (progress == NO_OTHER) {
+        if ((progress == NO_OTHER) && (detHdPh == 0)) {
             if (chkTmr >= 8) {
                 progress |= NEXT;
             }

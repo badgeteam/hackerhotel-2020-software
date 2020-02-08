@@ -252,9 +252,9 @@ uint8_t CheckSend(){
     uint8_t EEreadLength=0;
 
     //Play effects if available and not already playing
-    if (effect == 0){
+    /*if (effect == 0){
         effect = currObj.byteField[EFFECTS];
-    }
+    }*/
 
     //Check if more string(part)s have to be sent to the serial output if previous send operation is completed
     if ((txAddrNow < TXLISTLEN) && serTxDone){

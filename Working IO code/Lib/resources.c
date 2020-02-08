@@ -764,8 +764,25 @@ uint8_t GenerateAudio(){
             }
 
             //Good (bell)
-            if ((effect&0xE0)==64){
-                //auBuffer = 
+            if (((effect&0xE0)==64)||((effect&0xE0)==160)){
+                static uint8_t start, auBuffer[3] = {255, 1, 0};
+                
+                auRepAddr = &auBuffer[0];
+                if (buttonMark){
+                    if (start == 0) {
+                        auVolume = 255;
+                        TCB1_CCMP = 0x0a00;
+                        start = 1;
+                    }
+                     
+                    TCB1_CCMP -= (0x080<<(effect>64)?2:0);                    
+                    if (auVolume > 32) auVolume -=32; else 
+                    {
+                        start = 0;
+                        auRepAddr = &zero;
+                        effect = 0;
+                    }
+                }
             }
 
             //Rain storm with whistling wind
@@ -795,10 +812,15 @@ uint8_t GenerateAudio(){
 
             }
 
-            //
-            if ((effect&0xE0)==160){
-
-            }
+            //Bleeps
+            /*if ((effect&0xE0)==160){
+                static uint8_t auBuffer[3] = {255, 1, 0};
+                auRepAddr = &auBuffer[0];
+                if (buttonMark){
+                    floatSpeed(6, 0x0500, 0x0fff);
+                    if (auVolume) --auVolume;
+                }
+            }*/
 
             //
             if ((effect&0xE0)==192){
@@ -826,8 +848,8 @@ uint8_t GenerateAudio(){
                     }   if (duration == 0) {
                         effect &= 0x1f;
                         auRepAddr = &zero;
-                        auSmpAddr = &zero;
-                        auVolume = 0xff;
+                        //auSmpAddr = &zero;
+                        //auVolume = 0xff;
                         start = 0;
                     } else duration--;
                 }
@@ -862,38 +884,41 @@ uint8_t SelfTest(){
     }
 
     //Audio in/out
-    SelectAuIn();
+    /*SelectAuIn();
+    auIn = 0xff;
     auRepAddr = &tstVal[0];
     while (auIn > 0x04) ;
     tstVal[0] = 0xff;
-    while (auIn < 0x04) ;
+    auRepAddr = &tstVal[0];
+    auIn = 0;
+    while (auIn < 0x04) ; //Should work even with headphones...
     iLED[HCKR[R][0]] = 0x00;
     iLED[HCKR[G][0]] = 0xff;
-    auRepAddr = &zero;
+    auRepAddr = &zero;*/
 
     //Light sensor
     tstVal[0] = adcPhot&0xff;
     while (tstVal[0] == (adcPhot&0xff)) ;
     iLED[HCKR[R][1]] = 0x00;
-    iLED[HCKR[G][1]] = 0xff;
+    //iLED[HCKR[G][1]] = 0xff;
 
     //Magnet
     tstVal[0] = adcHall&0xff;
     while (tstVal[0] == (adcHall&0xff)) ;
     iLED[HCKR[R][2]] = 0x00;
-    iLED[HCKR[G][2]] = 0xff;
+    //iLED[HCKR[G][2]] = 0xff;
 
     //Temperature
     SelectTSens();
     tstVal[0] = adcTemp&0xff;
     while (tstVal[0] == (adcTemp&0xff)) ;
     iLED[HCKR[R][3]] = 0x00;
-    iLED[HCKR[G][3]] = 0xff;
+    //iLED[HCKR[G][3]] = 0xff;
 
     //Buttons (none pressed / shorted)
     while ((adcBtns>>4) < 200) ;
     iLED[HCKR[R][4]] = 0x00;
-    iLED[HCKR[G][4]] = 0xff;
+   // iLED[HCKR[G][4]] = 0xff;
 
     //Ext EEPROM
     /*
@@ -902,21 +927,17 @@ uint8_t SelfTest(){
         0x3CCE              Level 6, action_acl=192
         0x3CCF              Level 6, action_mask=20
     */
-
-    ExtEERead(0x3CCC, 4, 0, &tstVal[0]);
+    
+    ExtEERead(0x3CCC, 4, 0, (uint8_t *)&tstVal[0]);
     if ((tstVal[0] != 63) || (tstVal[1] != 0) || (tstVal[2] != 192) || (tstVal[3] != 20)){
         while(1);
-    } else {
-        iLED[HCKR[R][4]] = 0x00;
-        iLED[HCKR[G][4]] = 0xff;
     }
-
         //All LEDs off
     for (uint8_t x=0; x<40; ++x) {
         iLED[x]=0;
     }
 
-    for(uint8_t x=0; x<((adcPhot+adcTemp)&0x3f); ++x) lfsr();
+    for(uint8_t x=0; x<(adcPhot&0x3f); ++x) lfsr();
 
     return 0;
 }
