@@ -44,6 +44,8 @@ uint8_t MakeFriends(){
     static uint8_t jackIn = 0;
     static uint8_t candidate = 0;
 
+    ++chkTmr;
+
     //Check if badge has found 3 friends
     uint8_t foundAll = 1;
     for (uint8_t x=0; x<4; ++x){
@@ -68,7 +70,6 @@ uint8_t MakeFriends(){
         auRepAddr = &setDAC[0];
         auVolume = 255;
     } else {
-        ++chkTmr;
         if (progress & NEXT){
             progress++;
             progress&=0x0f;

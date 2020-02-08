@@ -907,10 +907,10 @@ uint8_t SelfTest(){
     //iLED[HCKR[G][2]] = 0xff;
 
     //Temperature
-    SelectTSens();
+    /*SelectTSens();
     tstVal[0] = adcTemp&0xff;
     while (tstVal[0] == (adcTemp&0xff)) ;
-    iLED[HCKR[R][3]] = 0x00;
+    iLED[HCKR[R][3]] = 0x00;*/
     //iLED[HCKR[G][3]] = 0xff;
 
     //Buttons (none pressed / shorted)
