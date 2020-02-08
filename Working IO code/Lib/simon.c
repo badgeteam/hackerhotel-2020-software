@@ -79,9 +79,7 @@ uint8_t BastetDictates() {
             simonGameState = BASTET_GAME_SHOW_PATTERN;
             simonTimer = 0;
             simonCounter = 0;
-            for (uint8_t n=0; n<6; n++){
-                iLED[HCKR[G][n]] = 0;
-            }
+            ClearHackerLeds();
             return 0;
         }
         iLED[HCKR[R][simonCounter]] = dimValue;
