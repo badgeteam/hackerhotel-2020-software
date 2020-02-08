@@ -59,7 +59,6 @@ void Setup(){
     //GPIO registers 0..3 can be used for global variables used in ISR routines (ASM capability: IN, OUT, SBI, CBI, SBIS, SBIC)
     L_COL = 0;     //Used in LED array to hold currently driven column value
     RXCNT = 0;     //Used as UART receive counter
-    AUPOS = 0;     //Used as audio input/output buffer counter
     GPIOR3 = 0;    //
 
     //Init TCA (split mode, f_CLK/16, PWM on 6 alternative pins, underflow int enabled, synced and started)
@@ -211,7 +210,6 @@ ISR(TCB1_INT_vect){
         ++auSmpAddr;
     } else {
         DAC0_DATA = 0x80;
-        auPlayDone = 1;
     }
     TCB1_INTFLAGS = TCB_CAPT_bm;
 }
@@ -243,8 +241,7 @@ ISR(USART0_DRE_vect){
 ISR(ADC0_RESRDY_vect){
     //If just switched reference, discard first few samples
     if (adc0Chg == 0){
-        AUPOS = (AUPOS+1)&(AULEN-1);
-        if (ADC0_MUXPOS == 0x1E) adcTemp = ADC0_RES; else auIn[AUPOS]=ADC0_RESL;
+        if (ADC0_MUXPOS == 0x1E) adcTemp = ADC0_RES; else auIn=ADC0_RESL;
     } else --adc0Chg;
     ADC0_INTFLAGS = ADC_RESRDY_bm;
 }
@@ -688,8 +685,9 @@ void GenerateBlinks(){
 
         //'circle the wing leds'
         case 6:
-            iLED[WING[L][LedCount%5]] = 0;
-            iLED[WING[L][(LedCount+1)%5]] = dimValue;
+            if (LedCount > 4) LedCount = 0;
+            iLED[WING[L][LedCount]] = 0;
+            iLED[WING[L][(LedCount+1)]] = dimValue;
 
             for (uint8_t x=0; x<5; ++x){
                 iLED[WING[R][x]] = iLED[WING[L][4-x]];
@@ -727,7 +725,7 @@ void GenerateBlinks(){
 
 uint8_t GenerateAudio(){
 
-    if (auIn[AULEN>>1] < HPLVL) {
+    if (auIn < HPLVL) {
 
         detHdPh = 1;
 
@@ -861,11 +859,7 @@ uint8_t idleTimeout(uint16_t lastActive, uint16_t maxIdle) {
 }
 
 uint8_t SelfTest(){
-    uint8_t tstVal[4] = {0x80, 0};
-    //All LEDs on 25%
-    for (uint8_t x=0; x<40; ++x) {
-        iLED[x]=0x40;
-    }
+    uint8_t tstVal[4] = {0x01, 0};
 
     //Red HCKR all on 100%
     for (uint8_t x=0; x<6; ++x) {
@@ -875,7 +869,9 @@ uint8_t SelfTest(){
     //Audio in/out
     SelectAuIn();
     auRepAddr = &tstVal[0];
-    while ((auIn[0] < 0x7A)||(auIn[0] > 0x85)) ;
+    while (auIn > 0x04) ;
+    tstVal[0] = 0xff;
+    while (auIn < 0x04) ;
     iLED[HCKR[R][0]] = 0x00;
     iLED[HCKR[G][0]] = 0xff;
     auRepAddr = &zero;
@@ -924,5 +920,8 @@ uint8_t SelfTest(){
     for (uint8_t x=0; x<40; ++x) {
         iLED[x]=0;
     }
+
+    for(uint8_t x=0; x<((adcPhot+adcTemp)&0x3f); ++x) lfsr();
+
     return 0;
 }

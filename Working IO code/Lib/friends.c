@@ -28,7 +28,7 @@ uint8_t chkVolt250(){
     uint8_t avgVolt = 9;
         
     for (uint8_t x=225; x>24; x-=25) {
-        if ((auIn[0] > (x-DELTA)) && (auIn[0] < (x+DELTA))) {
+        if ((auIn > (x-DELTA)) && (auIn < (x+DELTA))) {
             break;
         }
         --avgVolt;
@@ -51,9 +51,17 @@ uint8_t MakeFriends(){
     }
     if (foundAll) UpdateState(124);
 
-    //On/off game states, must be able to hijack from other games.
-    if (progress > FIRST_CONTACT) { gameNow = FRIENDS; effect = 31;}
-    if ((progress == NO_OTHER) && (gameNow = FRIENDS)) { gameNow = TEXT; effect = 0;}
+    //Set game state, must be able to hijack from other games.
+    if (progress > FIRST_CONTACT) { 
+        gameNow = FRIENDS; 
+        effect = 31;
+    }
+    
+    //Clear game state
+    if ((progress == NO_OTHER) && (gameNow == FRIENDS)) {
+        gameNow = TEXT; 
+        effect = 0;
+    }
 
     //Checking for headphones
     if (detHdPh) return 0;
@@ -66,7 +74,7 @@ uint8_t MakeFriends(){
     }
 
     //Check for other badges
-    if ((auIn[0] < (setDAC[0] - DELTA)) || (auIn[0] > (setDAC[0] + DELTA)) || (progress > FIRST_CONTACT)) {
+    if ((auIn < (setDAC[0] - DELTA)) || (auIn > (setDAC[0] + DELTA)) || (progress > FIRST_CONTACT)) {
         if (progress == NO_OTHER) {
             ++chkTmr;
             if (chkTmr >= 8) {

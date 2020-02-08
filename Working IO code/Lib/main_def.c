@@ -46,11 +46,9 @@ volatile uint16_t effect = 0;
 volatile uint8_t *auSmpAddr = &zero;    // Audio sample address pointer
 volatile uint8_t *auRepAddr = &zero;    // Audio loop start address pointer
 volatile uint8_t auVolume;              // Used for Volume control
-volatile uint8_t auPlayDone;            // User writes 0 just after initiation of playing a sample, after playing sample, interrupt routine writes it to 1.
-volatile uint8_t auStart = 0;           // To initiate playing a sound
 volatile uint8_t zero = 0;              // Point to this to stop playing audio
 
-volatile uint8_t auIn[AULEN];           // Audio input buffer
+volatile uint8_t auIn;                  // Audio input
 volatile uint8_t adc0Chg = 0;           // Changed adc0 channel and reference
 
 volatile uint16_t dimValueSum = 0x1fff;  // Add moving average to dimmer to reduce candlelight effect

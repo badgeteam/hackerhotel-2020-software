@@ -53,9 +53,6 @@ uint8_t BastetDictates() {
     iLED[CAT] = (buttonState==0xff ? 0 : dimValue);
 
     if (BASTET_BOOT == simonGameState) {
-        simonPos = ((adcPhot+adcTemp)&0x3f);
-        for(uint8_t x=0; x<simonPos; ++x) lfsr();
-
         for (uint8_t i = 0; i < BASTET_LENGTH; i++) {
             simonState[i] = (lfsr() % 4);
         }

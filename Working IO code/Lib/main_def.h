@@ -17,12 +17,11 @@
     //Used in ISRs for efficiency
     #define L_COL   GPIOR0  //LED column counter
     #define RXCNT   GPIOR1  //Serial Rx position counter
-    #define AUPOS   GPIOR2  //Audio in position counter
+    #define FREE    GPIOR2  //
     #define A1CNT   GPIOR3  //Counter for ADC1
     
     #define RXLEN   65      //Length of serial Rx buffer (yes, it one longer than a power of two)
     #define TXLEN   33      //Length of serial Tx buffer (yes, it one longer than a power of two)
-    #define AULEN   8       //Audio input buffer length: MUST be a power of 2
     #define HPLVL   25      //Headphone detection threshold (load is ~200 Ohm or less)
 
     #define USART0_BAUD_RATE(BAUD_RATE) ((float)(F_CPU * 64 / (16 * (float)BAUD_RATE)) + 0.5)
@@ -93,11 +92,9 @@
     extern volatile uint8_t *auSmpAddr;         // Audio sample address pointer
     extern volatile uint8_t *auRepAddr;         // Audio loop start address pointer
     extern volatile uint8_t auVolume;           // Used for Volume control
-    extern volatile uint8_t auPlayDone;         // User writes 0 just after initiation of playing a sample, after playing sample, interrupt routine writes it to 1.
-    extern volatile uint8_t auStart;            // To initiate playing a sound
     extern volatile uint8_t zero;               // Point to this to stop playing audio
 
-    extern volatile uint8_t auIn[AULEN];
+    extern volatile uint8_t auIn;
     extern volatile uint8_t adc0Chg;
 
     volatile uint8_t  dimValue;
