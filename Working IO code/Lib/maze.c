@@ -35,9 +35,7 @@
 uint8_t         curHallState = 0;
 uint8_t         newHallState = 0;
 
-// optimizing for size, also need to put the bits in reverse
-//const uint8_t   mazeCode[] = {1,1,2, 1,2,2, 1,2,2, 1,2,2, 2,2,2, 1,1,2};
-const uint8_t   mazeCode[] = {0b10110100,0b01111101,0b10};
+const uint8_t   mazeCode[] = {1,1,2, 1,2,2, 1,2,2, 1,2,2, 2,2,2, 1,1,2};
 uint8_t         mazePos = 0;
 uint8_t         mazeHckrPos = 0;
 uint8_t         mazeCnt = 0;
@@ -51,27 +49,27 @@ void initMaze() {
     mazeCnt = 0;
     mazeState = TRUE;
     inverted  = FALSE;
-    effect = 0;
+    ClearHackerLeds();
 }
 
 void showFieldStrength(int16_t val) {
-    int16_t field;
+    int16_t tmp;
 
-    field = abs(val);
+    tmp = abs(val);
 
-    if ( field > HALL_FIELD_0 )
+    if ( tmp*2 > HALL_LOW )
         gameNow = MAZE;
 
     if (gameNow == MAZE) {
-        if ( field < HALL_FIELD_0 )
+        if ( tmp*2 < HALL_LOW )
             WingBar(0,0);
-        else if ( field < HALL_FIELD_1 )
+        else if ( tmp   < HALL_LOW )
             WingBar(1,1);
-        else if ( field < HALL_FIELD_2 )
+        else if ( tmp*2 < HALL_HIGH )
             WingBar(2,2);
-        else if ( field < HALL_FIELD_3 )
+        else if ( tmp*3 < HALL_HIGH*2 )
             WingBar(3,3);
-        else if ( field < HALL_FIELD_4 )
+        else if ( tmp   < HALL_HIGH )
             WingBar(4,4);
         else
             WingBar(5,5);
@@ -103,39 +101,39 @@ uint8_t MagnetMaze(){
     showFieldStrength(valHall);
 
     switch (curHallState) {
-        case HALL_IDLE:
-            if ( valHall < NEG_HALL_HIGH ) {
-                newHallState = HALL_N;
-            } else if ( valHall > HALL_HIGH ) {
-                newHallState = HALL_S;
+        case 0:
+            if ( valHall + HALL_HIGH < 0 ) {
+                newHallState = 1;
+            } else if ( valHall - HALL_HIGH > 0 ) {
+                newHallState = 2;
             } else {
-                newHallState = HALL_IDLE;
+                newHallState = 0;
             }
             break;
         
-        case HALL_N:
-            if ( valHall > HALL_HIGH ) {
-                newHallState = HALL_S;
-            } else if ( valHall > NEG_HALL_LOW ) {
-                newHallState = HALL_IDLE;
+        case 1:
+            if ( valHall - HALL_HIGH > 0 ) {
+                newHallState = 2;
+            } else if ( valHall + HALL_LOW > 0 ) {
+                newHallState = 0;
             } else {
-                newHallState = HALL_N;
+                newHallState = 1;
             }
             break;
         
-        case HALL_S:
-            if ( valHall < NEG_HALL_HIGH ) {
-                newHallState = HALL_N;
-            } else if ( valHall < HALL_LOW ) {
-                newHallState = HALL_IDLE;
+        case 2:
+            if ( valHall + HALL_HIGH < 0 ) {
+                newHallState = 1;
+            } else if ( valHall - HALL_LOW < 0 ) {
+                newHallState = 0;
             } else {
-                newHallState = HALL_S;
+                newHallState = 2;
             }
             break;
     }
 
     /* Indicate that the magnet was read succesfully */
-    iLED[CAT] = (newHallState == HALL_IDLE ? 0 : dimValue);
+    iLED[CAT] = (newHallState ? dimValue : 0);
     effect = 0x19f;
 
     if (newHallState != curHallState) {
@@ -144,7 +142,7 @@ uint8_t MagnetMaze(){
 
         /* Make the maze work regardless of badge orientation */
         if ((mazePos == 0) && (newHallState != 0))
-            inverted = (newHallState != (mazeCode[0]&1)) ? TRUE : FALSE;
+            inverted = (newHallState != mazeCode[0]) ? TRUE : FALSE;
 
         curHallState = newHallState;
         
@@ -153,7 +151,7 @@ uint8_t MagnetMaze(){
                 initMaze();
             gameNow = MAZE;
 
-            if ( (inverted ? curHallState^1 : curHallState) == (mazeCode[mazePos>>3]&(mazePos&7)) ) {
+            if ( (inverted ? curHallState^3 : curHallState) == mazeCode[mazePos]) {
                 mazeState &= TRUE;
                 iLED[EYE[R][L]] = 0;
                 iLED[EYE[R][R]] = 0;
@@ -167,7 +165,7 @@ uint8_t MagnetMaze(){
                 if (mazeState == TRUE) {
                     iLED[HCKR[G][mazeHckrPos]] = dimValue;
                     mazeHckrPos++;
-                    if (mazePos == MAZE_LEN) {
+                    if (mazePos == sizeof(mazeCode)) {
                         UpdateState(MAZE_COMPLETED);
                         iLED[CAT]       = 0;
                         effect = 0x42;
