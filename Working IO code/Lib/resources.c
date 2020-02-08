@@ -493,6 +493,7 @@ uint8_t ReadStatusBit(uint8_t number){
 void UpdateState(uint8_t num){
     uint8_t clearBit = num & 0x80;
     num &= 0x7f;
+    
     if (num) {
         if (clearBit) {
             gameState[num>>3] &= ~(1<<(num&7));
@@ -549,7 +550,7 @@ void Reset(){
     UpdateState(100+id);
 
     //Write bit 0, must always be 1!
-    UpdateState(0);
+
 }
 
 //Sets specific game bits after the badge is heated for one and two times.

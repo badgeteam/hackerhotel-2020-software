@@ -48,6 +48,7 @@ int main(void)
 {
     Setup();
     LoadGameState();
+    gameState[0]|=1;
     SelfTest();
 
     while (TRUE) {
