@@ -16,6 +16,7 @@
  */
 
 #include <simon.h>
+#include <lanyard.h>
 #include <main_def.h>
 #include <resources.h>
 #include <I2C.h>
