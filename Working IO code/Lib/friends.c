@@ -56,14 +56,11 @@ uint8_t MakeFriends(){
         gameNow = FRIENDS; 
     }
     
-    //Clear game state
-    if ((progress == NO_OTHER) && (gameNow == FRIENDS)) {
+    //Clear game state if not communicating properly or headphones detected
+    if (((progress == NO_OTHER) && (gameNow == FRIENDS)) || detHdPh){
         gameNow = TEXT; 
         effect = 0;
     }
-
-    //Checking for headphones
-    if (detHdPh) return 0;
 
     //Audio off, set voltage level (setDAC[0]*10mV)
     if (progress == NO_OTHER) {
@@ -79,7 +76,7 @@ uint8_t MakeFriends(){
         }
     }
 
-    //Check for other badges
+    //Check for other badges ()
     if ((auIn < (setDAC[0] - DELTA)) || (auIn > (setDAC[0] + DELTA)) || (progress > FIRST_CONTACT)) {
         if (progress == NO_OTHER) {
             if (chkTmr >= 8) {
@@ -128,8 +125,7 @@ uint8_t MakeFriends(){
                 jackIn = chkVolt250();
                 if (jackIn == (((candidate > whoami)?candidate:whoami) + 5)) {
                     UpdateState(99+candidate);
-                    UpdateState(99+whoami);
-                    
+                 
                     effect = 31;
                     WingBar(candidate, whoami);
                     

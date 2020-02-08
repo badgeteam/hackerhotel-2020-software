@@ -546,6 +546,7 @@ void Reset(){
     else if (id == 1) UpdateState(111);
     else if (id == 2) UpdateState(112);
     else if (id == 3) UpdateState(113);
+    UpdateState(100+id);
 
     //Write bit 0, must always be 1!
     UpdateState(0);

@@ -440,7 +440,7 @@ uint8_t CheckInput(uint8_t *data){
                 }
                 SaveGameState();
 
-                uint8_t cheat[] = "Got ya! ";
+                uint8_t cheat[] = "Gotcha! ";
                 SerSpeed(60);
                 while(1){
                     if (serTxDone) SerSend(&cheat[0]);
@@ -478,13 +478,12 @@ uint8_t CheckInput(uint8_t *data){
                     EERead(CHEATS+x, &bit, 1);
                     bit = 0xff-bit;
 
-                    SetResponse(x*4, A_HEXPREFIX, L_HEXPREFIX, TEASER);
-                    SetResponse(x*4+1, A_DIGITS+(bit>>4), 1, TEASER);               
-                    SetResponse(x*4+2, A_DIGITS+(bit%16), 1, TEASER);
-                    SetResponse(x*4+3, A_COMMA, L_COMMA, TEASER);
+                    //SetResponse(x*4, A_HEXPREFIX, L_HEXPREFIX, TEASER);
+                    SetResponse(x*3, A_DIGITS+(bit>>4), 1, TEASER);               
+                    SetResponse(x*3+1, A_DIGITS+(bit%16), 1, TEASER);
+                    SetResponse(x*3+2, A_COMMA, L_COMMA, TEASER);
                 }
-                SetResponse((4*MAX_CHEATS)-1, A_LF, 4, TEASER);
-                responseList = 32;
+                responseList = SetStandardResponse((3*MAX_CHEATS));
                 return 1;
             }
         } 
@@ -506,7 +505,6 @@ uint8_t ShowInventory(uint8_t elements){
             PopulateObject(inventory[x], &actObj1);
             SetResponse(elements++, actObj1.addrStr[NAME], actObj1.lenStr[NAME], GAME);
             SetResponse(elements++, A_COMMA, L_COMMA, TEASER);
-
         }
     }
     elements -= 1;
@@ -549,7 +547,7 @@ uint8_t ProcessInput(uint8_t *data){
                 
             //Not possible, too many/little characters
             if (inputLen != 2){
-                SetResponse(elements, A_NOTPOSSIBLE, L_NOTPOSSIBLE, TEASER);
+                SetResponse(elements++, A_NOTPOSSIBLE, L_NOTPOSSIBLE, TEASER);
             } else {
                 uint8_t canDo = 0;
                 route[currDepth+1] = FindChild(route[currDepth], data[1], 0);
