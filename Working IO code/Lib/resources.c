@@ -535,7 +535,7 @@ uint8_t getID(){
     }
     id %= 4;
     whoami = id+1;
-    return whoami;
+    return id;
 }
 
 void Reset(){
