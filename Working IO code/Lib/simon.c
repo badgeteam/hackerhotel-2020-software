@@ -99,7 +99,12 @@ uint8_t BastetDictates() {
             simonTimer = 0;
             return 0;
         }
-        simonLed(simonState[simonCounter]+1);
+        if (simonTimer < 3) {
+            simonLed(simonState[simonCounter] + 1);
+        }
+        if (simonTimer > 6) {
+            simonLed(0);
+        }
     }
 
     if (BASTET_GAME_INPUT == simonGameState) {
