@@ -49,7 +49,7 @@ void initMaze() {
     mazeCnt = 0;
     mazeState = TRUE;
     inverted  = FALSE;
-    effect = 0;
+    ClearHackerLeds();
 }
 
 void showFieldStrength(int16_t val) {
