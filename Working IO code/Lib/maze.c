@@ -57,8 +57,12 @@ void showFieldStrength(int16_t val) {
  
     field = abs(val);
  
-    if ( field > HALL_FIELD_0 )
-         gameNow = MAZE;
+    if ( field > HALL_FIELD_0 ) {
+        if (gameNow == TEXT) {
+            initMaze();
+            gameNow = MAZE;
+        }
+    }
 
     if (gameNow == MAZE) {
         if ( field < HALL_FIELD_0 )
