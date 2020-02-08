@@ -42,9 +42,14 @@
 
     #define MAX_CHEATS  8           //Number of cheat codes that are accepted (Maximum = MAX_REACT/4)
     #define MAX_REACT   MAX_CHEATS*4
+    #define L_BOILER    32
 
     //External EEPROM address
     #define EE_I2C_ADDR 0x50 
+    #define EXT_EE_MAX      32767
+    //Keys are md5 hash of 'H@ck3r H0t3l 2020', split in two
+    #define KEY_LENGTH      8
+    extern const uint8_t xor_key[2][KEY_LENGTH];
 
     //Which game is running
     enum {TEXT, MAZE, BASTET, LANYARD, FRIENDS};

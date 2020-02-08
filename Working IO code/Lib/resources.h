@@ -41,7 +41,8 @@
 
     void EERead(uint8_t eeAddr, uint8_t *eeValues, uint8_t size);       // Read from internal EEPROM, wraps around if eeAddr+size>255
     uint8_t EEWrite(uint8_t eeAddr, uint8_t *eeValues, uint8_t size);   // Write to internal EEPROM, wraps around if eeAddr+size>255
-
+    uint8_t ExtEERead(uint16_t offset, uint8_t length, uint8_t type, uint8_t *data);
+    
     uint8_t lfsr();
     void floatSpeed(uint8_t bits, uint16_t min, uint16_t max);
     uint8_t floatAround(uint8_t sample, uint8_t bits, uint8_t min, uint8_t max);

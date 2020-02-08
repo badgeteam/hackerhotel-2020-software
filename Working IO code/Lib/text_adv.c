@@ -22,10 +22,6 @@
 #include <resources.h>
 #include <I2C.h>                //Fixed a semi-crappy lib found on internet, replace with interrupt driven one? If so, check hardware errata pdf!
 
-//Keys are md5 hash of 'H@ck3r H0t3l 2020', split in two
-const uint8_t xor_key[2][KEY_LENGTH] = {{0x74, 0xbf, 0xfa, 0x54, 0x1c, 0x96, 0xb2, 0x26},{0x1e, 0xeb, 0xd6, 0x8b, 0xc0, 0xc2, 0x0a, 0x61}};
-//const unsigned char boiler_plate[]   = "Hacker Hotel 2020 by badge.team "; // boiler_plate must by 32 bytes long, excluding string_end(0)
-#define L_BOILER    32
 
 //Serial Tx string glue and send stuff
 #define  TXLISTLEN  8
@@ -66,16 +62,6 @@ uint8_t Cheat(uint8_t bit, uint16_t checksum){
     return 0;
 }
 
-//Decrypts data read from I2C EEPROM, max 255 bytes at a time
-void DecryptData(uint16_t offset, uint8_t length, uint8_t type, uint8_t *data){
-    //offset += L_BOILER;
-    while(length){
-        *data ^= xor_key[type][(uint8_t)(offset%KEY_LENGTH)];
-        ++data;
-        ++offset;
-        --length;
-    }
-}
 
 //Un-flips the extra "encrypted" data for answers
 void UnflipData(uint8_t length, uint8_t *data){
@@ -83,16 +69,6 @@ void UnflipData(uint8_t length, uint8_t *data){
         data[x] = (data[x]<<4)|(data[x]>>4);
         data[x] ^= 0x55; 
     }
-}
-
-//Game data: Read a number of bytes and decrypt
-uint8_t ExtEERead(uint16_t offset, uint8_t length, uint8_t type, uint8_t *data){
-    offset &=EXT_EE_MAX;
-    uint8_t reg[2] = {(uint8_t)(offset>>8), (uint8_t)(offset&0xff)};
-    uint8_t error = (I2C_read_bytes(EE_I2C_ADDR, &reg[0], 2, data, length));
-    if (error) return error;
-    DecryptData(offset, length, type, data);
-    return 0;
 }
 
 //Empty all other strings

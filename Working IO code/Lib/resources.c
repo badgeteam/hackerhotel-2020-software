@@ -324,6 +324,27 @@ uint8_t EEWrite(uint8_t eeAddr, uint8_t *eeValues, uint8_t size)
     return 0;
 }
 
+//Decrypts data read from I2C EEPROM, max 255 bytes at a time
+void DecryptData(uint16_t offset, uint8_t length, uint8_t type, uint8_t *data){
+    //offset += L_BOILER;
+    while(length){
+        *data ^= xor_key[type][(uint8_t)(offset%KEY_LENGTH)];
+        ++data;
+        ++offset;
+        --length;
+    }
+}
+
+//Game data: Read a number of bytes and decrypt
+uint8_t ExtEERead(uint16_t offset, uint8_t length, uint8_t type, uint8_t *data){
+    offset &=EXT_EE_MAX;
+    uint8_t reg[2] = {(uint8_t)(offset>>8), (uint8_t)(offset&0xff)};
+    uint8_t error = (I2C_read_bytes(EE_I2C_ADDR, &reg[0], 2, data, length));
+    if (error) return error;
+    DecryptData(offset, length, type, data);
+    return 0;
+}
+
 // Sends a set of characters to the serial port, stops only when character value 0 is reached.
 uint8_t SerSend(unsigned char *addr){
     if (serTxDone){
@@ -791,7 +812,7 @@ uint8_t idleTimeout(uint16_t lastActive, uint16_t maxIdle) {
 }
 
 uint8_t SelfTest(){
-    uint8_t dacVal[2] = {0x80, 0};
+    uint8_t tstVal[4] = {0x80, 0};
     //All LEDs on 25%
     for (uint8_t x=0; x<40; ++x) {
         iLED[x]=0x40;
@@ -804,14 +825,51 @@ uint8_t SelfTest(){
 
     //Audio in/out
     SelectAuIn();
+    auRepAddr = &tstVal[0];
     while ((auIn[0] < 0x7A)||(auIn[0] > 0x85)) ;
     iLED[HCKR[R][0]] = 0x00;
     iLED[HCKR[G][0]] = 0xff;
+    auRepAddr = &zero;
 
     //Light sensor
+    tstVal[0] = adcPhot&0xff;
+    while (tstVal[0] == (adcPhot&0xff)) ;
+    iLED[HCKR[R][1]] = 0x00;
+    iLED[HCKR[G][1]] = 0xff;
 
     //Magnet
+    tstVal[0] = adcHall&0xff;
+    while (tstVal[0] == (adcHall&0xff)) ;
+    iLED[HCKR[R][2]] = 0x00;
+    iLED[HCKR[G][2]] = 0xff;
+
     //Temperature
+    SelectTSens();
+    tstVal[0] = adcTemp&0xff;
+    while (tstVal[0] == (adcTemp&0xff)) ;
+    iLED[HCKR[R][3]] = 0x00;
+    iLED[HCKR[G][3]] = 0xff;
+
+    //Buttons (none pressed / shorted)
+    while ((adcBtns>>4) < 200) ;
+    iLED[HCKR[R][4]] = 0x00;
+    iLED[HCKR[G][4]] = 0xff;
+
     //Ext EEPROM
+    /*
+        0x3CCC              Level 6, visible_acl=63
+        0x3CCD              Level 6, open_acl=0
+        0x3CCE              Level 6, action_acl=192
+        0x3CCF              Level 6, action_mask=20
+    */
+
+    ExtEERead(0x3CCC, 4, 0, &tstVal[0]);
+    if ((tstVal[0] != 63) || (tstVal[1] != 0) || (tstVal[2] != 192) || (tstVal[3] != 20)){
+        while(1);
+    } else {
+        iLED[HCKR[R][4]] = 0x00;
+        iLED[HCKR[G][4]] = 0xff;
+    }
+
     return 0;
 }

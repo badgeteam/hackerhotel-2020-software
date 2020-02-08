@@ -55,13 +55,10 @@
     #define MAX_ITEMS       64
     #define CURR_LOC        0xfff0
     
-    #define EXT_EE_MAX      32767
 
-    //Keys are md5 hash of 'H@ck3r H0t3l 2020', split in two
-    #define KEY_LENGTH      8
     #define INP_LENGTH      16
     enum {GAME = 0, TEASER = 1};
-    extern const uint8_t xor_key[2][KEY_LENGTH];
+
 
     uint8_t TextAdventure();
 
