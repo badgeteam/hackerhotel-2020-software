@@ -59,6 +59,7 @@
 
     uint8_t HotSummer();
 
+    void ClearHackerLeds();
     void SetBothEyes(uint8_t r, uint8_t g);
     void WingBar(int8_t l, int8_t r);
     void GenerateBlinks();
