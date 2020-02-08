@@ -36,7 +36,7 @@ void initLanyard() {
     lanyardPos      = 0;
     lanyardCnt      = 0;
     lanyardState    = TRUE;
-    effect = 0;
+    ClearHackerLeds();
 }
 
 // Main game loop
@@ -45,6 +45,7 @@ uint8_t LanyardCode(){
         /* clean up maze game and go back to text game */
         initLanyard();
         gameNow = TEXT;
+        effect = 0;
         return 0;
     }
 

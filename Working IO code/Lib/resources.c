@@ -565,13 +565,13 @@ uint8_t HotSummer(){
     static uint8_t cooledDown = 0;
 
     if (CheckState(SUMMERS_COMPLETED)){
-        iLED[SCARAB[G]] = 0;
-        iLED[SCARAB[R]] = dimValue;
+        iLED[SCARAB[R]] = 0;
+        iLED[SCARAB[G]] = dimValue;
         return 1;
     }
 
     if (CheckState(FIRST_SUMMER)) {
-        iLED[SCARAB[G]] = dimValue;
+        iLED[SCARAB[R]] = dimValue;
         if ((cooledDown) && (adcTemp >= (calTemp + 32))) {
             UpdateState(SUMMERS_COMPLETED);
             return 0;
@@ -606,6 +606,14 @@ void SetBothEyes(uint8_t r, uint8_t g) {
         iLED[EYE[G][i]] = g;
     }
 }
+
+void ClearHackerLeds() {
+    for (uint8_t i=0;i<6;i++) {
+        iLED[HCKR[G][i]] = 0;
+        iLED[HCKR[R][i]] = 0;
+    }
+}
+
 
 void GenerateBlinks(){
     /*
@@ -698,12 +706,14 @@ void GenerateBlinks(){
 
         //'falling rain'
         case 8:
-            for (uint8_t x=0; x<4; ++x){
-                iLED[WING[L][x]] = iLED[WING[L][x+1]];
-                iLED[WING[R][x]] = iLED[WING[R][x+1]];
+            if ((LedCount & 1) == 0) {
+                for (uint8_t x=0; x<4; ++x){
+                    iLED[WING[L][x]] = iLED[WING[L][x+1]];
+                    iLED[WING[R][x]] = iLED[WING[R][x+1]];
+                }
+                iLED[WING[L][4]] = (lfsr() > 224)?dimValue:0;
+                iLED[WING[R][4]] = (lfsr() > 224)?dimValue:0;
             }
-            iLED[WING[L][4]] = (lfsr() > 192)?dimValue:0;
-            iLED[WING[R][4]] = (lfsr() > 192)?dimValue:0;
             break;
 
 
