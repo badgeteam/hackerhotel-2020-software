@@ -80,7 +80,7 @@ uint8_t BastetDictates() {
             simonTimer = 0;
             simonCounter = 0;
             for (uint8_t n=0; n<6; n++){
-                iLED[HCKR[G][n]] = 1;
+                iLED[HCKR[G][n]] = 0;
             }
             return 0;
         }
@@ -174,7 +174,7 @@ uint8_t BastetDictates() {
     }
 
     if (BASTET_GAME_OUTRO == simonGameState) {
-        if (simonTimer > 5) {   // ±.33 second
+        if (simonTimer > 3) {
             simonCounter++;
             simonTimer = 0;
         }
@@ -184,8 +184,8 @@ uint8_t BastetDictates() {
             simonGameState = BASTET_GAME_OVER;
             return 0;
         }
-        iLED[HCKR[R][5-simonCounter]] = 1;
-        iLED[HCKR[G][5-simonCounter]] = 1;
+        iLED[HCKR[R][5-simonCounter]] = 0;
+        iLED[HCKR[G][5-simonCounter]] = 0;
     }
 
     if (BASTET_GAME_OVER == simonGameState) {
@@ -193,10 +193,7 @@ uint8_t BastetDictates() {
         simonPos = 0;
         simonGameState = BASTET_BOOT; // BASTET_GAME_START for stale "field" ツs
         gameNow = TEXT;
-        for (uint8_t n=0; n<5; n++){
-            iLED[WING[L][n]] = 1;
-            iLED[WING[R][n]] = 1;
-        }
+        simonLed(0);
     }
 
     ++simonTimer;

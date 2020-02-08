@@ -20,10 +20,10 @@ if [ "$1" == "schoon" ]; then
 else
   for target in $TARGETS
   do
-    avr-gcc -ILib -Iavr/include -Os \
+    avr-gcc -ILib -Iavr/include -Os -ggdb -gstabs \
             -x c -funsigned-char -funsigned-bitfields -DDEBUG -Os \
             -ffunction-sections -fdata-sections -fpack-struct -fshort-enums\
-            -mrelax -g2 -Wall -Wa,-mgcc-isr\
+            -mrelax -mcall-prologues -g2 -Wall -Wa,-mgcc-isr\
             -mmcu=attiny1617 -Bdev/attiny1617\
             -c -std=gnu99 -MD -MP\
             -MF $target.d -MT $target.d -MT $target.o -o $target.o $target.c
@@ -33,7 +33,7 @@ else
 
   avr-gcc -o ISR_IO.elf $OBJECTS -Wl,-Map="ISR_IO.map"\
           -Wl,--start-group -Wl,-lm -Wl,--end-group -Wl,-Lavrxmega3 -Wl,-LLib -Wl,-Lavr/lib -Wl,--gc-sections\
-          -mrelax -mmcu=attiny1617 -B dev/attiny1617
+          -Wl,--relax -mrelax -mmcu=attiny1617 -B dev/attiny1617 --param inline-call-cost=2
 
   avr-objcopy -O ihex -R .eeprom -R .fuse -R .lock -R .signature -R .user_signatures  "ISR_IO.elf" "ISR_IO.hex"
 
