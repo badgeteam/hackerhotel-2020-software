@@ -45,7 +45,7 @@ uint8_t LanyardCode(){
         /* clean up maze game and go back to text game */
         initLanyard();
         gameNow = TEXT;
-        effect = 0;
+        ClearHackerLeds();
         return 0;
     }
 
@@ -93,7 +93,7 @@ uint8_t LanyardCode(){
                 if ((lanyardPos % 4) == 0) {
                     iLED[HCKR[G][(lanyardPos>>2)-1]] = dimValue;
                 }
-                if (lanyardPos == sizeof(lanyardCode)) {
+                if (lanyardPos == LANYARD_LEN) {
                     UpdateState(LANYARD_COMPLETED);
                     iLED[CAT]       = 0;
                     effect = 0x42;
