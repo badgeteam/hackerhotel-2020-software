@@ -910,5 +910,9 @@ uint8_t SelfTest(){
         iLED[HCKR[G][4]] = 0xff;
     }
 
+        //All LEDs off
+    for (uint8_t x=0; x<40; ++x) {
+        iLED[x]=0;
+    }
     return 0;
 }

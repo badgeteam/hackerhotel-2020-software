@@ -16,7 +16,7 @@
     #include <stdlib.h>
     #include <literals.h>
 
-    #define DELTA           5
+    #define DELTA           10
 
     #define NO_OTHER        0
     #define FIRST_CONTACT   1

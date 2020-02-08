@@ -322,8 +322,6 @@ uint8_t CheckInput(uint8_t *data){
             //Normal code challenge
             if (StartsWith((uint8_t *)&serRx[0], &specialInput[0])) {
                 specialPassed = 1;
-                //specialInput[0] = 0;
-                //data[1] = 0;
 
             //Special challenge 1
             } else if ((specialInput[0] == '1')&&(specialInput[2] == 0)) {
@@ -332,7 +330,7 @@ uint8_t CheckInput(uint8_t *data){
                 data[1] = 0;
 
                 if (inputLen >= 2) {
-                    if ((serRx[0] == '1')||(serRx[0] == '2')||(serRx[0] == '3')||(serRx[0] == '4')) {
+                    if ((serRx[0] >= '1') && (serRx[0] <= '4')) {
                         serRx[1] |= 0x20;
                         if ((serRx[1] == 'a')||(serRx[1] == 'e')||(serRx[1] == 'f')||(serRx[1] == 'w')) {
                             data[1] = specialInput[1]+0x11;
@@ -343,11 +341,6 @@ uint8_t CheckInput(uint8_t *data){
                     }
                 }
             }
-            //Wrong answer
-            //} else {
-                //specialInput[0] = 0;
-                //data[1] = 0;
-            //}
         
         //Normal input
         } else {

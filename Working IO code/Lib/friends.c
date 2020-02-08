@@ -25,13 +25,13 @@
 
 //Returns measured voltage * 4 (2V returns 8) if it is in the expected range (DELTA)
 uint8_t chkVolt250(){
-    static uint8_t avgVolt = 0;
+    uint8_t avgVolt = 9;
         
-    for (uint8_t x=25; x<226; x+=25) {
+    for (uint8_t x=225; x>24; x-=25) {
         if ((auIn[0] > (x-DELTA)) && (auIn[0] < (x+DELTA))) {
             break;
         }
-        ++avgVolt;
+        --avgVolt;
     }
     return avgVolt;
 }
@@ -51,19 +51,22 @@ uint8_t MakeFriends(){
     }
     if (foundAll) UpdateState(124);
 
+    //On/off game states, must be able to hijack from other games.
+    if (progress > FIRST_CONTACT) { gameNow = FRIENDS; effect = 31;}
+    if ((progress == NO_OTHER) && (gameNow = FRIENDS)) { gameNow = TEXT; effect = 0;}
 
     //Checking for headphones
     if (detHdPh) return 0;
 
     //Audio off, set voltage level (setDAC[0]*10mV)
     if (progress == NO_OTHER) {
-        setDAC[0] = whoami * 50;
+        setDAC[0] = whoami * 51;
         auRepAddr = &setDAC[0];
         auVolume = 255;
     }
 
     //Check for other badges
-    if ((auIn[0] < (setDAC[0] - DELTA)) || (auIn[0] > (setDAC[0] + DELTA)) ||((progress > FIRST_CONTACT))) {
+    if ((auIn[0] < (setDAC[0] - DELTA)) || (auIn[0] > (setDAC[0] + DELTA)) || (progress > FIRST_CONTACT)) {
         if (progress == NO_OTHER) {
             ++chkTmr;
             if (chkTmr >= 8) {
@@ -108,7 +111,11 @@ uint8_t MakeFriends(){
             //The badge with the lowest voltage will now go to 2.5V (impedance check, for people tricking the things with a power supply)
             if (chkTmr >= LONG_WAIT){
                 candidate = jackIn-whoami;
-                if (candidate > whoami) setDAC[0] = 250; else setDAC[0] = 0;
+                if (candidate > whoami) {
+                    setDAC[0] = 249;
+                } else {
+                    setDAC[0] = 1;
+                }
                 progress = THIRD_KISS;
                 chkTmr = 0;
             }
@@ -118,33 +125,32 @@ uint8_t MakeFriends(){
         else if (progress == THIRD_KISS) {
             chkTmr++;
             if (chkTmr >= SHORT_WAIT) {
-                if (chkVolt250() == 5) {
+                jackIn = chkVolt250();
+                if (jackIn == 5) {
                     UpdateState(99+candidate);
                     UpdateState(99+whoami);
-                    for (uint8_t x=0; x<5; ++x){
-                        iLED[WING[L][x]] = (x<candidate)?dimValue:0;
-                        iLED[WING[R][x]] = (x<whoami)?dimValue:00;
-                    }   
+                    WingBar(candidate, whoami);
                     progress = FOURTH_BASE;
                 } else progress = NO_OTHER;                
                 chkTmr = 0;
             }
 
-        //Wait for divorce of force quit
+        //Wait for quit
         } else if (progress == FOURTH_BASE) {
-            if (chkVolt250() == 5) {
-                chkTmr++;
-                if (chkTmr >= LONG_WAIT) {
-                    for (uint8_t x=0; x<5; ++x){
-                        iLED[WING[L][x]] = 0;
-                        iLED[WING[R][x]] = 0;
-                        progress = NO_OTHER;
-                    }                    
-                }
+            ++chkTmr;
+            if (chkTmr >= (SHORT_WAIT<<3)) {
+                for (uint8_t x=0; x<5; ++x) {
+                    iLED[WING[L][x]] = 0;
+                    iLED[WING[R][x]] = 0;
+                }                 
+                progress = NO_OTHER;
+                gameNow = TEXT;
             }
         }
 
-    } else progress = NO_OTHER;
+    } else {
+        progress = NO_OTHER;
+    }
       
     return 0;
 }

@@ -66,7 +66,7 @@ int main(void)
             //Other games & user interaction checks
             MagnetMaze();
             LanyardCode();
-            //BastetDictates();
+            BastetDictates();
             MakeFriends();
 
             //Save progress
@@ -83,9 +83,6 @@ int main(void)
 
             //Check temperature
             HotSummer();
-
-
-
         }
 
         /*
