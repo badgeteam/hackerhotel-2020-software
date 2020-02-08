@@ -53,7 +53,7 @@ volatile uint8_t zero = 0;              // Point to this to stop playing audio
 volatile uint8_t auIn[AULEN];           // Audio input buffer
 volatile uint8_t adc0Chg = 0;           // Changed adc0 channel and reference
 
-volatile uint16_t dimValueSum = 0xffff;  // Add moving average to dimmer to reduce candlelight effect
+volatile uint16_t dimValueSum = 0x1fff;  // Add moving average to dimmer to reduce candlelight effect
 volatile uint8_t  dimValue    = 0xff;    // Global dimming maximum LED value.
 
 //Quarter sine table, can be used for audio or other things (invert for nice LED dimming curve from bright to off)

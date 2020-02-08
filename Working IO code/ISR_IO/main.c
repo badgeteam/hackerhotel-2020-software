@@ -67,7 +67,7 @@ int main(void)
             MagnetMaze();
             LanyardCode();
             //BastetDictates();
-            MakeFriends();
+            //MakeFriends();
 
             //Save progress
             SaveGameState();
@@ -76,10 +76,10 @@ int main(void)
             if (adcPhot < 10) WriteStatusBit(116, 1);
             if (adcPhot > 100) WriteStatusBit(116, 0);
 
-            dimValueSum -= (dimValueSum>>8);
+            dimValueSum -= (dimValueSum>>6);
             dimValueSum += 256;
             dimValueSum -= QSINE[31-(adcPhot>>7)];
-            dimValue     = dimValueSum>>8;
+            dimValue     = dimValueSum>>6;
 
             //Check temperature
             HotSummer();
