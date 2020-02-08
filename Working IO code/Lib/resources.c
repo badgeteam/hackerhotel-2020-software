@@ -489,21 +489,15 @@ uint8_t ReadStatusBit(uint8_t number){
     if (gameState[number>>3] & (1<<(number&7))) return 1; else return 0;
 }
 
-void WriteStatusBit(uint8_t number, uint8_t state){
-    number &= 0x7f;
-    if (state) gameState[number>>3] |= 1<<(number&7);
-    else gameState[number>>3] &= ~(1<<(number&7));
-}
-
 //Update game state: num -> vBBBBbbb v=value(0 is set!), BBBB=Byte number, bbb=bit number
 void UpdateState(uint8_t num){
     uint8_t clearBit = num & 0x80;
     num &= 0x7f;
     if (num) {
         if (clearBit) {
-            WriteStatusBit(num, 0);
+            gameState[num>>3] &= ~(1<<(num&7));
         } else {
-            WriteStatusBit(num, 1);
+            gameState[num>>3] |= 1<<(num&7);
         }
     }
 }
@@ -536,7 +530,7 @@ uint8_t getID(){
 }
 
 void Reset(){
-    //Reset game progress (all zeroes) and load some bits:
+    //Reset game progress (all zeros) and load some bits:
     //# 110   set to 1 by FW if badge UUID mod 4 == 0
     //# 111   set to 1 by FW if badge UUID mod 4 == 1
     //# 112   set to 1 by FW if badge UUID mod 4 == 2
@@ -548,13 +542,13 @@ void Reset(){
     uint8_t id = getID();
 
     //Write bit in gameState location 110..113
-    if (id == 0) WriteStatusBit(110, 1);
-    else if (id == 1) WriteStatusBit(111, 1);
-    else if (id == 2) WriteStatusBit(112, 1);
-    else if (id == 3) WriteStatusBit(113, 1);
+    if (id == 0) UpdateState(110);
+    else if (id == 1) UpdateState(111);
+    else if (id == 2) UpdateState(112);
+    else if (id == 3) UpdateState(113);
 
     //Write bit 0, must always be 1!
-    WriteStatusBit(0, 1);
+    UpdateState(0);
 }
 
 //Sets specific game bits after the badge is heated for one and two times.

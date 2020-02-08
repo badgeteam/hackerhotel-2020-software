@@ -46,7 +46,7 @@ uint8_t MakeFriends(){
 
     //Check if badge has found 3 friends
     uint8_t foundAll = 1;
-    for (uint8_t x=0; x<4; x++){
+    for (uint8_t x=0; x<4; ++x){
         if (CheckState(100+x) == 0) foundAll = 0;
     }
     if (foundAll) UpdateState(124);

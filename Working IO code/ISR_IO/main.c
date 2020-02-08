@@ -73,8 +73,8 @@ int main(void)
             SaveGameState();
 
             //Check light sensor status (added hysteresis to preserve writing cycles to internal EEPROM)
-            if (adcPhot < 10) WriteStatusBit(116, 1);
-            if (adcPhot > 100) WriteStatusBit(116, 0);
+            if (adcPhot < 10) UpdateState(116);
+            if (adcPhot > 100) UpdateState(128+116);
 
             dimValueSum -= (dimValueSum>>6);
             dimValueSum += 256;

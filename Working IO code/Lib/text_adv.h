@@ -59,7 +59,6 @@
     #define INP_LENGTH      16
     enum {GAME = 0, TEASER = 1};
 
-
     uint8_t TextAdventure();
 
 #endif /* TEXT_ADV_H_ */

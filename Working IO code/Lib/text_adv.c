@@ -22,6 +22,8 @@
 #include <resources.h>
 #include <I2C.h>                //Fixed a semi-crappy lib found on internet, replace with interrupt driven one? If so, check hardware errata pdf!
 
+const uint16_t names[2][4] = {{A_ANUBIS, A_BES, A_KHONSU, A_THOTH}, {L_ANUBIS, L_BES, L_KHONSU, L_THOTH}};
+
 
 //Serial Tx string glue and send stuff
 #define  TXLISTLEN  8
@@ -32,7 +34,7 @@ uint8_t sendPrompt = 0;
 uint8_t txTypeNow = GAME;                   //Type of data that is being sent.
 uint8_t txBuffer[TXLEN];                    //Buffer for string data
 
-static object_model_t currObj;                      //Object data for current posistion in game
+static object_model_t currObj;                      //Object data for current position in game
 static uint8_t currDepth = 0xff;                    //Depth of position in game, 0xff indicates game data is not loaded from eeprom yet.
 static uint16_t route[MAX_OBJ_DEPTH] = {0};         //
 static uint16_t reactStr[3][MAX_REACT] = {{0},{0},{0}};    //
@@ -402,6 +404,9 @@ uint8_t CheckInput(uint8_t *data){
             //Whoami text
             if (data[0] == 'w'){
                 SetResponse(1, A_HELLO, L_HELLO, TEASER);
+                SetResponse(2, names[0][whoami-1], names[1][whoami-1], TEASER);
+
+                /*
                 if (whoami == 1) {
                     SetResponse(2, A_ANUBIS, L_ANUBIS, TEASER);
                 } else if (whoami == 2) {
@@ -412,25 +417,26 @@ uint8_t CheckInput(uint8_t *data){
                     SetResponse(2, A_THOTH, L_THOTH, TEASER);
                 } else {
                     SetResponse(2, A_ERROR, L_ERROR, TEASER);
-                }
+                }*/
+
                 SetResponse(3, A_PLEASED, L_PLEASED, TEASER);
                 responseList = SetStandardResponse(4);
                 return 1;
             }
 
             //Quit text
-            if (data[0] == 'q'){
+            /*if (data[0] == 'q'){
                 SetResponse(1, A_QUIT, L_QUIT, TEASER);
                 responseList = SetStandardResponse(2);
                 return 1;
-            }
+            }*/
 
             //Fake cheat = reset badge!
             if (StartsWith(&data[0], "iddqd")){
             
                 //Reset game data by wiping the UUID bits
                 for (uint8_t x=0; x<4; ++x){
-                    WriteStatusBit(110+x, 0);
+                    UpdateState(128+110+x);
                 }
                 SaveGameState();
 
@@ -451,7 +457,7 @@ uint8_t CheckInput(uint8_t *data){
                 }
                 //Reset game data by wiping the UUID bits
                 for (uint8_t x=0; x<4; ++x){
-                    WriteStatusBit(110+x, 0);
+                    UpdateState(128+110+x);
                 }
                 
                 SaveGameState();
