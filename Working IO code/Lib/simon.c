@@ -46,9 +46,9 @@ uint8_t BastetDictates() {
         return 0;
     }
 
-    if (CheckState(LANYARD_COMPLETED)) {
-        gameNow = BASTET;
-    }
+    if (CheckState(LANYARD_COMPLETED))
+        if (buttonState!=0xff)
+            gameNow = BASTET;
 
     iLED[CAT] = (buttonState==0xff ? 0 : dimValue);
 
