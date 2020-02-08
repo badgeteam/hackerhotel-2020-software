@@ -734,50 +734,27 @@ uint8_t GenerateAudio(){
             //Bad (buzzer)
             if ((effect&0xE0)==32){
                 static uint8_t auBuffer[17] = {1, 255, 128, 128, 192, 255, 64, 255, 192, 128, 64, 1, 192, 1, 64, 128, 0}; 
-                static uint8_t loudness, duration, start;
+                static uint8_t duration, start;
                 floatSpeed(1, 0x2000, 0x2200);
                 auBuffer[2] = floatAround(0x80, 5, 0x01, 0x00);
-                /*
-                if (buttonMark) {
-                    if (start == 0) {
 
-                        loudness = 0xff;
-                        TCB1_CCMP = 0x2000;
-                        auRepAddr = &auBuffer[0];
-                        start = 1;
-                    }
-
-                    if (loudness) {
-                        auVolume = loudness;
-                        if (duration) duration--; else loudness >>= 1;
-                    }
-
-                    if (loudness == 0) {
-                        effect &= 0x1f;
-                        auRepAddr = &zero;
-                        auSmpAddr = &zero;
-                        auVolume = 0xff;
-                        start = 0;
-                    }
-                }*/
-
-                auRepAddr = &auBuffer[0];
                 if (buttonMark){
                     if (start == 0) {
                         duration = 4;
                         auVolume = 255;
-                        TCB1_CCMP = 0x2000;
+                        auRepAddr = &auBuffer[0];
                         start = 1;
                     }
                     
-                    TCB1_CCMP -= (0x080<<(effect>64)?2:0);
-                    if ((auVolume)&&(duration == 0)) auVolume -=32; else
-                    {
+                    if ((auVolume)&&(duration == 0)) auVolume >>= 1; 
+
+                    if (auVolume == 0){
                         start = 0;
                         auRepAddr = &zero;
-                        effect = 0;
-                    } // else --duration;
-                    //F
+                        effect &= 0x1f;
+                        auVolume = 255;
+                    } else if (duration) --duration;
+
                 }
             }
 
@@ -785,15 +762,15 @@ uint8_t GenerateAudio(){
             if (((effect&0xE0)==64)||((effect&0xE0)==160)){
                 static uint8_t start, auBuffer[3] = {255, 1, 0};
                 
-                auRepAddr = &auBuffer[0];
                 if (buttonMark){
                     if (start == 0) {
                         auVolume = 255;
                         TCB1_CCMP = 0x0a00;
+                        auRepAddr = &auBuffer[0];
                         start = 1;
                     }
                      
-                    TCB1_CCMP -= (0x080<<(effect>64)?2:0);                    
+                    TCB1_CCMP -= (0x080<<((uint8_t)(effect>64)?2:0));                    
                     if (auVolume > 32) auVolume -=32; else 
                     {
                         start = 0;
@@ -880,7 +857,8 @@ uint8_t GenerateAudio(){
 }
 
 uint16_t getClock() {
-    return 60 * minuteMark + (RTC_CNT>>9);
+    uint16_t tmp = RTC_CNT;
+    return 60 * minuteMark + (tmp>>9);
 }
 
 uint8_t idleTimeout(uint16_t lastActive, uint16_t maxIdle) {
@@ -921,9 +899,9 @@ uint8_t SelfTest(){
     //iLED[HCKR[G][1]] = 0xff;
 
     //Magnet
-    tstVal[0] = adcHall&0xff;
+    /*tstVal[0] = adcHall&0xff;
     while (tstVal[0] == (adcHall&0xff)) ;
-    iLED[HCKR[R][2]] = 0x00;
+    iLED[HCKR[R][2]] = 0x00;*/
     //iLED[HCKR[G][2]] = 0xff;
 
     //Temperature
