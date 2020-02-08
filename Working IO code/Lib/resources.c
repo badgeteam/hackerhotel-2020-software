@@ -32,13 +32,15 @@ void Setup(){
     PORTC_DIR = 0b00111111;
 
     //Invert some pins for correcting LED reversal error
+#ifndef PURIST_BADGE
     PORTC_PIN3CTRL |= 0x80;
     PORTC_PIN4CTRL |= 0x80;
     PORTC_PIN5CTRL |= 0x80;
     PORTB_PIN3CTRL |= 0x80;
     PORTB_PIN4CTRL |= 0x80;
     PORTB_PIN5CTRL |= 0x80;
-    
+#endif
+
     //FET drive pins
     /*
     PORTC_PIN0CTRL |= 0x80;
