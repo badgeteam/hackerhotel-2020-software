@@ -23,6 +23,7 @@
     #define SECOND_LOVE     2
     #define THIRD_KISS      3
     #define FOURTH_BASE     4
+    #define NEXT            0xf0
 
     #define SHORT_WAIT      8
     #define LONG_WAIT       250
