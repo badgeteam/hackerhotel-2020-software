@@ -682,11 +682,9 @@ void GenerateBlinks(){
         case 6:
             if (LedCount > 4) LedCount = 0;
             iLED[WING[L][LedCount]] = 0;
-            iLED[WING[L][(LedCount+1)]] = dimValue;
-
-            for (uint8_t x=0; x<5; ++x){
-                iLED[WING[R][x]] = iLED[WING[L][4-x]];
-            }
+            iLED[WING[L][LedCount == 4 ? 0 : LedCount+1]] = dimValue;
+            iLED[WING[L][4-LedCount]] = 0;
+            iLED[WING[L][LedCount == 4 ? 4 : 3-LedCount]] = dimValue;
             break;
 
         //'random wing leds'
