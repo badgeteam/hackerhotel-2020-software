@@ -1,9 +1,18 @@
 # hh2020
 Hackerhotel 2020 private repo
 
-In `ISR_IO` and Lib directories is the magical code.
+Python version of main game in: `game-prototype`
 
-Compiling:
+Main app in: `Working IO code`
+in `ISR_IO` and `Lib` directories is where the magical code resides.
+
+## Prequisites
+
+Requires `gcc-avr`
+
+Flashing using: [pyupdi](https://github.com/mraardvark/pyupdi)
+
+## Compiling
 
 ```bash
 cd Working\ IO\ code/
