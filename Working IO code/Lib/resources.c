@@ -616,7 +616,7 @@ void GenerateBlinks(){
     */
 
     //Activate HCKR & BADGER leds based on the state-bits
-    if (gameNow == TEXT) {
+    if (gameNow == 0){ //TEXT) {
         for (uint8_t i=0;i<6;i++) {
             if(CheckState(HACKER_STATES + i)) {
                 iLED[HCKR[G][i]] = dimValue;
@@ -646,7 +646,7 @@ void GenerateBlinks(){
     //LEDs effects for all games
     // Keep a counter for dynamic effects
     LedCount++;
-
+    
     switch (effect&0x1f) {
         // All LEDs off
         case 0:
@@ -713,6 +713,7 @@ void GenerateBlinks(){
         case 31:
         default:
             break;
+            
     }
 }
 
@@ -808,14 +809,14 @@ uint8_t GenerateAudio(){
             }
 
             //Bleeps
-            /*if ((effect&0xE0)==160){
+            if ((effect&0xE0)==160){
                 static uint8_t auBuffer[3] = {255, 1, 0};
                 auRepAddr = &auBuffer[0];
                 if (buttonMark){
                     floatSpeed(6, 0x0500, 0x0fff);
                     if (auVolume) --auVolume;
                 }
-            }*/
+            }
 
             //
             if ((effect&0xE0)==192){
@@ -879,56 +880,21 @@ uint8_t SelfTest(){
         iLED[HCKR[R][x]] = 0xff;
     }
 
-    //Audio in/out
-    /*SelectAuIn();
-    auIn = 0xff;
-    auRepAddr = &tstVal[0];
-    while (auIn > 0x04) ;
-    tstVal[0] = 0xff;
-    auRepAddr = &tstVal[0];
-    auIn = 0;
-    while (auIn < 0x04) ; //Should work even with headphones...
-    iLED[HCKR[R][0]] = 0x00;
-    iLED[HCKR[G][0]] = 0xff;
-    auRepAddr = &zero;*/
-
     //Light sensor
     tstVal[0] = adcPhot&0xff;
     while (tstVal[0] == (adcPhot&0xff)) ;
     iLED[HCKR[R][1]] = 0x00;
-    //iLED[HCKR[G][1]] = 0xff;
-
-    //Magnet
-    /*tstVal[0] = adcHall&0xff;
-    while (tstVal[0] == (adcHall&0xff)) ;
-    iLED[HCKR[R][2]] = 0x00;*/
-    //iLED[HCKR[G][2]] = 0xff;
-
-    //Temperature
-    /*SelectTSens();
-    tstVal[0] = adcTemp&0xff;
-    while (tstVal[0] == (adcTemp&0xff)) ;
-    iLED[HCKR[R][3]] = 0x00;*/
-    //iLED[HCKR[G][3]] = 0xff;
 
     //Buttons (none pressed / shorted)
     while ((adcBtns>>4) < 200) ;
     iLED[HCKR[R][4]] = 0x00;
-   // iLED[HCKR[G][4]] = 0xff;
-
-    //Ext EEPROM
-    /*
-        0x3CCC              Level 6, visible_acl=63
-        0x3CCD              Level 6, open_acl=0
-        0x3CCE              Level 6, action_acl=192
-        0x3CCF              Level 6, action_mask=20
-    */
     
     ExtEERead(0x3CCC, 4, 0, (uint8_t *)&tstVal[0]);
     if ((tstVal[0] != 63) || (tstVal[1] != 0) || (tstVal[2] != 192) || (tstVal[3] != 20)){
         while(1);
     }
-        //All LEDs off
+    
+    //All LEDs off
     for (uint8_t x=0; x<40; ++x) {
         iLED[x]=0;
     }
