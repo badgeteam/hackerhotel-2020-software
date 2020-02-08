@@ -53,23 +53,23 @@ void initMaze() {
 }
 
 void showFieldStrength(int16_t val) {
-    int16_t tmp;
-
-    tmp = abs(val);
-
-    if ( tmp*2 > HALL_LOW )
-        gameNow = MAZE;
+    int16_t field;
+ 
+    field = abs(val);
+ 
+    if ( field > HALL_FIELD_0 )
+         gameNow = MAZE;
 
     if (gameNow == MAZE) {
-        if ( tmp*2 < HALL_LOW )
+        if ( field < HALL_FIELD_0 )
             WingBar(0,0);
-        else if ( tmp   < HALL_LOW )
+        else if ( field < HALL_FIELD_1 )
             WingBar(1,1);
-        else if ( tmp*2 < HALL_HIGH )
+        else if ( field < HALL_FIELD_2 )
             WingBar(2,2);
-        else if ( tmp*3 < HALL_HIGH*2 )
+        else if ( field < HALL_FIELD_3 )
             WingBar(3,3);
-        else if ( tmp   < HALL_HIGH )
+        else if ( field < HALL_FIELD_4 )
             WingBar(4,4);
         else
             WingBar(5,5);
