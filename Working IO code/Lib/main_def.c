@@ -21,6 +21,8 @@ volatile unsigned char *serTxAddr;   // Tx data address pointer
 volatile uint8_t serTxDone = 1;      // Done transmitting
 volatile uint8_t serRxDone = 0;      // Done receiving (CR or LF detected)
 
+volatile uint8_t fastTicker = 0;
+volatile uint8_t oldTicker = 0;
 volatile uint8_t minuteMark = 0;     // RTC overflows every minute, this counts up to max 255.
 volatile uint8_t buttonMark = 0;     // Increments when a guaranteed new button value is available.
 

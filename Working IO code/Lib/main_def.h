@@ -66,6 +66,8 @@
     extern volatile uint8_t serTxDone;          // Done transmitting
     extern volatile uint8_t serRxDone;          // Done receiving (LF detected)
 
+    extern volatile uint8_t fastTicker;
+    extern volatile uint8_t oldTicker;
     extern volatile uint8_t minuteMark;
     extern volatile uint8_t buttonMark;
 

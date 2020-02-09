@@ -137,9 +137,19 @@ void Setup(){
     //Other inits
     serRx[0] = 0;           // Empty Rx buffer (first char is enough)
     serTxAddr = &serRx[0];  // Point to first address of the Rx buffer
-    adc0Chg = 255;          // Wait 10ms before taking samples from ADC0 (jack input / temperature sensor)
+    adc0Chg = 255;          // Wait 10ms before taking samples from ADC0 (jack input temperature sensor)
 
     sei();
+}
+
+uint8_t lsr8(uint8_t input, uint8_t bits)
+{
+    return (input>>bits);
+}
+
+uint8_t lsl8(uint8_t input, uint8_t bits)
+{
+    return (input<<bits);
 }
 
 // TCA0 is used for driving the LED matrix at 488Hz (* 5 columns = 2440Hz). The lower 8 bit underflow interrupt is used to load new values and shift between columns.
@@ -292,6 +302,7 @@ ISR(RTC_CNT_vect) {
 ISR(RTC_PIT_vect) {						// PIT interrupt handling code
     ADC1_COMMAND = 0x01;
     RTC_PITINTFLAGS = RTC_PI_bm;		// clear interrupt flag
+    fastTicker++;
 }
 
 // Read bytes from EEPROM
@@ -731,7 +742,7 @@ uint8_t GenerateAudio(){
 
         //Audio for text adventure
         if ((effect&0xff00)==0) {
-
+        
             //Silence, I kill u
             if ((effect&0xE0)==0){
                 auRepAddr = &zero;
@@ -765,13 +776,18 @@ uint8_t GenerateAudio(){
             //Good (bell)
             else if ((effect&0xE0)==64){
                 static uint8_t start, auBuffer[3] = {255, 1, 0};
-                
-                if (auVolume) --auVolume;
+                uint8_t tick = lsr8(fastTicker - oldTicker,4);
+                if (tick) {
+                    if (auVolume > tick) auVolume -= tick; else auVolume = 0;
+                    oldTicker = fastTicker;
+                }
+
                 if (buttonMark){
                     if (start == 0) {
                         TCB1_CCMP = 0x0a00;
                         auRepAddr = &auBuffer[0];
                         start = 1;
+                        auVolume = 0xff;
                     }
                      
                     TCB1_CCMP -= (0x080);                    
