@@ -50,8 +50,6 @@ uint8_t BastetDictates() {
         if (buttonState!=0xff)
             gameNow = BASTET;
 
-    iLED[CAT] = (buttonState==0xff ? 0 : dimValue);
-
     if (BASTET_BOOT == simonGameState) {
         for (uint8_t i = 0; i < BASTET_LENGTH; i++) {
             simonState[i] = (lfsr() % 4);
@@ -76,7 +74,7 @@ uint8_t BastetDictates() {
             simonGameState = BASTET_GAME_SHOW_PATTERN;
             simonTimer = 0;
             simonCounter = 0;
-            ClearHackerLeds();
+            SetHackerLeds(0,0);
             return 0;
         }
         iLED[HCKR[R][simonCounter]] = dimValue;
@@ -208,19 +206,15 @@ void simonLed(uint8_t val) {
         iLED[WING[L][0]] = dimValue;
         iLED[WING[L][1]] = dimValue;
         iLED[WING[L][2]] = dimValue;
-        effect = 0x013f;
     } else if (val == 1) {  //
         iLED[WING[L][3]] = dimValue;
         iLED[WING[L][4]] = dimValue;
-        effect = 0x015f;
     } else if (val == 4) {  // III
         iLED[WING[R][0]] = dimValue;
         iLED[WING[R][1]] = dimValue;
         iLED[WING[R][2]] = dimValue;
-        effect = 0x017f;
     } else if (val == 2) {  // I
         iLED[WING[R][3]] = dimValue;
         iLED[WING[R][4]] = dimValue;
-        effect = 0x019f;
     }
 }

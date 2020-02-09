@@ -49,7 +49,7 @@ void initMaze() {
     mazeCnt = 0;
     mazeState = TRUE;
     inverted  = FALSE;
-    ClearHackerLeds();
+    SetHackerLeds(0,0);
 }
 
 void showFieldStrength(int16_t val) {
@@ -178,7 +178,7 @@ uint8_t MagnetMaze(){
                 } else {
                     initMaze();
                     gameNow   = TEXT;
-                    effect = 0x21;
+                    effect = 0x31;
                 }
             }
         }

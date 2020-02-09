@@ -615,10 +615,10 @@ void SetBothEyes(uint8_t r, uint8_t g) {
     }
 }
 
-void ClearHackerLeds() {
+void SetHackerLeds(uint8_t r, uint8_t g) {
     for (uint8_t i=0;i<6;i++) {
-        iLED[HCKR[G][i]] = 0;
-        iLED[HCKR[R][i]] = 0;
+        iLED[HCKR[R][i]] = r;
+        iLED[HCKR[G][i]] = g;
     }
 }
 
@@ -676,7 +676,10 @@ void GenerateBlinks(){
 
         //'flashing red eyes',       # 1 can be used when a bad answer is given
         case 1:
+        case 17:
             SetBothEyes((LedCount & 1 ? dimValue : 0),0);
+            if (effect & 16)
+                SetHackerLeds(dimValue,0);
             break;
 
         //'flashing green eyes',     # 2 can be used when a good answer is given

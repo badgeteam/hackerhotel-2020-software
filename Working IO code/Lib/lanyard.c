@@ -35,20 +35,13 @@ uint8_t         lanyardCnt = 0;
 uint8_t         lanyardState = TRUE;
 uint16_t        lanyardLastActive = 0;
 
-void initLanyard() {
-    lanyardPos      = 0;
-    lanyardCnt      = 0;
-    lanyardState    = TRUE;
-    ClearHackerLeds();
-}
 
 // Main game loop
 uint8_t LanyardCode(){
     if (gameNow == LANYARD && idleTimeout(lanyardLastActive,LANYARD_MAX_IDLE)) {
         /* clean up maze game and go back to text game */
-        initLanyard();
         gameNow = TEXT;
-        ClearHackerLeds();
+        effect = 0;
         return 0;
     }
 
@@ -57,9 +50,6 @@ uint8_t LanyardCode(){
 
     if ( gameNow != TEXT && gameNow != LANYARD )
         return 0;
-
-    /* activate led for buttonstate */
-    iLED[CAT] = (buttonState==0xff ? 0 : dimValue);
 
     if (buttonState == 0xff)
         return 0;
@@ -70,11 +60,14 @@ uint8_t LanyardCode(){
     lanyardLastActive = getClock();
 
     if (lastButtonState == 0xff){
-        effect = 0x13f + (buttonState << 5);
-
-        if (gameNow != LANYARD)
-            initLanyard();
-        gameNow = LANYARD;
+        if ((gameNow != LANYARD) || (lanyardState&GAME_OVER) ) {
+            // init Lanyard game
+            gameNow         = LANYARD;
+            lanyardPos      = 0;
+            lanyardCnt      = 0;
+            lanyardState    = TRUE;
+            SetHackerLeds(0,0);
+        }
 
         if (buttonState == lanyardCode[lanyardPos]) {
             lanyardState &= TRUE;
@@ -83,7 +76,6 @@ uint8_t LanyardCode(){
         } else {
             lanyardState = FALSE;
             if (lanyardPos == 0 ) {
-                initLanyard();
                 gameNow         = BASTET;
                 return 0;
             }
@@ -95,18 +87,19 @@ uint8_t LanyardCode(){
             lanyardCnt = 0;
             if (lanyardState == TRUE) {
                 if (lanyardCnt == 0) {
+                    WingBar(0,0);
                     iLED[HCKR[G][(lanyardPos>>1)-2]] = dimValue;
                     iLED[HCKR[G][(lanyardPos>>1)-1]] = dimValue;
                 }
                 if (lanyardPos == LANYARD_LEN) {
                     UpdateState(LANYARD_COMPLETED);
-                    iLED[CAT]       = 0;
-                    effect = 0x42;
+                    effect    = 0x42;
                     /*TODO state = STATE_MUSIC;*/
                 }
             } else {
-                initLanyard();
-                effect = 0x21;
+                lanyardState |= GAME_OVER;
+                effect  = 0x31;
+                WingBar(0,0);
             }
         }
     }
