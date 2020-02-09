@@ -55,7 +55,7 @@ int main(void)
         if (GenerateAudio()) {
             lastButtonState = buttonState;
             buttonState = CheckButtons();
-            buttonMark = 0;
+            --buttonMark;
 
             if (VREF_CTRLA == 0x12) SelectAuIn(); else SelectTSens();
 

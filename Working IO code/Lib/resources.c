@@ -211,6 +211,7 @@ ISR(TCB1_INT_vect){
         DAC0_DATA = (uint8_t)(volCtrl);
         ++auSmpAddr;
     } else {
+        auVolume = 0xff;
         DAC0_DATA = 0x80;
     }
     TCB1_INTFLAGS = TCB_CAPT_bm;
@@ -743,7 +744,6 @@ uint8_t GenerateAudio(){
                 if (buttonMark){
                     if (start == 0) {
                         duration = 4;
-                        auVolume = 255;
                         auRepAddr = &auBuffer[0];
                         start = 1;
                     }
@@ -754,7 +754,6 @@ uint8_t GenerateAudio(){
                         start = 0;
                         auRepAddr = &zero;
                         effect &= 0x1f;
-                        auVolume = 255;
                     } else if (duration) --duration;
 
                 }
@@ -766,7 +765,6 @@ uint8_t GenerateAudio(){
                 
                 if (buttonMark){
                     if (start == 0) {
-                        auVolume = 255;
                         TCB1_CCMP = 0x0a00;
                         auRepAddr = &auBuffer[0];
                         start = 1;
@@ -840,13 +838,10 @@ uint8_t GenerateAudio(){
                     if (start == 0) {
                         duration = 3;
                         auRepAddr = &auBuffer[0];
-                        auVolume = 255;
                         start = 1;
                     }   if (duration == 0) {
                         effect &= 0x1f;
                         auRepAddr = &zero;
-                        //auSmpAddr = &zero;
-                        //auVolume = 0xff;
                         start = 0;
                     } else --duration;
                 }
