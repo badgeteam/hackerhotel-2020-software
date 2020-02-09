@@ -46,7 +46,7 @@ uint8_t BastetDictates() {
         return 0;
     }
 
-    if (CheckState(LANYARD_COMPLETED))
+    if (TEXT == gameNow)
         if (buttonState!=0xff)
             gameNow = BASTET;
 
@@ -78,6 +78,7 @@ uint8_t BastetDictates() {
             return 0;
         }
         iLED[HCKR[R][simonCounter]] = dimValue;
+        iLED[HCKR[G][simonCounter]] = 0;
     }
 
     if (BASTET_GAME_SHOW_PATTERN == simonGameState) {
@@ -198,23 +199,16 @@ uint8_t BastetDictates() {
  * @param val
  */
 void simonLed(uint8_t val) {
-    for (uint8_t n = 0; n < 5; n++) {
-        iLED[WING[L][n]] = 0;
-        iLED[WING[R][n]] = 0;
-    }
-    if (val == 3) {         // II
-        iLED[WING[L][0]] = dimValue;
-        iLED[WING[L][1]] = dimValue;
-        iLED[WING[L][2]] = dimValue;
-    } else if (val == 1) {  //
+    WingBar(0,0);
+    if (val == 1) {                     //
         iLED[WING[L][3]] = dimValue;
         iLED[WING[L][4]] = dimValue;
-    } else if (val == 4) {  // III
-        iLED[WING[R][0]] = dimValue;
-        iLED[WING[R][1]] = dimValue;
-        iLED[WING[R][2]] = dimValue;
-    } else if (val == 2) {  // I
+    } else if (val == 2) {              // I
         iLED[WING[R][3]] = dimValue;
         iLED[WING[R][4]] = dimValue;
+    } else if (val == 3) {              // II
+        WingBar(3,0);
+    } else if (val == 4) {              // III
+        WingBar(0,3);
     }
 }

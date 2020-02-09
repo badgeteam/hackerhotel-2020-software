@@ -32,7 +32,7 @@ const uint8_t   lanyardCode[] = { 1,0,0,2, 1,2,0,1, 1,3,0,3};
 
 uint8_t         lanyardPos = 0;
 uint8_t         lanyardCnt = 0;
-uint8_t         lanyardState = TRUE;
+uint8_t         lanyardState = LANYARD_GOOD;
 uint16_t        lanyardLastActive = 0;
 
 
@@ -60,32 +60,28 @@ uint8_t LanyardCode(){
     lanyardLastActive = getClock();
 
     if (lastButtonState == 0xff){
-        if ((gameNow != LANYARD) || (lanyardState&GAME_OVER) ) {
+        if ((gameNow != LANYARD) || (lanyardState == LANYARD_GAMEOVER)) {
             // init Lanyard game
             gameNow         = LANYARD;
             lanyardPos      = 0;
             lanyardCnt      = 0;
-            lanyardState    = TRUE;
+            lanyardState    = LANYARD_GOOD;
             SetHackerLeds(0,0);
         }
 
-        if (buttonState == lanyardCode[lanyardPos]) {
-            lanyardState &= TRUE;
-            iLED[EYE[R][L]] = 0;
-            iLED[EYE[R][R]] = 0;
-        } else {
-            lanyardState = FALSE;
+        if (buttonState != lanyardCode[lanyardPos]) {
             if (lanyardPos == 0 ) {
-                gameNow         = BASTET;
+                gameNow = TEXT;
                 return 0;
             }
+            lanyardState = LANYARD_MISTAKE;
         }
         lanyardPos++;
         lanyardCnt++;            
         WingBar(lanyardCnt,lanyardCnt);
         if (lanyardCnt >= 4) {
             lanyardCnt = 0;
-            if (lanyardState == TRUE) {
+            if (lanyardState == LANYARD_GOOD) {
                 if (lanyardCnt == 0) {
                     WingBar(0,0);
                     iLED[HCKR[G][(lanyardPos>>1)-2]] = dimValue;
@@ -97,7 +93,7 @@ uint8_t LanyardCode(){
                     /*TODO state = STATE_MUSIC;*/
                 }
             } else {
-                lanyardState |= GAME_OVER;
+                lanyardState = LANYARD_GAMEOVER;
                 effect  = 0x31;
                 WingBar(0,0);
             }

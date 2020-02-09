@@ -20,6 +20,9 @@
 //    #define LANYARD_LEN         24
     #define LANYARD_LEN         12
 
+    #define LANYARD_GOOD        1
+    #define LANYARD_MISTAKE     2
+    #define LANYARD_GAMEOVER    3
 
     uint8_t LanyardCode();
 
