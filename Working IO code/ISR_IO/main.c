@@ -53,18 +53,20 @@ int main(void)
 
     while (TRUE) {
         if (GenerateAudio()) {
+
+            //Some sound effects and button readout 
             lastButtonState = buttonState;
             buttonState = CheckButtons();
             if (buttonState != 0xff) {
                 if ((effect & 0xffe0)==0)
-                    effect = 0x13f + (buttonState << 5);
+                    effect = 0x13f + (buttonState<<5);
                 iLED[CAT] = dimValue;
             } else {
                 iLED[CAT] = 0;
             }
-
             --buttonMark;
 
+            //Switch between audio port input (badge to badge comms) and onboard temperature sensor
             if (VREF_CTRLA == 0x12) SelectAuIn(); else SelectTSens();
 
             GenerateBlinks();

@@ -142,16 +142,6 @@ void Setup(){
     sei();
 }
 
-uint8_t lsr8(uint8_t input, uint8_t bits)
-{
-    return (input>>bits);
-}
-
-uint8_t lsl8(uint8_t input, uint8_t bits)
-{
-    return (input<<bits);
-}
-
 // TCA0 is used for driving the LED matrix at 488Hz (* 5 columns = 2440Hz). The lower 8 bit underflow interrupt is used to load new values and shift between columns.
 ISR(TCA0_LUNF_vect){
     //Turn off all columns
@@ -511,7 +501,7 @@ void UpdateState(uint8_t num){
     
     if (num) {
         if (clearBit) {
-            gameState[num>>3] &= ~(1<<(num&7));
+            gameState[num>>3] &= ~(1<(num&7));
         } else {
             gameState[num>>3] |= 1<<(num&7);
         }
@@ -585,13 +575,13 @@ uint8_t HotSummer(){
             return 0;
         }
         if (adcTemp <= (calTemp + 8)) cooledDown = 1;
-                   
-    } else {
-        if (calTemp == 0) calTemp = adcTemp;
-        if (adcTemp >= (calTemp + 32)) {
-            UpdateState(FIRST_SUMMER);
-        }
+    }            
+    if (calTemp == 0) calTemp = adcTemp;
+
+    if (adcTemp >= (calTemp + 32)) {
+        UpdateState(FIRST_SUMMER);
     }
+    
     return 0;
 }
 
@@ -740,7 +730,7 @@ void FadeOut(uint8_t spd, uint8_t off)
 {
     if (*auRepAddr){
         spd = 7 - (spd&0x07);
-        uint8_t tick = lsr8(fastTicker - oldTicker, spd);
+        uint8_t tick = (fastTicker - oldTicker) >> spd;
         if (tick) {
             if (auVolume > tick) auVolume -= tick; else {
                 auVolume = 0;
@@ -849,7 +839,9 @@ uint8_t GenerateAudio(){
 
                 if (duration == 0) FadeOut(2, start);
                 if (buttonMark){
-                    floatSpeed(7, 0x0100, 0x4000);
+                    for(uint8_t x=0; x<6; ++x){
+                        auBuffer[x]=lfsr()|0x01;
+                    }
                 }
             }
 
