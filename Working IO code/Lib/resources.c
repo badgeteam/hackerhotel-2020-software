@@ -137,6 +137,7 @@ void Setup(){
     //Other inits
     serRx[0] = 0;           // Empty Rx buffer (first char is enough)
     serTxAddr = &serRx[0];  // Point to first address of the Rx buffer
+    adc0Chg = 255;          // Wait 10ms before taking samples from ADC0 (jack input / temperature sensor)
 
     sei();
 }
@@ -364,18 +365,18 @@ void SerSpeed(uint8_t serSpd){
 
 // Select temperature sensor
 void SelectTSens(){
+     adc0Chg = 255;
      VREF_CTRLA   = 0x12;    //0x22 for audio in/out (2.5V), 0x12 for temperature in, audio out (1.1V/2.5V)
      ADC0_CTRLA   &= ~(ADC_RESSEL_bm);
      ADC0_MUXPOS  = 0x1E;    //Audio in: AIN7 at (0x07), Temperature: Internal sensor at (0x1E)
-     adc0Chg = 3;
 };
 
 // Select "audio" input (0-2.5V)
 void SelectAuIn(){
+     adc0Chg = 255;
      VREF_CTRLA   = 0x22;    //0x22 for audio in/out (2.5V), 0x12 for temperature in, audio out (1.1V/2.5V)
      ADC0_CTRLA   |= ADC_RESSEL_bm;
      ADC0_MUXPOS  = 0x07;    //Audio in: AIN7 at (0x07), Temperature: Internal sensor at (0x1E)
-     adc0Chg = 3;
 };
 
 // Returns button combination (4LSB) and number of consecutive times this combination is detected. First read should always be ignored! 
@@ -723,6 +724,7 @@ void GenerateBlinks(){
 
 uint8_t GenerateAudio(){
 
+    //Headphones detected?
     if (auIn < HPLVL) {
 
         detHdPh = 1;
@@ -730,13 +732,13 @@ uint8_t GenerateAudio(){
         //Audio for text adventure
         if ((effect&0xff00)==0) {
 
-            //Silence
+            //Silence, I kill u
             if ((effect&0xE0)==0){
                 auRepAddr = &zero;
             }
 
-            //Bad (buzzer)
-            if ((effect&0xE0)==32){
+            //Bad answer (buzzer, also used in other games)
+            else if ((effect&0xE0)==32){
                 static uint8_t auBuffer[17] = {1, 255, 128, 128, 192, 255, 64, 255, 192, 128, 64, 1, 192, 1, 64, 128, 0}; 
                 static uint8_t duration, start;
                 floatSpeed(1, 0x2000, 0x2200);
@@ -761,9 +763,10 @@ uint8_t GenerateAudio(){
             }
 
             //Good (bell)
-            if (((effect&0xE0)==64)||((effect&0xE0)==160)){
+            else if ((effect&0xE0)==64){
                 static uint8_t start, auBuffer[3] = {255, 1, 0};
                 
+                if (auVolume) --auVolume;
                 if (buttonMark){
                     if (start == 0) {
                         TCB1_CCMP = 0x0a00;
@@ -771,8 +774,9 @@ uint8_t GenerateAudio(){
                         start = 1;
                     }
                      
-                    TCB1_CCMP -= (0x080<<((uint8_t)(effect>64)?2:0));                    
-                    if (auVolume > 32) auVolume -=32; else 
+                    TCB1_CCMP -= (0x080);                    
+                    //if (auVolume > 32) auVolume -=32; else 
+                    if (auVolume == 0)
                     {
                         start = 0;
                         auRepAddr = &zero;
@@ -782,7 +786,7 @@ uint8_t GenerateAudio(){
             }
 
             //Rain storm with whistling wind
-            if ((effect&0xE0)==96){
+            else if ((effect&0xE0)==96){
                 static uint8_t auBuffer[7];
                 auBuffer[6]= 0;        
                 auRepAddr = &auBuffer[0];
@@ -804,12 +808,12 @@ uint8_t GenerateAudio(){
             }
 
             //Footsteps
-            if ((effect&0xE0)==128){
+            else if ((effect&0xE0)==128){
 
             }
 
             //Bleeps
-            if ((effect&0xE0)==160){
+            else if ((effect&0xE0)==160){
                 static uint8_t auBuffer[6] = {255, 192, 128, 64 ,1 ,0};
                 auRepAddr = &auBuffer[0];
                 if (buttonMark){
@@ -819,7 +823,7 @@ uint8_t GenerateAudio(){
             }
 
             //
-            if ((effect&0xE0)==192){
+            else if ((effect&0xE0)==192){
 
             }
 
