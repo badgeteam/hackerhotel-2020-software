@@ -655,13 +655,13 @@ void GenerateBlinks(){
     switch (effect&0x1f) {
         // All LEDs off
         case 0:
-            WingBar(0,0);
-            for (uint8_t i=0; i<2; i++) {
-                iLED[EYE[R][i]] = 0;
-                iLED[EYE[G][i]] = 0; 
-                iLED[SCARAB[i]] = 0;
+        case 16:
+            SetBothEyes(0,0);
+            effect = 0x1f;
+            if ((effect&16)==0) {
+                WingBar(0,0);
+                iLED[CAT] = 0;
             }
-            iLED[CAT] = 0;
             break;
 
         //'flashing red eyes',       # 1 can be used when a bad answer is given

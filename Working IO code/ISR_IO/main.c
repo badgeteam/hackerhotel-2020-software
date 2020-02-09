@@ -58,9 +58,9 @@ int main(void)
             lastButtonState = buttonState;
             buttonState = CheckButtons();
             if (buttonState != 0xff) {
-                if ((effect & 0xffe0)==0)
-                    effect = 0x13f + (buttonState<<5);
                 iLED[CAT] = dimValue;
+                if ((effect & 0xffe0)==0)
+                    effect = 0x13f + (buttonState << 5);
             } else {
                 iLED[CAT] = 0;
             }

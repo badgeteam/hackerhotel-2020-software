@@ -39,14 +39,16 @@ uint8_t BastetDictates() {
     if ((TEXT != gameNow) && (BASTET != gameNow))
         return 0;
 
+    /* Keep the badge as a SimonSays^WBastetDictates game, even if you completed the challenge
     if (CheckState(BASTET_COMPLETED)) {
         if (BASTET == gameNow) {
             gameNow = TEXT;
         }
         return 0;
     }
+    */
 
-    if (CheckState(LANYARD_COMPLETED))
+    if (TEXT == gameNow)
         if (buttonState!=0xff)
             gameNow = BASTET;
 
@@ -63,6 +65,7 @@ uint8_t BastetDictates() {
         simonInputPos = 0;
         simonTimer = 0;
         simonCounter = 0;
+        effect = 0;
     }
 
     if (BASTET_GAME_INTRO == simonGameState) {
@@ -78,6 +81,7 @@ uint8_t BastetDictates() {
             return 0;
         }
         iLED[HCKR[R][simonCounter]] = dimValue;
+        iLED[HCKR[G][simonCounter]] = 0;
     }
 
     if (BASTET_GAME_SHOW_PATTERN == simonGameState) {
@@ -122,7 +126,7 @@ uint8_t BastetDictates() {
                         simonNextGameState = BASTET_GAME_SHOW_PATTERN;
                     }
                 } else {
-                    effect = 32;
+                    effect = 32|1;
                     for (uint8_t n=0; n<6; n++){
                         iLED[HCKR[R][n]] = dimValue;
                     }
@@ -187,6 +191,7 @@ uint8_t BastetDictates() {
         simonGameState = BASTET_BOOT; // BASTET_GAME_START for stale "field" ツs
         gameNow = TEXT;
         simonLed(0);
+        effect = 0;
     }
 
     ++simonTimer;
@@ -198,23 +203,14 @@ uint8_t BastetDictates() {
  * @param val
  */
 void simonLed(uint8_t val) {
-    for (uint8_t n = 0; n < 5; n++) {
-        iLED[WING[L][n]] = 0;
-        iLED[WING[R][n]] = 0;
-    }
-    if (val == 3) {         // II
-        iLED[WING[L][0]] = dimValue;
-        iLED[WING[L][1]] = dimValue;
-        iLED[WING[L][2]] = dimValue;
-    } else if (val == 1) {  //
-        iLED[WING[L][3]] = dimValue;
+    WingBar(0,0);
+    if (val == 1) {                     //
         iLED[WING[L][4]] = dimValue;
-    } else if (val == 4) {  // III
-        iLED[WING[R][0]] = dimValue;
-        iLED[WING[R][1]] = dimValue;
-        iLED[WING[R][2]] = dimValue;
-    } else if (val == 2) {  // I
-        iLED[WING[R][3]] = dimValue;
+    } else if (val == 2) {              // I
         iLED[WING[R][4]] = dimValue;
+    } else if (val == 3) {              // II
+        iLED[WING[L][2]] = dimValue;
+    } else if (val == 4) {              // III
+        iLED[WING[R][2]] = dimValue;
     }
 }
