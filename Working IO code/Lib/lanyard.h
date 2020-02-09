@@ -17,7 +17,8 @@
 
     #define LANYARD_COMPLETED   123
     #define LANYARD_MAX_IDLE    10
-    #define LANYARD_LEN         24
+//    #define LANYARD_LEN         24
+    #define LANYARD_LEN         12
 
 
     uint8_t LanyardCode();
