@@ -298,11 +298,11 @@ ISR(RTC_CNT_vect) {
     }
 }
 
-// PIT interrupt (timing of ADC1: sensor values)
+// PIT interrupt (timing of ADC1: sensor values @ 8192 sps)
 ISR(RTC_PIT_vect) {						// PIT interrupt handling code
     ADC1_COMMAND = 0x01;
-    RTC_PITINTFLAGS = RTC_PI_bm;		// clear interrupt flag
     fastTicker++;
+    RTC_PITINTFLAGS = RTC_PI_bm;		// clear interrupt flag
 }
 
 // Read bytes from EEPROM
@@ -732,8 +732,37 @@ void GenerateBlinks(){
     }
 }
 
+//Fade out audio (slowest 0: 8s, 1: 4s, 2: 2s, 3: 1s, 4: 0.5s, 5: 0.25s, 6: 0.125s and 7: 0.062 seconds from maximum volume(0xff))
+void FadeOut(uint8_t spd, uint8_t off)
+{
+    if (*auRepAddr){
+        spd = 7 - (spd&0x07);
+        uint8_t tick = lsr8(fastTicker - oldTicker, spd);
+        if (tick) {
+            if (auVolume > tick) auVolume -= tick; else {
+                auVolume = 0;
+                if (off) {
+                    auRepAddr = &zero;
+                    effect &= 0x1f;
+                }
+            }
+            oldTicker = fastTicker;
+        }
+    }
+}
+
+uint8_t Play(uint8_t * auBuffer, uint8_t repeat, uint16_t pitch, uint8_t volume)
+{
+    TCB1_CCMP = pitch;
+    if (repeat) auRepAddr = auBuffer;
+    else auSmpAddr = auBuffer;
+    auVolume = volume;
+    return 1;
+}
 
 uint8_t GenerateAudio(){
+    static uint8_t start = 0;
+    static uint8_t duration;
 
     //Headphones detected?
     if (auIn < HPLVL) {
@@ -746,58 +775,36 @@ uint8_t GenerateAudio(){
             //Silence, I kill u
             if ((effect&0xE0)==0){
                 auRepAddr = &zero;
+                start = 0;
             }
 
             //Bad answer (buzzer, also used in other games)
             else if ((effect&0xE0)==32){
                 static uint8_t auBuffer[17] = {1, 255, 128, 128, 192, 255, 64, 255, 192, 128, 64, 1, 192, 1, 64, 128, 0}; 
-                static uint8_t duration, start;
-                floatSpeed(1, 0x2000, 0x2200);
                 auBuffer[2] = floatAround(0x80, 5, 0x01, 0x00);
 
-                if (buttonMark){
-                    if (start == 0) {
-                        duration = 4;
-                        auRepAddr = &auBuffer[0];
-                        start = 1;
-                    }
-                    
-                    if ((auVolume)&&(duration == 0)) auVolume >>= 1; 
-
-                    if (auVolume == 0){
-                        start = 0;
-                        auRepAddr = &zero;
-                        effect &= 0x1f;
-                    } else if (duration) --duration;
-
+                if (start == 0) {
+                    start = Play(&auBuffer[0], 1, 0x2100, 0xff);
+                    duration = 4;
                 }
+
+                if (duration == 0) FadeOut(4, start);
+                floatSpeed(1, 0x2000, 0x2200);
             }
 
             //Good (bell)
             else if ((effect&0xE0)==64){
-                static uint8_t start, auBuffer[3] = {255, 1, 0};
-                uint8_t tick = lsr8(fastTicker - oldTicker,4);
-                if (tick) {
-                    if (auVolume > tick) auVolume -= tick; else auVolume = 0;
-                    oldTicker = fastTicker;
+                static uint8_t auBuffer[3] = {255, 1, 0};
+
+                if (start == 0) {
+                    start = Play(&auBuffer[0], 1, 0x0a00, 0xff);
+                    duration = 4;
                 }
 
+                if (duration == 0) FadeOut(4, start);
                 if (buttonMark){
-                    if (start == 0) {
-                        TCB1_CCMP = 0x0a00;
-                        auRepAddr = &auBuffer[0];
-                        start = 1;
-                        auVolume = 0xff;
-                    }
-                     
-                    TCB1_CCMP -= (0x080);                    
-                    //if (auVolume > 32) auVolume -=32; else 
-                    if (auVolume == 0)
-                    {
-                        start = 0;
-                        auRepAddr = &zero;
-                        effect = 0;
-                    }
+                    TCB1_CCMP -= 0x080;                    
+                    if (auVolume == 0) effect = 0;
                 }
             }
 
@@ -831,10 +838,15 @@ uint8_t GenerateAudio(){
             //Bleeps
             else if ((effect&0xE0)==160){
                 static uint8_t auBuffer[6] = {255, 192, 128, 64 ,1 ,0};
-                auRepAddr = &auBuffer[0];
+                
+                if (start == 0) {
+                    start = Play(&auBuffer[0], 1, 0x2000, 0xff);
+                    duration = 10;
+                }
+
+                if (duration == 0) FadeOut(2, start);
                 if (buttonMark){
-                    floatSpeed(7, 0x0500, 0x2000);
-                    if (auVolume) --auVolume;
+                    floatSpeed(7, 0x0100, 0x4000);
                 }
             }
 
@@ -850,27 +862,25 @@ uint8_t GenerateAudio(){
             if ((effect&0xE0) <= 0x90) {
                 
                 static uint8_t auBuffer[3] = {255, 1, 0};
-                static uint8_t duration, start;
-                uint16_t freq = ((effect&0xE0)+1)<<6;
+                static uint16_t freq;
+
+                if (start == 0) {
+                    freq = ((effect&0xE0)+1)<<6;
+                    start = Play(&auBuffer[0], 1, freq, 0xff);
+                    duration = 3;
+                }
+
+                if (duration == 0) FadeOut(7, start);
                 floatSpeed(1, freq+0x0200, freq+0x0300);
                 //auBuffer[] = floatAround(0x80, 5, 0x01, 0x00);
-
-                if (buttonMark) {
-                    if (start == 0) {
-                        duration = 3;
-                        auRepAddr = &auBuffer[0];
-                        start = 1;
-                    }   if (duration == 0) {
-                        effect &= 0x1f;
-                        auRepAddr = &zero;
-                        start = 0;
-                    } else --duration;
-                }
             }
         }
     } else {
         detHdPh = 0;
     }
+
+    if (buttonMark && duration) --duration;
+
     return buttonMark;
 }
 
