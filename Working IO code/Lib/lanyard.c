@@ -82,7 +82,7 @@ uint8_t LanyardCode(){
             iLED[EYE[R][R]] = 0;
         } else {
             lanyardState = FALSE;
-            if (lanyardPos < 4 ) {
+            if (lanyardPos == 0 ) {
                 initLanyard();
                 gameNow         = BASTET;
                 return 0;
