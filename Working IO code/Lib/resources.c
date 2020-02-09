@@ -193,7 +193,7 @@ ISR(TCA0_LUNF_vect){
 ISR(TCB0_INT_vect){
     if (*serTxAddr) {
         USART0_TXDATAL = *serTxAddr;
-        serTxAddr++;
+        ++serTxAddr;
         USART0_CTRLA |= USART_DREIE_bm;
     } else {
         serTxDone = 1;
@@ -272,15 +272,14 @@ ISR(ADC1_RESRDY_vect){
 // RTC compare interrupt, triggers at 512/BTN_TMR rate, also RTC overflow interrupt, triggers once a minute
 ISR(RTC_CNT_vect) {
     if (RTC_INTFLAGS & RTC_CMP_bm){
-        if (buttonMark<0xff) buttonMark++;   // For button timing purposes
-        //tmp16bit = (RTC_CNT + BTN_TMR)%RTC_PER;
+        if (buttonMark<0xff) ++buttonMark;   // For button timing purposes
         tmp16bit = (RTC_CNT + BTN_TMR);
-        if (tmp16bit > RTC_PER) tmp16bit -= RTC_PER;
+        while (tmp16bit > RTC_PER) tmp16bit -= RTC_PER;
         while(RTC_STATUS & RTC_CMPBUSY_bm);
         RTC_CMP = tmp16bit;                 // Button timing: next interrupt set
         RTC_INTFLAGS = RTC_CMP_bm;		    // clear interrupt flag
     } else {
-        minuteMark++;                       // For very slow timing purposes, overflows to 0
+        ++minuteMark;                       // For very slow timing purposes, overflows to 0
         RTC_INTFLAGS = RTC_OVF_bm;		    // clear interrupt flag
     }
 }
@@ -849,7 +848,7 @@ uint8_t GenerateAudio(){
                         //auSmpAddr = &zero;
                         //auVolume = 0xff;
                         start = 0;
-                    } else duration--;
+                    } else --duration;
                 }
             }
         }

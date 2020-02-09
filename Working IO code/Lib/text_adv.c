@@ -287,7 +287,7 @@ uint8_t CheckResponse(){
         } else {
             PrepareSending(reactStr[0][number], reactStr[1][number], reactStr[2][number]);
         }
-        number++;
+        ++number;
 
         if (responseList == 0) {
             //effect = currObj.byteField[EFFECTS];
@@ -719,7 +719,7 @@ uint8_t ProcessInput(uint8_t *data){
                     
                     //Give item to person / use item on object 
                     if ((inputLen == 3)&&((data[0] == 'u')||(data[0] == 'g'))) {
-                        for (uint8_t x=0; x<2; x++) {
+                        for (uint8_t x=0; x<2; ++x) {
                             if (inventory[x]) { 
                                 if (CheckLetter(inventory[x], data[1])) {
                                     PopulateObject(inventory[x], &actObj2);
