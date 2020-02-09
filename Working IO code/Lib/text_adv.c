@@ -240,6 +240,7 @@ uint8_t CleanInput(uint8_t *data){
     uint8_t cnt = 0;
     for (uint8_t x=0; data[x]!=0; ++x){
         data[cnt] = data[x];
+        if (data[x] == 0x1b) break; //Escape characters are not supported!
         if (InpOkChk(data[x])) ++cnt;
     }
     data[cnt] = 0;
