@@ -16,6 +16,8 @@
 
 volatile uint16_t tmp16bit;    
 volatile uint8_t mask[8] = {0x01, 0x03, 0x07, 0x0f, 0x1f, 0x3f, 0x7f, 0xff};
+static uint16_t lfsrSeed = 0;
+
 uint8_t HeartCount = 0;
 uint8_t LedCount = 0;
 
@@ -409,11 +411,10 @@ uint8_t CheckButtons(){
 }
 
 uint8_t lfsr(){
-    static uint16_t state = 0xd401;
-    state ^= (state << 13);
-    state ^= (state >> 9);
-    state ^= (state << 7);
-    return (state & 0xff);
+    lfsrSeed ^= (lfsrSeed << 13);
+    lfsrSeed ^= (lfsrSeed >> 9);
+    lfsrSeed ^= (lfsrSeed << 7);
+    return (lfsrSeed & 0xff);
 }
 
 void floatSpeed(uint8_t bits, uint16_t min, uint16_t max){
@@ -809,10 +810,10 @@ uint8_t GenerateAudio(){
 
             //Bleeps
             if ((effect&0xE0)==160){
-                static uint8_t auBuffer[3] = {255, 1, 0};
+                static uint8_t auBuffer[6] = {255, 192, 128, 64 ,1 ,0};
                 auRepAddr = &auBuffer[0];
                 if (buttonMark){
-                    floatSpeed(6, 0x0500, 0x0fff);
+                    floatSpeed(7, 0x0500, 0x2000);
                     if (auVolume) --auVolume;
                 }
             }
@@ -895,7 +896,8 @@ uint8_t SelfTest(){
         iLED[x]=0;
     }
 
-    for(uint8_t x=0; x<(adcPhot&0x3f); ++x) lfsr();
+    //for(uint8_t x=0; x<(adcPhot&0x3f); ++x) lfsr();
+    lfsrSeed = (adcPhot + adcTemp)<<1 | 0x0001; 
 
     return 0;
 }
