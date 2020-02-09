@@ -618,7 +618,7 @@ void GenerateBlinks(){
     */
 
     //Activate HCKR & BADGER leds based on the state-bits
-    if (gameNow == 0){ //TEXT) {
+    if (gameNow == TEXT) {
         for (uint8_t i=0;i<6;i++) {
             if(CheckState(HACKER_STATES + i)) {
                 iLED[HCKR[G][i]] = dimValue;
