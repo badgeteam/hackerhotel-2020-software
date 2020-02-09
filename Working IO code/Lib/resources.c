@@ -501,7 +501,7 @@ void UpdateState(uint8_t num){
     
     if (num) {
         if (clearBit) {
-            gameState[num>>3] &= ~(1<(num&7));
+            gameState[num>>3] &= ~(1<<(num&7));
         } else {
             gameState[num>>3] |= 1<<(num&7);
         }
