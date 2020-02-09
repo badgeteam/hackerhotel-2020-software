@@ -26,7 +26,10 @@
 #include <resources.h>
 #include <I2C.h>
 
-const uint8_t   lanyardCode[] = { 1,0,0,2, 1,2,0,1, 1,3,0,3, 1,3,1,0, 1,2,1,1, 1,3,1,0 };
+//Printing of the lanyard failed, only part of the code was printed
+//const uint8_t   lanyardCode[] = { 1,0,0,2, 1,2,0,1, 1,3,0,3, 1,3,1,0, 1,2,1,1, 1,3,1,0 };
+const uint8_t   lanyardCode[] = { 1,0,0,2, 1,2,0,1, 1,3,0,3};
+
 uint8_t         lanyardPos = 0;
 uint8_t         lanyardCnt = 0;
 uint8_t         lanyardState = TRUE;
@@ -87,11 +90,13 @@ uint8_t LanyardCode(){
         }
         lanyardPos++;
         lanyardCnt++;            
+        WingBar(lanyardCnt,lanyardCnt);
         if (lanyardCnt >= 4) {
             lanyardCnt = 0;
             if (lanyardState == TRUE) {
-                if ((lanyardPos % 4) == 0) {
-                    iLED[HCKR[G][(lanyardPos>>2)-1]] = dimValue;
+                if (lanyardCnt == 0) {
+                    iLED[HCKR[G][(lanyardPos>>1)-2]] = dimValue;
+                    iLED[HCKR[G][(lanyardPos>>1)-1]] = dimValue;
                 }
                 if (lanyardPos == LANYARD_LEN) {
                     UpdateState(LANYARD_COMPLETED);
