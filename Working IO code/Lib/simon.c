@@ -191,6 +191,7 @@ uint8_t BastetDictates() {
         simonGameState = BASTET_BOOT; // BASTET_GAME_START for stale "field" ツs
         gameNow = TEXT;
         simonLed(0);
+        effect = 0;
     }
 
     ++simonTimer;

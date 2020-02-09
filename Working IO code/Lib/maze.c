@@ -49,6 +49,7 @@ void initMaze() {
     mazeCnt = 0;
     mazeState = TRUE;
     inverted  = FALSE;
+    effect = 16;
     SetHackerLeds(0,0);
 }
 

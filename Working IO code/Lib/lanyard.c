@@ -67,6 +67,7 @@ uint8_t LanyardCode(){
             lanyardCnt      = 0;
             lanyardState    = LANYARD_GOOD;
             SetHackerLeds(0,0);
+            effect = 16;
         }
 
         if (buttonState != lanyardCode[lanyardPos]) {
