@@ -613,6 +613,32 @@ void SetHackerLeds(uint8_t r, uint8_t g) {
 }
 
 
+void VictoryDance() {
+    if (CheckState(127)) {
+        SetBothEyes(0,dimValue);
+        switch((RTC_CNT>>12)&0x7) {
+            case 0:
+            case 1:
+            case 2:
+                // Falling rain
+                effect = 8;
+                break;
+            case 4:
+                // Circling wings
+                effect = 6;
+                break;
+            case 6:
+                // Random wings
+                effect = 7;
+                break;
+            default:
+                WingBar(0,0);
+                effect = 2;
+                break;
+        }
+    }
+}
+
 void GenerateBlinks(){
     /*
     HCKR + BADGER are used for game progress and should not be

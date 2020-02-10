@@ -69,6 +69,9 @@ int main(void)
             //Switch between audio port input (badge to badge comms) and onboard temperature sensor
             if (VREF_CTRLA == 0x12) SelectAuIn(); else SelectTSens();
 
+            //Victory dance when the game is completed
+            VictoryDance();
+
             GenerateBlinks();
 
             //Main game, to complete: Finish sub-game MagnetMaze and MakeFriends too.
@@ -94,6 +97,7 @@ int main(void)
 
             //Check temperature
             HotSummer();
+
         }
 
         /*
