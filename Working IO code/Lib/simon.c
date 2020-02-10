@@ -49,8 +49,10 @@ uint8_t BastetDictates() {
     */
 
     if (TEXT == gameNow)
-        if (buttonState!=0xff)
+        if (buttonState!=0xff) {
+            WingBar(0,0);
             gameNow = BASTET;
+        }
 
     if (BASTET_BOOT == simonGameState) {
         for (uint8_t i = 0; i < BASTET_LENGTH; i++) {

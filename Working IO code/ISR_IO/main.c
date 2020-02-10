@@ -70,7 +70,8 @@ int main(void)
             if (VREF_CTRLA == 0x12) SelectAuIn(); else SelectTSens();
 
             //Victory dance when the game is completed
-            VictoryDance();
+            if ((gameNow == TEXT) && CheckState(127))
+                VictoryDance();
 
             GenerateBlinks();
 
