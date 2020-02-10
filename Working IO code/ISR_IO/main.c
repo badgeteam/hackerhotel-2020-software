@@ -95,10 +95,15 @@ int main(void)
             if (adcPhot < 10) UpdateState(116);
             if (adcPhot > 100) UpdateState(128+116);
 
-            dimValueSum -= (dimValueSum>>6);
-            dimValueSum += 256;
-            dimValueSum -= QSINE[31-(adcPhot>>7)];
-            dimValue     = dimValueSum>>6;
+            lightsensorSum -= (lightsensorSum>>6);
+            lightsensorSum += adcPhot>>4;
+            if (lightsensorSum>>6 < 128) {
+                dimValue = lightsensorSum>>5;
+                if (dimValue < 8)
+                    dimValue = 8;
+            } else {
+                dimValue = 255;
+            }
 
             //Check temperature
             HotSummer();
