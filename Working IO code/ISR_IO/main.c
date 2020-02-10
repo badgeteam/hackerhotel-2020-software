@@ -70,7 +70,11 @@ int main(void)
             if (VREF_CTRLA == 0x12) SelectAuIn(); else SelectTSens();
 
             //Victory dance when the game is completed
-            if ((gameNow == TEXT) && CheckState(127))
+            if ((gameNow == TEXT) &&
+                 CheckState(122) &&     // Finished BastetDictates
+                 CheckState(123) &&     // Finished Lanyard
+                 CheckState(124) &&     // Connected to 3 others
+                 CheckState(127))       // Finished the text adventure (implies state 125 and 126)
                 VictoryDance();
 
             GenerateBlinks();

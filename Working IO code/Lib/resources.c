@@ -658,14 +658,24 @@ void GenerateBlinks(){
     }
 
     if (CheckState(GEM_STATE)) {
-        if ( HeartCount == 1 || HeartCount == 3 || HeartCount == 5 )
-            iLED[BADGER] = dimValue>>1 ;
-        else if ( HeartCount == 2 || HeartCount == 4 )
-            iLED[BADGER] = dimValue;
-        else if ( HeartCount == 0 || HeartCount == 6 )
-            iLED[BADGER] = dimValue>>2;
-        else
-            iLED[BADGER] = 0;
+        switch( HeartCount ) {
+            case 0:
+            case 6:
+                iLED[BADGER] = dimValue>>2;
+                break;
+            case 1:
+            case 3:
+            case 5:
+                iLED[BADGER] = dimValue>>1;
+                break;
+            case 2:
+            case 4:
+                iLED[BADGER] = dimValue;
+                break;
+            default:
+                iLED[BADGER] = 0;
+                break;
+        }
         if (HeartCount<32)
             HeartCount++;
         else
