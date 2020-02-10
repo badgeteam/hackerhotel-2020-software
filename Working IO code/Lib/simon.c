@@ -159,8 +159,8 @@ uint8_t BastetDictates() {
     }
 
     if (BASTET_GAME_WAIT_LEDS == simonGameState) {
-        if (simonTimer >= 7) {
-            // on to next state after ±.5 second
+        if (simonTimer >= 3) {
+            // on to next state after ±.2 second
             simonLed(0);  // LEDs off
             simonWait = 0;
             simonTimer = 0;
