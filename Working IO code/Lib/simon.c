@@ -69,7 +69,7 @@ uint8_t BastetDictates() {
     }
 
     if (BASTET_GAME_INTRO == simonGameState) {
-        if (simonTimer > 5) {   // ±.33 seconds
+        if (simonTimer > 3) {   // ±? seconds
             simonCounter++;
             simonTimer = 0;
         }
@@ -85,7 +85,7 @@ uint8_t BastetDictates() {
     }
 
     if (BASTET_GAME_SHOW_PATTERN == simonGameState) {
-        if (simonTimer > 7) {   // ±.5 second
+        if (simonTimer > 8) {   // ±.6 second
             simonCounter++;
             simonTimer = 0;
         }
@@ -96,11 +96,10 @@ uint8_t BastetDictates() {
             simonTimer = 0;
             return 0;
         }
-        if (simonTimer < 3) {
-            simonLed(simonState[simonCounter] + 1);
-        }
-        if (simonTimer > 6) {
+        if (simonTimer > 7 ) {
             simonLed(0);
+        } else if (simonTimer > 5) {
+            simonLed(simonState[simonCounter] + 1);
         }
     }
 
@@ -151,7 +150,7 @@ uint8_t BastetDictates() {
             simonWait = 0;
         }
 
-        if (simonTimer == 200) {    // did you forget about Bastet?
+        if (simonTimer == 75) {    // did you forget about Bastet?
             simonGameState = BASTET_GAME_SHOW_PATTERN;
             simonCounter = 0;
             simonTimer = 0;
@@ -204,6 +203,12 @@ uint8_t BastetDictates() {
  */
 void simonLed(uint8_t val) {
     WingBar(0,0);
+    if (val==0)
+        return;
+
+    if ((effect & 0xffe0)==0)
+        effect = 0x13f + ((val-1)<<5);
+
     if (val == 1) {                     //
         iLED[WING[L][4]] = dimValue;
     } else if (val == 2) {              // I
