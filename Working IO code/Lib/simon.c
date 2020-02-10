@@ -180,6 +180,7 @@ uint8_t BastetDictates() {
             simonTimer = 0;
             simonCounter = 0;
             simonGameState = BASTET_GAME_OVER;
+            effect = 0;
             return 0;
         }
         iLED[HCKR[R][5-simonCounter]] = 0;
@@ -192,7 +193,6 @@ uint8_t BastetDictates() {
         simonGameState = BASTET_BOOT; // BASTET_GAME_START for stale "field" ツs
         gameNow = TEXT;
         simonLed(0);
-        effect = 0;
     }
 
     ++simonTimer;
