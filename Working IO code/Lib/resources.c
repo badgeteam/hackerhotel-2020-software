@@ -657,10 +657,11 @@ void GenerateBlinks(){
         case 0:
         case 16:
             SetBothEyes(0,0);
-            effect = 0x1f;
             if ((effect&16)==0) {
                 WingBar(0,0);
                 iLED[CAT] = 0;
+            } else {
+                effect = 0x1f;
             }
             break;
 

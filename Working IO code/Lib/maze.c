@@ -139,7 +139,6 @@ uint8_t MagnetMaze(){
 
     /* Indicate that the magnet was read succesfully */
     iLED[CAT] = (newHallState ? dimValue : 0);
-    effect = 0x19f;
 
     if (newHallState != curHallState) {
         /* keep track of time to enable an idle timeout to exit the game */
@@ -152,6 +151,7 @@ uint8_t MagnetMaze(){
         curHallState = newHallState;
         
         if (curHallState != 0) {
+            effect = 0x19f;
             if (gameNow == TEXT)
                 initMaze();
             gameNow = MAZE;
