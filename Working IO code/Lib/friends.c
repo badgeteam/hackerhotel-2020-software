@@ -52,6 +52,7 @@ uint8_t MakeFriends(){
     }
     if (foundAll) {
         UpdateState(124);
+        gameNow = TEXT; 
         return 0;
     }
 
