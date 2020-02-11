@@ -112,7 +112,25 @@ int main(void)
                 //Check temperature
                 HotSummer();
 
+            //Save progress
+            SaveGameState();
+
+            //Check light sensor status (added hysteresis to preserve writing cycles to internal EEPROM)
+            if (adcPhot < 10) UpdateState(116);
+            if (adcPhot > 100) UpdateState(128+116);
+
+            lightsensorSum -= (lightsensorSum>>6);
+            lightsensorSum += adcPhot>>4;
+            if (lightsensorSum>>6 < 128) {
+                dimValue = lightsensorSum>>5;
+                if (dimValue < 8)
+                    dimValue = 8;
+            } else {
+                dimValue = 255;
             }
+
+            //Check temperature
+            HotSummer();
 
             /*
                 Audio and light effect control explained:
