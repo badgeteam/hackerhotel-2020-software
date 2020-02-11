@@ -844,7 +844,7 @@ void GenerateBlinks(){
 //Fade out audio (slowest 0: 8s, 1: 4s, 2: 2s, 3: 1s, 4: 0.5s, 5: 0.25s, 6: 0.125s and 7: 0.062 seconds from maximum volume(0xff))
 void FadeOut(uint8_t spd, uint8_t off)
 {
-    if (*auRepAddr){
+    //if (*auRepAddr){
         spd = 7 - (spd&0x07);
         uint8_t tick = fastTicker >> spd;
         if (tick) {
@@ -857,7 +857,7 @@ void FadeOut(uint8_t spd, uint8_t off)
             }
             fastTicker = 0;
         }
-    }
+    //}
 }
 
 uint8_t Play(uint8_t * auBuffer, uint8_t repeat, uint16_t pitch, uint8_t volume)
@@ -902,7 +902,7 @@ uint8_t GenerateAudio(){
             }
 
             //Good (bell)
-            else if ((effect&0xE0)==64){
+            else if ((effect&0xE0)==64){   //64
                 static uint8_t auBuffer[3] = {255, 1, 0};
 
                 if (start == 0) {
@@ -917,59 +917,79 @@ uint8_t GenerateAudio(){
                 }
             }
 
-            //Rain storm with whistling wind
-            else if ((effect&0xE0)==96){
+            //Rain storm with whistling wind and ghostly 
+            else if (((effect&0xE0)==128)||((effect&0xE0)==96)){
                 static uint8_t auBuffer[7];
                 auBuffer[6]= 0;        
                 auRepAddr = &auBuffer[0];
 
                 //Noise is to be generated fast, outside of buttonMark loop
                 for (uint8_t x=1; x<6; ++x){
-                    if ((x>0) && (x!=3)) auBuffer[x] = floatAround(0x80, 5, 0x01, 0x00);
+                    if ((x>0) && (x!=3)) {
+                        auBuffer[x] = floatAround(0x80, 6-((effect&0xa0)>>5), 0x01, 0x00);
+                    }
                 }
 
                 if (buttonMark){
                     //"Floating" speed for howl (and noise, but that's hardly audible)
-                    floatSpeed(5, 0x0280, 0x0400);
+                    if (effect & 128) floatSpeed(6, 0x0800, 0x2000); 
+                    else              floatSpeed(5, 0x0280, 0x0400);
             
                     //"Floating" volume and wind howl during 8 bit rainstorm needs some randomness
                     auVolume = floatAround(auVolume, 2, 0x10, 0xA0);
-                    auBuffer[0] = floatAround(auBuffer[0], 2, 0x70, 0x90);
+                    auBuffer[0] = floatAround(auBuffer[0], 2, 0xD0-effect, 0x90);
                     auBuffer[3] = 0xFF-auBuffer[0];  //Inverse value of wind[0] produces a whistle
                 }
             }
 
-            //Footsteps
-            else if ((effect&0xE0)==128){
-
+            //AAAhhhh failed sound effect, too tired...
+            else if ((effect&0xE0)==192){ //128//192
+                /*
+                static uint8_t auBuffer[8] = {64, 200, 240, 128, 64, 32, 16, 0};
+                start = Play(&auBuffer[0], 1, (0x1000 - (effect<<5)), auVolume);
+                floatSpeed(5, 0x0280, 0x0400);
+                auBuffer[4]=80+lfsr()>>3;
+                FadeOut(1, start);         
+                */
             }
 
             //Bleeps
             else if ((effect&0xE0)==160){
                 static uint8_t auBuffer[6] = {255, 192, 128, 64 ,1 ,0};
                 
-                if (start == 0) {
-                    start = Play(&auBuffer[0], 1, 0x2000, 0xff);
-                    duration = 10;
-                }
+                start = Play(&auBuffer[0], 1, TCB1_CCMP, auVolume);
 
-                if (duration == 0) FadeOut(2, start);
+                FadeOut(0, start);
                 if (buttonMark){
                     TCB1_CCMP = 0x0400 + (lfsr()<<5);
-                    for(uint8_t x=0; x<6; ++x){
+                    for(uint8_t x=0; x<5; ++x){
                         auBuffer[x]=lfsr()|0x01;
                     }
                 }
             }
 
-            //
-            else if ((effect&0xE0)==192){
+            //Footsteps
+            else if ((effect&0xE0)==224){//224){
+                static uint8_t auBuffer[8] = {64, 200, 240, 128, 64, 32, 16, 0};
+                static uint8_t interval = 6;
 
+                
+                if (start == 0) {
+                    auRepAddr = &auBuffer[6];
+                    start = Play(&auBuffer[0], 0, 0x6000, auVolume);
+                }
+
+                FadeOut(0, start);
+                if (buttonMark){
+                    --interval;
+                    if (interval == 0){
+                        TCB1_CCMP += 0x0300;
+                        interval = 6;
+                        start = 0;
+                    }
+                }
             }
 
-            //
-            else {
-            }
         } else if ((effect&0xff00)==0x0100) {
             if ((effect&0xE0) <= 0x90) {
                 

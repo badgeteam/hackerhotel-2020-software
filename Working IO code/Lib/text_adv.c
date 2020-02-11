@@ -411,11 +411,11 @@ uint8_t CheckInput(uint8_t *data){
             }
 
             //Quit text
-            /*if (data[0] == 'q'){
+            if (data[0] == 'q'){
                 SetResponse(1, A_QUIT, L_QUIT, TEASER);
                 responseList = SetStandardResponse(2);
                 return 1;
-            }*/
+            }
 
             //Fake cheat = reset badge!
             if (StartsWith(&data[0], "iddqd")){
