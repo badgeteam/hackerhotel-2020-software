@@ -2,7 +2,7 @@
 
 python3 pyupdi/pyupdi.py -c /dev/ttyUSB0 -d tiny1617 -f hh2020.hex > outbuff 2>&1
 if [ $? == 0 ]; then
-  python3 pyupdi/pyupdi.py -c /dev/ttyUSB0 -d tiny1617 -fs 10:0x3A >> outbuff 2>&1
+  python3 pyupdi/pyupdi.py -c /dev/ttyUSB0 -d tiny1617 -fs 1:0x4C 5:0xF6 10:0x3A >> outbuff 2>&1
   if [ $? == 0 ]; then
     echo -e "\u001b[42m"
     clear

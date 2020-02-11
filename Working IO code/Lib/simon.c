@@ -189,7 +189,7 @@ uint8_t BastetDictates() {
     if (BASTET_GAME_OVER == simonGameState) {
         simonInputPos = 0;
         simonPos = 0;
-        simonGameState = BASTET_BOOT; // BASTET_GAME_START for stale "field" ツs
+        simonGameState = BASTET_BOOT; // BASTET_GAME_START for stale "field" ツ
         gameNow = TEXT;
         simonLed(0);
     }
