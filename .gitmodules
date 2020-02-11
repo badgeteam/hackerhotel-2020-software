@@ -1,3 +1,3 @@
 [submodule "Working IO code/pyupdi"]
-	path = Working IO code/pyupdi
+	path = Production/pyupdi
 	url = https://github.com/mraardvark/pyupdi.git
