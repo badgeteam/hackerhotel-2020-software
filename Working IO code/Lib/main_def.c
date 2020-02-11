@@ -14,7 +14,9 @@ const uint8_t xor_key[2][KEY_LENGTH] = {{0x74, 0xbf, 0xfa, 0x54, 0x1c, 0x96, 0xb
 // Global vars
 volatile uint8_t iLED[40];           // 0,1,2,3,4,5(,6,7),8,9,10,11,12,13(,14,15) etc. ()=unused
 
-volatile uint8_t timeout_I2C;        // Used for I2C timeout error, old code was blocking further code execution.
+volatile uint8_t readDataI2C;        // If true, reads data, if false, writes address
+volatile uint8_t bytesLeftI2C;       // Number of bytes left for a restart command (after address write) or a NACK+STOP command
+volatile uint8_t *addrDataI2C;       // Address pointer to the I2C data
 
 volatile unsigned char serRx[RXLEN]; // Receive buffer
 volatile unsigned char *serTxAddr;   // Tx data address pointer
@@ -57,7 +59,8 @@ volatile uint16_t dimValueSum = 0x1fff;  // Add moving average to dimmer to redu
 volatile uint8_t  dimValue    = 0xff;    // Global dimming maximum LED value.
 
 //Quarter sine table, can be used for audio or other things (invert for nice LED dimming curve from bright to off)
-const uint8_t QSINE[32] = {0x01,0x0d,0x19,0x26,0x32,0x3e,0x4a,0x56,0x62,0x6f,0x78,0x83,0x8e,0x98,0xa2,0xab,0xb4,0xbf,0xc5,0xcf,0xd4,0xdb,0xe1,0xe7,0xec,0xf0,0xf4,0xf7,0xfa,0xfc,0xfe,0xff};
+const uint8_t QSINE[32] = { 0x01,0x0d,0x19,0x26,0x32,0x3e,0x4a,0x56,0x62,0x6f,0x78,0x83,0x8e,0x98,0xa2,0xab,
+                            0xb4,0xbf,0xc5,0xcf,0xd4,0xdb,0xe1,0xe7,0xec,0xf0,0xf4,0xf7,0xfa,0xfc,0xfe,0xff};
 
 //LED translation matrices (usage iLED[name_of_const_array[][]] = value;)
 /*

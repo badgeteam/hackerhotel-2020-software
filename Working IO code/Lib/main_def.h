@@ -44,8 +44,9 @@
     #define L_BOILER    32
 
     //External EEPROM address
-    #define EE_I2C_ADDR 0x50 
+    #define EE_I2C_ADDR     0x50
     #define EXT_EE_MAX      32767
+
     //Keys are md5 hash of 'H@ck3r H0t3l 2020', split in two
     #define KEY_LENGTH      8
     extern const uint8_t xor_key[2][KEY_LENGTH];
@@ -60,7 +61,9 @@
     //Global vars
     extern volatile uint8_t iLED[40];           // 0,1,2,3,4,5(,6,7),8,9,10,11,12,13(,14,15) etc. ()=unused
 
-    extern volatile uint8_t timeout_I2C;        // 
+    extern volatile uint8_t readDataI2C;        // If true, reads data, if false, writes address
+    extern volatile uint8_t bytesLeftI2C;       // Number of bytes left for a restart command (after address write) or a NACK+STOP command
+    extern volatile uint8_t *addrDataI2C;       // Address pointer to the I2C data
 
     extern volatile unsigned char serRx[RXLEN]; // Receive buffer
     extern volatile unsigned char *serTxAddr;   // Tx data address pointer

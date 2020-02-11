@@ -40,10 +40,17 @@
  * Edited: 11/12/2019
  * By: Ralph Willekes
  * Reason: Libraries unavailable, old crap? Added 16 bit internal addresses (24LC256) support.
- */ 
-
-#include <avr/io.h>
-#include "I2C.h"
+ */
+ /*
+ #include <avr/io.h>
+ #include "I2C.h"
+ 
+ void I2C_init(){
+    
+ }
+ */
+ 
+ /*
 #include <util/delay.h>
 
 #define NOP() asm volatile(" nop \r\n")
@@ -266,4 +273,4 @@ uint8_t	I2C_write_bytes(uint8_t slave_addr, uint8_t *reg_ptr, uint8_t reg_len, u
 error:
 	I2C_recover();
 	return 0xff;
-}
+}*/

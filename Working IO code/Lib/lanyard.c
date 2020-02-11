@@ -24,7 +24,6 @@
 #include <lanyard.h>
 #include <main_def.h>
 #include <resources.h>
-#include <I2C.h>
 
 //Printing of the lanyard failed, only part of the code was printed
 //const uint8_t   lanyardCode[] = { 1,0,0,2, 1,2,0,1, 1,3,0,3, 1,3,1,0, 1,2,1,1, 1,3,1,0 };

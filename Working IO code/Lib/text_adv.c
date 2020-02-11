@@ -20,7 +20,6 @@
 #include <text_adv.h>           //Text adventure stuff
 #include <main_def.h>
 #include <resources.h>
-#include <I2C.h>                //Fixed a semi-crappy lib found on internet, replace with interrupt driven one? If so, check hardware errata pdf!
 
 const uint16_t names[2][4] = {{A_ANUBIS, A_BES, A_KHONSU, A_THOTH}, {L_ANUBIS, L_BES, L_KHONSU, L_THOTH}};
 
@@ -406,20 +405,6 @@ uint8_t CheckInput(uint8_t *data){
             if (data[0] == 'w'){
                 SetResponse(1, A_HELLO, L_HELLO, TEASER);
                 SetResponse(2, names[0][whoami-1], names[1][whoami-1], TEASER);
-
-                /*
-                if (whoami == 1) {
-                    SetResponse(2, A_ANUBIS, L_ANUBIS, TEASER);
-                } else if (whoami == 2) {
-                    SetResponse(2, A_BES, L_BES, TEASER);
-                } else if (whoami == 3) {
-                    SetResponse(2, A_KHONSU, L_KHONSU, TEASER);
-                } else if (whoami == 4) {
-                    SetResponse(2, A_THOTH, L_THOTH, TEASER);
-                } else {
-                    SetResponse(2, A_ERROR, L_ERROR, TEASER);
-                }*/
-
                 SetResponse(3, A_PLEASED, L_PLEASED, TEASER);
                 responseList = SetStandardResponse(4);
                 return 1;
@@ -435,10 +420,8 @@ uint8_t CheckInput(uint8_t *data){
             //Fake cheat = reset badge!
             if (StartsWith(&data[0], "iddqd")){
             
-                //Reset game data by wiping the UUID bits
-                for (uint8_t x=0; x<4; ++x){
-                    UpdateState(128+110+x);
-                }
+                //Wipe, but not the cheat data, hidden easter egg in ext. eeprom. ;)
+                WipeAfterBoot(0);
                 SaveGameState();
 
                 uint8_t cheat[] = "Gotcha! ";
@@ -451,16 +434,8 @@ uint8_t CheckInput(uint8_t *data){
             //Cheat reset
             if (StartsWith(&data[0], "ikillu")){
                 
-                //Reset cheat data by resetting the EEPROM bytes
-                uint8_t empty=0xff;
-                for (uint8_t x=0; x<MAX_CHEATS; ++x){
-                    EEWrite(CHEATS+x, &empty, 1);
-                }
-                //Reset game data by wiping the UUID bits
-                for (uint8_t x=0; x<4; ++x){
-                    UpdateState(128+110+x);
-                }
-                
+                //Full wipe, including cheats, for badge.team use only!
+                WipeAfterBoot(1);
                 SaveGameState();
 
                 uint8_t cheat[] = "Reset! ";

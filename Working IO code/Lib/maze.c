@@ -30,7 +30,6 @@
 #include <maze.h>
 #include <main_def.h>
 #include <resources.h>
-#include <I2C.h>
 
 uint8_t         curHallState = 0;
 uint8_t         newHallState = 0;

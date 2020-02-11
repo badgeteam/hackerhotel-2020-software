@@ -12,7 +12,6 @@
  */
 
 #include <resources.h>
-#include <I2C.h>                //Fixed a semi-crappy lib found on internet, replace with interrupt driven one? If so, check hardware errata pdf!
 
 volatile uint16_t tmp16bit;    
 volatile uint8_t mask[8] = {0x01, 0x03, 0x07, 0x0f, 0x1f, 0x3f, 0x7f, 0xff};
@@ -86,15 +85,18 @@ void Setup(){
     TCB1_CCMP = 0x038B;
     TCB1_INTCTRL = 0x01;
 
-    //Init I2C (100kHz)
-    I2C_init();
+    //Init I2C (400kHz)
+    TWI0.MBAUD = 12;		// Rate = 10MHz/(2MBAUD+10) => 400kHz;
+    TWI0.MCTRLA = 0xC3;     // SMEN (0x02) also enabled
+    TWI0.MSTATUS |= 0x01;	// Put bus in idle
+    TWI0.MSTATUS |= 0xC4;	// Clear errors if any
 
     //VREF (DAC, ADC's)
     VREF_CTRLA   = 0x12;    //0x22 for audio in/out (2.5V), 0x12 for temperature in, audio out (1.1V/2.5V)
     VREF_CTRLC   = 0x20;    //ADC1 reference at 2.5V
     VREF_CTRLB   = 0x01;    //DAC0 ref forced enabled
 
-    //Init ADC0 (audio in, also controls DAC output rate, internal temperature?)
+    //Init ADC0 (audio in and internal temperature)
     ADC0_CTRLA   = 0x02;    //10 bit resolution, free running
     ADC0_CTRLC   = 0x44;    //Reduced sample capacitor, internal reference, clock/32 => 24038sps
     ADC0_MUXPOS  = 0x1E;    //Audio in: AIN7 at (0x07), Temperature: Internal sensor at (0x1E)
@@ -188,7 +190,6 @@ ISR(TCA0_LUNF_vect){
         :: [io0] "I" (&L_COL), [vpb] "I" (&VPORTB_OUT) : "r24", "cc");
     }
     
-    if(timeout_I2C) --timeout_I2C;
     TCA0_SPLIT_INTFLAGS = 0xFF;
 }
 
@@ -218,6 +219,46 @@ ISR(TCB1_INT_vect){
         DAC0_DATA = 0x80;
     }
     TCB1_INTFLAGS = TCB_CAPT_bm;
+}
+
+/*
+    extern volatile uint8_t readDataI2C;        // If true, reads data, if false, writes address
+    extern volatile uint8_t bytesLeftI2C;       // Number of bytes left for a restart command (after address write) or a NACK+STOP command
+    extern volatile uint8_t *addrDataI2C;       // Address pointer to the I2C data
+
+*/
+
+//I2C Interrupt DOES work now!
+ISR(TWI0_TWIM_vect){
+    if (bytesLeftI2C) --bytesLeftI2C;          
+    
+    //Reading is done here
+    if (TWI0_MSTATUS & 0x80) {                 
+        if (bytesLeftI2C) {
+            *addrDataI2C++ = TWI0_MDATA;
+            TWI0.MCTRLB = 0;
+        } else TWI0.MCTRLB = 4;
+    
+    //Write part
+    } else {
+
+        //Error, will never get here unless there's some hacker poking around on the PCB, slim chance of happening...
+        if (TWI0_MSTATUS & 0x0C) {
+            bytesLeftI2C = 0;
+
+        //Good, good!
+        } else { 
+            if (bytesLeftI2C == 2) {
+                TWI0_MDATA = addrDataI2C[0];
+            } else if (bytesLeftI2C == 1) {
+                TWI0_MDATA = addrDataI2C[1];
+            } else {
+                //TWI0_MCTRLB = 1;        //Repeated start, already handled by smart mode!
+                TWI0_MADDR |= 1;          //Read I2C address
+            }
+        }
+    }
+    if ((TWI0_MSTATUS & 0x80)&&(bytesLeftI2C == 0)) TWI0.MCTRLB = 7;
 }
 
 // Reads up to RXLEN characters until LF is found, LF sets the serRxDone flag and writes 0 instead of LF.
@@ -295,9 +336,31 @@ ISR(RTC_PIT_vect) {						// PIT interrupt handling code
     RTC_PITINTFLAGS = RTC_PI_bm;		// clear interrupt flag
 }
 
+// I2C read part, could be neater, but got frustrated... At least it's working flawlessly! :P
+uint8_t I2C_read_bytes(uint8_t slave_addr, uint8_t *reg_ptr, uint8_t reg_len, uint8_t *dat_ptr, uint8_t dat_len){
+    
+    //Error.
+    if ((TWI0_MSTATUS & 0x03) == 0) return 1;
+
+    addrDataI2C = reg_ptr;
+    if ((addrDataI2C) == 0) return 1;       //Stupid line is needed or previous line is optimized away...
+    
+    TWI0_MADDR = (EE_I2C_ADDR<<1);          //Write stupid shifted I2C address, looking over this for hours...
+    bytesLeftI2C = reg_len + 1;             //Yeah, well... it works.
+    while (bytesLeftI2C) ;                  //Just a very short pause.
+
+    addrDataI2C = dat_ptr;                  //Data!
+    if ((addrDataI2C) == 0) return 1;       //Wait for address written.
+    
+    bytesLeftI2C = dat_len + 1;             //Gimme, gimme!
+    while (bytesLeftI2C) ;                  //Hurry up!!!
+
+    //Yesss! Now be quiet!
+    return 0;
+}
+
 // Read bytes from EEPROM
-void EERead(uint8_t eeAddr, uint8_t *eeValues, uint8_t size)
-{
+void EERead(uint8_t eeAddr, uint8_t *eeValues, uint8_t size) {
     while(NVMCTRL_STATUS & NVMCTRL_EEBUSY_bm);              // Wait until any write operation has finished
 
     while(size){
@@ -326,6 +389,9 @@ uint8_t EEWrite(uint8_t eeAddr, uint8_t *eeValues, uint8_t size)
     }
     return 0;
 }
+
+
+
 
 //Decrypts data read from I2C EEPROM, max 255 bytes at a time
 void DecryptData(uint16_t offset, uint8_t length, uint8_t type, uint8_t *data){
@@ -444,6 +510,8 @@ uint8_t floatAround(uint8_t sample, uint8_t bits, uint8_t min, uint8_t max){
 
 //Load game status
 void LoadGameState(){
+    lfsrSeed = (adcPhot + adcTemp)<<1 | 0x0001; 
+
     EERead(0, &gameState[0], BOOTCHK);   //Load game status bits from EEPROM
 
     uint8_t idSet = 0;
@@ -533,6 +601,19 @@ uint8_t getID(){
     id %= 4;
     whoami = id+1;
     return id;
+}
+
+void WipeAfterBoot(uint8_t full){
+    //Reset cheat data by resetting the EEPROM bytes
+    uint8_t empty=0xff;
+    if (full) {
+        for (uint8_t x=0; x<CHEATS+MAX_CHEATS; ++x){
+            EEWrite(+x, &empty, 1);
+        }
+    }
+
+    //Reset game data by wiping the UUID bit
+    UpdateState(128+109+whoami);
 }
 
 void Reset(){
@@ -765,7 +846,7 @@ void FadeOut(uint8_t spd, uint8_t off)
 {
     if (*auRepAddr){
         spd = 7 - (spd&0x07);
-        uint8_t tick = (fastTicker - oldTicker) >> spd;
+        uint8_t tick = fastTicker >> spd;
         if (tick) {
             if (auVolume > tick) auVolume -= tick; else {
                 auVolume = 0;
@@ -774,7 +855,7 @@ void FadeOut(uint8_t spd, uint8_t off)
                     effect &= 0x1f;
                 }
             }
-            oldTicker = fastTicker;
+            fastTicker = 0;
         }
     }
 }
@@ -813,7 +894,7 @@ uint8_t GenerateAudio(){
 
                 if (start == 0) {
                     start = Play(&auBuffer[0], 1, 0x2100, 0xff);
-                    duration = 4;
+                    duration = 8;
                 }
 
                 if (duration == 0) FadeOut(4, start);
@@ -826,7 +907,7 @@ uint8_t GenerateAudio(){
 
                 if (start == 0) {
                     start = Play(&auBuffer[0], 1, 0x0a00, 0xff);
-                    duration = 4;
+                    duration = 6;
                 }
 
                 if (duration == 0) FadeOut(4, start);
@@ -874,6 +955,7 @@ uint8_t GenerateAudio(){
 
                 if (duration == 0) FadeOut(2, start);
                 if (buttonMark){
+                    TCB1_CCMP = 0x0400 + (lfsr()<<5);
                     for(uint8_t x=0; x<6; ++x){
                         auBuffer[x]=lfsr()|0x01;
                     }
@@ -930,34 +1012,54 @@ uint8_t idleTimeout(uint16_t lastActive, uint16_t maxIdle) {
 }
 
 uint8_t SelfTest(){
-    uint8_t tstVal[4] = {0x01, 0};
+    uint8_t tstVal[4] = {0, 0, 0, 0};
 
-    //Red HCKR all on 100%
-    for (uint8_t x=0; x<6; ++x) {
-        iLED[HCKR[R][x]] = 0xff;
-    }
+    while (adcTemp == 0) ;
+    EERead(BOOTCHK, &tstVal[0], 4);
+    //already checked and ok, skip test, can be reset by using "ikillu" command.
+    if (tstVal[0] == 0xA5) {
+        calTemp =  tstVal[1]<<8;
+        calTemp |= tstVal[2];
+        return 0; 
+    } 
 
-    //Light sensor
+    //Old data in EEPROM, wipe!
+    if (tstVal[3] != 0xff) return 1;
+
+    //Red BADGER, CAT, EYEs and SCARAB LED on 100% = error
+    iLED[BADGER] = 255;
+    iLED[CAT] = 255;
+    iLED[EYE[R][R]] = 255;    
+    iLED[EYE[R][L]] = 255;
+    iLED[SCARAB[R]] = 255;
+
+    //Light sensor OK, scarab off
     tstVal[0] = adcPhot&0xff;
     while (tstVal[0] == (adcPhot&0xff)) ;
-    iLED[HCKR[R][1]] = 0x00;
+    iLED[SCARAB[R]] = 0x00;
 
-    //Buttons (none pressed / shorted)
+    //Buttons OK (none pressed / shorted), cat forehead off
     while ((adcBtns>>4) < 200) ;
-    iLED[HCKR[R][4]] = 0x00;
-    
+    iLED[CAT] = 0x00;
+
+    //Right ROM?
     ExtEERead(0x3CCC, 4, 0, (uint8_t *)&tstVal[0]);
     if ((tstVal[0] != 63) || (tstVal[1] != 0) || (tstVal[2] != 192) || (tstVal[3] != 20)){
         while(1);
     }
     
-    //All LEDs off
-    for (uint8_t x=0; x<40; ++x) {
-        iLED[x]=0;
-    }
+    SelectAuIn();
+    //Audio in/out OK, eyes off
+    while ((auIn < 0x78) || (auIn > 0x88)) ;
+    iLED[EYE[R][R]] = 0x00;
+    iLED[EYE[R][L]] = 0x00;
+    
+    //All ok!
+    tstVal[0] = 0xA5;
+    tstVal[1] = adcTemp>>8;
+    tstVal[2] = adcTemp&0xff;
 
-    //for(uint8_t x=0; x<(adcPhot&0x3f); ++x) lfsr();
-    lfsrSeed = (adcPhot + adcTemp)<<1 | 0x0001; 
-
+    EEWrite(BOOTCHK, &tstVal[0], 3);
+    iLED[BADGER] = 0x08;
     return 0;
 }

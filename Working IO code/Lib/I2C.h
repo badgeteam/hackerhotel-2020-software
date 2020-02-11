@@ -52,14 +52,11 @@
 
 
  */
-
+ /*
 #ifndef I2C_H_
 #define I2C_H_
 
-#define ADDR_TIMEOUT	12			// timeout (about 2.5ms, TCA0_LUNF interrupt)
-#define READ_TIMEOUT	12
-#define WRITE_TIMEOUT	12
-#define MAX_LEN			64			// maximum number of bytes for read/write transaction
+
 
 #include <main_def.h>
 
@@ -105,4 +102,16 @@ void		I2C_stop();
 uint8_t		I2C_read_bytes(uint8_t slave_addr, uint8_t *reg_ptr, uint8_t reg_len, uint8_t *dat_ptr, uint8_t dat_len);
 uint8_t		I2C_write_bytes(uint8_t slave_addr, uint8_t *reg_ptr, uint8_t reg_len, uint8_t *dat_ptr, uint8_t dat_len);
 
-#endif /* I2C_H_ */
+#endif  I2C_H_ */
+/*
+#ifndef I2C_H_
+#define I2C_H_
+
+#define ADDR_TIMEOUT	12			// timeout (about 2.5ms, TCA0_LUNF interrupt)
+#define READ_TIMEOUT	12
+#define WRITE_TIMEOUT	12
+#define MAX_LEN			64			// maximum number of bytes for read/write transaction
+
+void		I2C_init();
+uint8_t		I2C_read_bytes(uint8_t slave_addr, uint8_t *reg_ptr, uint8_t reg_len, uint8_t *dat_ptr, uint8_t dat_len);
+#endif*/

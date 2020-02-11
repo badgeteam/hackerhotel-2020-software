@@ -21,7 +21,6 @@
 #include <friends.h>
 #include <main_def.h>
 #include <resources.h>
-#include <I2C.h>
 
 //Returns measured voltage * 4 (2V returns 8) if it is in the expected range (DELTA)
 uint8_t chkVolt250(){
@@ -46,12 +45,15 @@ uint8_t MakeFriends(){
 
     ++chkTmr;
 
-    //Check if badge has found 3 friends
+    //Check if badge has found 3 friends, if true, don't accept any new connections!
     uint8_t foundAll = 1;
     for (uint8_t x=0; x<4; ++x){
         if (CheckState(100+x) == 0) foundAll = 0;
     }
-    if (foundAll) UpdateState(124);
+    if (foundAll) {
+        UpdateState(124);
+        return 0;
+    }
 
     //Set game state, must be able to hijack from other games.
     if (progress > FIRST_CONTACT) { 

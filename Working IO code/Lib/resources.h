@@ -57,6 +57,7 @@
     uint8_t CheckState(uint8_t num);
 
     uint8_t getID();
+    void WipeAfterBoot(uint8_t full);
     void Reset();
 
     uint8_t HotSummer();
