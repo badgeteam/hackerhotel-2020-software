@@ -110,7 +110,7 @@
                 "state_desc" : "You unlocked room 203",
                 "o" : {
                   "[L]aptop" : {
-                    "desc" : "This looks like a standard laptop. Nothing special except the two barcode \r\nstickers on the back of the laptop:\r\n\r\nSticker 1     █▐ ▌ ▐ █  ▌▌ ▐▐▌▐ ▌█  ▌▐ ██▐ ██▐ ▌█ ▌ ▐ ▌▐█▌█  ▌▌▐▌ █▌▌█     \r\n\r\nSticker 2     █▐ ▌ ▐▌██▐▌█ █▌▐▐▐▌ █????? ▐ ▌██ █▌█ ▐▐▐▌ ▌ █ ▐█▐▐▌     \r\n\r\nAs you can see, sticker 2 is a little damaged.",
+                    "desc" : "This looks like a standard laptop. Nothing special except the two barcode \r\nstickers on the back of the laptop:\r\n\r\nSticker 1     █▐ ▌ ▐ █  ▌▌ ▐▐▌▐ ▌█  ▌▐ ██▐ ██▐ ▌█ ▌ ▐ ▌▐█▌█  ▌▌▐▌ █▌▌█     \r\n\r\nSticker 2     █▐ ▌ ▐▌██▐▌█ █▌▐▐▐▌ █▌???? ▐ ▌██ █▌█ ▐▐▐▌ ▌ █ ▐█▐▐▌     \r\n\r\nAs you can see, sticker 2 is a little damaged.",
                     "action_mask" : 20,
                     "action_item" : 0,
                     "action_str1" : "You turn on the laptop, but it is locked by user 'hcarter'.\r\nPlease enter the correct password?",
@@ -363,7 +363,7 @@
                       "[S]ecret message" : {
                         "desc" : "There is a secret message on the wall",
                         "action_mask" : 36,
-                        "action_msg" : "J AE LSKSY A AEW UO DHGD ZOM BR BO TZX LHUED, UYM \r\nZOM PIKF TZX SGMY GGI PIO UHYEE HWET FF. AFW CHV \r\nDAW, M TN SG ZPTE YGN GTNE LAML GAJ. B EF LEHM LHTTSZI \r\nBO TZX QTTTWK GABMTXV. RPU FXIW UO LXPE SA LAI \r\nGBMW HJ FZ AVOIKTAJR EGE HW PMEM KFHA PIAL MS WP.\r\nI ZTZX IIVWIG UHW GEFF IF MLX OOFHKKBM\r\n\r\nMGJHSTMGEMFLQ KE ABS TXIG VNVXV T TPWEP TOD UTR \r\nGPT ZXPI VS MGXBM TZX WIFLD BW USOCXR UZ TOH VXBLDR \r\nLHU SMFQXSS. KH AX OEWW E EJTLEI FPRW IEMJEFVI.\r\n\r\nUVT KHSG... TOGG M PJLD UI YSEW... TRW ZOM MSH!"
+                        "action_msg" : "Tm8sIG5vLCBubywgdGhhdCB3b3VsZCBiZSB0b28gZWFzeSwgaGF2ZSB5b3UgcmVh\nZCB0aGUgbm90ZSBpbiByb29tIDIwMz8KCgoK\n\nTSTCTKCTL1KSOTBBJEzCRUCULzBEU0NDJFdQVKCJLjBBUiTVSWVgKF9UJVwkJEBW\nVSqZL1VgN0WSJTBMTEMhT05EXSTQTcVgN0iPAFNHWUpFIWiFLGAyUUMvIWGOJDBR\nU1UCSEdFLUCJAFFFJFFQIWeMIVQyXU9NJEFCTMVgNFhBVyTHQNJuAFkyRU0yT0VI\nWCTJT1FVQMeFUllGJFJJRKCNIWNMSVAhQ0zCTMKFMj4gOV9VAF5FJVQyWE8yWENN\nTUCSITBMTEMLTcGNJTBHSiTOWKCBJGZXVlFCUdlgIV5EAFhXJFvKTWxgK05QVqCX\nKFFMJFJQIWSPDhpBJEzCVcVgKFlWSENPIXSIJTBGRU1XJEdPIXSIJTBGU05PJ1KB\nLRoCWU5YU1JMWU5TWENNWKCSITBARVEhQcWFLjBNUkJGUaCBAGNISUpNIWGOJDBV\nRU4CUk9MJEzGTXBgNWMyWU5MTUohVWiFAGNISUpNIWmTAFJKU0tXUiTDWKCUN08h\nUcWBLFxRDkzQVUCTNV1NJWJLMiTUTqCXJTBGSUNFIWFgLFlMWEpGIW1QUcVgMFFM\nTUNPQ0MvCyqCNWQyV09PLj4uDjBLU09OAFkyW0lEUCTDRKCGMlVXMi4mJEXPRUCZ\nL1VgNF9PAR=="
                       },
                       "[G]host of Ra" : {
                         "desc" : "This is the ghost whom you released in room 203. \r\nHis name is Ra, the sun-god. Unfortunately he is \r\nunder a spell and is not much of a help to you now.",
