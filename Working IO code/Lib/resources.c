@@ -1067,8 +1067,8 @@ uint8_t SelfTest(){
     //if ((tstVal[0] != 0x3F) || (tstVal[1] != 0x00) || (tstVal[2] != 0xC0) || (tstVal[3] != 0x14)){   //Finalfinalwellmaybenotthatfinal ROM @ 0x3CCC: 0x3F, 0x00, 0xC0, 0x14
 
     //Righter ROM?
-    ExtEERead(0x34D0, 4, 0, (uint8_t *)&tstVal[0]);
-    if ((tstVal[0] != 0x02) || (tstVal[1] != 0xfe) || (tstVal[2] != 0x00) || (tstVal[3] != 0x54)){  //Newestest ROM @ 0x34D0: 0x02, 0xfe, 0x00, 0x54
+    ExtEERead(0x34D2, 4, 0, (uint8_t *)&tstVal[0]);
+    if ((tstVal[0] != 0x02) || (tstVal[1] != 0xfe) || (tstVal[2] != 0x00) || (tstVal[3] != 0x54)){  //Newestest ROM @ 0x34D2: 0x02, 0xfe, 0x00, 0x54
         while(1);
     }
     
