@@ -1063,8 +1063,12 @@ uint8_t SelfTest(){
     iLED[CAT] = 0x00;
 
     //Right ROM?
-    ExtEERead(0x3CCC, 4, 0, (uint8_t *)&tstVal[0]);
-    if ((tstVal[0] != 63) || (tstVal[1] != 0) || (tstVal[2] != 192) || (tstVal[3] != 20)){
+    //ExtEERead(0x3CCC, 4, 0, (uint8_t *)&tstVal[0]);
+    //if ((tstVal[0] != 0x3F) || (tstVal[1] != 0x00) || (tstVal[2] != 0xC0) || (tstVal[3] != 0x14)){   //Finalfinalwellmaybenotthatfinal ROM @ 0x3CCC: 0x3F, 0x00, 0xC0, 0x14
+
+    //Righter ROM?
+    ExtEERead(0x34D0, 4, 0, (uint8_t *)&tstVal[0]);
+    if ((tstVal[0] != 0x00) || (tstVal[1] != 0x54) || (tstVal[2] != 0x6D) || (tstVal[3] != 0x38)){  //Newestest ROM @ 0x34D0: 0x00, 0x54, 0x6D, 0x38 
         while(1);
     }
     
