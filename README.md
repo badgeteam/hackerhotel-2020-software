@@ -1,5 +1,4 @@
-# hh2020
-Hackerhotel 2020 software repo
+# Hackerhotel 2020 software repo
 
 Python version of main game in: `game-prototype`
 

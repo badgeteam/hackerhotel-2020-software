@@ -1,0 +1,17 @@
+name: Maak Firmware
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+    - name: Get prequisites
+      run: sudo apt update && sudo apt install -y --no-install-recommends gcc-avr
+    - name: Goto folder
+      run: cd Working\ IO\ code/
+    - name: Maak
+      run: ./maak.sh
