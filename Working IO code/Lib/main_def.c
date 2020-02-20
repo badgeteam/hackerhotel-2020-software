@@ -16,7 +16,7 @@ volatile uint8_t iLED[40];           // 0,1,2,3,4,5(,6,7),8,9,10,11,12,13(,14,15
 
 volatile uint8_t readDataI2C;        // If true, reads data, if false, writes address
 volatile uint8_t bytesLeftI2C;       // Number of bytes left for a restart command (after address write) or a NACK+STOP command
-volatile uint8_t *addrDataI2C;       // Address pointer to the I2C data
+uint8_t * volatile addrDataI2C;       // Address pointer to the I2C data
 
 volatile unsigned char serRx[RXLEN]; // Receive buffer
 volatile unsigned char *serTxAddr;   // Tx data address pointer

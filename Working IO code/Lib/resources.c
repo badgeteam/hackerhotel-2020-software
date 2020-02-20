@@ -15,7 +15,7 @@
 
 volatile uint16_t tmp16bit;    
 volatile uint8_t mask[8] = {0x01, 0x03, 0x07, 0x0f, 0x1f, 0x3f, 0x7f, 0xff};
-static uint16_t lfsrSeed = 0;
+static uint16_t lfsrSeed;
 
 uint8_t HeartCount = 0;
 uint8_t LedCount = 0;
@@ -32,8 +32,8 @@ void Setup(){
     PORTB_DIR = 0b01111100;
     PORTC_DIR = 0b00111111;
 
-    //Invert some pins for correcting LED reversal error
 #ifndef PURIST_BADGE
+    //Invert some pins for correcting LED reversal error (with bodge wire mod or PFET mod)
     PORTC_PIN3CTRL |= 0x80;
     PORTC_PIN4CTRL |= 0x80;
     PORTC_PIN5CTRL |= 0x80;
@@ -42,16 +42,16 @@ void Setup(){
     PORTB_PIN5CTRL |= 0x80;
 #endif
 
-    //FET drive pins
-    /*
+#ifdef PFET_MOD //(benadski has the only one left at the moment of writing, but you can mod the badge too!)
+    //PFET mod drive pins
     PORTC_PIN0CTRL |= 0x80;
     PORTC_PIN1CTRL |= 0x80;
     PORTC_PIN2CTRL |= 0x80;
     PORTB_PIN2CTRL |= 0x80;
     PORTB_PIN6CTRL |= 0x80;
-    */
+#endif
 
-    //UART (Alternative pins PA1=TxD, PA2=RxD, baudrate 9600, 8n1, RX and Buffer empty interrupts on)
+    //UART (Alternative pins PA1=TxD, PA2=RxD, baudrate 115200, 8n1, RX and Buffer empty interrupts on)
     PORTMUX_CTRLB = 0x01;
     PORTA_OUTSET = 0x02;
     USART0_BAUD = (uint16_t)USART0_BAUD_RATE(115200);
@@ -85,8 +85,8 @@ void Setup(){
     TCB1_CCMP = 0x038B;
     TCB1_INTCTRL = 0x01;
 
-    //Init I2C (400kHz)
-    TWI0.MBAUD = 12;		// Rate = 10MHz/(2MBAUD+10) => 400kHz;
+    //Init I2C (About 400kHz, but EEPROM might work on FM+ as well (MBAUD minimum is 3, so fmax would be 625kHz))
+    TWI0.MBAUD = 8;		    // Rate = 10MHz/(2*MBAUD+10) => 385kHz, close enough;
     TWI0.MCTRLA = 0xC3;     // SMEN (0x02) also enabled
     TWI0.MSTATUS |= 0x01;	// Put bus in idle
     TWI0.MSTATUS |= 0xC4;	// Clear errors if any
@@ -206,7 +206,7 @@ ISR(TCB0_INT_vect){
     TCB0_INTFLAGS = TCB_CAPT_bm;
 }
 
-// TCB1 is used for audio generation. Keeps playing "data" until 0 is reached. Audio sample data can contain 0x01 to 0xFF, centered around 0x80
+// TCB1 is used for audio generation. Keeps playing "data" until 0 is reached, can leak memory too. Audio sample data can contain 0x01 to 0xFF, centered around 0x80
 ISR(TCB1_INT_vect){
     int16_t volCtrl;
     if (*auSmpAddr == 0) auSmpAddr = auRepAddr;
@@ -221,30 +221,25 @@ ISR(TCB1_INT_vect){
     TCB1_INTFLAGS = TCB_CAPT_bm;
 }
 
-/*
-    extern volatile uint8_t readDataI2C;        // If true, reads data, if false, writes address
-    extern volatile uint8_t bytesLeftI2C;       // Number of bytes left for a restart command (after address write) or a NACK+STOP command
-    extern volatile uint8_t *addrDataI2C;       // Address pointer to the I2C data
-
-*/
-
-//I2C Interrupt DOES work now!
+//I2C Interrupt (DOES work now! Tidied up.)
 ISR(TWI0_TWIM_vect){
-    if (bytesLeftI2C) --bytesLeftI2C;          
-    
+
+    //The initial numbers of register/data bytes has to be one higher than written/read for switching the TWI0_MADDR to read and to send the NACK/STOP sequence.
+    if (bytesLeftI2C) --bytesLeftI2C;
+   
     //Reading is done here
     if (TWI0_MSTATUS & 0x80) {                 
         if (bytesLeftI2C) {
-            *addrDataI2C++ = TWI0_MDATA;
+            *addrDataI2C++ = TWI0_MDATA; 
             TWI0.MCTRLB = 0;
-        } else TWI0.MCTRLB = 4;
-    
-    //Write part
+        } else TWI0.MCTRLB = 7;
+            
+    //Write part at (7 bit I2C address)<<1 (data: 2 byte internal address of external EEPROM)
     } else {
 
-        //Error, will never get here unless there's some hacker poking around on the PCB, slim chance of happening...
+        //Error, will never get here unless there's some hacker poking around on the PCB, slim chance of happening at HackerHotel... ;-)
         if (TWI0_MSTATUS & 0x0C) {
-            bytesLeftI2C = 0;
+            bytesLeftI2C = 0;   //No neat exit, we'll see what happens next...
 
         //Good, good!
         } else { 
@@ -253,12 +248,10 @@ ISR(TWI0_TWIM_vect){
             } else if (bytesLeftI2C == 1) {
                 TWI0_MDATA = addrDataI2C[1];
             } else {
-                //TWI0_MCTRLB = 1;        //Repeated start, already handled by smart mode!
-                TWI0_MADDR |= 1;          //Read I2C address
+                TWI0_MADDR |= 1; //Read: (7 bit I2C address)<<1 + 1
             }
         }
     }
-    if ((TWI0_MSTATUS & 0x80)&&(bytesLeftI2C == 0)) TWI0.MCTRLB = 7;
 }
 
 // Reads up to RXLEN characters until LF is found, LF sets the serRxDone flag and writes 0 instead of LF.
@@ -317,7 +310,7 @@ ISR(ADC1_RESRDY_vect){
 // RTC compare interrupt, triggers at 512/BTN_TMR rate, also RTC overflow interrupt, triggers once a minute
 ISR(RTC_CNT_vect) {
     if (RTC_INTFLAGS & RTC_CMP_bm){
-        if (buttonMark<0xff) ++buttonMark;   // For button timing purposes
+        if (buttonMark<0xff) ++buttonMark;  // For button timing purposes
         tmp16bit = (RTC_CNT + BTN_TMR);
         while (tmp16bit > RTC_PER) tmp16bit -= RTC_PER;
         while(RTC_STATUS & RTC_CMPBUSY_bm);
@@ -336,23 +329,23 @@ ISR(RTC_PIT_vect) {						// PIT interrupt handling code
     RTC_PITINTFLAGS = RTC_PI_bm;		// clear interrupt flag
 }
 
-// I2C read part, could be neater, but got frustrated... At least it's working flawlessly! :P
+/*
+    ---------- END OF INTERRUPT ROUTINES ----------
+*/
+
+// I2C read data from external EEPROM
 uint8_t I2C_read_bytes(uint8_t slave_addr, uint8_t *reg_ptr, uint8_t reg_len, uint8_t *dat_ptr, uint8_t dat_len){
-    
-    //Error.
+
+    //Error, I2C not available somehow...
     if ((TWI0_MSTATUS & 0x03) == 0) return 1;
 
     addrDataI2C = reg_ptr;
-    if ((addrDataI2C) == 0) return 1;       //Stupid line is needed or previous line is optimized away...
-    
-    TWI0_MADDR = (EE_I2C_ADDR<<1);          //Write stupid shifted I2C address, looking over this for hours...
-    bytesLeftI2C = reg_len + 1;             //Yeah, well... it works.
-    while (bytesLeftI2C) ;                  //Just a very short pause.
+    TWI0_MADDR = (EE_I2C_ADDR<<1);          //Write stupid shifted! I2C address, looking over this for hours...
+    bytesLeftI2C = reg_len+1;               //Yeah, well... it works now.
+    while (bytesLeftI2C) ;                  //Just a very short pause, waiting for address to be written and EEPROM set to read.
 
     addrDataI2C = dat_ptr;                  //Data!
-    if ((addrDataI2C) == 0) return 1;       //Wait for address written.
-    
-    bytesLeftI2C = dat_len + 1;             //Gimme, gimme!
+    bytesLeftI2C = dat_len+1;               //Gimme, gimme!
     while (bytesLeftI2C) ;                  //Hurry up!!!
 
     //Yesss! Now be quiet!
@@ -369,7 +362,7 @@ void EERead(uint8_t eeAddr, uint8_t *eeValues, uint8_t size) {
     }
 }
 
-// Write bytes to the EEPROM, if address exceeds EEPROM space data wraps around
+//Write bytes to the EEPROM, if address exceeds EEPROM space data wraps around
 uint8_t EEWrite(uint8_t eeAddr, uint8_t *eeValues, uint8_t size)
 {
     uint8_t lastByteOfPage;
@@ -390,12 +383,8 @@ uint8_t EEWrite(uint8_t eeAddr, uint8_t *eeValues, uint8_t size)
     return 0;
 }
 
-
-
-
 //Decrypts data read from I2C EEPROM, max 255 bytes at a time
 void DecryptData(uint16_t offset, uint8_t length, uint8_t type, uint8_t *data){
-    //offset += L_BOILER;
     while(length){
         *data ^= xor_key[type][(uint8_t)(offset%KEY_LENGTH)];
         ++data;
@@ -452,32 +441,32 @@ uint8_t CheckButtons(){
     uint8_t bADC = (uint8_t)(adcBtns>>4);
     uint8_t button = 0xFF;     //FF = released or error
 
-        switch(bADC){
+    switch(bADC){
 
-            case 48 ... 56:          //52: Bottom left (+/-4)
-            button = 2;
-            break;
+        case 48 ... 56:          //52: Bottom left (+/-4)
+        button = 2;
+        break;
 
-            case 79 ... 95:          //87: Top left (+/-8)
-            button = 3;
-            break;
+        case 79 ... 95:          //87: Top left (+/-8)
+        button = 3;
+        break;
 
-            case 117 ... 141:        //129: Top right (+/- 12)
-            button = 1;
-            break;
+        case 117 ... 141:        //129: Top right (+/- 12)
+        button = 1;
+        break;
 
-            case 158 ... 190:        //174: Bottom right (+/- 16)
-            button = 0;
-            break;
-        }
+        case 158 ... 190:        //174: Bottom right (+/- 16)
+        button = 0;
+        break;
+    }
 
-        if (((previousValue+1)== 0) || (button != previousValue)) {
-            previousValue = button;
-            return 0xFF;
-        } else return button;
-
+    if (((previousValue+1)== 0) || (button != previousValue)) {
+        previousValue = button;
+        return 0xFF;
+    } else return button;
 }
 
+//Linear feedback shift register, for cheap pseudo random
 uint8_t lfsr(){
     lfsrSeed ^= (lfsrSeed << 13);
     lfsrSeed ^= (lfsrSeed >> 9);
@@ -485,6 +474,7 @@ uint8_t lfsr(){
     return (lfsrSeed & 0xff);
 }
 
+//Variate the speed of playing audio a bit
 void floatSpeed(uint8_t bits, uint16_t min, uint16_t max){
     uint16_t val = TCB1_CCMP;
     bits = mask[(bits-1)&0x07];
@@ -495,6 +485,7 @@ void floatSpeed(uint8_t bits, uint16_t min, uint16_t max){
     TCB1_CCMP = val;
 }
 
+//About the same as above, but for a sample
 uint8_t floatAround(uint8_t sample, uint8_t bits, uint8_t min, uint8_t max){
     bits = mask[(bits-1)&0x07];
     sample += lfsr()&bits;
@@ -508,9 +499,8 @@ uint8_t floatAround(uint8_t sample, uint8_t bits, uint8_t min, uint8_t max){
     return sample;
 }
 
-//Load game status
-void LoadGameState(){
-    lfsrSeed = (adcPhot + adcTemp)<<1 | 0x0001; 
+//Load game state from internal EEPROM (seed lfsr, read game state, check the badge identity and load inventory) 
+void LoadGameState() {
 
     EERead(0, &gameState[0], BOOTCHK);   //Load game status bits from EEPROM
 
@@ -557,6 +547,7 @@ uint8_t SaveGameState(){
     return 0;
 }
 
+//Status bit checking
 uint8_t ReadStatusBit(uint8_t number){
     number &= 0x7f;
     if (gameState[number>>3] & (1<<(number&7))) return 1; else return 0;
@@ -603,6 +594,7 @@ uint8_t getID(){
     return id;
 }
 
+//For resetting all game progress, temperature calibration and rom test data.
 void WipeAfterBoot(uint8_t full){
     //Reset cheat data by resetting the EEPROM bytes
     uint8_t empty=0xff;
@@ -616,27 +608,20 @@ void WipeAfterBoot(uint8_t full){
     UpdateState(128+109+whoami);
 }
 
+// Reset game progress (all zeros) and set some bits (depending on chip serial number)
 void Reset(){
-    //Reset game progress (all zeros) and load some bits:
-    //# 110   set to 1 by FW if badge UUID mod 4 == 0
-    //# 111   set to 1 by FW if badge UUID mod 4 == 1
-    //# 112   set to 1 by FW if badge UUID mod 4 == 2
-    //# 113   set to 1 by FW if badge UUID mod 4 == 3
     for (uint8_t x=0; x<sizeof(gameState); ++x){
         gameState[x] = 0;
     }
 
+    //ID is calculated 
     uint8_t id = getID();
 
-    //Write bit in gameState location 110..113
     if (id == 0) UpdateState(110);
     else if (id == 1) UpdateState(111);
     else if (id == 2) UpdateState(112);
     else if (id == 3) UpdateState(113);
     UpdateState(100+id);
-
-    //Write bit 0, must always be 1!
-
 }
 
 //Sets specific game bits after the badge is heated for one and two times.
@@ -666,6 +651,7 @@ uint8_t HotSummer(){
     return 0;
 }
 
+//Turn on a number of LEDs on left/right wings, starting from bottom.
 void WingBar(int8_t l, int8_t r) {
     for (int8_t i=0; i<5; i++) {
         if (i<l)
@@ -679,6 +665,7 @@ void WingBar(int8_t l, int8_t r) {
     }
 }
 
+//Set both eyes in red or green, 0...255 dimming
 void SetBothEyes(uint8_t r, uint8_t g) {
     for (uint8_t i=0; i<2; i++) {
         iLED[EYE[R][i]] = r;
@@ -686,6 +673,7 @@ void SetBothEyes(uint8_t r, uint8_t g) {
     }
 }
 
+//Set all of the necklace LEDs the same brightness in red and green.
 void SetHackerLeds(uint8_t r, uint8_t g) {
     for (uint8_t i=0;i<6;i++) {
         iLED[HCKR[R][i]] = r;
@@ -693,7 +681,7 @@ void SetHackerLeds(uint8_t r, uint8_t g) {
     }
 }
 
-
+//When all of the challenges are finished, play a blinky thing on the LEDs
 void VictoryDance() {
     SetBothEyes(0,dimValue);
     switch((RTC_CNT>>12)&0x7) {
@@ -718,6 +706,7 @@ void VictoryDance() {
     }
 }
 
+//LED control for game status and light effects during games.
 void GenerateBlinks(){
     /*
     HCKR + BADGER are used for game progress and should not be
@@ -844,22 +833,21 @@ void GenerateBlinks(){
 //Fade out audio (slowest 0: 8s, 1: 4s, 2: 2s, 3: 1s, 4: 0.5s, 5: 0.25s, 6: 0.125s and 7: 0.062 seconds from maximum volume(0xff))
 void FadeOut(uint8_t spd, uint8_t off)
 {
-    //if (*auRepAddr){
-        spd = 7 - (spd&0x07);
-        uint8_t tick = fastTicker >> spd;
-        if (tick) {
-            if (auVolume > tick) auVolume -= tick; else {
-                auVolume = 0;
-                if (off) {
-                    auRepAddr = &zero;
-                    effect &= 0x1f;
-                }
+    spd = 7 - (spd&0x07);
+    uint8_t tick = fastTicker >> spd;
+    if (tick) {
+        if (auVolume > tick) auVolume -= tick; else {
+            auVolume = 0;
+            if (off) {
+                auRepAddr = &zero;
+                effect &= 0x1f;
             }
-            fastTicker = 0;
         }
-    //}
+        fastTicker = 0;
+    }
 }
 
+//Play a sample 
 uint8_t Play(uint8_t * auBuffer, uint8_t repeat, uint16_t pitch, uint8_t volume)
 {
     TCB1_CCMP = pitch;
@@ -869,6 +857,7 @@ uint8_t Play(uint8_t * auBuffer, uint8_t repeat, uint16_t pitch, uint8_t volume)
     return 1;
 }
 
+//This is the audio routine, it's magic!
 uint8_t GenerateAudio(){
     static uint8_t start = 0;
     static uint8_t duration;
@@ -1007,20 +996,25 @@ uint8_t GenerateAudio(){
                 //auBuffer[] = floatAround(0x80, 5, 0x01, 0x00);
             }
         }
+
+    //No headphone, output can do other things like trying to find another bagder.
     } else {
         detHdPh = 0;
     }
 
+    //Buttonmark is used for timing slow things.
     if (buttonMark && duration) --duration;
 
     return buttonMark;
 }
 
+//Tick, tock
 uint16_t getClock() {
     uint16_t tmp = RTC_CNT;
     return 60 * minuteMark + (tmp>>9);
 }
 
+//Timeout for going back to things and for repeating sequences
 uint8_t idleTimeout(uint16_t lastActive, uint16_t maxIdle) {
     uint16_t curClock;
 
@@ -1031,10 +1025,14 @@ uint8_t idleTimeout(uint16_t lastActive, uint16_t maxIdle) {
     return (curClock > (lastActive + maxIdle));
 }
 
+//Checks the most important hardware features before starting up the first time.
 uint8_t SelfTest(){
     uint8_t tstVal[4] = {0, 0, 0, 0};
 
+    //Wait until we have a value for adcTemp, after that seed random and if virgin, save adcTemp as calibration value for HotSummers
     while (adcTemp == 0) ;
+    lfsrSeed = (adcPhot + adcTemp + adcHall)<<1 | 0x0001;
+
     EERead(BOOTCHK, &tstVal[0], 4);
     //already checked and ok, skip test, can be reset by using "ikillu" command.
     if (tstVal[0] == 0xA5) {
@@ -1062,20 +1060,16 @@ uint8_t SelfTest(){
     while ((adcBtns>>4) < 200) ;
     iLED[CAT] = 0x00;
 
-    //Right ROM?
-    //ExtEERead(0x3CCC, 4, 0, (uint8_t *)&tstVal[0]);
-    //if ((tstVal[0] != 0x3F) || (tstVal[1] != 0x00) || (tstVal[2] != 0xC0) || (tstVal[3] != 0x14)){   //Finalfinalwellmaybenotthatfinal ROM @ 0x3CCC: 0x3F, 0x00, 0xC0, 0x14
-
-    //Righter ROM?
+    //Right game ROM version, right eye off
     ExtEERead(0x34D2, 4, 0, (uint8_t *)&tstVal[0]);
     if ((tstVal[0] != 0x02) || (tstVal[1] != 0xfe) || (tstVal[2] != 0x00) || (tstVal[3] != 0x54)){  //Newestest ROM @ 0x34D2: 0x02, 0xfe, 0x00, 0x54
         while(1);
     }
-    
-    SelectAuIn();
-    //Audio in/out OK, eyes off
-    while ((auIn < 0x78) || (auIn > 0x88)) ;
     iLED[EYE[R][R]] = 0x00;
+    
+    //Audio in/out OK, left eye off
+    SelectAuIn();
+    while ((auIn < 0x78) || (auIn > 0x88)) ;
     iLED[EYE[R][L]] = 0x00;
     
     //All ok!

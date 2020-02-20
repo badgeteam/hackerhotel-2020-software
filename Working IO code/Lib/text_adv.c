@@ -344,9 +344,7 @@ uint8_t CheckInput(uint8_t *data){
         //Normal input
         } else {
       
-            //SetResponse(0, A_LF, 4, TEASER);
-
-            //Change status bit
+            //Change status bit if cheat code is correct and space not occupied
             if ((serRx[0] == '#')&&(RXCNT == 6)){
                 uint8_t bitNr = 0;
 
@@ -417,7 +415,7 @@ uint8_t CheckInput(uint8_t *data){
                 return 1;
             }
 
-            //Fake cheat = reset badge!
+            //Fake cheat = reset badge! (Disable (comment) to get a few bytes needed for inverting pins for PFET modded badge)
             if (StartsWith(&data[0], "iddqd")){
             
                 //Wipe, but not the cheat data, hidden easter egg in ext. eeprom. ;)
@@ -809,7 +807,7 @@ uint8_t ProcessInput(uint8_t *data){
                     uint32_t answer = 0;
                     uint8_t  n = 0;
 
-                    /* CALCULATION                    
+                    /* CALCULATION (Python uses 0..3 for person, here (C) whoami is 1..4)              
                         data[x]: x=1->offering x=2->kneelings x=3->element whoami->person
                     
                         answer = ((offering  & 2) << 19) + ((offering  & 1) << 8) + \
@@ -817,7 +815,7 @@ uint8_t ProcessInput(uint8_t *data){
                         ((kneelings & 2) << 11) + ((kneelings & 1))
                         answer = answer << (3-person)
                     */
-                    data[1]-='0'; // item 31 needs to become something that results in 0 when doing %4
+                    data[1]-='0'; 
                     data[2]-='1';
                     if (data[3] == 'a') data[3] = 1;
                     else if (data[3] == 'e') data[3] = 0;
@@ -851,7 +849,7 @@ uint8_t ProcessInput(uint8_t *data){
                     SetResponse(elements++, A_BADOFFERING, L_BADOFFERING, TEASER);
                 }
             
-            //Other questions    
+            //Other questions, checked (case sensitive) answer is ok, check action permissions
             } else if (specialPassed == 1) {
                 PopulateObject(route[currDepth+1], &actObj1);
                 if (CheckState(actObj1.byteField[ACTION_ACL])){
@@ -863,6 +861,7 @@ uint8_t ProcessInput(uint8_t *data){
                     effect = actObj1.effect[1];
                 }
 
+            //Incorrect stuff
             } else {
                 PopulateObject(route[currDepth+1], &actObj1);
                 SetResponse(elements++, A_INCORRECT, L_INCORRECT, TEASER);

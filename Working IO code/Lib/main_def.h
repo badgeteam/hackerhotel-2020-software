@@ -63,7 +63,7 @@
 
     extern volatile uint8_t readDataI2C;        // If true, reads data, if false, writes address
     extern volatile uint8_t bytesLeftI2C;       // Number of bytes left for a restart command (after address write) or a NACK+STOP command
-    extern volatile uint8_t *addrDataI2C;       // Address pointer to the I2C data
+    extern uint8_t * volatile addrDataI2C;       // Address pointer to the I2C data
 
     extern volatile unsigned char serRx[RXLEN]; // Receive buffer
     extern volatile unsigned char *serTxAddr;   // Tx data address pointer
