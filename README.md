@@ -22,7 +22,7 @@ Flashing: `./maak flits`
 
 ---
 
-Further reading on [docs.bade.team](https://docs.badge.team/badges/hackerhotel-2020/)
+Further reading on [docs.badge.team](https://docs.badge.team/badges/hackerhotel-2020/)
 
 ```
         coc      ,:c:;::;,
